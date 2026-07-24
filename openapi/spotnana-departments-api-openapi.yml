@@ -1,0 +1,427 @@
+openapi: 3.1.0
+info:
+  title: Air Departments API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Departments
+  description: APIs to create and manage departments.
+paths:
+  /v2/companies/{companyId}/departments:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Departments
+      summary: Create department
+      description: This endpoint creates a department.
+      operationId: createDepartment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDepartmentRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    get:
+      tags:
+      - Departments
+      summary: List departments
+      description: This endpoint lists departments of a company.
+      operationId: listDepartments
+      deprecated: true
+      x-sunset: '2026-07-01'
+      parameters:
+      - name: externalId
+        in: query
+        description: External id of the department.
+        required: false
+        schema:
+          type: string
+        example: department-external-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfReference'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v2/companies/{companyId}/departments/{departmentId}:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: departmentId
+      in: path
+      description: Identifier for department.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Departments
+      summary: Get department
+      description: This endpoint gets a department by ID.
+      operationId: getDepartment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentV2'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Departments
+      summary: Update department
+      description: This endpoint updates department by ID.
+      operationId: updateDepartment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentV2'
+      responses:
+        '204':
+          description: Updated Successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Departments
+      summary: Delete department
+      description: This endpoint deletes department by ID.
+      operationId: deleteDepartment
+      parameters:
+      - name: detachUsers
+        in: query
+        description: Whether to remove this entity's reference from associated user entities.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '204':
+          description: Deleted Successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/companies/{companyId}/departments/list:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Departments
+      summary: List departments
+      description: This endpoint lists departments of a company.
+      operationId: listDepartmentsV3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListDepartmentsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDepartmentsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    OffsetBasedPaginationResponseParams:
+      type: object
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
+      required:
+      - totalNumResults
+      properties:
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results.
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+    ListDepartmentsFilter:
+      type: object
+      title: ListDepartmentsFilter
+      description: Filter parameters for list departments.
+      properties:
+        externalIds:
+          type: array
+          items:
+            type: string
+            example: department-external-id
+          description: List of external ids.
+        departmentIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+          description: List of department ids.
+    DepartmentInfo:
+      type: object
+      title: DepartmentInfo
+      description: Department information with UUID and entity name.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+        name:
+          type: string
+          example: Accounting
+    OffsetBasedPaginationRequestParams:
+      type: object
+      title: OffsetBasedPaginationRequestParams
+      description: Pagination parameters for requests.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
+          default: 0
+          minimum: 0
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to be fetched.
+          minimum: 1
+          default: 100
+    ArrayOfReference:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+        elements:
+          type: array
+          description: List of references containing id and name.
+          items:
+            $ref: '#/components/schemas/Reference'
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results
+    DepartmentV2:
+      type: object
+      title: DepartmentV2
+      description: Department details.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: Name of the department
+          example: IT Department
+        externalId:
+          type: string
+          description: External id of the department
+          example: department-ext-id
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    ListDepartmentsResponse:
+      type: object
+      description: Response for list departments API.
+      required:
+      - paginationParams
+      properties:
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
+        departments:
+          type: array
+          description: List of departments containing id and name.
+          items:
+            $ref: '#/components/schemas/DepartmentInfo'
+    CreateDepartmentRequest:
+      type: object
+      title: CreateDepartmentRequest
+      required:
+      - name
+      description: Create department request
+      properties:
+        name:
+          type: string
+          description: Name of the department
+        externalId:
+          type: string
+          description: External id of the department
+          example: department-external-id
+    ListDepartmentsRequest:
+      type: object
+      title: ListDepartmentsRequest
+      required:
+      - paginationParams
+      description: List departments request
+      properties:
+        searchText:
+          type: string
+          description: Search string entered by the user
+          example: Engineering
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
+        filters:
+          type: array
+          description: List of filters. Departments matching with any filter would be returned.
+          items:
+            $ref: '#/components/schemas/ListDepartmentsFilter'
+    Reference:
+      type: object
+      title: Reference object containing uuid and name of the entity.
+      description: Reference of an entity
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+        name:
+          type: string
+          example: Name
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

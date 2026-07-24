@@ -1,0 +1,342 @@
+openapi: 3.1.0
+info:
+  title: Air Service Charge Plan API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Service Charge Plan
+  description: APIs to manage service charge plans.
+paths:
+  /v2/license/company/{companyId}/service-charge/per-trip:
+    parameters:
+    - name: companyId
+      in: path
+      description: Company ID
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: f49d00fe-1eda-4304-ba79-a980f565281d
+    get:
+      tags:
+      - Service Charge Plan
+      summary: Get per-trip service charge configuration
+      description: Get per-trip service charge configuration for company
+      operationId: getCompanyPerTripSrvCharge
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCompanyPerTripSrvChargeResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      tags:
+      - Service Charge Plan
+      summary: Set per-trip service charge configuration
+      description: Set per-trip service charge configuration for company
+      operationId: setCompanyPerTripSrvCharge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetCompanyPerTripSrvChargeRequest'
+      responses:
+        '204':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    FlightPassTax:
+      type: object
+      title: FlightPassTax
+      description: A single tax component of the flight pass fare.
+      properties:
+        code:
+          type: string
+          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
+          example: GST_HST
+        amount:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+    FlightPassPaymentMetadata:
+      type: object
+      title: FlightPassPaymentMetadata
+      description: Metadata specific to Flight Pass payment method in OtherCoinage.
+      properties:
+        flightPassNumber:
+          type: string
+          description: Flight pass number
+          example: FP123456789
+        flightPassAmounts:
+          $ref: '#/components/schemas/FlightPassPaymentAmounts'
+    GetCompanyPerTripSrvChargeResponse:
+      type: object
+      title: GetCompanyPerTripSrvChargeResponse
+      description: Get per trip service charge configuration for company
+      properties:
+        config:
+          $ref: '#/components/schemas/FixedChargeConfig'
+        enabled:
+          type: boolean
+          description: True if per trip service charge configuration is enabled
+          example: true
+        enableDisableOpSupported:
+          type: boolean
+          description: True if per trip service charge configuration can be enabled/disabled
+          example: true
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    FlightPassPaymentMetadataWrapper:
+      type: object
+      title: FlightPassPaymentMetadataWrapper
+      description: Wrapper for Flight Pass payment metadata.
+      required:
+      - flightPassMetadata
+      properties:
+        metadataType:
+          type: string
+          description: Discriminator field for polymorphic deserialization
+          example: FlightPassPaymentMetadata
+          default: FlightPassPaymentMetadata
+        flightPassMetadata:
+          $ref: '#/components/schemas/FlightPassPaymentMetadata'
+    FixedChargeConfig:
+      type: object
+      title: FixedChargeConfig
+      description: Fixed charge configuration for service charge
+      required:
+      - charges
+      properties:
+        charges:
+          type: array
+          description: Amount in specified currency
+          items:
+            $ref: '#/components/schemas/Money'
+        defaultCurrencyCode:
+          type: string
+          description: The 3-letter currency code defined in ISO 4217.
+          example: GBP
+        tierCharges:
+          type: array
+          description: Charges specified per traveler tier
+          items:
+            $ref: '#/components/schemas/TierChargeConfig'
+    TierChargeConfig:
+      type: object
+      title: Tier charge configuration for service charge
+      required:
+      - tier
+      - charges
+      properties:
+        tier:
+          $ref: '#/components/schemas/Tier'
+        charges:
+          type: array
+          description: Amount in specified currency
+          items:
+            $ref: '#/components/schemas/Money'
+    SetCompanyPerTripSrvChargeRequest:
+      type: object
+      title: SetCompanyPerTripSrvChargeRequest
+      description: Set per trip service charge configuration for company
+      required:
+      - config
+      properties:
+        config:
+          $ref: '#/components/schemas/FixedChargeConfig'
+    Money:
+      type: object
+      title: Money
+      description: 'Money object containing details such as the amount, the currency code, and the converted amount.
+
+        '
+      required:
+      - amount
+      - currencyCode
+      properties:
+        amount:
+          type: number
+          format: double
+          description: The numeric value for the amount of money.
+          example: 510
+        currencyCode:
+          type: string
+          description: The 3-letter currency code for the money amount (defined using ISO 4217 standard).
+          example: GBP
+        convertedAmount:
+          type: number
+          format: double
+          description: 'The converted currency and amount that has been converted (if a currency conversion has been requested).
+
+            For example, if the call requests that money be sent in a specified currency (because the frontend requested
+
+            the backend to send money in the user''s preferred currency).
+
+            '
+          example: 715.42
+        convertedCurrency:
+          type: string
+          description: The 3-letter currency code for the converted currency (defined using ISO 4217 standard).
+          example: USD
+        otherCoinage:
+          type: array
+          title: OtherCoinage
+          description: List of the dollar amount in other coinage systems like reward points, cryptocurrency etc.
+          items:
+            type: object
+            properties:
+              coinageCode:
+                $ref: '#/components/schemas/PaymentMethod'
+                description: Payment method
+              amount:
+                type: number
+                format: double
+                example: 1000
+              conversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              preferredCurrencyConversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              otherCoinageMetadata:
+                description: Metadata to store additional information related to the payment method
+                discriminator:
+                  propertyName: metadataType
+                  mapping:
+                    FlightPassPaymentMetadata: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+                oneOf:
+                - $ref: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    PaymentMethod:
+      type: string
+      description: Payment method
+      enum:
+      - PAYMENT_METHOD_UNKNOWN
+      - CREDIT_CARD
+      - BREX_POINTS
+      - CASH
+      - QANTAS_POINTS
+      - VENDOR_PROGRAM_PAYMENT
+      - DELAYED_INVOICING
+      - FLIGHT_CREDITS
+      - QANTAS_TRAVEL_FUND
+      - CUSTOM_VIRTUAL_PAYMENT
+      - FLIGHT_PASS
+      - MISCELLANEOUS_CREDIT_ORDER
+      - NO_PREPAYMENT
+      x-ignoreBreakingChanges:
+      - PaymentMethod->MISCELLANEOUS_CREDIT_ORDER
+      - PaymentMethod->NO_PREPAYMENT
+      example: BREX_POINTS
+    Tier:
+      type: string
+      title: Tier
+      description: 'Tier of User.
+
+        Note: In default UI, BASIC is displayed as Standard, and SEAT1A is displayed as VIP.
+
+        '
+      enum:
+      - BASIC
+      - SEAT1A
+      x-enum-varnames:
+      - BASIC
+      - SEAT1A
+      example: SEAT1A
+      default: BASIC
+    FlightPassPaymentAmounts:
+      type: object
+      title: FlightPassPaymentAmounts
+      description: Fare breakdown for the flight pass booking.
+      properties:
+        totalAmount:
+          description: Total value (base + taxes).
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          description: Base fare excluding taxes.
+          $ref: '#/components/schemas/Money'
+        totalTaxes:
+          description: Sum of all taxes, fees, and charges.
+          $ref: '#/components/schemas/Money'
+        taxBreakdown:
+          type: array
+          description: Breakdown of taxes by code (e.g. GST_HST, QST, OTHER).
+          items:
+            $ref: '#/components/schemas/FlightPassTax'
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

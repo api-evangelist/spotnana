@@ -1,0 +1,182 @@
+openapi: 3.1.0
+info:
+  title: Air Roles API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Roles
+paths:
+  /v3/users/{userId}/rbac-info:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier of the user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 1234a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Roles
+      summary: Get RBAC info for a user
+      description: Returns RBAC information for a user indicating what permissions the user has.
+      operationId: getRbacInfo
+      responses:
+        '200':
+          description: RBAC info for the user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRbacInfoResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    GetRbacInfoResponse:
+      type: object
+      title: GetRbacInfoResponse
+      description: Response containing RBAC info for a user.
+      required:
+      - hasOthersTripAccess
+      - permissions
+      properties:
+        hasOthersTripAccess:
+          type: boolean
+          description: Flag indicating whether user has access to trips of other travelers.
+          example: true
+        permissions:
+          type: array
+          description: List of permissions with their associated actions for the user.
+          items:
+            $ref: '#/components/schemas/PermissionWithActions'
+    PermissionAction:
+      type: string
+      title: PermissionAction
+      description: Actions which can be performed for a given permission.
+      enum:
+      - ALL
+      - CREATE
+      - READ
+      - WRITE
+      - DELETE
+      - PURGE
+      example: READ
+    PermissionWithActions:
+      type: object
+      title: PermissionWithActions
+      description: Permission with actions
+      required:
+      - permission
+      - actions
+      properties:
+        permission:
+          $ref: '#/components/schemas/PermissionName'
+          example: USER_MANAGEMENT
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionAction'
+          description: Actions allowed on the permission like read/write/delete.
+          example:
+          - READ
+          - WRITE
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    PermissionName:
+      type: string
+      title: PermissionName
+      description: Permission
+      enum:
+      - PLATFORM_MANAGEMENT
+      - TMC_MANAGEMENT
+      - COMPANY_MANAGEMENT
+      - USER_MANAGEMENT
+      - USER_PROFILE
+      - EVENT_MANAGEMENT
+      - REPORT_MANAGEMENT
+      - ACCESS_MANAGEMENT
+      - TRIP_MANAGEMENT
+      - AGENT
+      - DEVELOPER_PLATFORM_MANAGEMENT
+      - THIRD_PARTY_NOTIFICATION_MANAGEMENT
+      - AGENT_CONTACT_CENTER_MANAGEMENT
+      - AGENT_CONTACT_CENTER_SUPPORT_MANAGEMENT
+      - AGENT_CONTACT_CENTER_TEAM_MANAGEMENT
+      - AGENT_CONTACT_CENTER_ANALYTICS_MANAGEMENT
+      - AGENT_CONTACT_CENTER_SETTINGS_MANAGEMENT
+      example: COMPANY_MANAGEMENT
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

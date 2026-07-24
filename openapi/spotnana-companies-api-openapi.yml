@@ -1,0 +1,3339 @@
+openapi: 3.1.0
+info:
+  title: Air Companies API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Companies
+  description: APIs to onboard and manage company.
+paths:
+  /v2/companies:
+    post:
+      tags:
+      - Companies
+      summary: Create company
+      description: This endpoint creates a company. This is allowed only by TMC_ADMIN and above roles.
+      operationId: createCompany
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompanyRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    get:
+      tags:
+      - Companies
+      summary: List companies
+      description: "This endpoint lists companies. If externalId is provided in query param, only the company having \nthe specified external ID is returned.\n"
+      operationId: listCompanies
+      parameters:
+      - name: externalId
+        in: query
+        description: External id of the entity.
+        required: false
+        schema:
+          type: string
+        example: my-external-id
+      - name: companyRole
+        in: query
+        description: Filter by a particular role
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyRole'
+        example: ORG
+      - name: companyIds
+        in: query
+        description: Filter by a list of companies
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      - name: contractingTmcIds
+        in: query
+        description: Filter by contracting TMCs
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      - name: bookingTmcIds
+        in: query
+        description: Filter by booking TMCs
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      - name: offset
+        in: query
+        description: Indicates the start index to read companies from the server.
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        description: Maximum number of results to be fetched.
+        schema:
+          type: integer
+          default: 100
+          minimum: 0
+          maximum: 100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfReference'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v2/companies/{companyId}:
+    get:
+      tags:
+      - Companies
+      summary: Get company
+      description: This endpoint gets a company by ID.
+      operationId: readCompany
+      parameters:
+      - name: companyId
+        in: path
+        description: Identifier for company. External id can be supplied in `X` prefixed form. For instance, if external_id = abc, then Xabc, has to be passed.
+        required: true
+        schema:
+          type: string
+        example: 4974a66b-7493-4f41-908c-58ba81093947
+      - in: header
+        name: x-application-id
+        schema:
+          type: string
+          format: uuid
+        example: 4974a66b-7493-4f41-908c-58ba81093947
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Companies
+      summary: Update company
+      operationId: updateCompany
+      description: This endpoint updates a company by ID.
+      parameters:
+      - name: companyId
+        in: path
+        description: Identifier for company.
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 4974a66b-7493-4f41-908c-58ba81093947
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+      responses:
+        '204':
+          description: Updated Successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Companies
+      summary: Delete company
+      description: This endpoint deletes a company by ID.
+      operationId: deleteCompany
+      parameters:
+      - name: companyId
+        in: path
+        description: Identifier for company.
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 4974a66b-7493-4f41-908c-58ba81093947
+      responses:
+        '204':
+          description: Deleted Successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/companies/{companyId}/features:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - in: header
+      name: X-Application-Id
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: companyRole
+      in: query
+      schema:
+        $ref: '#/components/schemas/CompanyRole'
+      example: TMC
+    get:
+      tags:
+      - Companies
+      summary: Get company features
+      operationId: getCompanyFeatures
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureConfigs'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags:
+      - Companies
+      summary: Update Company Features
+      operationId: updateCompanyFeaturesPatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFeaturesRequest'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/companies/{companyId}/travel-content-config:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Companies
+      summary: Get company travel content config
+      operationId: getCompanyTravelContentConfig
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelContentConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Companies
+      summary: Update company travel content config
+      operationId: updateCompanyTravelContentConfig
+      requestBody:
+        description: Travel content config of a given company
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelContentConfig'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Companies
+      summary: Delete company travel content config
+      operationId: deleteCompanyTravelContentConfig
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/companies/{companyId}/white-label-config:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    put:
+      tags:
+      - Companies
+      summary: Updates white label config
+      description: This endpoint stores white label config for the company at different entity levels.
+      operationId: updateCompanyWhiteLabelConfig
+      parameters:
+      - name: companyRole
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/CompanyRole'
+        example: ORG
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WhiteLabelConfig'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    get:
+      tags:
+      - Companies
+      summary: Get white label config
+      description: This endpoint fetches the white label config for the company.
+      operationId: getCompanyWhiteLabelConfig
+      parameters:
+      - name: companyRole
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/CompanyRole'
+        example: ORG
+      - name: applicationId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        example: 1234a66b-7493-4f41-908c-58ba81055667
+        description: Application context to get white label config.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhiteLabelConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Companies
+      summary: Delete white label config
+      description: This endpoint deletes the white label config for the company.
+      operationId: deleteCompanyWhiteLabelConfig
+      parameters:
+      - name: companyRole
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/CompanyRole'
+        example: ORG
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/companies/{companyId}/managers-config:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    put:
+      tags:
+      - Companies
+      summary: Updates company managers config
+      description: This endpoint stores company managers config (account managers and customer success managers) for the company at different entity levels.
+      operationId: updateCompanyManagersConfig
+      parameters:
+      - name: companyRole
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/CompanyRole'
+        example: ORG
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyManagersConfig'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    get:
+      tags:
+      - Companies
+      summary: Get company managers config
+      description: This endpoint fetches the company managers config for the company.
+      operationId: getCompanyManagersConfig
+      parameters:
+      - name: companyRole
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/CompanyRole'
+        example: ORG
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyManagersConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Companies
+      summary: Delete company managers config
+      description: This endpoint deletes the company managers config for the company.
+      operationId: deleteCompanyManagersConfig
+      parameters:
+      - name: companyRole
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/CompanyRole'
+        example: ORG
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/companies/{companyId}/color-config:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    put:
+      tags:
+      - Companies
+      summary: Updates Color config
+      description: This endpoint stores Color config for the company at some entity level.
+      operationId: updateColorConfig
+      parameters:
+      - name: companyRole
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/CompanyRole'
+        example: TMC
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColorConfig'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    get:
+      tags:
+      - Companies
+      summary: Get color config
+      description: This endpoint fetches the color config for the given entity.
+      operationId: getColorConfig
+      parameters:
+      - name: companyRole
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/CompanyRole'
+        example: TMC
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColorConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/companies/{companyId}/vendor-preferences:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Companies
+      summary: Upload company vendor preferences csv file
+      operationId: uploadCompanyPreferences
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadCompanyVendorPreferencesRequest'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/companies/{companyId}/preference-tiers:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    put:
+      tags:
+      - Companies
+      summary: Store tier levels with labels
+      description: This endpoint store the tiers with respective label for a company.
+      operationId: storePreferenceTiers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorePreferenceTiersRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    get:
+      tags:
+      - Companies
+      summary: Read company preference tiers
+      description: Read all preference tiers with respective label for a company.
+      operationId: listPreferenceTiers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPreferenceTiersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    PrimaryServiceProviderTmc:
+      type: object
+      title: PrimaryServiceProviderTmc
+      description: Primary service provider TMC info
+      required:
+      - tmcId
+      properties:
+        tmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Id of the service provider TMC.
+    ListPreferenceTiersResponse:
+      type: object
+      title: ListPreferenceTiers
+      description: List of preference tiers
+      required:
+      - preferenceTiersPerBookingType
+      properties:
+        preferenceTiersPerBookingType:
+          type: array
+          description: List of preference tiers with respective labels for different booking types.
+          items:
+            $ref: '#/components/schemas/PreferenceTiersPerBookingType'
+    ExpensePartnerConfig:
+      type: object
+      title: ExpensePartnerConfig
+      description: Expense Partner Configuration
+      required:
+      - partner
+      properties:
+        partner:
+          $ref: '#/components/schemas/ExpensePartner'
+        emailConfig:
+          $ref: '#/components/schemas/EmailConfig'
+        travelType:
+          type: array
+          description: Applicable segments
+          items:
+            $ref: '#/components/schemas/TravelType'
+        isExpensePartnerEnabled:
+          type: boolean
+          description: A flag denoting is the expense partner config is enabled or not.
+          default: true
+          example: true
+        reportCustomFields:
+          type: boolean
+          description: Send custom fields to the expense partner if enabled.
+          example: true
+        personalCardExpenseOwner:
+          $ref: '#/components/schemas/ExpenseOwner'
+        centralCardExpenseOwner:
+          $ref: '#/components/schemas/ExpenseOwner'
+        partnerReferralId:
+          type: string
+          description: Referral id used for this company/legal entity during expense partner setup
+          example: 1234hgd
+        itineraryConfig:
+          $ref: '#/components/schemas/ItineraryConfig'
+    Company:
+      type: object
+      title: Company
+      description: Company information.
+      required:
+      - id
+      - name
+      - billingCurrency
+      - companyRoles
+      properties:
+        id:
+          $ref: '#/components/schemas/CompanyId'
+        name:
+          type: string
+          description: Company name
+          example: Spotnana
+        emailDomains:
+          type: array
+          description: List of the company email domains
+          uniqueItems: true
+          items:
+            type: string
+            example: spotnana.com
+        billingCurrency:
+          type: string
+          description: Billing currency of the company
+          example: INR
+        phoneNumbers:
+          type: array
+          description: List of company phone numbers
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        emergencyContactInfos:
+          type: array
+          description: List of company emergency contacts
+          items:
+            $ref: '#/components/schemas/EmergencyContactInfo'
+        isSelfSignUpEnabled:
+          type: boolean
+          description: Boolean to show if company has self sign up enabled.
+          example: true
+        announcements:
+          type: array
+          description: Company announcements
+          items:
+            $ref: '#/components/schemas/Announcement'
+        companyLogo:
+          $ref: '#/components/schemas/Image'
+          description: Company logo
+        contractedBy:
+          $ref: '#/components/schemas/CompanyId'
+          description: Company ID which have contracted this company.
+        isActive:
+          type: boolean
+          description: Boolean to show if this is an active company.
+        companyRoles:
+          type: array
+          description: Company roles
+          items:
+            $ref: '#/components/schemas/CompanyRole'
+        supportConfig:
+          $ref: '#/components/schemas/SupportConfig'
+          description: Support Configuration for company
+          deprecated: true
+          x-sunset: '2026-07-01'
+        ccEmailAddresses:
+          type: array
+          description: List of email addresses on which all confirmation emails will be cced. This is applicable only for company roles 'ORG'
+          items:
+            type: string
+            example: example@gmail.com
+        bccEmailAddresses:
+          type: array
+          description: List of email addresses on which all confirmation emails will be bcced. This is applicable only for company roles 'ORG'
+          items:
+            type: string
+            example: example@gmail.com
+        connectors:
+          type: array
+          description: Connectors related to company.
+          items:
+            $ref: '#/components/schemas/Connector'
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+          description: Postal address of the company.
+        redirectUrl:
+          type: string
+          description: Redirect URL for the company. It is applicable only for company roles 'PARTNER_TMC'
+        rewardsProgram:
+          $ref: '#/components/schemas/RewardsProgram'
+          description: Reward Program corresponding to partner. It is applicable only for company roles 'PARTNER_TMC'.
+          deprecated: true
+          x-sunset: '2026-07-01'
+        tmcDefaultConfiguration:
+          $ref: '#/components/schemas/TmcDefaultConfiguration'
+          description: Default Booking configuration for the TMC. It is applicable only for company roles 'TMC'
+        expensePartnerConfig:
+          $ref: '#/components/schemas/ExpensePartnerConfig'
+        mobileRedirectUrl:
+          type: string
+          description: Redirect URL for the company for mobile. It is applicable only for company roles 'PARTNER_TMC'
+        applicableCustomFieldTypes:
+          type: array
+          description: List of custom fields supported by the company.
+          items:
+            $ref: '#/components/schemas/CustomFieldType'
+        oauthPartnerConfig:
+          $ref: '#/components/schemas/OAuthPartnerConfig'
+        privacySettings:
+          $ref: '#/components/schemas/PrivacySettings'
+        designationTree:
+          $ref: '#/components/schemas/DesignationNode'
+          description: Designation tree for company showing who reports whom.
+        externalId:
+          type: string
+          description: External id to be linked with this.
+          example: MyCompanyId
+        emailClientConfig:
+          $ref: '#/components/schemas/EmailClientConfig'
+          description: Email client configuration representing the email provider to be used.
+        isFake:
+          type: boolean
+          description: Whether the company is a fake company for testing. This is for internal use.
+          default: false
+          example: false
+        tmcPartnerRoleMappings:
+          type: array
+          description: list of individual role mappings between spotnana and partner.
+          items:
+            $ref: '#/components/schemas/TmcPartnerRoleMapping'
+        supportConfigs:
+          $ref: '#/components/schemas/SupportConfigs'
+        loyaltyBlockedCountries:
+          type: array
+          items:
+            type: string
+          description: List of 2 letter country codes where business travelers should not be allowed to add loyalty info.
+          example:
+          - US
+          - IN
+        allowDomainBasedAuthConfig:
+          type: boolean
+          default: false
+          description: Whether to allow user to get auth config based on email domain
+        carbonCostConfig:
+          $ref: '#/components/schemas/CarbonCostConfig'
+          description: The config is used to calculate carbon cost of CO2 emission.
+        defaultBookingTmcId:
+          description: Default booking TMC id. For PARTNER_TMC companies only.
+          $ref: '#/components/schemas/CompanyId'
+        bookingTmcId:
+          description: Booking TMC ID for the company. Applicable for ORG role companies.
+          $ref: '#/components/schemas/CompanyId'
+        companySpecifiedAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanySpecifiedAttributeCompany'
+          description: Company-specified custom attributes.
+    TmcDefaultConfiguration:
+      type: object
+      title: TmcDefaultConfiguration
+      description: Default TMC configuration.
+      properties:
+        defaultBookingTmcId:
+          type: string
+          format: uuid
+          description: Default booking TMC to be used. If not set, then TMC itself will be default booking tmc.
+          example: 734f4ea2-e9ed-4c90-853c-9eed62f1254b
+        countryWiseBookingTmcs:
+          type: array
+          description: Override for booking TMCs per country.
+          items:
+            type: object
+            title: CountryWiseBookingTmcs
+            required:
+            - countryCode
+            - bookingTmcId
+            properties:
+              countryCode:
+                type: string
+                example: US
+                description: The ISO 2-character country code for which booking TMCs needs to be overriden.
+              bookingTmcId:
+                type: string
+                format: uuid
+                description: Booking TMC for above country code.
+                example: 734f4ea2-e9ed-4c90-853c-9eed62f1254b
+    VerifierDetails:
+      type: object
+      title: VerifierDetails
+      oneOf:
+      - $ref: '#/components/schemas/OktaJwtVerifierWrapper'
+    FareCategoryFilterConfig:
+      type: object
+      title: FareCategoryFilterConfig
+      description: Air fare category filter
+      required:
+      - priority
+      - origin
+      - destination
+      - fareCategoryOption
+      properties:
+        priority:
+          type: integer
+          description: priority of this filter in case multiple filters are applicable
+          example: 1
+        origin:
+          description: origin for which this filter will be valid (* for all origins)
+          $ref: '#/components/schemas/LocationItem'
+        destination:
+          description: destination for which this filter will be valid (* for all destinations)
+          $ref: '#/components/schemas/LocationItem'
+        fareCategoryOption:
+          type: array
+          items:
+            $ref: '#/components/schemas/FareCategoryOptionConfig'
+    Money:
+      type: object
+      title: Money
+      description: 'Money object containing details such as the amount, the currency code, and the converted amount.
+
+        '
+      required:
+      - amount
+      - currencyCode
+      properties:
+        amount:
+          type: number
+          format: double
+          description: The numeric value for the amount of money.
+          example: 510
+        currencyCode:
+          type: string
+          description: The 3-letter currency code for the money amount (defined using ISO 4217 standard).
+          example: GBP
+        convertedAmount:
+          type: number
+          format: double
+          description: 'The converted currency and amount that has been converted (if a currency conversion has been requested).
+
+            For example, if the call requests that money be sent in a specified currency (because the frontend requested
+
+            the backend to send money in the user''s preferred currency).
+
+            '
+          example: 715.42
+        convertedCurrency:
+          type: string
+          description: The 3-letter currency code for the converted currency (defined using ISO 4217 standard).
+          example: USD
+        otherCoinage:
+          type: array
+          title: OtherCoinage
+          description: List of the dollar amount in other coinage systems like reward points, cryptocurrency etc.
+          items:
+            type: object
+            properties:
+              coinageCode:
+                $ref: '#/components/schemas/PaymentMethod'
+                description: Payment method
+              amount:
+                type: number
+                format: double
+                example: 1000
+              conversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              preferredCurrencyConversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              otherCoinageMetadata:
+                description: Metadata to store additional information related to the payment method
+                discriminator:
+                  propertyName: metadataType
+                  mapping:
+                    FlightPassPaymentMetadata: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+                oneOf:
+                - $ref: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+    EmailClientType:
+      type: string
+      enum:
+      - AWS_SES
+      - SENDGRID
+      example: SENDGRID
+    FlightPassTax:
+      type: object
+      title: FlightPassTax
+      description: A single tax component of the flight pass fare.
+      properties:
+        code:
+          type: string
+          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
+          example: GST_HST
+        amount:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+    ThemeConfigV2:
+      type: object
+      title: ThemeConfigV2
+      description: Theming V2 config — maps 1:1 to the FE TWhiteLabelConfigV2 shape. Additive and opt-in.
+      properties:
+        fontFamily:
+          type: array
+          description: Font stack — first font that loads wins. Empty = use V1 fontFamily.
+          items:
+            type: string
+          example:
+          - Inter
+          - Arial
+          - sans-serif
+        palette:
+          $ref: '#/components/schemas/ThemePalette'
+        overrides:
+          $ref: '#/components/schemas/ThemeOverrides'
+    ExpensePartner:
+      title: Expense Partner
+      description: The expense partner name as enum.
+      type: string
+      enum:
+      - EXPENSIFY
+      - EMBURSE_CHROMERIVER
+      - BREX
+      example: EXPENSIFY
+    LocationType:
+      description: Type of the location object.
+      type: string
+      title: LocationType
+      enum:
+      - CONTINENT
+      - COUNTRY
+      - CITY
+      - AIRPORT
+      - ADMINISTRATIVE_DIVISION
+      example: CITY
+    RewardsProgram:
+      type: object
+      title: RewardsProgram
+      description: Rewards program details.
+      properties:
+        allowedUserRoles:
+          type: array
+          description: Roles entitled to redeem company's reward points.
+          items:
+            $ref: '#/components/schemas/RoleType'
+        conversionRate:
+          type: object
+          description: Conversion rate of points to specified currency.
+          title: ConversionRate
+          properties:
+            currencyCode:
+              type: string
+              example: USD
+              description: The 3-letter currency code defined in ISO 4217.
+            rate:
+              type: number
+              format: double
+              description: Conversion rate of points to specified currency.
+        redeemablePaymentMethods:
+          type: array
+          description: Payment methods to redeem company's reward points.
+          items:
+            $ref: '#/components/schemas/PaymentMethod'
+        backingCurrency:
+          type: array
+          description: The currencies backing up this rewards program.
+          items:
+            type: string
+            example: USD
+    CompanyId:
+      type: object
+      title: CompanyId
+      description: Company ID
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: f49d00fe-1eda-4304-ba79-a980f565281d
+    OktaJwtVerifier:
+      type: object
+      title: OktaJwtVerifier
+      description: "Details of Okta JWT verifier such as okta oauth endpoint, audience for which the token is \nissued.\n"
+      required:
+      - oauthUrl
+      - audience
+      properties:
+        oauthUrl:
+          type: string
+          description: Okta oauth url.
+        audience:
+          type: string
+          description: Audience for which the token is issued.
+    EmergencyContactInfo:
+      type: object
+      title: EmergencyContactInfo
+      description: Emergency contact information.
+      required:
+      - email
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+          x-pii: SENSITIVE
+        designation:
+          type: string
+          example: MANAGER
+        email:
+          type: string
+          format: email
+          example: emergency-contact@email.com
+          x-pii: IDENTIFIER
+        name:
+          $ref: '#/components/schemas/Name'
+        phoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+          x-pii: IDENTIFIER
+        userOrgId:
+          $ref: '#/components/schemas/UserOrgId'
+    UserId:
+      type: object
+      title: UserId
+      description: User identifier
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+    PrivacySettings:
+      type: object
+      title: PrivacySettings
+      description: Privacy settings for a company.
+      properties:
+        allowCompanyAdminAccessToRelativesInfo:
+          type: boolean
+          description: Boolean to show if company admin can see information of users' relatives.
+          example: true
+    WhiteLabelConfig:
+      type: object
+      title: WhitelabelConfig
+      description: Whitelabel configuration.
+      x-ignoreBreakingChanges:
+      - WhiteLabelConfig->colors
+      - CompanyApi.yaml->WhiteLabelConfig->colors
+      properties:
+        companyName:
+          type: string
+          example: Spotnana
+        colors:
+          $ref: '#/components/schemas/ColorWhiteLabelConfig'
+          x-optionalFrom: '2025-09-25'
+        webLinks:
+          $ref: '#/components/schemas/WebLinksConfig'
+        fromEmailAddress:
+          type: string
+          example: no-reply@spotnana.com
+        fontFamily:
+          type: string
+          example: Arial
+          default: Arial
+        emailFontFamily:
+          type: string
+          example: Roboto
+          default: Roboto
+        fontFamilyCss:
+          type: string
+          example: https://duploservices-stage-email-assets-873909615026.s3.us-west-2.amazonaws.com/partners/amazon/emberDisplay.css
+        emailClientConfig:
+          $ref: '#/components/schemas/EmailClientConfig'
+          description: Email client configuration representing the email provider to be used.
+        clientRoutingBasePath:
+          type: string
+          description: Base path used by Spotnana OBT application to invoke API calls. Default path value is /
+        routingConfig:
+          $ref: '#/components/schemas/RoutingConfig'
+        privacyDisclaimer:
+          $ref: '#/components/schemas/PrivacyDisclaimer'
+        visaRequirements:
+          type: string
+          description: Rich text content for visa requirements information
+          example: <p>Please ensure you have the necessary visa documentation before traveling.</p>
+        themeConfig:
+          $ref: '#/components/schemas/ThemeConfigV2'
+          description: Theming V2 — additive, opt-in. Unset falls back to V1 (colors / fontFamily).
+        brandingVisibility:
+          $ref: '#/components/schemas/BrandingVisibility'
+          description: Per-surface visibility of branding elements (e.g. hide the company logo on web but keep it in email). Additive — default shows everything.
+    AppDownloadLinksConfig:
+      type: object
+      title: AppDownloadLinksConfig
+      description: App store or QR links for downloading app.
+      properties:
+        androidPlayStoreUrl:
+          type: string
+          example: https://play.google.com/store/apps/details?id=com.spotnana
+        iosAppStoreUrl:
+          type: string
+          example: https://apps.apple.com/in/app/spotnana-travel-booking/id1580021446
+        qrCodeUrl:
+          type: string
+          example: https://www.spotnana.com
+    OrganizationId:
+      type: object
+      title: OrganizationId
+      description: Organization id for traveler.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+    SocialMediaLinksConfig:
+      type: object
+      title: SocialMediaLinksConfig
+      description: Social media links.
+      properties:
+        facebookUrl:
+          type: string
+          example: https://www.facebook.com/spotnanaofficial
+        twitterUrl:
+          type: string
+          example: https://twitter.com/spotnana
+        instagramUrl:
+          type: string
+          example: https://www.instagram.com/spotnana_official
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    FreshdeskCredentialDetails:
+      type: object
+      title: FreshdeskCredentialDetails
+      description: Credentials related to freshdesk.
+      required:
+      - domain
+      - appId
+      - appKey
+      properties:
+        domain:
+          type: string
+          description: Domain related to fresh desk.
+        appId:
+          type: string
+          description: An identifier for fresh desk's app.
+        appKey:
+          type: string
+          description: A secret key assigned to user's app by fresh desk.
+    Tier:
+      type: string
+      title: Tier
+      description: 'Tier of User.
+
+        Note: In default UI, BASIC is displayed as Standard, and SEAT1A is displayed as VIP.
+
+        '
+      enum:
+      - BASIC
+      - SEAT1A
+      x-enum-varnames:
+      - BASIC
+      - SEAT1A
+      example: SEAT1A
+      default: BASIC
+    AirConfig:
+      type: object
+      title: AirConfig
+      description: Air content config
+      properties:
+        fareCategoryFilter:
+          type: array
+          description: List of fare category filter
+          items:
+            $ref: '#/components/schemas/FareCategoryFilterConfig'
+    UserIdentifierType:
+      type: string
+      enum:
+      - PID
+      - EMAIL
+      - EXTERNAL_ID
+      description: Type of identifier for auth code Authentication
+    PreferenceEntityType:
+      type: string
+      title: PreferenceEntityType
+      description: Different type of entities at which one can store vendor preference.
+      enum:
+      - COMPANY
+      - LEGAL_ENTITY
+      - COUNTRY
+    ProfileColors:
+      type: array
+      description: The list of colors relating to profile.
+      items:
+        $ref: '#/components/schemas/TitledColor'
+    OktaJwtVerifierWrapper:
+      type: object
+      title: OktaJwtVerifierWrapper
+      properties:
+        oktaJwtVerifier:
+          $ref: '#/components/schemas/OktaJwtVerifier'
+    TmcPartnerRoleMapping:
+      type: object
+      title: TmcPartnerRoleMapping
+      description: Mapping between spotnana role and partner company's role
+      required:
+      - partnerRole
+      - spotnanaRole
+      properties:
+        partnerRole:
+          type: string
+          description: User's role at partner.
+        spotnanaRole:
+          $ref: '#/components/schemas/RoleType'
+    ThemeColorTokens:
+      type: object
+      title: ThemeColorTokens
+      description: Semantic-role-based tokens (bg / text / border / icon).
+      properties:
+        bg:
+          $ref: '#/components/schemas/ThemeBgTokens'
+        text:
+          $ref: '#/components/schemas/ThemeTextTokens'
+        border:
+          $ref: '#/components/schemas/ThemeBorderTokens'
+        icon:
+          $ref: '#/components/schemas/ThemeIconTokens'
+    SupportConfigs:
+      title: SupportConfigs
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+        elements:
+          type: array
+          description: Support Configurations List.
+          items:
+            $ref: '#/components/schemas/SupportConfig'
+    ThemeTextTokens:
+      type: object
+      title: ThemeTextTokens
+      properties:
+        primary:
+          type: string
+          example: '#1A1A1A'
+        secondary:
+          type: string
+          example: '#6B6B6B'
+        brand:
+          type: string
+          example: '#D33B47'
+        link:
+          type: string
+          example: '#1F6FEB'
+    PersonalCardConfig:
+      title: PersonalCardConfig
+      description: Configuration for bookings done with Personal card.
+      type: object
+      properties:
+        sendToTraveler:
+          type: boolean
+          description: A boolean flag to show if expenses are to be sent to traveler's Expense partner account.
+          example: false
+        personalCardExpenseEmail:
+          type: string
+          description: The email for the expense partner account.
+          example: user@company.com
+    UploadCompanyVendorPreferencesRequest:
+      type: object
+      title: UploadCompanyVendorPreferencesRequest
+      description: Request for uploading company vendor preferences.
+      required:
+      - vendorType
+      properties:
+        vendorType:
+          $ref: '#/components/schemas/VendorType'
+        file:
+          type: string
+          format: binary
+    ItineraryConfig:
+      title: ItineraryConfig
+      type: object
+      description: Itinerary configuration to control what expenses to send to the partner
+      properties:
+        skipModificationUpdate:
+          type: boolean
+          description: Allow modification expenses to be skipped from sending to the partner
+          example: true
+          default: false
+        skipCancellationUpdate:
+          type: boolean
+          description: Allow cancellation expenses to be skipped from sending to the partner
+          example: true
+          default: false
+    RoutingConfig:
+      type: object
+      title: RoutingConfig
+      description: App routing configuration.
+      properties:
+        appHomeRoute:
+          type: string
+          example: /my-account
+    FlightPassPaymentMetadata:
+      type: object
+      title: FlightPassPaymentMetadata
+      description: Metadata specific to Flight Pass payment method in OtherCoinage.
+      properties:
+        flightPassNumber:
+          type: string
+          description: Flight pass number
+          example: FP123456789
+        flightPassAmounts:
+          $ref: '#/components/schemas/FlightPassPaymentAmounts'
+    Image:
+      type: object
+      title: Image
+      description: An image with meta data. Either the `data` or `url` property must be supplied to load the image.
+      properties:
+        data:
+          type: string
+          format: byte
+          example: 6935813e12584abda0e43d71cd2ea260
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        url:
+          type: string
+          example: https://static.wixstatic.com/media/73f2e2_6935813e12584abda0e43d71cd2ea260~mv2.png/v1/fill/w_630,h_94,al_c,q_85,usm_0.66_1.00_0.01/Spotnana%403x.webp
+    CompanyRole:
+      type: string
+      description: Role of the company.
+      enum:
+      - ORG
+      - TMC
+      - PARTNER_TMC
+      - HR_FEED_CONNECTOR
+      - TRIPS_DATA_CONNECTOR
+      - GLOBAL
+      example: ORG
+    CompanySpecifiedAttributeCompany:
+      type: object
+      description: Company-specified custom attribute.
+      required:
+      - fieldName
+      - value
+      properties:
+        fieldName:
+          type: string
+          description: Field name of the attribute
+          example: businessId
+        value:
+          type: string
+          description: Field value of the attribute
+          example: ABCD
+    FareCategoryOptionConfig:
+      type: object
+      title: FareCategoryOptionConfig
+      description: Fare category option to disable
+      required:
+      - fareCategory
+      - disabled
+      properties:
+        fareCategory:
+          $ref: '#/components/schemas/FareCategory'
+        disabled:
+          type: boolean
+          description: true if a fare category is disabled
+          example: true
+    NGSFareCategory:
+      type: string
+      enum:
+      - UNKNOWN_NGS_CATEGORY
+      - BASE
+      - STANDARD
+      - ENHANCED
+      - PREMIUM
+      - LUXURY
+      - ULTRA_LUXURY
+      default: UNKNOWN_NGS_CATEGORY
+    ColorTitle:
+      title: ColorTitle
+      description: Title of the color.
+      type: string
+      enum:
+      - PROFILE_TIER_MEMBER_COLOR
+      - PROFILE_TIER_SILVER_COLOR
+      - PROFILE_TIER_GOLD_COLOR
+      - PROFILE_TIER_PLATINUM_COLOR
+      - PROFILE_TIER_TITANIUM_COLOR
+      - PROFILE_TIER_AMBASSADOR_COLOR
+    ThemeBorderTokens:
+      type: object
+      title: ThemeBorderTokens
+      properties:
+        light:
+          type: string
+          example: '#E5E5E5'
+        medium:
+          type: string
+          example: '#CCCCCC'
+        dark:
+          type: string
+          example: '#999999'
+        brand:
+          type: string
+          example: '#D33B47'
+        brandSubtle:
+          type: string
+          example: '#F3C6C9'
+        hover:
+          type: string
+          example: '#B73039'
+    TokenVerifier:
+      type: object
+      title: TokenVerifier
+      description: Method to verify the external token sent by partners.
+      required:
+      - doVerifyToken
+      properties:
+        doVerifyToken:
+          type: boolean
+          description: Token verification rules will be applied only if this is true.
+        type:
+          type: string
+          description: Method to verify the external token sent by partners.
+          enum:
+          - OKTA_JWT
+        verifierDetails:
+          $ref: '#/components/schemas/VerifierDetails'
+    SupportConfig:
+      type: object
+      title: SupportConfig
+      description: Support Configuration for company
+      properties:
+        contactNumbers:
+          type: array
+          description: List of support phone numbers.
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        emailAddresses:
+          type: array
+          description: List of the support email addresses.
+          uniqueItems: true
+          items:
+            type: string
+            example: support@spotnana.com
+        freshdeskConfig:
+          $ref: '#/components/schemas/FreshdeskConfig'
+        tier:
+          $ref: '#/components/schemas/Tier'
+          default: BASIC
+        genesysConfig:
+          type: object
+          title: GenesysConfig
+          description: Configuration for genesys.
+          required:
+          - enabled
+          - dataUrl
+          properties:
+            enabled:
+              type: boolean
+              description: Whether genesys is enabled or not.
+              default: false
+              example: true
+            dataUrl:
+              type: string
+              description: Data url for genesys.
+        portalUrls:
+          type: array
+          description: List of the support portal urls.
+          uniqueItems: true
+          items:
+            type: string
+            example: www.support.spotnana.com
+        zendeskConfig:
+          type: object
+          title: ZendeskConfig
+          description: Configuration for zendesk.
+          required:
+          - enabled
+          - integrationId
+          properties:
+            enabled:
+              type: boolean
+              description: Whether Zendesk Chat is enabled or not.
+              default: false
+              example: true
+            integrationId:
+              type: string
+              description: Integration ID for Zendesk Chat for Web.
+              example: '1234567890'
+            androidIntegrationId:
+              type: string
+              description: Integration ID for Zendesk Chat for Android.
+              example: '1234567890'
+            iosIntegrationId:
+              type: string
+              description: Integration ID for Zendesk Chat for iOS.
+              example: '1234567890'
+        genesysCloudConfig:
+          type: object
+          title: GenesysCloudConfig
+          description: Configuration for Genesys cloud.
+          required:
+          - enabled
+          - deploymentId
+          - environment
+          - genesysScriptUrl
+          properties:
+            enabled:
+              type: boolean
+              description: Whether Genesys Cloud is enabled or not.
+              default: false
+              example: true
+            deploymentId:
+              type: string
+              description: DeploymentId for Genesys Cloud.
+              example: 52dc2a6f-772a-4edf-96d3-b3f0c49400a7
+            environment:
+              type: string
+              description: Environment for Genesys Cloud.
+              example: usa-1
+            genesysScriptUrl:
+              type: string
+              description: Url for Genesys Cloud Script.
+              example: https://test.test.com
+            clientId:
+              type: string
+              description: Client ID for Genesys Cloud.
+              example: 1ab2cd3efghijklmnop4qr5s6t
+        twilioChatConfig:
+          type: object
+          title: TwilioChatConfig
+          description: Configuration for Twilio Chat.
+          required:
+          - enabled
+          properties:
+            enabled:
+              type: boolean
+              description: Whether Twilio Chat is enabled or not.
+        cognigyChatConfig:
+          type: object
+          title: CognigyChatConfig
+          description: Cognigy Chat Config.
+          properties:
+            enabled:
+              type: boolean
+              description: Whether Cognigy chat is enabled or not.
+              x-requiredFrom: '2025-05-12'
+            scriptUrl:
+              type: string
+              description: Url for Cognigy Script.
+              example: https://your-cognigy-instance.com/script/abcdef123456
+              x-requiredFrom: '2025-05-12'
+            initWebchatEndpoint:
+              type: string
+              description: Endpoint for Cognigy initWebchat method.
+              example: https://your-cognigy-instance.com/initWebchat
+              x-requiredFrom: '2025-05-12'
+            sessionTimeout:
+              type: integer
+              format: integer
+              description: Session timeout (in minutes) for Cognigy Chat.
+              example: 30
+              x-requiredFrom: '2025-05-12'
+            cssUrl:
+              type: string
+              description: Url for Cognigy Chat CSS.
+              example: https://your-server.com/css/chat.css
+    CompanyManagersConfig:
+      type: object
+      title: CompanyManagersConfig
+      description: Configuration for company managers (account managers and customer success managers).
+      properties:
+        accountManagers:
+          type: array
+          description: List of detailed account manager information
+          items:
+            $ref: '#/components/schemas/CompanyManagerInfo'
+        customerSuccessManagers:
+          type: array
+          description: List of detailed customer success manager information
+          items:
+            $ref: '#/components/schemas/CompanyManagerInfo'
+    PostalAddress:
+      title: PostalAddress
+      description: Postal Address Details
+      type: object
+      required:
+      - addressLines
+      - regionCode
+      properties:
+        addressLines:
+          description: Address lines
+          type: array
+          items:
+            type: string
+            example: Golden Gate Bridge
+        administrativeArea:
+          type: string
+          description: 'Code of administrative area. For example: DL for Delhi, India.
+
+            Highest administrative subdivision which is used for postal
+
+            addresses of a country or region.
+
+            For example, this can be a state, a province, an oblast, or a prefecture.
+
+            Specifically, for Spain this is the province and not the autonomous
+
+            community (e.g. "Barcelona" and not "Catalonia").
+
+            Many countries don''t use an administrative area in postal addresses. E.g.
+
+            in Switzerland this should be left unpopulated.
+
+            '
+          example: CA
+        administrativeAreaName:
+          type: string
+          description: "Name of administrative area. This is full name corresponding to administrativeArea. \nLike Delhi for DL area code. For some places, code and name maybe same as well like Tokyo.\n"
+          example: California
+        description:
+          description: Address description
+          type: string
+          example: San Francisco Home
+        isDefault:
+          description: Whether this address is default address in case multiple addresses are specified.
+          type: boolean
+          example: true
+        languageCode:
+          description: "BCP-47 language code of the contents of this address (if known). This is often the UI \nlanguage of the input form or is expected to match one of the languages used in the \naddress' country/region, or their transliterated equivalents.\nThis can affect formatting in certain countries, but is not critical to the correctness \nof the data and will never affect any validation or other non-formatting related operations.\nExamples: \"zh-Hant\", \"ja\", \"ja-Latn\", \"en\".\n"
+          type: string
+          example: en
+        locality:
+          description: Generally refers to the city/town portion of the address.
+          type: string
+          example: San Francisco
+        locationCode:
+          description: IATA 3-letter location code. See https://www.iata.org/en/services/codes.
+          type: string
+          example: LAX
+        organization:
+          description: The name of the organization at the address.
+          type: string
+          example: Spotnana
+        postalCode:
+          description: Postal code of the address. This is a required field when setting for a user/legal entity/company etc.
+          type: string
+          example: '94130'
+        continentCode:
+          description: 2 letter continent code of the continent this address falls in.
+          type: string
+          example: AF
+        recipients:
+          description: The recipient at the address.
+          type: array
+          items:
+            type: string
+        regionCode:
+          description: Region code of the country/region of the address.
+          type: string
+          example: US
+        regionName:
+          description: Region name of the country/region of the address.
+          type: string
+          example: America
+        revision:
+          type: integer
+          format: int32
+          example: 1
+        sortingCode:
+          description: 'Additional, country-specific, sorting code. This is not used
+
+            in most regions. Where it is used, the value is either a string like
+
+            "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
+
+            alone, representing the "sector code" (Jamaica), "delivery area indicator"
+
+            (Malawi) or "post office indicator" (e.g. Côte d''Ivoire).
+
+            '
+          type: string
+          example: Jamaica
+        sublocality:
+          description: Sublocality of the address. This can be neighborhoods, boroughs, districts.
+          type: string
+        timezone:
+          description: Time zone of the address.
+          type: string
+          example: America/Los_Angeles
+        coordinates:
+          description: Map coordinates of the address.
+          $ref: '#/components/schemas/Latlng'
+    CabinViewFareCategory:
+      type: string
+      enum:
+      - UNKNOWN_CABIN_CATEGORY
+      - BASIC
+      - ECONOMY
+      - PREMIUM_ECONOMY
+      - ECONOMY_PLUS
+      - BUSINESS
+      - FIRST
+      default: UNKNOWN_CABIN_CATEGORY
+    UpdateFeatureConfig:
+      type: object
+      title: FeatureConfig
+      description: Feature enabled for company.
+      required:
+      - name
+      - value
+      properties:
+        name:
+          $ref: '#/components/schemas/FeatureNameEnum'
+        value:
+          type: string
+          description: Value associated with feature converted in String format.
+    OrganizationAgencyId:
+      type: object
+      title: OrganizationAgencyId
+      description: Agency id for the organization.
+      deprecated: true
+      x-sunset: '2026-07-01'
+      required:
+      - id
+      properties:
+        id:
+          type: string
+    ThemePalette:
+      type: object
+      title: ThemePalette
+      description: Semantic palette split by color mode. Empty token = use the Blocks default.
+      properties:
+        light:
+          $ref: '#/components/schemas/ThemeColorTokens'
+        dark:
+          $ref: '#/components/schemas/ThemeColorTokens'
+    TmcBasicInfo:
+      type: object
+      title: TmcBasicInfo
+      description: TMC related basic information.
+      required:
+      - contractingTmc
+      - bookingTmc
+      properties:
+        contractingTmc:
+          $ref: '#/components/schemas/CompanyRef'
+          description: Contracting TMC is the TMC the user/organization contracted.
+        bookingTmc:
+          $ref: '#/components/schemas/CompanyRef'
+          description: Booking TMC is the TMC used for the bookings for the user/organization.
+    TitledColor:
+      type: object
+      description: Color with associated title.
+      required:
+      - title
+      - color
+      properties:
+        title:
+          $ref: '#/components/schemas/ColorTitle'
+        color:
+          type: string
+          example: '#FF0000'
+    FlightPassPaymentMetadataWrapper:
+      type: object
+      title: FlightPassPaymentMetadataWrapper
+      description: Wrapper for Flight Pass payment metadata.
+      required:
+      - flightPassMetadata
+      properties:
+        metadataType:
+          type: string
+          description: Discriminator field for polymorphic deserialization
+          example: FlightPassPaymentMetadata
+          default: FlightPassPaymentMetadata
+        flightPassMetadata:
+          $ref: '#/components/schemas/FlightPassPaymentMetadata'
+    EmailClientConfig:
+      type: object
+      title: EmailClientConfig
+      description: Email Client Config
+      required:
+      - client
+      - credentials
+      - defaultSenderAddress
+      properties:
+        client:
+          $ref: '#/components/schemas/EmailClientType'
+          description: The email client to be used for pushing out the emails
+        credentials:
+          $ref: '#/components/schemas/EmailClientCredentials'
+          description: Credentials for connecting to the email client
+        defaultSenderAddress:
+          type: string
+          description: The default sender address to be used for the configured client
+          example: test@somedomain.com
+        defaultSenderName:
+          type: string
+          description: The default sender name to be used for the configured client
+          example: Test Sender
+    LocationItem:
+      type: object
+      title: LocationItem
+      description: Object representing a single location object.
+      required:
+      - value
+      - metadata
+      - infos
+      properties:
+        value:
+          type: string
+          description: User facing display value.
+        metadata:
+          description: Metadata such as country code of the @value.
+          $ref: '#/components/schemas/LocationMetadata'
+        infos:
+          type: array
+          description: 'This represent other information for the @value.
+
+            E.g. - This will have continent details if value is any country,
+
+            similarly country details for city.
+
+            '
+          items:
+            $ref: '#/components/schemas/LocationItem'
+    Weight:
+      type: object
+      title: Weight
+      description: Specifies weight unit and weight amount.
+      required:
+      - weight
+      - unit
+      properties:
+        weight:
+          type: number
+          description: Amount of weight.
+          format: double
+          example: 150
+        unit:
+          type: string
+          description: Unit of weight.
+          enum:
+          - KG
+          - LBS
+          example: KG
+    ColorConfig:
+      type: object
+      title: ColorConfig
+      description: Color configuration for customizable colors in the UI.
+      properties:
+        profileColors:
+          $ref: '#/components/schemas/ProfileColors'
+    EmailClientCredentials:
+      type: object
+      title: EmailClientCredentials
+      description: Email client credentials for the company.
+      required:
+      - emailClientSecretKey
+      properties:
+        emailClientSecretKey:
+          $ref: '#/components/schemas/EmailClientSecretKey'
+    ThemeBgTokens:
+      type: object
+      title: ThemeBgTokens
+      description: Background tokens. surface is the app/page background.
+      properties:
+        surface:
+          type: string
+          example: '#FFFFFF'
+        surface02:
+          type: string
+          example: '#F7F7F7'
+        brand:
+          type: string
+          example: '#D33B47'
+        brandSubtle:
+          type: string
+          example: '#FBE9EA'
+        brandHover:
+          type: string
+          example: '#B73039'
+    TmcInfo:
+      type: object
+      title: TmcInfo
+      description: TMC config information.
+      required:
+      - id
+      - primaryServiceProviderTmc
+      properties:
+        id:
+          $ref: '#/components/schemas/CompanyId'
+          description: TMC id.
+        primaryServiceProviderTmc:
+          $ref: '#/components/schemas/PrimaryServiceProviderTmc'
+          description: Primary service provider TMC for the TMC.
+        secondaryServiceProviderTmcs:
+          type: array
+          description: Secondary service provider TMCs for the TMC.
+          items:
+            $ref: '#/components/schemas/SecondaryServiceProviderTmc'
+        partnerTmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Useful to identify the clients onboarded by a PARTNER_TMC
+    CarbonCostConfig:
+      type: object
+      title: CarbonCostConfig
+      description: The config is used to calculate carbon cost of CO2 emission.
+      required:
+      - price
+      - weight
+      properties:
+        price:
+          description: The price for the carbon emission per weight.
+          $ref: '#/components/schemas/Money'
+        weight:
+          description: The weight unit and amount to calculate cost of carbon emission.
+          $ref: '#/components/schemas/Weight'
+    PreferenceTierLevel:
+      title: PreferenceTierLevel
+      type: string
+      description: Different levels of tier.
+      enum:
+      - TIER_1
+      - TIER_2
+      - TIER_3
+      - TIER_4
+      - TIER_5
+      - TIER_6
+    Connector:
+      type: object
+      title: Connector
+      description: Connectors related to company.
+      required:
+      - connectorType
+      - connectorId
+      properties:
+        connectorType:
+          type: string
+          description: Type of connector.
+          enum:
+          - HR_FEED_CONNECTOR
+          - TRIPS_DATA_CONNECTOR
+          example: HR_FEED_CONNECTOR
+        connectorId:
+          $ref: '#/components/schemas/CompanyId'
+    VendorType:
+      type: string
+      description: Types of vendors supported for company preferences.
+      enum:
+      - CAR
+      - HOTEL
+      - HOTEL_CHAIN
+      - AIRLINE
+      - HOTEL_BRAND
+    PreferenceTiersPerBookingType:
+      type: object
+      title: PreferenceTiersPerBookingType
+      description: List of preference tiers with respective labels for given booking type.
+      required:
+      - allowedEntityTypes
+      - preferenceTiers
+      - bookingType
+      properties:
+        allowedEntityTypes:
+          type: array
+          description: Different entity types that are allowed for defining preference.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/PreferenceEntityType'
+        bookingType:
+          $ref: '#/components/schemas/BookingType'
+        preferenceTiers:
+          type: array
+          description: List of preference tiers with respective labels.
+          items:
+            $ref: '#/components/schemas/PreferenceTier'
+    BookingType:
+      title: BookingType
+      description: What type of travel booking it is.
+      type: string
+      enum:
+      - AIR
+      - HOTEL
+      - CAR
+      - RAIL
+      - LIMO
+      example: AIR
+    UserOrgId:
+      type: object
+      title: UserOrgId
+      description: User and user's organization information.
+      required:
+      - userId
+      - organizationId
+      properties:
+        organizationAgencyId:
+          $ref: '#/components/schemas/OrganizationAgencyId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        userId:
+          $ref: '#/components/schemas/UserId'
+        tmcInfo:
+          $ref: '#/components/schemas/TmcInfo'
+          deprecated: true
+          x-sunset: '2026-07-01'
+        tmcBasicInfo:
+          $ref: '#/components/schemas/TmcBasicInfo'
+    ExpenseOwner:
+      type: object
+      title: ExpenseOwner
+      description: Determines who should the expense be reported against.
+      properties:
+        traveler:
+          type: boolean
+          description: Report the expense against the traveler who made the booking. If set to true, central email should not be set.
+          example: true
+        centralEmail:
+          type: string
+          description: Report the expense against a central email.
+          example: docs@company.com
+    RoleType:
+      type: string
+      enum:
+      - UNKNOWN_TYPE
+      - COMPANY_ADMIN
+      - COMPANY_TRAVEL_ARRANGER
+      - TRAVEL_ARRANGER
+      - COMPANY_REPORT_ADMIN
+      - GLOBAL_ADMIN
+      - GLOBAL_AGENT
+      - TMC_AGENT
+      - TMC_ADMIN
+      example: TRAVEL_ARRANGER
+    EmailConfig:
+      type: object
+      title: EmailConfig
+      description: The email configuration part of the ExpensePartnerConfig.
+      required:
+      - expensePartnerEmail
+      properties:
+        personalCardConfig:
+          $ref: '#/components/schemas/PersonalCardConfig'
+        centralCardExpenseEmail:
+          type: string
+          description: Central email for bookings done with central card.
+          example: finance+le@company.com
+        expensePartnerEmail:
+          type: string
+          description: The expense partner email where expense receipts are sent to.
+          example: receipts@expensify.com
+        bccEmail:
+          type: string
+          description: Email to which we bcc expensify emails
+          example: docs@company.com
+    UserInfoEndpointResponseAttribute:
+      type: object
+      title: UserInfoEndpointResponseAttribute
+      description: auth Code metadata to get the user authenticated.
+      required:
+      - name
+      - jsonXpath
+      properties:
+        name:
+          description: Attribute name
+          type: string
+          enum:
+          - PID
+          - EMAIL
+          - EXTERNAL_ID
+          example: PID
+        jsonXpath:
+          type: string
+          description: Json xpath of the Attribute/Parameter value location
+          example: $.user.email
+    UpdateFeaturesRequest:
+      type: object
+      title: UpdateFeaturesRequest
+      properties:
+        featuresToUpdate:
+          type: array
+          description: Features that has to be updated.
+          items:
+            $ref: '#/components/schemas/UpdateFeatureConfig'
+        featuresToDelete:
+          type: array
+          description: Features that has to be deleted.
+          items:
+            $ref: '#/components/schemas/FeatureNameEnum'
+    FeatureConfig:
+      type: object
+      title: FeatureConfig
+      description: Feature enabled for company.
+      required:
+      - name
+      - enabled
+      properties:
+        name:
+          $ref: '#/components/schemas/FeatureNameEnum'
+        enabled:
+          type: boolean
+          description: Whether feature is enabled or not.
+          deprecated: true
+          x-sunset: '2026-07-01'
+          default: true
+          example: true
+        valueType:
+          type: string
+          description: Value Type of Feature.
+          enum:
+          - INT
+          - DOUBLE
+          - BOOL
+          - STRING
+          - JSON
+          example: BOOL
+        value:
+          type: string
+          description: Value associated with Feature.
+    PaymentMethod:
+      type: string
+      description: Payment method
+      enum:
+      - PAYMENT_METHOD_UNKNOWN
+      - CREDIT_CARD
+      - BREX_POINTS
+      - CASH
+      - QANTAS_POINTS
+      - VENDOR_PROGRAM_PAYMENT
+      - DELAYED_INVOICING
+      - FLIGHT_CREDITS
+      - QANTAS_TRAVEL_FUND
+      - CUSTOM_VIRTUAL_PAYMENT
+      - FLIGHT_PASS
+      - MISCELLANEOUS_CREDIT_ORDER
+      - NO_PREPAYMENT
+      x-ignoreBreakingChanges:
+      - PaymentMethod->MISCELLANEOUS_CREDIT_ORDER
+      - PaymentMethod->NO_PREPAYMENT
+      example: BREX_POINTS
+    SupplierType:
+      type: string
+      description: Supplier type like Sabre, TravelFusion etc.
+      enum:
+      - SABRE
+      - AMADEUS
+      - TRAVEL_FUSION
+      - FARELOGIX_NDC
+      - ATPCO_NDC
+      - TRAINLINE
+      - AVIA
+      - QBR
+      - BCD
+      - QANTAS_HOTELS
+      - SOUTHWEST
+      - EXPEDIA
+      - HOTEL_HUB
+      - NDC
+      - MARRIOTT
+      - CLEARTRIP
+      - KYTE
+      - GROUNDSPAN
+      - SABRE_NDC
+      - BOOKING_COM
+      - CARTRAWLER
+      - PREMIER_INN
+      - TRAVELODGE
+      - ENTERPRISE
+      - HYATT
+      - NATIONAL
+      - ALAMO
+      - HERTZ
+      - DOLLAR
+      - THRIFTY
+      - FIREFLY
+      - EUROSTAR
+      - AVIS
+      - BUDGET
+      x-ignoreBreakingChanges:
+      - SupplierType->PREMIER_INN
+      example: SABRE
+    FlightPassPaymentAmounts:
+      type: object
+      title: FlightPassPaymentAmounts
+      description: Fare breakdown for the flight pass booking.
+      properties:
+        totalAmount:
+          description: Total value (base + taxes).
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          description: Base fare excluding taxes.
+          $ref: '#/components/schemas/Money'
+        totalTaxes:
+          description: Sum of all taxes, fees, and charges.
+          $ref: '#/components/schemas/Money'
+        taxBreakdown:
+          type: array
+          description: Breakdown of taxes by code (e.g. GST_HST, QST, OTHER).
+          items:
+            $ref: '#/components/schemas/FlightPassTax'
+    StorePreferenceTiersRequest:
+      type: object
+      title: StorePreferenceTiersRequest
+      description: Request object to store preference tiers.
+      required:
+      - preferenceTiersPerBookingType
+      properties:
+        preferenceTiersPerBookingType:
+          type: array
+          description: List of preference tiers with respective labels for different booking types.
+          items:
+            $ref: '#/components/schemas/PreferenceTiersPerBookingType'
+    NameSuffix:
+      title: NameSuffix
+      description: Suffix for name
+      type: string
+      enum:
+      - NAME_SUFFIX_UNKNOWN
+      - SR
+      - JR
+      - MD
+      - PHD
+      - II
+      - III
+      - IV
+      - DO
+      - ATTY
+      - V
+      - VI
+      - ESQ
+      - DC
+      - DDS
+      - VM
+      - JD
+      - SECOND
+      - THIRD
+      example: SR
+    ArrayOfReference:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+        elements:
+          type: array
+          description: List of references containing id and name.
+          items:
+            $ref: '#/components/schemas/Reference'
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results
+    FreshdeskCredentials:
+      type: object
+      title: FreshdeskCredentials
+      description: Mobile and web Credentials related to freshdesk.
+      properties:
+        webCredentials:
+          $ref: '#/components/schemas/FreshdeskCredentialDetails'
+        mobileCredentials:
+          $ref: '#/components/schemas/FreshdeskCredentialDetails'
+    EmailClientSecretKey:
+      type: object
+      title: EmailClientSecretKey
+      description: EmailClientSecretKey
+      properties:
+        secretKey:
+          type: string
+          example: SECRET_KEY
+        versionId:
+          type: string
+          example: '1'
+    ThemeButtonOverride:
+      type: object
+      title: ThemeButtonOverride
+      properties:
+        borderRadius:
+          $ref: '#/components/schemas/ThemeButtonRadius'
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+    LocationMetadata:
+      type: object
+      title: LocationMetadata
+      description: Metadata of the location object.
+      required:
+      - type
+      - code
+      properties:
+        type:
+          description: Type of the object.
+          $ref: '#/components/schemas/LocationType'
+        code:
+          type: string
+          description: Unique code to represent the object.
+    FeatureNameEnum:
+      type: string
+      description: Name of the feature.
+      enum:
+      - FLIGHT_RESULTS_OOP
+      - HOTEL_RESULTS_OOP
+      - RAIL_RESULTS_OOP
+      - CARS_RESULTS_OOP
+      - PAYMENT_ADD_CARD
+      - MENU_ITEM_POLICIES
+      - INTEGRATION_EXPENSIFY
+      - TRAVELER_SELECTION
+      - FEATURE_PERSONAL_TRAVEL
+      - PRODUCT_OBT_RAIL
+      - MENU_ITEM_COMPANY_REMARKS
+      - HOMEPAGE_ADD_USER
+      - MENU_ITEM_CUSTOM_FIELDS
+      - PAYMENT_UNUSED_CREDITS
+      - EMAIL_UPDATE_BY_COMPANY_ADMIN
+      - ADHOC_BOOKING_SEARCH_PAGE
+      - ADHOC_BOOKING_SAVE_TRAVELER
+      - ADMIN_VIRTUAL_CARD
+      - CENTRAL_CARD_SERVICE_FEE
+      - EXPEDIA_SOURCE_ENABLED
+      - BOOKING_COM_SOURCE_ENABLED
+      - HOTEL_MEDIAN_ENABLE
+      - HIDE_SEARCH_CRITERIA
+      - ADHOC_PAYMENT_SOURCE
+      - SERVICE_CHARGE_CONFIG_DISABLED
+      - HIDE_SETTINGS_MENU_ITEM_COMPANY
+      - HIDE_SETTINGS_MENU_ITEM_USERS
+      - HIDE_POLICY_APPROVAL_SECTION
+      - HIDE_POLICY_CREATION
+      - HIDE_SETTINGS_TEXT_FROM_MENU
+      - HIDE_LEFT_NAV
+      - HIDE_POLICY_AIR_CARRIER
+      - HIDE_POLICY_AIR_CO2
+      - HIDE_POLICY_HOTEL_PRICE_LOCATION_CUSTOMISATION
+      - HIDE_PROFILE_PREFERENCES_AIRLINES
+      - HIDE_PROFILE_PREFERENCES_ALLIANCES
+      - MONEY_SET_CONVERTED_CURRENCY_AS_ORIGINAL_CURRENCY
+      - PRODUCT_OBT_AIR_DISABLED
+      - PRODUCT_OBT_HOTEL_DISABLED
+      - PRODUCT_OBT_CAR_DISABLED
+      - PRODUCT_OBT_LIMO_DISABLED
+      - PRODUCT_OBT_CONCIERGE_DISABLED
+      - EVENT_BOOKING_ENABLED
+      - EMPLOYEE_LEVEL_DESIGNATED_APPROVER_ENABLED
+      - ENRICH_SEARCH_RESPONSE_WITH_REWARD_POINTS
+      - HIDE_LEFT_NAV_EMBED
+      - HIDE_POLICY_AIR_NOT_ALLOWED_TO_BE_BOOKED
+      - HIDE_TRIP_FEE_CONFIG
+      - HIDE_AGENT_FEE_CONFIG
+      - SHOW_SERVICE_FEE_TAXES
+      - HIDE_GUEST_BOOKING_SETTING
+      - USER_CREATION_PERSONA_TYPE_OPTIONS
+      - AIR_SEARCH_RESULT_AIRLINE_SORT_ORDER
+      - HIDE_SHERPA_VISA_WIDGET
+      - AUTO_DEACTIVATE_GUEST
+      - POLICY_USER_GROUPS
+      - HIDE_SUPPLIER_MANAGEMENT
+      - HIDE_BOOKING_RESTRICTIONS_BY_COUNTRY
+      - LINKED_MARRIOTT_BONVOY_REQUIRED
+      - EDITING_DEFAULT_POLICIES_DISABLED
+      - DISALLOW_MULTI_CITY_ADD_FLIGHT
+      - REQUIRE_ONBOARDING_ON_ENROLLMENT
+      - GEO_CUSTOMIZATIONS
+      - HIDE_PREFERRED_PARENT_CHAINS
+      - HIDE_PREFERRED_HOTEL_BRANDS
+      - HIDE_ROOM_OPTIONS_AND_STAY_PREFERENCES
+      - HIDE_CONDITIONAL_RATES_PREFERENCES
+      - HIDE_HOTELS_IN_SUPPLIER_MANAGEMENT
+      - HIDE_HOTEL_BRANDS_IN_SUPPLIER_MANAGEMENT
+      - HIDE_POLICY_HOTEL_STAR_RATING
+      - PRODUCT_OBT_HOMEPAGE_ORDER
+      - HIDE_COMPANY_SUPPLIER_MENU
+      - EXTERNAL_EVENT_BOOKING_URL
+      - HIDE_IDLE_SESSION_TIMEOUT
+      - LE_CUSTOM_COLUMNS_CONFIG
+      - PROFILE_ELEMENTS_VISIBILITY
+      - SHOW_TRIP_FEE_CONFIG
+      - SHOW_AGENT_FEE_CONFIG
+      - DEFAULT_HOTEL_SEARCH_RADIUS_CONFIG
+      - ENROLLMENT_DASHBOARD
+      - PRIVACY_CONFIG_HIERARCHY
+      - POLICY_CONFIGURED_IN_HR_FEED
+      - COMPANION_VIEW_CONFIG
+      - SHOW_INDIAN_CARD_PAYMENT_GUIDELINES
+      - VISA_RESTRICTIONS_CONFIG
+      - ALLOW_COMPANY_ADMIN_TO_RAISE_SUPPORT_TICKET
+      - ENABLE_COMPANY_PREFERRED_HOTEL_FILTER_BY_DEFAULT
+      - ENABLE_COMPANY_PREFERRED_CAR_FILTER_BY_DEFAULT
+      - LOGIN_DISABLED
+      - SHOW_AGENT_FEE_RULE_BASED_CONFIG
+      - ENROLLMENT_EMAILS_BCC
+      - SUREWARE_SYNC
+      - DEFAULT_TMC_VIEW_MODE
+      - SUPPORTED_CONTRACTING_TMCS
+      - HRIS_ERROR_REPORT_RECIPIENTS
+      - ENABLE_SOLD_OUT_HOTEL_FILTER_BY_DEFAULT
+      - ENABLE_SHOW_NOT_ALLOWED_HOTEL_FILTER_BY_DEFAULT
+      - ORG_LEVEL_PROFILE_FIELD_CONTROLS
+      - ENABLE_CAR_SHOW_CORPORATE_RATES_ONLY_BY_DEFAULT
+      - BLOCK_PAID_ANCILLARY_ON_CASH_FOP
+      - POLICY_CUSTOMIZE_CABIN_BY_MILEAGE
+      - ALLOW_YOUTH_ONLY_BOOKINGS
+      - ALLOW_UNAUTHORIZED_CARD_STORAGE
+      - AIR_DEFAULT_SORT_ORDER_DISABLED
+      - PRIORITIZE_PERSONAL_PAYMENT_FOR_CONTINGENT_WORKERS
+      - CUSTOM_FOP_MESSAGING
+      - ENABLE_TRAVEL_NAME
+      - DEFAULT_HOTEL_PAYMENT_FILTER
+      - DEFAULT_HOTEL_CANCELLATION_FILTER
+      - SHOW_OOP_PERSONAL_UPGRADE_TAG
+      - USE_DEDICATED_TMC_MARRIOTT_BONVOY_CREDENTIALS
+      - USE_HYATT_PARTNER_LOYALTY_VALIDATION
+      - RESTRICTED_EMAIL_DOMAINS
+      - UNUSED_CREDIT_DISABLED
+      - SABRE_USE_FARE_PAX_TYPE_DISABLED
+      - PROVISION_TENANT_ENCRYPTION
+      - RH_LANGUAGE_HEADER_ENABLED
+      - DISABLE_MULTI_BYTE_EMAIL_CHARS
+      - ENABLE_CORP_HYATT_LEVERAGE
+      - ENABLE_CORP_MARRIOTT_BAMB
+      - SEED_WOH_EARNING_HOLDER
+      - HOTEL_RATE_PLAN_CODE_CONFIG
+      x-ignoreBreakingChanges:
+      - FeatureNameEnum->LOGIN_DISABLED
+      - FeatureNameEnum->SHOW_AGENT_FEE_RULE_BASED_CONFIG
+      - FeatureNameEnum->ALLOW_UNAUTHORIZED_CARD_STORAGE
+      - FeatureNameEnum->PRIORITIZE_PERSONAL_PAYMENT_FOR_CONTINGENT_WORKERS
+      - FeatureNameEnum->CUSTOM_FOP_MESSAGING
+      - FeatureNameEnum->ENABLE_SHOW_NOT_ALLOWED_HOTEL_FILTER_BY_DEFAULT
+      - FeatureNameEnum->USE_DEDICATED_TMC_MARRIOTT_BONVOY_CREDENTIALS
+      x-enumValidFrom:
+        ORG_LEVEL_PROFILE_FIELD_CONTROLS: '2025-09-09'
+        BLOCK_PAID_ANCILLARY_ON_CASH_FOP: '2025-10-28'
+        POLICY_CUSTOMIZE_CABIN_BY_MILEAGE: '2025-10-28'
+      example: ADMIN_VIRTUAL_CARD
+    SecondaryServiceProviderTmc:
+      type: object
+      title: SecondaryServiceProviderTmc
+      description: Secondary service provider TMC info
+      required:
+      - tmcId
+      - supplier
+      - travelType
+      properties:
+        tmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Id of the service provider TMC.
+        supplier:
+          $ref: '#/components/schemas/SupplierType'
+          description: Supplier for which this service provider should be used.
+        travelType:
+          $ref: '#/components/schemas/TravelType'
+          description: Travel type for which this service provider should be used.
+    TravelType:
+      type: string
+      title: TravelType
+      description: Travel Type
+      enum:
+      - AIR
+      - HOTEL
+      - CAR
+      - RAIL
+      - LIMO
+      - MISC
+      - ALL
+      example: AIR
+    Reference:
+      type: object
+      title: Reference object containing uuid and name of the entity.
+      description: Reference of an entity
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+        name:
+          type: string
+          example: Name
+    Name:
+      type: object
+      title: Name
+      description: Full name containing first, middle, last (family) names, and suffix.
+      required:
+      - given
+      - family1
+      properties:
+        family1:
+          type: string
+          description: Last (family) name.
+          example: Gandas
+          x-pii: SENSITIVE
+        family2:
+          type: string
+          example: FamilyTwo
+          x-pii: SENSITIVE
+        given:
+          type: string
+          description: First (given) name.
+          example: Vichitr
+          x-pii: SENSITIVE
+        middle:
+          type: string
+          description: Middle name.
+          example: Kumar
+          x-pii: SENSITIVE
+        suffix:
+          $ref: '#/components/schemas/NameSuffix'
+          description: Suffix used with the name. For example SR or JR.
+          example: SR
+        preferred:
+          type: string
+          description: Informal preferred name added by traveler. This is not used on any PNR or tickets
+          example: Don
+          x-pii: SENSITIVE
+    ThemeButtonRadius:
+      type: object
+      title: ThemeButtonRadius
+      description: Border radius by button size. Empty = use the Blocks default.
+      properties:
+        small:
+          type: string
+          example: 4px
+        medium:
+          type: string
+          example: 6px
+        large:
+          type: string
+          example: 8px
+    FreshdeskConfig:
+      type: object
+      title: FreshdeskConfig
+      description: Configuration for freshdesk.
+      required:
+      - enabled
+      - hasCredentials
+      properties:
+        enabled:
+          type: boolean
+          description: Whether freshdesk is enabled or not.
+          default: true
+          example: true
+        hasCredentials:
+          type: boolean
+          description: Whether the company has its own freshdesk credentials.
+          default: false
+          example: false
+        credentials:
+          description: "Credentials for the fresh desk. This field has no impact in create/update APIs. The \nprocess to store / update the credentials are manual.\n"
+          $ref: '#/components/schemas/FreshdeskCredentials'
+    SurfaceVisibility:
+      type: object
+      title: SurfaceVisibility
+      description: Visibility of one branding element across surfaces. Each surface renderer honors only its own flag (e.g. email ignores hideOnWeb).
+      properties:
+        hideOnWeb:
+          type: boolean
+          example: true
+    ThemeOverrides:
+      type: object
+      title: ThemeOverrides
+      description: Per-component style overrides. Extensible — start with button.
+      properties:
+        button:
+          $ref: '#/components/schemas/ThemeButtonOverride'
+    ExternalEndpoint:
+      type: object
+      title: ExternalEndpoint
+      description: Generic object to encapsulate information about any external endpoint.
+      required:
+      - url
+      - authHeaderName
+      properties:
+        url:
+          type: string
+          description: Url from where user can be fetched.
+        authHeaderName:
+          type: string
+          description: Auth header where we have to send authentication/authorization details.
+        userIdentifierType:
+          $ref: '#/components/schemas/UserIdentifierType'
+          description: Either use pid or email as the identifier for auth code exchange process
+        responseAttributes:
+          description: List of relevant attribute names & their json xpath from response
+          items:
+            $ref: '#/components/schemas/UserInfoEndpointResponseAttribute'
+    CreateCompanyRequest:
+      type: object
+      title: CreateCompanyRequest
+      description: Request for company create.
+      required:
+      - name
+      - billingCurrency
+      - companyRoles
+      properties:
+        name:
+          type: string
+          description: Company name
+          example: Spotnana
+        emailDomains:
+          type: array
+          description: List of the company email domains
+          uniqueItems: true
+          items:
+            type: string
+            example: spotnana.com
+        billingCurrency:
+          type: string
+          description: Billing currency of the company
+          example: INR
+        phoneNumbers:
+          type: array
+          description: List of company phone numbers
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        emergencyContactInfos:
+          type: array
+          description: List of company emergency contacts
+          items:
+            $ref: '#/components/schemas/EmergencyContactInfo'
+        isSelfSignUpEnabled:
+          type: boolean
+          description: Boolean to show if company has self sign up enabled.
+          example: true
+        announcements:
+          type: array
+          description: Company announcements
+          items:
+            $ref: '#/components/schemas/Announcement'
+        companyLogo:
+          $ref: '#/components/schemas/Image'
+          description: Company logo
+        contractedBy:
+          $ref: '#/components/schemas/CompanyId'
+          description: Company ID which have contracted this company.
+        companyRoles:
+          type: array
+          description: Company roles
+          items:
+            $ref: '#/components/schemas/CompanyRole'
+        supportConfig:
+          $ref: '#/components/schemas/SupportConfig'
+          description: Support Configuration for company
+          deprecated: true
+          x-sunset: '2026-07-01'
+        supportConfigs:
+          type: array
+          description: Support Configs for company
+          items:
+            $ref: '#/components/schemas/SupportConfig'
+        ccEmailAddresses:
+          type: array
+          description: List of email addresses on which all confirmation emails will be cced. This is applicable only for company roles 'ORG'
+          items:
+            type: string
+            example: example@gmail.com
+        bccEmailAddresses:
+          type: array
+          description: List of email addresses on which all confirmation emails will be bcced. This is applicable only for company roles 'ORG'
+          items:
+            type: string
+            example: example@gmail.com
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+          description: Postal address of the company.
+        redirectUrl:
+          type: string
+          description: Redirect URL for the company. It is applicable only for company roles 'PARTNER_TMC'
+        rewardsProgram:
+          $ref: '#/components/schemas/RewardsProgram'
+          description: Rewards Program corresponding to partner. It is applicable only for company roles 'PARTNER_TMC'.
+          deprecated: true
+          x-sunset: '2026-07-01'
+        tmcDefaultConfiguration:
+          $ref: '#/components/schemas/TmcDefaultConfiguration'
+          description: Default Booking configuration for the TMC. It is applicable only for company roles 'TMC'
+        expensePartnerConfig:
+          $ref: '#/components/schemas/ExpensePartnerConfig'
+        mobileRedirectUrl:
+          type: string
+          description: Redirect URL for the company for mobile. It is applicable only for company roles 'PARTNER_TMC'
+        applicableCustomFieldTypes:
+          type: array
+          description: List of custom fields supported by the company.
+          items:
+            $ref: '#/components/schemas/CustomFieldType'
+        oauthPartnerConfig:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/OAuthPartnerConfig'
+        privacySettings:
+          $ref: '#/components/schemas/PrivacySettings'
+        emailClientConfig:
+          $ref: '#/components/schemas/EmailClientConfig'
+          description: Email client configuration representing the email provider to be used.
+        externalId:
+          type: string
+          description: External id for legal entity.
+          example: company-external-id
+        isFake:
+          type: boolean
+          description: Whether the company is a fake company for testing. This is for internal use.
+          default: false
+          example: false
+        tmcPartnerRoleMappings:
+          type: array
+          description: list of individual role mappings between spotnana and partner.
+          items:
+            $ref: '#/components/schemas/TmcPartnerRoleMapping'
+        loyaltyBlockedCountries:
+          type: array
+          items:
+            type: string
+          description: List of 2 letter country codes where business travelers should not be allowed to add loyalty info.
+          example:
+          - US
+          - IN
+        allowDomainBasedAuthConfig:
+          type: boolean
+          default: false
+          description: Whether to allow user to get auth config based on email domain
+        carbonCostConfig:
+          $ref: '#/components/schemas/CarbonCostConfig'
+          description: The config is used to calculate carbon cost of CO2 emission.
+        defaultBookingTmcId:
+          description: Default booking TMC id. For PARTNER_TMC companies only.
+          $ref: '#/components/schemas/CompanyId'
+        bookingTmcId:
+          description: Booking TMC ID for the company. Applicable for ORG role companies.
+          $ref: '#/components/schemas/CompanyId'
+        companySpecifiedAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanySpecifiedAttributeCompany'
+          description: Company-specified custom attributes.
+    FeatureConfigs:
+      type: object
+      title: Features
+      description: Features related to company.
+      properties:
+        length:
+          type: integer
+          description: Number of features.
+          example: 1
+        features:
+          type: array
+          description: Features related to company.
+          items:
+            $ref: '#/components/schemas/FeatureConfig'
+    Dimensions:
+      type: object
+      title: Dimensions
+      description: Image dimensions ie width and height.
+      properties:
+        height:
+          type: integer
+          format: int32
+          example: 120
+        width:
+          type: integer
+          format: int32
+          example: 240
+    FareCategory:
+      type: object
+      properties:
+        ngsCategory:
+          $ref: '#/components/schemas/NGSFareCategory'
+        cabinViewCategory:
+          $ref: '#/components/schemas/CabinViewFareCategory'
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    ThemeIconTokens:
+      type: object
+      title: ThemeIconTokens
+      properties:
+        brand:
+          type: string
+          example: '#D33B47'
+    Announcement:
+      type: object
+      title: Announcement
+      description: Announcement details
+      required:
+      - title
+      - description
+      properties:
+        title:
+          type: string
+          description: Title of the announcement.
+          example: Spotnana on Mission to Unbundle Travel
+        description:
+          type: string
+          description: Description of the announcement.
+          example: Amex Ventures Joins Spotnana on Mission to Unbundle Travel.
+        linkUrl:
+          type: string
+          description: Announcement link url which points to the atual announcement page.
+          example: https://medium.com/inside-spotnana/amex-ventures-joins-spotnana-on-mission-to-unbundle-travel-3cdb2ecceff4
+        linkDisplayText:
+          type: string
+          description: Announcement link display text.
+          example: New announcement
+    PhoneNumber:
+      type: object
+      title: PhoneNumber
+      description: Properly formatted phone number.
+      properties:
+        countryCode:
+          type: integer
+          format: int32
+          description: two digit country code
+          example: 91
+        countryCodeSource:
+          type: string
+          enum:
+          - UNSPECIFIED
+          - FROM_NUMBER_WITH_PLUS_SIGN
+          - FROM_NUMBER_WITH_IDD
+          - FROM_NUMBER_WITHOUT_PLUS_SIGN
+          - FROM_DEFAULT_COUNTRY
+          example: FROM_NUMBER_WITH_PLUS_SIGN
+        extension:
+          description: phone number extension
+          type: string
+          example: '222'
+        isoCountryCode:
+          description: ISO alpha-2 code
+          type: string
+          example: IN
+        italianLeadingZero:
+          type: boolean
+          default: false
+          example: true
+        nationalNumber:
+          type: integer
+          format: int64
+          example: 8150
+        numberOfLeadingZeros:
+          type: integer
+          format: int32
+          default: 0
+          example: 1
+        preferredDomesticCarrierCode:
+          type: string
+          example: '7'
+        rawInput:
+          type: string
+          example: '77777'
+        type:
+          type: string
+          enum:
+          - UNKNOWN_TYPE
+          - MOBILE
+          - LANDLINE
+          example: MOBILE
+    TravelContentConfig:
+      type: object
+      title: TravelContentConfig
+      description: Travel content config
+      properties:
+        airConfig:
+          description: Air content config
+          $ref: '#/components/schemas/AirConfig'
+    ColorWhiteLabelConfig:
+      type: object
+      title: ColorWhitelabelConfig
+      description: Whitelabel configuration related to colours.
+      properties:
+        primary:
+          type: string
+          example: '#D33B47'
+        primaryDark:
+          type: string
+          example: '#D33B47'
+        primaryLight:
+          type: string
+          example: '#D33B47'
+        primaryPale:
+          type: string
+          example: '#D33B47'
+        onPrimary:
+          type: string
+          example: '#D33B47'
+        secondary:
+          type: string
+          example: '#D33B47'
+        secondaryDark:
+          type: string
+          example: '#D33B47'
+        secondaryLight:
+          type: string
+          example: '#D33B47'
+        secondaryPale:
+          type: string
+          example: '#D33B47'
+        onSecondary:
+          type: string
+          example: '#D33B47'
+        error:
+          type: string
+          example: '#D33B47'
+        errorDark:
+          type: string
+          example: '#D33B47'
+        errorLight:
+          type: string
+          example: '#D33B47'
+        errorPale:
+          type: string
+          example: '#D33B47'
+        onError:
+          type: string
+          example: '#D33B47'
+    PrivacyDisclaimer:
+      type: object
+      title: PrivacyDisclaimer
+      description: Html to shown on the the login page. This will be text with hyper links.
+      properties:
+        show:
+          type: boolean
+          default: true
+        html:
+          type: string
+          description: String containing the html.
+          example: </html>
+    CustomFieldType:
+      type: string
+      description: The type of custom field.
+      enum:
+      - QUESTION
+      - MEETING
+      - BUDGET
+      - BREX_TOKEN
+      default: QUESTION
+    OAuthPartnerConfig:
+      type: object
+      title: OAuthConfig
+      description: Config for token exchange in case of partner's have their own IDP.
+      required:
+      - name
+      - tokenVerifier
+      - doPersistToken
+      properties:
+        name:
+          type: string
+          description: Name of the partner.
+        userDetailEndpoint:
+          $ref: '#/components/schemas/ExternalEndpoint'
+        tokenVerifier:
+          $ref: '#/components/schemas/TokenVerifier'
+        doPersistToken:
+          type: boolean
+          description: Boolean to define whether to persist(in-memory/disk) token or not.
+    CompanyRef:
+      type: object
+      description: Basic information about a company.
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/CompanyId'
+        name:
+          type: string
+        logo:
+          $ref: '#/components/schemas/Image'
+          description: Company logo
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    BrandingVisibility:
+      type: object
+      title: BrandingVisibility
+      description: Per-surface visibility of branding elements. Additive — default shows everything.
+      properties:
+        headerLogo:
+          $ref: '#/components/schemas/SurfaceVisibility'
+        poweredBy:
+          $ref: '#/components/schemas/SurfaceVisibility'
+    DesignationNode:
+      type: object
+      title: DesignationNode
+      description: Designation tree for company showing who reports whom.
+      properties:
+        name:
+          type: string
+          description: designation name
+        children:
+          type: array
+          description: designations under this designation.
+          items:
+            $ref: '#/components/schemas/DesignationNode'
+    WebLinksConfig:
+      type: object
+      title: WebLinksConfig
+      description: Weblinks which are parts of WhiteLabelConfig.
+      properties:
+        logoHeader:
+          type: string
+          example: https://duploservices-stage-email-assets-873909615026.s3.us-west-2.amazonaws.com/confirmation/spotnana3.png
+        logoFooter:
+          type: string
+          example: https://duploservices-stage-email-assets-873909615026.s3-us-west-2.amazonaws.com/approval/spotnana-s-logo.png
+        companyWebsiteAddress:
+          type: string
+          example: https://www.spotnana.com
+        homePage:
+          type: string
+          example: https://stage-app.spotnana.com/flights
+        itineraryPage:
+          type: string
+          example: https://stage-app.spotnana.com/trips/3375488451
+        disclaimerPage:
+          type: string
+          example: https://www.spotnana.com/terms
+        privacyPage:
+          type: string
+          example: https://www.spotnana.com/privacy-policy
+        hardApprovalUrl:
+          type: string
+          example: https://stage-app.spotnana.com/hardapproval?approvalId=CgozMzQ5OTI4MzI2EiMKIQoMCgpQaWh1IEd1cHRhEhFwaWh1QHNwb3RuYW5hLmNvbQ%3D%3D&approverName=Pihu%20Gupta&travelerName=Pihu%20Gupta&tripName=TESting%201&tripId=2418132231&voidDate=Tuesday,%2021%20Jun%20at%2002:00%20UTC
+        itineraryFlightStatsUrl:
+          type: string
+          example: https://stage-app.spotnana.com/trips/4694735622
+        appEmbedScriptUrl:
+          type: string
+          example: https://customjs.partner.com
+        logoNavigationLink:
+          type: string
+          example: http://www.spotnana.com
+        illustration:
+          type: string
+          example: https://duploservices-stage-email-assets-873909615026.s3-us-west-2.amazonaws.com/approval/spotnana-s-logo.png
+        poweredBySpotnana:
+          type: boolean
+          default: true
+          example: false
+        logoutRedirectUrl:
+          type: string
+          example: https://www.spotnana.com/signout
+        faviconUrl:
+          type: string
+          description: Display logo on the browser title.
+          example: http://www.spotnana.com
+        appDownloadLinks:
+          $ref: '#/components/schemas/AppDownloadLinksConfig'
+        socialMediaLinks:
+          $ref: '#/components/schemas/SocialMediaLinksConfig'
+        termsOfUse:
+          type: string
+          description: Terms of service/legal agreement between a service provider and a person who wants to use service.
+          example: https://www.spotnana.com/terms/
+        illustrationActionUrl:
+          type: string
+          example: https://www.spotnana.com/login
+        checkoutCoverImageUrl:
+          type: string
+          description: Cover image to be shown on checkout page.
+          example: https://duploservices-email-assets-873909615026.s3-us-west-2.amazonaws.com/approval/spotnana-s-logo.png
+        postCcVerificationCallbackUrl:
+          type: string
+          description: Post credit card verification callback URL.
+          example: https://example.com/callback
+        loyaltyLinkedImageUrl:
+          type: string
+          description: Image URL for loyalty linked page.
+          example: https://example.com/loyalty-linked.png
+        onboardingFinalizeImageUrl:
+          type: string
+          description: Image URL for onboarding finalize page.
+          example: https://example.com/onboarding-finalize.png
+        inviteUserImageUrl:
+          type: string
+          description: Image URL for invite user page.
+          example: https://example.com/invite-user.png
+        takeActionPath:
+          type: string
+          description: Email CTA routing override for embedded/white-labeled deployments. "Take action" CTA (Arranger email) destination — a full URL (e.g. a partner-hosted wrapping page that redirects into their embedded iframe), same convention as itineraryPage/hardApprovalUrl, used as-is with no base-URL prefixing. Unset falls back to the existing hardcoded native path.
+          example: https://partner.com/embedded/take-action
+        bookMyTripPath:
+          type: string
+          description: Email CTA routing override for embedded/white-labeled deployments. "Book my trip" CTA (event invite/reminder emails) destination — a full URL, same convention as itineraryPage/hardApprovalUrl, used as-is with no base-URL prefixing. Unset falls back to the existing hardcoded native path.
+          example: https://partner.com/embedded/my-trip
+        viewEventDetailsPath:
+          type: string
+          description: Email CTA routing override for embedded/white-labeled deployments. "View event details" CTA (event invite email) destination — a full URL, same convention as itineraryPage/hardApprovalUrl, used as-is with no base-URL prefixing. Unset falls back to the existing hardcoded native path.
+          example: https://partner.com/embedded/my-trip
+    PreferenceTier:
+      title: PreferenceTier
+      description: The level of preference with the display label.
+      required:
+      - level
+      - label
+      - showLabel
+      properties:
+        level:
+          $ref: '#/components/schemas/PreferenceTierLevel'
+        label:
+          type: string
+          description: Text to be used to display given tier.
+        description:
+          type: string
+          description: Short description about the tier level.
+        showLabel:
+          type: boolean
+          description: Whether to show label in search result for the given tier.
+          default: false
+    CompanyManagerInfo:
+      type: object
+      title: CompanyManagerInfo
+      description: Detailed information about a manager
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User ID of the manager
+        fullName:
+          type: string
+          description: Full name of the manager
+          example: John Doe
+        email:
+          type: string
+          description: Email address of the manager
+          example: john.doe@company.com
+        profilePictureUrl:
+          type: string
+          description: URL to the manager's profile picture
+          example: https://example.com/profiles/john-doe.jpg
+        isActive:
+          type: boolean
+          description: Whether the manager is active
+          example: true
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

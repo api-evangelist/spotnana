@@ -1,0 +1,546 @@
+openapi: 3.1.0
+info:
+  title: Air Custom Fields API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Custom Fields
+  description: APIs to manage company custom fields.
+paths:
+  /v2/companies/{companyId}/questions:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Custom Fields
+      summary: Get company questions
+      operationId: getCompanyQuestions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfReference'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags:
+      - Custom Fields
+      summary: Create company question
+      operationId: createCompanyQuestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQuestionRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityId'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/companies/{companyId}/questions/{questionId}:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: questionId
+      in: path
+      description: Identifier for question.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 1234a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Custom Fields
+      summary: Get company question
+      operationId: getCompanyQuestion
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Custom Fields
+      summary: Update company question
+      operationId: updateCompanyQuestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Custom Fields
+      summary: Delete company question
+      operationId: deleteCompanyQuestion
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    TravelRegionType:
+      type: string
+      title: TravelRegionType
+      description: Travel region Type
+      enum:
+      - DOMESTIC
+      - INTERNATIONAL
+      example: DOMESTIC
+    CompanyConfigSource:
+      type: object
+      title: CompanyConfigSource
+      description: For this option source, options would be auto generated based on specified parameter.
+      required:
+      - optionsParam
+      properties:
+        optionsParam:
+          $ref: '#/components/schemas/CustomFieldOptionsParam'
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+    Option:
+      type: object
+      title: Option
+      description: Answer option for a question
+      required:
+      - displayCode
+      properties:
+        displayCode:
+          type: string
+          description: The code which is sent in answer response.
+        displayValue:
+          type: string
+          description: The text to be displayed to the user beside this option.
+    OptionInfo:
+      type: object
+      title: OptionInfo
+      description: Options related information for the question.
+      required:
+      - source
+      properties:
+        source:
+          $ref: '#/components/schemas/OptionSource'
+          default: MANUAL
+        sourceMetadata:
+          $ref: '#/components/schemas/OptionSourceMetadata'
+        totalNumOptions:
+          type: integer
+          description: Total number of options
+        options:
+          type: array
+          description: "Available options for the question. This will contain only max 10 options if only \nsummary is requested.\n"
+          items:
+            $ref: '#/components/schemas/Option'
+    CustomFieldLocation:
+      title: CustomFieldLocation
+      description: Display the custom fields in all these locations.
+      type: string
+      enum:
+      - POLICY_APPROVAL_EMAIL
+      - PNR_EMAIL
+      - TRIP_EMAIL
+      example: POLICY_APPROVAL_EMAIL
+    CreateQuestionRequest:
+      type: object
+      title: CreateQuestionRequest
+      description: Request for question creation.
+      required:
+      - name
+      - questionFormat
+      - isRequired
+      - isDisabled
+      properties:
+        name:
+          type: string
+          description: Question display name that the user will see. For eg, 'Choose the purpose of your trip'.
+        questionFormat:
+          $ref: '#/components/schemas/QuestionFormat'
+        optionInfo:
+          $ref: '#/components/schemas/OptionInfo'
+        isRequired:
+          type: boolean
+          description: Whether its compulsory to answer the question or not.
+          default: false
+          example: true
+        isDisabled:
+          type: boolean
+          description: Whether the question is disabled or not. If true, this should not be asked.
+          default: true
+          example: false
+        includeInItinerary:
+          type: boolean
+          description: Whether to include this question in the itinerary related emails.
+          default: false
+          example: true
+          deprecated: true
+          x-sunset: '2026-07-01'
+        customFieldLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldLocation'
+        matchConditions:
+          $ref: '#/components/schemas/CustomFieldMatchConditions'
+    TravelType:
+      type: string
+      title: TravelType
+      description: Travel Type
+      enum:
+      - AIR
+      - HOTEL
+      - CAR
+      - RAIL
+      - LIMO
+      - MISC
+      - ALL
+      example: AIR
+    Reference:
+      type: object
+      title: Reference object containing uuid and name of the entity.
+      description: Reference of an entity
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+        name:
+          type: string
+          example: Name
+    CustomFieldMatchConditions:
+      type: object
+      title: CustomFieldMatchConditions
+      description: Conditions to select the custom field for given context.
+      properties:
+        travelerConditions:
+          $ref: '#/components/schemas/TravelerMatchConditions'
+        travelTypes:
+          type: array
+          description: Travel types to match.
+          items:
+            $ref: '#/components/schemas/TravelType'
+        travelRegionTypes:
+          type: array
+          description: Travel region types to match.
+          items:
+            $ref: '#/components/schemas/TravelRegionType'
+        tripUsageTypes:
+          type: array
+          description: Trip usage types to match. If empty, all trip usage types will be matched.
+          items:
+            $ref: '#/components/schemas/TripUsageType'
+    OptionSourceMetadata:
+      type: object
+      title: OptionSourceMetadata
+      description: Metadata information for the option source.
+      oneOf:
+      - $ref: '#/components/schemas/CompanyConfigSourceWrapper'
+    QuestionType:
+      type: object
+      title: QuestionType
+      description: Question type.
+      properties:
+        preSearchQuestionType:
+          $ref: '#/components/schemas/PreSearchQuestionType'
+        preCheckoutQuestionType:
+          $ref: '#/components/schemas/PreCheckoutQuestionType'
+    PreSearchQuestionType:
+      type: string
+      enum:
+      - UNKNOWN_SEARCH_QUESTION_TYPE
+      - PURPOSE_OF_TRIP
+      description: 'Types of pre-search questions.
+
+        PURPOSE_OF_TRIP required to ask purpose of the trip user is going to. For example: meeting, training, interview.
+
+        '
+      example: PURPOSE_OF_TRIP
+    CustomFieldOptionsParam:
+      type: string
+      title: CustomFieldOptionsParam
+      enum:
+      - COST_CENTER
+      - LEGAL_ENTITY
+      - OFFICE
+      - DEPARTMENT
+      description: Parameter to form options for the custom field.
+      example: COST_CENTER
+    WorkerType:
+      type: string
+      description: The type of worker.
+      enum:
+      - EMPLOYEE
+      - CONTINGENT
+      - SEASONAL
+      - INTERN
+      - GUEST
+      example: EMPLOYEE
+      x-enumValidFrom:
+        GUEST: '2025-06-03'
+    OptionSource:
+      type: string
+      enum:
+      - MANUAL
+      - COMPANY_CONFIG
+      description: Option source
+      example: MANUAL
+    TravelerMatchConditions:
+      type: object
+      title: TravelerMatchConditions
+      description: Matching conditions for traveler.
+      properties:
+        workerTypes:
+          type: array
+          description: Worker types. Users belonging to any of these would match.
+          items:
+            $ref: '#/components/schemas/WorkerType'
+        countries:
+          type: array
+          description: Countries.
+          items:
+            type: string
+        legalEntities:
+          type: array
+          description: Legal entities
+          items:
+            $ref: '#/components/schemas/Reference'
+        departments:
+          type: array
+          description: Departments
+          items:
+            $ref: '#/components/schemas/Reference'
+        costCenters:
+          type: array
+          description: Cost centers
+          items:
+            $ref: '#/components/schemas/Reference'
+        offices:
+          type: array
+          description: Offices
+          items:
+            $ref: '#/components/schemas/Reference'
+    CompanyConfigSourceWrapper:
+      type: object
+      title: CompanyConfigSourceWrapper
+      description: Wrapper for option source company config.
+      properties:
+        companyConfig:
+          $ref: '#/components/schemas/CompanyConfigSource'
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    TripUsageType:
+      title: TripUsageType
+      description: Trip usage type.
+      type: string
+      enum:
+      - STANDARD
+      - EVENT
+    Question:
+      type: object
+      title: Question
+      description: The message defines the format of a question which can be asked to a user in any kind of workflows.
+      required:
+      - id
+      - name
+      - isRequired
+      - isDisabled
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: Question display name that the user will see. For eg, 'Choose the purpose of your trip'.
+        questionFormat:
+          $ref: '#/components/schemas/QuestionFormat'
+        optionInfo:
+          $ref: '#/components/schemas/OptionInfo'
+        isRequired:
+          type: boolean
+          description: Whether its compulsory to answer the question or not.
+          default: false
+          example: true
+        isDisabled:
+          type: boolean
+          description: Whether the question is disabled or not. If true, this should not be asked.
+          default: true
+          example: true
+        includeInItinerary:
+          type: boolean
+          description: Whether to include this question in the itinerary related emails.
+          default: false
+          example: true
+          deprecated: true
+          x-sunset: '2026-07-01'
+        customFieldLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldLocation'
+        matchConditions:
+          $ref: '#/components/schemas/CustomFieldMatchConditions'
+        questionType:
+          $ref: '#/components/schemas/QuestionType'
+    PreCheckoutQuestionType:
+      type: string
+      enum:
+      - UNKNOWN_CHECKOUT_QUESTION_TYPE
+      - USER_DEFINED_QUESTION
+      - OOP_REASON_CODE
+      description: 'Types of pre-checkout questions.
+
+        USER_DEFINED_QUESTION the default question type for all pre checkout questions which have been created from UI.
+
+        OOP_REASON_CODE is kept separate so that existing OOP flow doesn''t break.
+
+        '
+      example: OOP_REASON_CODE
+    QuestionFormat:
+      type: string
+      enum:
+      - INPUT_BOX
+      - RADIO_BUTTON
+      - CHECKBOX
+      - CHECKBOX_WITH_PERCENTAGE
+      description: 'Question types. INPUT_BOX will make user enter a free flowing text.
+
+        RADIO_BUTTON will have multiple options, user can select only one.
+
+        CHECKBOX questions contain the possible set of options, from which the user can choose multiple options.
+
+        CHECKBOX_WITH_PERCENTAGE is similar to checkbox, with the difference being that each option having an additional input field whose values must add up to 100.
+
+        '
+      example: CHECKBOX
+    ArrayOfReference:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+        elements:
+          type: array
+          description: List of references containing id and name.
+          items:
+            $ref: '#/components/schemas/Reference'
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

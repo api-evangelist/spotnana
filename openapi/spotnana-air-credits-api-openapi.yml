@@ -1,0 +1,1321 @@
+openapi: 3.1.0
+info:
+  title: Air Air Credits API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Air Credits
+  description: Manage airline credits including company credit pools, credit transfers, and credit redemptions.
+  x-displayName: Credits
+paths:
+  /v3/air/fetch-traveler-unused-credits:
+    post:
+      tags:
+      - Air Credits
+      operationId: fetchTravelerUnusedCredits
+      summary: Get unused credits for a traveler
+      description: "Returns a list of unused credits associated with a traveler \nalong with details such as the PNR ID, trip ID, airline details, credit expiry date, and the source of booking (e.g., NDC). \nTravelers can redeem unused credit for future bookings with the same airline where the credit was earned.\n"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: FetchTravelerUnusedCreditsRequest
+              description: Request for fetching unused credits for a traveler.
+              $ref: '#/components/schemas/FetchTravelerUnusedCreditsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: FetchTravelerUnusedCreditsResponse
+                $ref: '#/components/schemas/FetchTravelerUnusedCreditsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/air/company-unused-credits/list:
+    post:
+      tags:
+      - Air Credits
+      operationId: fetchCompanyUnusedCredits
+      summary: Get unused credits for a company
+      description: 'Returns the list of company unused credits which can be used by any employees of the company.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: CompanyUnusedCreditsListRequest
+              description: Request for fetching unused credits for a company.
+              $ref: '#/components/schemas/CompanyUnusedCreditsListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: CompanyUnusedCreditsListResponse
+                $ref: '#/components/schemas/CompanyUnusedCreditsListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/air/company-transferable-unused-credits/list:
+    post:
+      tags:
+      - Air Credits
+      operationId: fetchCompanyTransferableUnusedCredits
+      summary: Get transferable unused credits for a company
+      description: 'Returns the list of transferable company unused credits which can be used by any employees of the company.
+
+        The unused credits can be transferred to another traveler.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: CompanyTransferableUnusedCreditsListRequest
+              description: Request for fetching transferable unused credits for a company.
+              $ref: '#/components/schemas/CompanyTransferableUnusedCreditsListRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: CompanyTransferableUnusedCreditsListResponse
+                $ref: '#/components/schemas/CompanyTransferableUnusedCreditsListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/air/company-credits/migrations:
+    post:
+      tags:
+      - Air Credits
+      operationId: migrateUnusedCreditsInCompanyCredits
+      summary: Migrate Unused Credits of a traveler to and fro Company Credits
+      description: This API will be migrate unused credits from individual credits to company credits and vice versa.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              title: MigrateUnusedCreditsToCompanyCreditsRequest
+              description: Request for migrating unused credits.
+              $ref: '#/components/schemas/MigrateUnusedCreditsToCompanyCreditsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: MigrateUnusedCreditsToCompanyCreditsResponse
+                $ref: '#/components/schemas/MigrateUnusedCreditsToCompanyCreditsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    CompanyUnusedCreditsListResponse:
+      type: object
+      title: CompanyUnusedCreditsListResponse
+      description: Response body for company unused credits
+      properties:
+        unusedCreditInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnusedCreditInfo'
+            description: Information about the unused credit
+        paginationParams:
+          type: object
+          properties:
+            offset:
+              type: integer
+              example: 0
+            totalRecords:
+              type: integer
+              example: 100
+        companyFopLabels:
+          type: array
+          items:
+            type: string
+          description: List of distinct FOP labels for company credits
+          example:
+          - Company Central Card
+          - Corporate Amex
+        companyPccs:
+          type: array
+          items:
+            type: string
+          description: List of distinct PCCs for company credits
+          example:
+          - AK5L
+          - BE6C
+        companyLegalEntityNames:
+          type: array
+          items:
+            type: string
+          description: List of distinct legal entity names for company credits
+        supportedAirlines:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupportedAirline'
+          description: List of airlines that support unused credit transfers
+    FlightPassPaymentMetadataWrapper:
+      type: object
+      title: FlightPassPaymentMetadataWrapper
+      description: Wrapper for Flight Pass payment metadata.
+      required:
+      - flightPassMetadata
+      properties:
+        metadataType:
+          type: string
+          description: Discriminator field for polymorphic deserialization
+          example: FlightPassPaymentMetadata
+          default: FlightPassPaymentMetadata
+        flightPassMetadata:
+          $ref: '#/components/schemas/FlightPassPaymentMetadata'
+    UnusedCreditExchangeInfo:
+      type: object
+      title: ExchangeInfo
+      description: Exchange information for unused credits.
+      properties:
+        previousTicket:
+          type: string
+          description: Previous ticket number in case of exchanges.
+    SupportedAirline:
+      type: object
+      title: SupportedAirline
+      description: Airline that supports unused credit transfers
+      properties:
+        airlineCode:
+          type: string
+          description: IATA airline code
+          example: AA
+        airlineName:
+          type: string
+          description: Full airline name
+          example: American Airlines
+    FetchTravelerUnusedCreditsResponse:
+      type: object
+      title: FetchTravelerUnusedCreditsResponse
+      description: Response body for fetching traveler's unused credits
+      properties:
+        unusedCreditInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnusedCreditInfo'
+            description: Information about the unused credit
+    Money:
+      type: object
+      title: Money
+      description: 'Money object containing details such as the amount, the currency code, and the converted amount.
+
+        '
+      required:
+      - amount
+      - currencyCode
+      properties:
+        amount:
+          type: number
+          format: double
+          description: The numeric value for the amount of money.
+          example: 510
+        currencyCode:
+          type: string
+          description: The 3-letter currency code for the money amount (defined using ISO 4217 standard).
+          example: GBP
+        convertedAmount:
+          type: number
+          format: double
+          description: 'The converted currency and amount that has been converted (if a currency conversion has been requested).
+
+            For example, if the call requests that money be sent in a specified currency (because the frontend requested
+
+            the backend to send money in the user''s preferred currency).
+
+            '
+          example: 715.42
+        convertedCurrency:
+          type: string
+          description: The 3-letter currency code for the converted currency (defined using ISO 4217 standard).
+          example: USD
+        otherCoinage:
+          type: array
+          title: OtherCoinage
+          description: List of the dollar amount in other coinage systems like reward points, cryptocurrency etc.
+          items:
+            type: object
+            properties:
+              coinageCode:
+                $ref: '#/components/schemas/PaymentMethod'
+                description: Payment method
+              amount:
+                type: number
+                format: double
+                example: 1000
+              conversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              preferredCurrencyConversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              otherCoinageMetadata:
+                description: Metadata to store additional information related to the payment method
+                discriminator:
+                  propertyName: metadataType
+                  mapping:
+                    FlightPassPaymentMetadata: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+                oneOf:
+                - $ref: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+    DateTimeOffset:
+      title: DateTimeOffset
+      description: ISO8601 UTC Date Time
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?(Z|([+-](0[0-9]|1[0-4]):([0-5][0-9])))$
+          example: 2017-07-21T17:32Z
+    Name:
+      type: object
+      title: Name
+      description: Full name containing first, middle, last (family) names, and suffix.
+      required:
+      - given
+      - family1
+      properties:
+        family1:
+          type: string
+          description: Last (family) name.
+          example: Gandas
+          x-pii: SENSITIVE
+        family2:
+          type: string
+          example: FamilyTwo
+          x-pii: SENSITIVE
+        given:
+          type: string
+          description: First (given) name.
+          example: Vichitr
+          x-pii: SENSITIVE
+        middle:
+          type: string
+          description: Middle name.
+          example: Kumar
+          x-pii: SENSITIVE
+        suffix:
+          $ref: '#/components/schemas/NameSuffix'
+          description: Suffix used with the name. For example SR or JR.
+          example: SR
+        preferred:
+          type: string
+          description: Informal preferred name added by traveler. This is not used on any PNR or tickets
+          example: Don
+          x-pii: SENSITIVE
+    DateModel:
+      title: Date
+      description: Date in ISO 8601 standard.
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$
+          example: '2017-07-21'
+    FlightPassPaymentMetadata:
+      type: object
+      title: FlightPassPaymentMetadata
+      description: Metadata specific to Flight Pass payment method in OtherCoinage.
+      properties:
+        flightPassNumber:
+          type: string
+          description: Flight pass number
+          example: FP123456789
+        flightPassAmounts:
+          $ref: '#/components/schemas/FlightPassPaymentAmounts'
+    FlightPassTax:
+      type: object
+      title: FlightPassTax
+      description: A single tax component of the flight pass fare.
+      properties:
+        code:
+          type: string
+          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
+          example: GST_HST
+        amount:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+    UserIdWrapper:
+      title: UserIdWrapper
+      description: Wrapper over UserId object to be used as an identifier in a oneOf case
+      properties:
+        userId:
+          $ref: '#/components/schemas/UserId'
+    ExpiryWrapper:
+      type: object
+      title: ExpiryWrapper
+      properties:
+        expiry:
+          $ref: '#/components/schemas/Expiry'
+    AirlineInfo:
+      title: AirlineInfo
+      type: object
+      required:
+      - airlineCode
+      - airlineName
+      properties:
+        airlineCode:
+          type: string
+          description: IATA code for airline.
+          example: AA
+        airlineName:
+          type: string
+          description: Airline name
+          example: American Airlines
+    OwnershipLabel:
+      title: OwnershipLabel
+      type: string
+      description: Ownership label of the card whether it is personal, corporate or central.
+      enum:
+      - CORPORATE
+      - PERSONAL
+      - CENTRAL
+    CompanyTransferableUnusedCreditsListResponse:
+      type: object
+      title: CompanyTransferableUnusedCreditsListResponse
+      description: Response body for company transferable unused credits
+      properties:
+        unusedCreditInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnusedCreditInfo'
+            description: Information about the unused credit
+        paginationParams:
+          type: object
+          properties:
+            offset:
+              type: integer
+              example: 0
+            totalRecords:
+              type: integer
+              example: 100
+        companyTransferableFopLabels:
+          type: array
+          items:
+            type: string
+          description: List of distinct FOP labels for company transferable credits
+          example:
+          - Personal Visa
+          - Personal Mastercard
+        companyTransferablePccs:
+          type: array
+          items:
+            type: string
+          description: List of distinct PCCs for company transferable credits
+          example:
+          - AK5L
+          - BE6C
+        companyTransferableLegalEntityNames:
+          type: array
+          items:
+            type: string
+          description: List of distinct legal entity names for company transferable credits
+        supportedAirlines:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupportedAirline'
+          description: List of airlines that support unused credit transfers
+    FetchTravelerUnusedCreditsRequest:
+      type: object
+      title: FetchTravelerUnusedCreditsRequest
+      description: Request body for fetching traveler's unused credits
+      required:
+      - travelerInfo
+      properties:
+        travelerInfo:
+          description: Traveler information to get userOrgId.
+          $ref: '#/components/schemas/AirRequestTravelerInfo'
+    AdhocTravelerInfoWrapper:
+      title: AdhocTravelerInfoWrapper
+      description: Wrapper over AdhocTravelerInfo object to be used as an identifier in a oneOf case.
+      properties:
+        adhocTravelerInfo:
+          $ref: '#/components/schemas/AdhocTravelerInfo'
+    TokenizedExpiryWrapper:
+      type: object
+      title: TokenizedExpiryWrapper
+      properties:
+        tokenizedExpiry:
+          $ref: '#/components/schemas/TokenizedExpiry'
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    MigrateUnusedCreditsToCompanyCreditsResponse:
+      type: object
+      title: MigrateUnusedCreditsToCompanyCreditsResponse
+      description: Response body for migrating unused credits
+      properties:
+        migrationStatus:
+          type: array
+          items:
+            $ref: '#/components/schemas/MigrationResponseInfo'
+            description: Information about the migration of the unused credit
+    CompanyTransferableUnusedCreditsListRequest:
+      type: object
+      title: CompanyUnusedCreditsListRequest
+      description: Request for fetching unused credits for a company.
+      required:
+      - companyId
+      properties:
+        companyId:
+          type: object
+          required:
+          - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: edd5b835-8001-430c-98f8-fedeccebe4cf
+        companyCreditFilter:
+          $ref: '#/components/schemas/CompanyCreditFilter'
+          description: Filter for fetching company credits.
+        offset:
+          type: integer
+          minimum: 0
+          default: 0
+          example: 0
+    MigrateUnusedCreditsToCompanyCreditsRequest:
+      type: object
+      title: MigrateUnusedCreditsToCompanyCreditsRequest
+      description: Request body for migrating unused credits
+      required:
+      - paymentSourceIds
+      - updateCreditUsageTypeTo
+      properties:
+        paymentSourceIds:
+          type: array
+          items:
+            type: string
+            description: Payment source ids of the unused credits to be migrated
+        updateCreditUsageTypeTo:
+          $ref: '#/components/schemas/CreditUsageType'
+          description: The type of credit usage to be updated to. This can be either COMPANY or PERSONAL. If passed Company, it means you are trying to update from personal to Company
+    UnusedCreditFop:
+      type: object
+      title: UnusedCreditFop
+      description: Form of payment information associated with an unused credit.
+      properties:
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+          description: Payment method used for the original booking.
+        paymentSourceType:
+          $ref: '#/components/schemas/PaymentSourceType'
+          description: Type of payment source used.
+        card:
+          $ref: '#/components/schemas/Card'
+          description: Card information if the payment source type is a card.
+    Card:
+      type: object
+      title: Card
+      description: User card info
+      required:
+      - number
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this card
+          format: uuid
+          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - CREDIT
+          - DEBIT
+          description: Type of card
+          example: CREDIT
+        company:
+          $ref: '#/components/schemas/CardCompany'
+        name:
+          description: Name on card
+          type: string
+          example: Harrison Schwartz
+          x-pii: SENSITIVE
+        address:
+          description: Billing address
+          $ref: '#/components/schemas/PostalAddress'
+          x-pii: SENSITIVE
+        number:
+          type: string
+          description: Card number
+          example: '4111111111111111'
+        expiryMonth:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+          description: Expiry month
+          example: 1
+          deprecated: true
+          x-sunset: '2026-07-01'
+        expiryYear:
+          type: integer
+          format: int32
+          description: Expiry year
+          minimum: 2000
+          example: 2010
+          deprecated: true
+          x-sunset: '2026-07-01'
+        cvv:
+          type: string
+          description: Card cvv number
+          example: '012'
+        label:
+          type: string
+          description: Card Label
+          example: Label amex
+        currency:
+          type: string
+          description: Native currency of the card.
+          example: USD
+        externalId:
+          type: string
+          description: Spotnana partner card id.
+          example: bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40
+        vaultId:
+          type: string
+          description: ID of the vault used for creating the card.
+          format: uuid
+          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
+        expiry:
+          description: Card Expiry.
+          $ref: '#/components/schemas/CardExpiry'
+        ownershipLabel:
+          $ref: '#/components/schemas/OwnershipLabel'
+          example: PERSONAL
+    CreditUsageType:
+      type: string
+      description: Usage type of the credit.
+      enum:
+      - CREDIT_USAGE_TYPE_UNKNOWN
+      - COMPANY
+      - PERSONAL
+    TokenizedExpiry:
+      title: TokenizedExpiry
+      type: object
+      description: Contains the tokenized expiry of a Card.
+      required:
+      - expiryMonth
+      - expiryYear
+      properties:
+        expiryMonth:
+          type: string
+          description: Tokenized Expiry month
+          example: KvAuPANQWCpjwRQxcC8EXg==
+        expiryYear:
+          type: string
+          description: Tokenized Expiry year
+          example: fPBm0OWrKwPyIrCVcbg4cA==
+    UserId:
+      type: object
+      title: UserId
+      description: User identifier
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+    UnusedCreditInfo:
+      type: object
+      title: UnusedCreditInfo
+      description: Information regarding an unused credit.
+      properties:
+        sourcePnr:
+          type: string
+          description: PNR number corresponding to third party through which booking was made.
+          example: MC5ONS
+        spotnanaPnr:
+          type: string
+          description: Spotnana pnr ID.
+          example: '2345678'
+        ticketNumber:
+          type: string
+          description: Ticket number for the ticket that was converted into an unused credit.
+          example: '5267779139217'
+        airlineCode:
+          type: string
+          description: 2 letter airline code of the airline associated with this unused credit.
+          example: AA
+        airlineInfo:
+          description: Airline info with airline name and code
+          $ref: '#/components/schemas/AirlineInfo'
+        totalFare:
+          description: Total airfare associated with the original ticket.
+          $ref: '#/components/schemas/Money'
+        issueDate:
+          description: Issue date for the unused credit.
+          $ref: '#/components/schemas/DateTimeOffset'
+        expiryDate:
+          description: Expiry date for the unused credit.
+          $ref: '#/components/schemas/DateTimeOffset'
+        usedDate:
+          description: Date on which the unused credit was used.
+          $ref: '#/components/schemas/DateTimeOffset'
+        departureDate:
+          description: Date for the departure of the first flight associated with the unused credit.
+          $ref: '#/components/schemas/DateTimeOffset'
+        segmentsAvailable:
+          type: string
+          description: Whether all segments are unused or some have already been used.
+          enum:
+          - UNKNOWN
+          - ALL_OPEN
+          - PARTIAL
+          - OTHER
+        passengerName:
+          description: Name of the passenger associated with the credit.
+          $ref: '#/components/schemas/Name'
+        departureCountry:
+          type: string
+          description: 3 letter country code of the departure country associated with the original ticket.
+          example: USA
+        arrivalCountry:
+          type: string
+          description: 3 letter country code of the arrival country associated with the original ticket.
+          example: USA
+        ticketType:
+          type: string
+          description: Type of credit.
+          enum:
+          - TICKET_TYPE_UNKNOWN
+          - ETICKET
+          - MCO
+          - NON_GDS
+        pcc:
+          type: string
+          description: PCC the credit was issued on.
+        status:
+          $ref: '#/components/schemas/CreditStatus'
+        source:
+          $ref: '#/components/schemas/ThirdPartySource'
+          default: SABRE
+          description: Source of unused credit e.g. Sabre, NDC etc.
+        tripId:
+          type: string
+          description: Trip ID that contains the unused credit
+          example: '1234567'
+        redeemVia:
+          type: string
+          description: "Credit redemption method. \nIf the value contains `CONTACT_AGENT`, then the agent must book the ticket and redeem the credits on behalf of the traveler.\n"
+          enum:
+          - REDEEM_VIA_OBT
+          - CONTACT_AGENT
+          example: REDEEM_VIA_OBT
+        sourceOfTruth:
+          type: string
+          description: The system that owns the credit.
+          enum:
+          - SPOTNANA
+          - MANUAL_FORM
+        owningPcc:
+          type: string
+          description: PCC the PNR was created on.
+        paymentSourceId:
+          type: string
+          format: uuid
+          description: Payment source ID associated with the credit.
+          example: edd5b835-8001-430c-98f8-fedeccebe4cf
+        creditUsageType:
+          $ref: '#/components/schemas/CreditUsageType'
+          description: The type of credit usage. This can be either COMPANY or PERSONAL.
+        email:
+          type: string
+          description: Email of the passenger owning the unused credit.
+        fopInfo:
+          $ref: '#/components/schemas/UnusedCreditFop'
+          description: The FOP associated with the unused credit.
+        fopLabel:
+          type: string
+          description: The label associated with the FOP. This value can be empty if that particular FOP does not have any label.
+        exchangeInfo:
+          $ref: '#/components/schemas/UnusedCreditExchangeInfo'
+          description: Exchange information in case of exchanges.
+        fopCardAccessType:
+          $ref: '#/components/schemas/UnusedCreditFopCardAccessType'
+          description: The card access type of the FOP associated with the unused credit.
+        legalEntityName:
+          type: string
+          description: The name of the legal entity associated with this unused credit.
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    SupplierType:
+      type: string
+      description: Supplier type like Sabre, TravelFusion etc.
+      enum:
+      - SABRE
+      - AMADEUS
+      - TRAVEL_FUSION
+      - FARELOGIX_NDC
+      - ATPCO_NDC
+      - TRAINLINE
+      - AVIA
+      - QBR
+      - BCD
+      - QANTAS_HOTELS
+      - SOUTHWEST
+      - EXPEDIA
+      - HOTEL_HUB
+      - NDC
+      - MARRIOTT
+      - CLEARTRIP
+      - KYTE
+      - GROUNDSPAN
+      - SABRE_NDC
+      - BOOKING_COM
+      - CARTRAWLER
+      - PREMIER_INN
+      - TRAVELODGE
+      - ENTERPRISE
+      - HYATT
+      - NATIONAL
+      - ALAMO
+      - HERTZ
+      - DOLLAR
+      - THRIFTY
+      - FIREFLY
+      - EUROSTAR
+      - AVIS
+      - BUDGET
+      x-ignoreBreakingChanges:
+      - SupplierType->PREMIER_INN
+      example: SABRE
+    PaymentMethod:
+      type: string
+      description: Payment method
+      enum:
+      - PAYMENT_METHOD_UNKNOWN
+      - CREDIT_CARD
+      - BREX_POINTS
+      - CASH
+      - QANTAS_POINTS
+      - VENDOR_PROGRAM_PAYMENT
+      - DELAYED_INVOICING
+      - FLIGHT_CREDITS
+      - QANTAS_TRAVEL_FUND
+      - CUSTOM_VIRTUAL_PAYMENT
+      - FLIGHT_PASS
+      - MISCELLANEOUS_CREDIT_ORDER
+      - NO_PREPAYMENT
+      x-ignoreBreakingChanges:
+      - PaymentMethod->MISCELLANEOUS_CREDIT_ORDER
+      - PaymentMethod->NO_PREPAYMENT
+      example: BREX_POINTS
+    ThirdPartySource:
+      type: string
+      enum:
+      - UNKNOWN_SOURCE
+      - SABRE
+      - TRAVEL_FUSION
+      - AVIA
+      - NDC
+      - TRAINLINE
+      - ATPCO_NDC
+      - FARELOGIX_NDC
+      - OFFLINE
+      - CONNEXUS
+      - ROUTEHAPPY
+      - AMADEUS
+      - GIATA
+      - QBR
+      - BCD
+      - QANTAS_HOTELS
+      - SOUTHWEST
+      - EXPEDIA
+      - HOTEL_HUB
+      - MARRIOTT
+      - CLEARTRIP
+      - KYTE
+      - GROUNDSPAN
+      - SABRE_NDC
+      - BOOKING_COM
+      - CARTRAWLER
+      - PREMIER_INN
+      - TRAVELODGE
+      - ENTERPRISE
+      - HYATT
+      - EUROSTAR
+      - NATIONAL
+      - ALAMO
+      - AVIS
+      - BUDGET
+      - HERTZ
+      - DOLLAR
+      - THRIFTY
+      - FIREFLY
+      x-ignoreBreakingChanges:
+      - ThirdPartySource->BOOKING_COM
+      - ThirdPartySource->CARTRAWLER
+      - ThirdPartySource->PREMIER_INN
+      example: SABRE
+    MigrationStatus:
+      type: string
+      description: Status of the credit.
+      enum:
+      - STATUS_UNKNOWN
+      - SUCCESS
+      - FAILED
+    UnusedCreditFopCardAccessType:
+      type: string
+      description: The card access type of the FOP associated with the unused credit.
+      enum:
+      - CARD_ACCESS_CENTRAL
+      - CARD_ACCESS_PERSONAL
+      - CARD_ACCESS_CORPORATE
+    FlightPassPaymentAmounts:
+      type: object
+      title: FlightPassPaymentAmounts
+      description: Fare breakdown for the flight pass booking.
+      properties:
+        totalAmount:
+          description: Total value (base + taxes).
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          description: Base fare excluding taxes.
+          $ref: '#/components/schemas/Money'
+        totalTaxes:
+          description: Sum of all taxes, fees, and charges.
+          $ref: '#/components/schemas/Money'
+        taxBreakdown:
+          type: array
+          description: Breakdown of taxes by code (e.g. GST_HST, QST, OTHER).
+          items:
+            $ref: '#/components/schemas/FlightPassTax'
+    PostalAddress:
+      title: PostalAddress
+      description: Postal Address Details
+      type: object
+      required:
+      - addressLines
+      - regionCode
+      properties:
+        addressLines:
+          description: Address lines
+          type: array
+          items:
+            type: string
+            example: Golden Gate Bridge
+        administrativeArea:
+          type: string
+          description: 'Code of administrative area. For example: DL for Delhi, India.
+
+            Highest administrative subdivision which is used for postal
+
+            addresses of a country or region.
+
+            For example, this can be a state, a province, an oblast, or a prefecture.
+
+            Specifically, for Spain this is the province and not the autonomous
+
+            community (e.g. "Barcelona" and not "Catalonia").
+
+            Many countries don''t use an administrative area in postal addresses. E.g.
+
+            in Switzerland this should be left unpopulated.
+
+            '
+          example: CA
+        administrativeAreaName:
+          type: string
+          description: "Name of administrative area. This is full name corresponding to administrativeArea. \nLike Delhi for DL area code. For some places, code and name maybe same as well like Tokyo.\n"
+          example: California
+        description:
+          description: Address description
+          type: string
+          example: San Francisco Home
+        isDefault:
+          description: Whether this address is default address in case multiple addresses are specified.
+          type: boolean
+          example: true
+        languageCode:
+          description: "BCP-47 language code of the contents of this address (if known). This is often the UI \nlanguage of the input form or is expected to match one of the languages used in the \naddress' country/region, or their transliterated equivalents.\nThis can affect formatting in certain countries, but is not critical to the correctness \nof the data and will never affect any validation or other non-formatting related operations.\nExamples: \"zh-Hant\", \"ja\", \"ja-Latn\", \"en\".\n"
+          type: string
+          example: en
+        locality:
+          description: Generally refers to the city/town portion of the address.
+          type: string
+          example: San Francisco
+        locationCode:
+          description: IATA 3-letter location code. See https://www.iata.org/en/services/codes.
+          type: string
+          example: LAX
+        organization:
+          description: The name of the organization at the address.
+          type: string
+          example: Spotnana
+        postalCode:
+          description: Postal code of the address. This is a required field when setting for a user/legal entity/company etc.
+          type: string
+          example: '94130'
+        continentCode:
+          description: 2 letter continent code of the continent this address falls in.
+          type: string
+          example: AF
+        recipients:
+          description: The recipient at the address.
+          type: array
+          items:
+            type: string
+        regionCode:
+          description: Region code of the country/region of the address.
+          type: string
+          example: US
+        regionName:
+          description: Region name of the country/region of the address.
+          type: string
+          example: America
+        revision:
+          type: integer
+          format: int32
+          example: 1
+        sortingCode:
+          description: 'Additional, country-specific, sorting code. This is not used
+
+            in most regions. Where it is used, the value is either a string like
+
+            "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
+
+            alone, representing the "sector code" (Jamaica), "delivery area indicator"
+
+            (Malawi) or "post office indicator" (e.g. Côte d''Ivoire).
+
+            '
+          type: string
+          example: Jamaica
+        sublocality:
+          description: Sublocality of the address. This can be neighborhoods, boroughs, districts.
+          type: string
+        timezone:
+          description: Time zone of the address.
+          type: string
+          example: America/Los_Angeles
+        coordinates:
+          description: Map coordinates of the address.
+          $ref: '#/components/schemas/Latlng'
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    CompanyCreditFilter:
+      type: object
+      title: CompanyCreditFilter
+      description: Filter for fetching company credits.
+      properties:
+        supplier:
+          $ref: '#/components/schemas/SupplierType'
+          description: Supplier for which this service provider should be used.
+        selectedAirlines:
+          type: array
+          items:
+            type: string
+            description: Airline codes for which the credits should be fetched.
+            example: AA
+        expiryDateRange:
+          type: object
+          properties:
+            expiryDateStart:
+              $ref: '#/components/schemas/DateModel'
+              example: '2023-01-31'
+            expiryDateEnd:
+              $ref: '#/components/schemas/DateModel'
+              example: '2023-12-01'
+        fopLabel:
+          type: array
+          items:
+            type: string
+          description: FOP labels for which the credits should be fetched.
+          example:
+          - Company Central Card
+          - Personal Card
+        pcc:
+          type: string
+          description: 'Deprecated: Use pccs instead. PCC for which the credits should be fetched. Ignored when pccs is set.'
+          example: LA5K
+          deprecated: true
+          x-sunset: '2027-01-01'
+        pccs:
+          type: array
+          items:
+            type: string
+          description: List of PCCs for which the credits should be fetched. Takes precedence over 'pcc' when both are set.
+          example:
+          - AK5L
+          - BE6C
+        fopCardAccessType:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnusedCreditFopCardAccessType'
+          description: FOP card access types for which the credits should be fetched.
+        legalEntityNames:
+          type: array
+          items:
+            type: string
+          description: Legal entity names for which the credits should be fetched.
+    CompanyUnusedCreditsListRequest:
+      type: object
+      title: CompanyUnusedCreditsListRequest
+      description: Request for fetching unused credits for a company.
+      properties:
+        companyId:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: edd5b835-8001-430c-98f8-fedeccebe4cf
+        companyCreditFilter:
+          $ref: '#/components/schemas/CompanyCreditFilter'
+          description: Filter for fetching company credits.
+        offset:
+          type: integer
+          minimum: 0
+          example: 0
+    PaymentSourceType:
+      type: string
+      description: Type of Payment Source
+      enum:
+      - CARD
+      - VIRTUAL_CARD
+      - REWARDS_PROGRAM
+      - DELAYED_INVOICING
+      - CUSTOM_PAYMENT_METHOD
+      - VENDOR_PROGRAM_PAYMENT
+      - UNUSED_CREDIT
+      - CASH
+    NameSuffix:
+      title: NameSuffix
+      description: Suffix for name
+      type: string
+      enum:
+      - NAME_SUFFIX_UNKNOWN
+      - SR
+      - JR
+      - MD
+      - PHD
+      - II
+      - III
+      - IV
+      - DO
+      - ATTY
+      - V
+      - VI
+      - ESQ
+      - DC
+      - DDS
+      - VM
+      - JD
+      - SECOND
+      - THIRD
+      example: SR
+    AdhocTravelerInfo:
+      title: AdhocTravelerInfo
+      type: object
+      description: Describes an adhoc traveler.
+      properties:
+        registrarUserId:
+          description: The registrar of the adhoc traveler.
+          $ref: '#/components/schemas/UserId'
+        externalId:
+          type: string
+          description: External Id of user
+          example: qwert123
+    CardCompany:
+      type: string
+      enum:
+      - NONE
+      - VISA
+      - MASTERCARD
+      - AMEX
+      - DISCOVER
+      - AIR_TRAVEL_UATP
+      - CARTE_BLANCHE
+      - DINERS_CLUB
+      - JCB
+      - BREX
+      - UNION_PAY
+      - EURO_CARD
+      - ACCESS_CARD
+      - ELO_CARD
+      description: The issuing company of card
+      example: VISA
+    MigrationResponseInfo:
+      type: object
+      title: MigrationResponseInfo
+      description: Information regarding the migration of the payment source Id.
+      properties:
+        paymentSourceId:
+          type: string
+          description: Unique identifier of the payment source.
+          example: d059044a-cacd-4b53-883d-7355530f54e7
+        status:
+          $ref: '#/components/schemas/MigrationStatus'
+    AirRequestTravelerInfo:
+      title: AirRequestTravelerInfo
+      description: 'The traveler identifiers. These can be either the Spotnana user IDs of the travelers or information regarding
+
+        the adhoc travelers.
+
+        '
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/UserIdWrapper'
+      - $ref: '#/components/schemas/AdhocTravelerInfoWrapper'
+    CardExpiry:
+      title: CardExpiry
+      type: object
+      description: Contains the expiry of a Card.
+      oneOf:
+      - $ref: '#/components/schemas/TokenizedExpiryWrapper'
+      - $ref: '#/components/schemas/ExpiryWrapper'
+    Expiry:
+      title: Expiry
+      type: object
+      description: Contains the expiry of a Card.
+      required:
+      - expiryMonth
+      - expiryYear
+      properties:
+        expiryMonth:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+          description: Expiry month
+          example: 1
+        expiryYear:
+          type: integer
+          format: int32
+          description: Expiry year
+          minimum: 2000
+          example: 2010
+    CreditStatus:
+      type: string
+      description: Status of the credit.
+      enum:
+      - STATUS_UNKNOWN
+      - OPEN
+      - USED
+      - RESERVED
+      x-ignoreBreakingChanges:
+      - CreditStatus->RESERVED
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

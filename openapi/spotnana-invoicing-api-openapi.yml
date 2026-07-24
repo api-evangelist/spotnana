@@ -1,0 +1,1840 @@
+openapi: 3.1.0
+info:
+  title: Air Invoicing API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Invoicing
+  description: APIs to manage invoicing.
+paths:
+  /v2/invoicing/invoice-data:
+    post:
+      tags:
+      - Invoicing
+      summary: Get Invoice Data
+      description: This endpoint gets the invoice data for given invoice numbers
+      operationId: getInvoiceData
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceDataRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    PaymentSourceMetadata:
+      type: object
+      title: PaymentSourceMetadata
+      description: Metadata corresponding to the payment source.
+      oneOf:
+      - $ref: '#/components/schemas/CardMetadataWrapper'
+      - $ref: '#/components/schemas/VirtualCardMetadataWrapper'
+      - $ref: '#/components/schemas/RewardsProgramMetadataWrapper'
+      - $ref: '#/components/schemas/CustomPaymentMethodMetadataWrapper'
+      - $ref: '#/components/schemas/VendorProgramPaymentDescriptorWrapper'
+    Money:
+      type: object
+      title: Money
+      description: 'Money object containing details such as the amount, the currency code, and the converted amount.
+
+        '
+      required:
+      - amount
+      - currencyCode
+      properties:
+        amount:
+          type: number
+          format: double
+          description: The numeric value for the amount of money.
+          example: 510
+        currencyCode:
+          type: string
+          description: The 3-letter currency code for the money amount (defined using ISO 4217 standard).
+          example: GBP
+        convertedAmount:
+          type: number
+          format: double
+          description: 'The converted currency and amount that has been converted (if a currency conversion has been requested).
+
+            For example, if the call requests that money be sent in a specified currency (because the frontend requested
+
+            the backend to send money in the user''s preferred currency).
+
+            '
+          example: 715.42
+        convertedCurrency:
+          type: string
+          description: The 3-letter currency code for the converted currency (defined using ISO 4217 standard).
+          example: USD
+        otherCoinage:
+          type: array
+          title: OtherCoinage
+          description: List of the dollar amount in other coinage systems like reward points, cryptocurrency etc.
+          items:
+            type: object
+            properties:
+              coinageCode:
+                $ref: '#/components/schemas/PaymentMethod'
+                description: Payment method
+              amount:
+                type: number
+                format: double
+                example: 1000
+              conversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              preferredCurrencyConversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              otherCoinageMetadata:
+                description: Metadata to store additional information related to the payment method
+                discriminator:
+                  propertyName: metadataType
+                  mapping:
+                    FlightPassPaymentMetadata: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+                oneOf:
+                - $ref: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+    ProgramDetails:
+      type: object
+      title: ProgramDetails
+      description: Descriptor for programs details.
+      required:
+      - uscId
+      - tourCode
+      - snapCode
+      properties:
+        uscId:
+          type: string
+          description: Contract Id between vendor and the client.
+        tourCode:
+          type: string
+          description: Tracking code to know which company has booked the ticket, it is added to the price quote and ticket.
+        snapCode:
+          type: string
+          description: Discount code.
+    DirectBillingWrapper:
+      type: object
+      title: DirectBillingWrapper
+      description: Wrapper for DirectBilling
+      properties:
+        directBilling:
+          $ref: '#/components/schemas/DirectBilling'
+    Invoice:
+      type: object
+      title: Invoice
+      description: Invoice Data for single invoice
+      required:
+      - invoiceNumber
+      - invoiceId
+      - data
+      properties:
+        invoiceNumber:
+          description: The invoice number
+          type: string
+          example: SPOT-0001232
+        invoiceId:
+          description: The invoice ID
+          type: string
+          example: d694cf94-534e-410e-b66b-11ef970622bc
+        data:
+          description: The invoice content
+          $ref: '#/components/schemas/InvoiceData'
+    FlightPassTax:
+      type: object
+      title: FlightPassTax
+      description: A single tax component of the flight pass fare.
+      properties:
+        code:
+          type: string
+          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
+          example: GST_HST
+        amount:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+    ProductType:
+      description: Type of product being invoiced
+      type: string
+      enum:
+      - PNR
+      - SERVICE_FEE
+      example: PNR
+    VendorProgramPaymentDescriptorWrapper:
+      type: object
+      title: VendorProgramPaymentDescriptorWrapper
+      description: Wrapper for VendorProgramPaymentDescriptor
+      properties:
+        vendorProgramPaymentDescriptor:
+          $ref: '#/components/schemas/VendorProgramPaymentDescriptor'
+    HotelItemNameMetadata:
+      title: HotelItemNameMetadata
+      type: object
+      description: HotelItemNameMetadata information.
+      required:
+      - pnrType
+      properties:
+        pnrType:
+          type: string
+          example: HOTEL
+        hotelName:
+          description: Name of the hotel.
+          type: string
+          example: Hilton
+        hotelCity:
+          description: City of the hotel.
+          type: string
+          example: New York
+        checkInDate:
+          description: Check in date.
+          $ref: '#/components/schemas/DateModel'
+        nights:
+          description: Number of nights.
+          type: string
+          example: 2 Nights
+    TokenizedExpiryWrapper:
+      type: object
+      title: TokenizedExpiryWrapper
+      properties:
+        tokenizedExpiry:
+          $ref: '#/components/schemas/TokenizedExpiry'
+    RailNameInvoiceMetadata:
+      title: RailNameInvoiceMetadata
+      type: object
+      description: RailMetadata information.
+      properties:
+        vendor:
+          description: Name of the rail.
+          type: string
+          example: Amtrak
+        trainTableId:
+          description: Train number.
+          type: string
+          example: A123
+        origin:
+          description: Origin of the train.
+          type: string
+          example: Washington Union Station
+        destination:
+          description: Destination of the train.
+          type: string
+          example: South Station
+        date:
+          description: Date of the journey.
+          $ref: '#/components/schemas/DateModel'
+        travelClass:
+          description: Travel class.
+          $ref: '#/components/schemas/RailTravelClass'
+          example: FIRST
+        fareType:
+          description: Fare type.
+          type: string
+          example: Flexible Fare
+        confirmationNumber:
+          description: Confirmation number.
+          type: string
+          example: '1234567890'
+    CustomPaymentMethodMetadataWrapper:
+      type: object
+      title: CustomPaymentMethodMetadataWrapper
+      description: Wrapper for CustomPaymentMethodMetadata
+      properties:
+        customPaymentMethodMetadata:
+          $ref: '#/components/schemas/CustomPaymentMethodMetadata'
+    BuyerInfo:
+      type: object
+      title: BuyerInfo
+      description: Buyer of items mentioned in the invoice.
+      required:
+      - name
+      - address
+      properties:
+        name:
+          description: Name of buyer, usually a traveler.
+          type: string
+          example: John Doe
+          x-pii: SENSITIVE
+        address:
+          description: Address of buyer. Could be office, legal entity or org address.
+          type: string
+          example: '115 Broadway Suite 04-101,
+
+            New York, NY 10006'
+          x-pii: SENSITIVE
+        taxId:
+          description: Tax number for the seller, for ex GSTN in India
+          type: string
+          example: TXG239023092
+          deprecated: true
+          x-sunset: '2026-07-01'
+        idInfo:
+          type: array
+          description: The seller ID information.
+          items:
+            $ref: '#/components/schemas/IdInfo'
+    RailTravelClass:
+      description: Travel class
+      type: string
+      enum:
+      - FIRST
+      - STANDARD
+      - BUSINESS
+      - SLEEPER
+      - STANDARD_PREMIUM
+      - BUSINESS_PREMIUM
+      - COACH
+      - ROOM
+      - EXECUTIVE
+      example: FIRST
+    TaxBreakdown:
+      type: array
+      items:
+        $ref: '#/components/schemas/Tax'
+    AirNameInvoiceMetadata:
+      title: AirNameInvoiceMetadata
+      type: object
+      description: invoice metadata for Air Pnr.
+      required:
+      - airlineName
+      - flightNumber
+      - origin
+      - destination
+      - cabin
+      properties:
+        airlineName:
+          description: Name of the airline.
+          type: string
+          example: United Airlines
+        flightNumber:
+          description: Flight number.
+          type: string
+          example: UA 123
+        origin:
+          description: Origin of the flight.
+          type: string
+          example: SFO
+        destination:
+          description: Destination of the flight.
+          type: string
+          example: EWR
+        date:
+          description: Date of the flight.
+          $ref: '#/components/schemas/DateModel'
+        cabin:
+          description: Cabin class.
+          $ref: '#/components/schemas/Cabin'
+          example: ECONOMY
+        ancillary:
+          description: Ancillary services.
+          type: string
+          example: Seat Purchase
+    VendorProgramPaymentDescriptor:
+      type: object
+      title: VendorProgramPaymentDescriptor
+      description: Descriptor for vendor program payment.
+      required:
+      - vendorProgramPaymentMetadata
+      properties:
+        vendorInfo:
+          $ref: '#/components/schemas/VendorInfo'
+        vendorProgramPaymentMetadata:
+          $ref: '#/components/schemas/VendorProgramPaymentMetadata'
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    InvoiceData:
+      type: object
+      title: InvoiceData
+      description: Actual Data
+      required:
+      - issuedDate
+      - seller
+      - buyer
+      - items
+      - payments
+      - productId
+      - productType
+      - referenceIds
+      - invoiceAmount
+      properties:
+        issuedDate:
+          description: Date of invoice issue
+          $ref: '#/components/schemas/DateModel'
+        seller:
+          description: Entity that sold the items mentioned in the invoice.
+          $ref: '#/components/schemas/SellerInfo'
+        buyer:
+          description: Buyer of items mentioned in the invoice.
+          $ref: '#/components/schemas/BuyerInfo'
+        items:
+          description: Items being invoiced.
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+        payments:
+          description: Information on how the items have been paid for.
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInformation'
+        productId:
+          description: ID of the product being invoiced
+          type: string
+          example: '123243223'
+        productType:
+          description: Type of product for which invoice is generated.
+          $ref: '#/components/schemas/ProductType'
+        invoiceAmount:
+          description: Total invoice amount.
+          $ref: '#/components/schemas/FareAmount'
+        taxBreakdown:
+          description: Tax breakdown for the invoice, this will be present for UK invoices with VAT
+          $ref: '#/components/schemas/TaxBreakdown'
+        referenceIds:
+          description: Reference Numbers to be shown on the invoice, for ex, Trip ID, PNR ID etc.
+          type: array
+          items:
+            $ref: '#/components/schemas/ReferenceId'
+        regionCode:
+          description: The region code for which the invoice is generated.
+          $ref: '#/components/schemas/RegionCode'
+          example: US
+        documentType:
+          description: Type of document
+          type: string
+          enum:
+          - INVOICE
+          - RECEIPT
+          - NONE
+          example: INVOICE
+        footerText:
+          description: Text shown at bottom of the PDF document. Nothing is shown if not set.
+          type: string
+          example: This document is proof of payment. If you require a tax invoice, please request one from the travel provider.
+        supplierType:
+          description: SupplierType for PNR, for eg. NDC, Sabre etc.
+          $ref: '#/components/schemas/ThirdPartySource'
+    ActualPayment:
+      title: ActualPayment
+      type: object
+      description: Payment done via supported Spotnana payment types.
+      required:
+      - paymentSourceType
+      - paymentMetadata
+      properties:
+        paymentSourceType:
+          description: Type of payment source.
+          $ref: '#/components/schemas/PaymentSourceType'
+        paymentMetadata:
+          description: Type of payment source.
+          $ref: '#/components/schemas/PaymentSourceMetadata'
+    Tax:
+      type: object
+      title: Tax
+      description: Tax details
+      required:
+      - amount
+      properties:
+        amount:
+          $ref: '#/components/schemas/Money'
+          description: Tax amount
+        taxCode:
+          type: string
+          description: Tax code
+          example: VAT
+        percentage:
+          type: number
+          format: double
+          description: Tax amount to total amount
+          example: 9
+    PaymentSourceType:
+      type: string
+      description: Type of Payment Source
+      enum:
+      - CARD
+      - VIRTUAL_CARD
+      - REWARDS_PROGRAM
+      - DELAYED_INVOICING
+      - CUSTOM_PAYMENT_METHOD
+      - VENDOR_PROGRAM_PAYMENT
+      - UNUSED_CREDIT
+      - CASH
+    RewardsProgramMetadata:
+      type: object
+      title: RewardsProgramMetadata
+      description: Metadata for Rewards Program payment source.
+      required:
+      - type
+      properties:
+        type:
+          $ref: '#/components/schemas/RewardsProgramType'
+        pointsBalance:
+          $ref: '#/components/schemas/PointsBalance'
+    InvoiceDataRequest:
+      type: object
+      title: InvoiceDataRequest
+      description: Invoice Data Request
+      required:
+      - invoices
+      properties:
+        tmcId:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          description: TMC for which invoice is being requested. Deprecated in favor of invoiceIds.
+          type: string
+          example: 15c94ac1-f540-4916-9243-306a75fbd8a9
+        invoiceNumbers:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          description: One or more invoice numbers being requested. Deprecated in favor of invoiceIds.
+          type: array
+          items:
+            type: string
+        invoiceIds:
+          description: One or more Invoice IDs being requested
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: 15c94ac1-f540-4916-9243-306a75fbd8a9
+    CardCompany:
+      type: string
+      enum:
+      - NONE
+      - VISA
+      - MASTERCARD
+      - AMEX
+      - DISCOVER
+      - AIR_TRAVEL_UATP
+      - CARTE_BLANCHE
+      - DINERS_CLUB
+      - JCB
+      - BREX
+      - UNION_PAY
+      - EURO_CARD
+      - ACCESS_CARD
+      - ELO_CARD
+      description: The issuing company of card
+      example: VISA
+    RegionCode:
+      description: The region code for which the following invoicing information is applicable.
+      type: string
+      enum:
+      - US
+      - UK
+      - NL
+      - SG
+      - CA
+      - MX
+      - DO
+      - AR
+      - BR
+      - CO
+      - GT
+      - PE
+      - CR
+      - IL
+      - NOR
+      - AE
+      - SE
+      - TR
+      - PL
+      - SA
+      - ZA
+      - AU
+      - CN
+      - HK
+      - IN
+      - ID
+      - JP
+      - KR
+      - MY
+      - NZ
+      - PH
+      - TH
+      - VN
+      - FR
+      - DK
+      - CZ
+      - HU
+      - AL
+      - BY
+      - BA
+      - BG
+      - IS
+      - AD
+      - AT
+      - BE
+      - CY
+      - EE
+      - FI
+      - DE
+      - GR
+      - IE
+      - IT
+      - XK
+      - LV
+      - LT
+      - LU
+      - MC
+      - ME
+      - MT
+      - PT
+      - SM
+      - SK
+      - SI
+      - ES
+      - VA
+      - HR
+      - LI
+      - MD
+      - MK
+      - RO
+      - RU
+      - RS
+      - CH
+      - UA
+      - GB
+      - TW
+      example: US
+    SimpleMoney:
+      type: object
+      title: SimpleMoney
+      description: Money object containing just amount and currency code.
+      required:
+      - amount
+      - currencyCode
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Amount
+          example: 510
+        currencyCode:
+          type: string
+          description: The 3-letter currency code defined in ISO 4217.
+          example: GBP
+    Expiry:
+      title: Expiry
+      type: object
+      description: Contains the expiry of a Card.
+      required:
+      - expiryMonth
+      - expiryYear
+      properties:
+        expiryMonth:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+          description: Expiry month
+          example: 1
+        expiryYear:
+          type: integer
+          format: int32
+          description: Expiry year
+          minimum: 2000
+          example: 2010
+    NoPrepaymentWrapper:
+      type: object
+      title: NoPrepaymentWrapper
+      description: Wrapper for No Prepayment Payment Source.
+      required:
+      - noPrepaymentMetadata
+      properties:
+        noPrepaymentMetadata:
+          $ref: '#/components/schemas/NoPrepaymentMetadata'
+    SellerInfo:
+      type: object
+      title: SellerInfo
+      description: Entity that sold the items mentioned in the invoice.
+      required:
+      - name
+      - address
+      properties:
+        name:
+          description: Name of seller, usually a TMC Legal Entity.
+          type: string
+          example: Spotnana India Pvt. Ltd.
+        address:
+          description: Address of seller.
+          type: string
+          example: '115 Broadway Suite 04-101,
+
+            New York, NY 10006'
+        taxId:
+          description: Tax number for the seller, for ex GSTN in India
+          type: string
+          example: TXG239023092
+          deprecated: true
+          x-sunset: '2026-07-01'
+        idInfo:
+          type: array
+          description: The seller ID information.
+          items:
+            $ref: '#/components/schemas/IdInfo'
+    DirectBilling:
+      type: object
+      title: DirectBilling
+      description: Descriptor for direct billing details.
+      properties:
+        directBillingCode:
+          type: string
+          description: Direct billing code provided by the vendor.
+        corporateDiscountCode:
+          type: string
+          deprecated: true
+          x-sunset: '2026-07-01'
+          description: Corporate discount code provided by the vendor.
+        label:
+          type: string
+          description: Label for the Direct Billing Payment method.
+    DateTimeRange:
+      type: object
+      properties:
+        min:
+          $ref: '#/components/schemas/DateTimeLocal'
+          description: Minimum value - inclusive.
+        max:
+          $ref: '#/components/schemas/DateTimeLocal'
+          description: Maximum value - inclusive.
+    AirlineProgram:
+      type: object
+      title: AirlineProgram
+      description: Descriptor for Airline program details.
+      required:
+      - airlineInfo
+      - airlineProgramMetadata
+      properties:
+        airlineInfo:
+          type: array
+          description: Eligible airlines' information list.
+          items:
+            $ref: '#/components/schemas/Airline'
+        airlineProgramMetadata:
+          description: Airline program payment specific metadata.
+          $ref: '#/components/schemas/AirlineProgramMetadata'
+    FlightPassPaymentMetadata:
+      type: object
+      title: FlightPassPaymentMetadata
+      description: Metadata specific to Flight Pass payment method in OtherCoinage.
+      properties:
+        flightPassNumber:
+          type: string
+          description: Flight pass number
+          example: FP123456789
+        flightPassAmounts:
+          $ref: '#/components/schemas/FlightPassPaymentAmounts'
+    CardMetadata:
+      type: object
+      title: CardMetadata
+      description: Metadata for Card payment source.
+      required:
+      - card
+      properties:
+        card:
+          $ref: '#/components/schemas/Card'
+    VirtualPaymentMetadata:
+      type: object
+      title: VirtualPaymentMetadata
+      required:
+      - label
+      description: Metadata for custom virtual payment source.
+      properties:
+        label:
+          type: string
+          example: Custom payment card
+          description: Label for custom virtual payment source.
+    FareAmount:
+      type: object
+      title: FareAmount
+      description: Fare amount including base fare and tax.
+      required:
+      - base
+      - tax
+      properties:
+        base:
+          description: Base fare amount.
+          $ref: '#/components/schemas/Money'
+        tax:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+        taxBreakdown:
+          description: Breakdown of tax amounts.
+          $ref: '#/components/schemas/TaxBreakdown'
+    Item:
+      type: object
+      title: Item
+      description: Item being invoiced.
+      required:
+      - name
+      - identifier
+      - type
+      - amount
+      - travelerName
+      - purchaseType
+      properties:
+        name:
+          description: Name of the item.
+          type: string
+          example: Air Ticket SFO-EWR
+        identifier:
+          description: Number identifying the item, for ex, the ticket number for air ticket.
+          type: string
+          example: 00129383829
+        purchaseType:
+          description: Type of item, indicates what type of item is being sold
+          type: string
+          enum:
+          - TRIP_FEE
+          - FLIGHT
+          - ANCILLARY
+          - HOTEL
+          - CAR
+          - RAIL
+          - MERCHANT_FEE
+          - LIMO
+          - MISC
+          example: TRIP_FEE
+        type:
+          description: Type of item, indicates if the item was purchased vs refunded.
+          type: string
+          enum:
+          - PURCHASE
+          - REFUND
+          example: PURCHASE
+        amount:
+          description: Amount of money.
+          $ref: '#/components/schemas/FareAmount'
+        travelerName:
+          description: Name of the traveler.
+          type: string
+          example: John Doe
+        taxBreakdown:
+          description: Tax breakdown for the invoice, this will be present for UK invoices with VAT
+          $ref: '#/components/schemas/TaxBreakdown'
+        itemNameMetadata:
+          description: Metadata for the item name.
+          $ref: '#/components/schemas/ItemNameMetadata'
+    FlightPassMetadata:
+      type: object
+      title: FlightPassMetadata
+      required:
+      - label
+      description: Metadata for FlightPass payment source.
+      properties:
+        label:
+          type: string
+          example: Air Canada Flight Pass
+          description: Label for FlightPass payment source.
+    TokenizedExpiry:
+      title: TokenizedExpiry
+      type: object
+      description: Contains the tokenized expiry of a Card.
+      required:
+      - expiryMonth
+      - expiryYear
+      properties:
+        expiryMonth:
+          type: string
+          description: Tokenized Expiry month
+          example: KvAuPANQWCpjwRQxcC8EXg==
+        expiryYear:
+          type: string
+          description: Tokenized Expiry year
+          example: fPBm0OWrKwPyIrCVcbg4cA==
+    VirtualCardMetadata:
+      type: object
+      title: VirtualCardMetadata
+      description: Metadata for Virtual Card payment source.
+      required:
+      - vendor
+      - cardLabel
+      - company
+      properties:
+        vendor:
+          $ref: '#/components/schemas/VirtualCardVendor'
+        cardLabel:
+          type: string
+          description: Name/Label for visual identification of the card.
+          example: cardCompany
+        company:
+          $ref: '#/components/schemas/CardCompany'
+        paymentInstruction:
+          $ref: '#/components/schemas/PaymentInstruction'
+    TicketStatus:
+      description: Status of the ticket.
+      type: string
+      enum:
+      - UNKNOWN
+      - ISSUED
+      - VOIDED
+      - REFUNDED_EXCHANGED
+      - EXCHANGED
+      example: ISSUED
+    QantasTravelFundMetadataWrapper:
+      type: object
+      title: QantasTravelFundMetadataWrapper
+      description: Wrapper for QantasTravelFundMetadata
+      required:
+      - qantasTravelFundMetadata
+      properties:
+        qantasTravelFundMetadata:
+          $ref: '#/components/schemas/QantasTravelFundMetadata'
+    VendorInfo:
+      type: object
+      title: VendorInfo
+      description: Name/ID etc. of the vendor.
+      required:
+      - vendorId
+      - vendorName
+      properties:
+        vendorId:
+          type: string
+          description: ID of the vendor.
+        vendorName:
+          type: string
+          description: Name of the vendor.
+    PaymentInformation:
+      type: object
+      title: PaymentInformation
+      description: Information on how the items have been paid for.
+      required:
+      - amount
+      - paymentMode
+      - paymentInstrumentIdentifier
+      properties:
+        id:
+          description: Payment reference ID.
+          type: string
+          example: sdkljhafisudlls
+        transactionTime:
+          description: Transaction timestamp.
+          $ref: '#/components/schemas/DateTimeOffset'
+        amount:
+          description: Amount paid.
+          $ref: '#/components/schemas/Money'
+        paymentMode:
+          description: Mode of Payment shown on invoice.
+          type: string
+          enum:
+          - CREDIT_CARD
+          - ON_ACCOUNT
+          - DIRECT
+          - EXCHANGE
+          - BREX_POINTS
+          - CASH
+          - QANTAS_POINTS
+          - VENDOR_PROGRAM_PAYMENT
+          - AMADEUS_CHECKOUT
+          - PREVIOUS_BOOKING_VALUE
+          - FLIGHT_CREDITS
+          - QANTAS_TRAVEL_FUND
+          - FLIGHT_PASS
+          - MISCELLANEOUS_CREDIT_ORDER
+          - NO_PREPAYMENT
+          x-ignoreBreakingChanges:
+          - PaymentInformation->paymentMode
+          example: CREDIT_CARD
+        paymentInstrumentIdentifier:
+          description: An identifier for the payment instrument used. For example, last four credit card number digits in case a credit card was used.
+          type: string
+          example: '**2343'
+        actualPayment:
+          description: Details of how payment was done
+          $ref: '#/components/schemas/ActualPayment'
+        exchangePayment:
+          description: Details of how payment was done
+          $ref: '#/components/schemas/ExchangePayment'
+    PostalAddress:
+      title: PostalAddress
+      description: Postal Address Details
+      type: object
+      required:
+      - addressLines
+      - regionCode
+      properties:
+        addressLines:
+          description: Address lines
+          type: array
+          items:
+            type: string
+            example: Golden Gate Bridge
+        administrativeArea:
+          type: string
+          description: 'Code of administrative area. For example: DL for Delhi, India.
+
+            Highest administrative subdivision which is used for postal
+
+            addresses of a country or region.
+
+            For example, this can be a state, a province, an oblast, or a prefecture.
+
+            Specifically, for Spain this is the province and not the autonomous
+
+            community (e.g. "Barcelona" and not "Catalonia").
+
+            Many countries don''t use an administrative area in postal addresses. E.g.
+
+            in Switzerland this should be left unpopulated.
+
+            '
+          example: CA
+        administrativeAreaName:
+          type: string
+          description: "Name of administrative area. This is full name corresponding to administrativeArea. \nLike Delhi for DL area code. For some places, code and name maybe same as well like Tokyo.\n"
+          example: California
+        description:
+          description: Address description
+          type: string
+          example: San Francisco Home
+        isDefault:
+          description: Whether this address is default address in case multiple addresses are specified.
+          type: boolean
+          example: true
+        languageCode:
+          description: "BCP-47 language code of the contents of this address (if known). This is often the UI \nlanguage of the input form or is expected to match one of the languages used in the \naddress' country/region, or their transliterated equivalents.\nThis can affect formatting in certain countries, but is not critical to the correctness \nof the data and will never affect any validation or other non-formatting related operations.\nExamples: \"zh-Hant\", \"ja\", \"ja-Latn\", \"en\".\n"
+          type: string
+          example: en
+        locality:
+          description: Generally refers to the city/town portion of the address.
+          type: string
+          example: San Francisco
+        locationCode:
+          description: IATA 3-letter location code. See https://www.iata.org/en/services/codes.
+          type: string
+          example: LAX
+        organization:
+          description: The name of the organization at the address.
+          type: string
+          example: Spotnana
+        postalCode:
+          description: Postal code of the address. This is a required field when setting for a user/legal entity/company etc.
+          type: string
+          example: '94130'
+        continentCode:
+          description: 2 letter continent code of the continent this address falls in.
+          type: string
+          example: AF
+        recipients:
+          description: The recipient at the address.
+          type: array
+          items:
+            type: string
+        regionCode:
+          description: Region code of the country/region of the address.
+          type: string
+          example: US
+        regionName:
+          description: Region name of the country/region of the address.
+          type: string
+          example: America
+        revision:
+          type: integer
+          format: int32
+          example: 1
+        sortingCode:
+          description: 'Additional, country-specific, sorting code. This is not used
+
+            in most regions. Where it is used, the value is either a string like
+
+            "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
+
+            alone, representing the "sector code" (Jamaica), "delivery area indicator"
+
+            (Malawi) or "post office indicator" (e.g. Côte d''Ivoire).
+
+            '
+          type: string
+          example: Jamaica
+        sublocality:
+          description: Sublocality of the address. This can be neighborhoods, boroughs, districts.
+          type: string
+        timezone:
+          description: Time zone of the address.
+          type: string
+          example: America/Los_Angeles
+        coordinates:
+          description: Map coordinates of the address.
+          $ref: '#/components/schemas/Latlng'
+    AirItemNameMetadata:
+      title: AirItemNameMetadata
+      type: object
+      description: AirItemNameMetadata information.
+      required:
+      - pnrType
+      properties:
+        pnrType:
+          type: string
+          example: AIR
+        ticketStatus:
+          description: Ticket status.
+          $ref: '#/components/schemas/TicketStatus'
+          example: REFUNDED_EXCHANGED
+        airNameInvoiceMetadata:
+          description: Air invoice metadata.
+          type: array
+          items:
+            $ref: '#/components/schemas/AirNameInvoiceMetadata'
+        defaultItemName:
+          description: Default item name.
+          type: string
+          example: Flight void
+    RewardsProgramMetadataWrapper:
+      type: object
+      title: RewardsProgramMetadataWrapper
+      description: Wrapper for RewardsProgramMetadata
+      properties:
+        rewardsProgramMetadata:
+          $ref: '#/components/schemas/RewardsProgramMetadata'
+    QantasTravelFundMetadata:
+      type: object
+      title: QantasTravelFundMetadata
+      description: Metadata for Qantas Travel Fund payment source.
+      required:
+      - label
+      - fundBalance
+      properties:
+        label:
+          type: string
+          example: QANTAS_TRAVEL_FUND
+          description: Label for the Qantas Travel Fund.
+        fundBalance:
+          $ref: '#/components/schemas/Money'
+          description: Balance of the travel fund wallet.
+    Cabin:
+      title: Cabin
+      description: Flight cabin
+      type: string
+      enum:
+      - UNKNOWN_CABIN
+      - ECONOMY
+      - PREMIUM_ECONOMY
+      - BUSINESS
+      - FIRST
+      example: ECONOMY
+    CardExpiry:
+      title: CardExpiry
+      type: object
+      description: Contains the expiry of a Card.
+      oneOf:
+      - $ref: '#/components/schemas/TokenizedExpiryWrapper'
+      - $ref: '#/components/schemas/ExpiryWrapper'
+    VendorProgramPaymentMetadata:
+      type: object
+      title: VendorProgramPaymentMetadata
+      description: Vendor program payment specific metadata.
+      oneOf:
+      - $ref: '#/components/schemas/DirectBillingWrapper'
+      - $ref: '#/components/schemas/AirlineProgramWrapper'
+    UATPMetadataWrapper:
+      type: object
+      title: UATPMetadataWrapper
+      description: Wrapper for UATP Metadata.
+      properties:
+        uatpMetadata:
+          $ref: '#/components/schemas/UATPMetadata'
+    BrexBudgetMetadataWrapper:
+      type: object
+      title: BrexBudgetMetadataWrapper
+      description: Wrapper for BrexBudgetMetadata
+      required:
+      - brexBudgetMetadata
+      properties:
+        brexBudgetMetadata:
+          $ref: '#/components/schemas/BrexBudgetMetadata'
+    FlightPassPaymentMetadataWrapper:
+      type: object
+      title: FlightPassPaymentMetadataWrapper
+      description: Wrapper for Flight Pass payment metadata.
+      required:
+      - flightPassMetadata
+      properties:
+        metadataType:
+          type: string
+          description: Discriminator field for polymorphic deserialization
+          example: FlightPassPaymentMetadata
+          default: FlightPassPaymentMetadata
+        flightPassMetadata:
+          $ref: '#/components/schemas/FlightPassPaymentMetadata'
+    NoPrepaymentMetadata:
+      type: object
+      title: NoPrepaymentMetadata
+      required:
+      - label
+      description: Metadata for No Prepayment payment source (car bookings on no-guarantee rates).
+      properties:
+        label:
+          type: string
+          example: No Prepayment
+          description: Label for No Prepayment payment source.
+    ReferenceId:
+      type: object
+      title: ReferenceId
+      description: Reference number to be shown on the invoice.
+      required:
+      - label
+      - value
+      properties:
+        label:
+          description: Label for the reference ID on invoice.
+          type: string
+          enum:
+          - TRIP_ID
+          - PNR_ID
+          - AGENCY_REFERENCE
+          example: AGENCY_REFERENCE
+        value:
+          description: The reference ID.
+          type: string
+          example: '122332432'
+    IdInfo:
+      type: object
+      title: IdInfo
+      description: Identity information of the buyer or seller
+      required:
+      - idType
+      - value
+      properties:
+        idType:
+          description: The type of Id.
+          type: string
+          enum:
+          - TAX_ID
+          - VAT_ID
+          - VAT_REG_NO
+          - GST_NO
+          - ABN
+          - GSTIN
+          - SIRET
+          - BUSINESS_REG_NO
+          - UID
+          - CVR_NO
+          - EIN
+          example: TAX_ID
+        value:
+          description: Value of the Id.
+          type: string
+          example: TXG239023092
+    CardMetadataWrapper:
+      type: object
+      title: CardMetadataWrapper
+      description: Wrapper for CardMetadata
+      properties:
+        cardMetadata:
+          $ref: '#/components/schemas/CardMetadata'
+    UAPassPlusMetadata:
+      type: object
+      title: UAPassPlusMetadata
+      description: Details for UAPassPlus Metadata.
+      required:
+      - programDetails
+      - uatpInfo
+      properties:
+        programDetails:
+          $ref: '#/components/schemas/ProgramDetails'
+        uatpInfo:
+          $ref: '#/components/schemas/UATPInformation'
+    DateTimeOffset:
+      title: DateTimeOffset
+      description: ISO8601 UTC Date Time
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?(Z|([+-](0[0-9]|1[0-4]):([0-5][0-9])))$
+          example: 2017-07-21T17:32Z
+    VirtualPaymentMetadataWrapper:
+      type: object
+      title: VirtualPaymentMetadataWrapper
+      description: Wrapper for custom virtual payment metadata
+      required:
+      - virtualPaymentMetadata
+      properties:
+        virtualPaymentMetadata:
+          $ref: '#/components/schemas/VirtualPaymentMetadata'
+    DateModel:
+      title: Date
+      description: Date in ISO 8601 standard.
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$
+          example: '2017-07-21'
+    ExpiryWrapper:
+      type: object
+      title: ExpiryWrapper
+      properties:
+        expiry:
+          $ref: '#/components/schemas/Expiry'
+    OwnershipLabel:
+      title: OwnershipLabel
+      type: string
+      description: Ownership label of the card whether it is personal, corporate or central.
+      enum:
+      - CORPORATE
+      - PERSONAL
+      - CENTRAL
+    CustomPaymentMethodMetadata:
+      type: object
+      title: CustomPaymentMethodMetadata
+      description: Metadata for Custom Payment Method payment source.
+      oneOf:
+      - $ref: '#/components/schemas/BrexBudgetMetadataWrapper'
+      - $ref: '#/components/schemas/AmadeusCheckoutMetadataWrapper'
+      - $ref: '#/components/schemas/QantasTravelFundMetadataWrapper'
+      - $ref: '#/components/schemas/VirtualPaymentMetadataWrapper'
+      - $ref: '#/components/schemas/FlightPassWrapper'
+      - $ref: '#/components/schemas/NoPrepaymentWrapper'
+      x-ignoreBreakingChanges:
+      - CustomPaymentMethodMetadata->NoPrepaymentWrapper
+    AmadeusCheckoutMetadata:
+      type: object
+      title: AmadeusCheckoutMetadata
+      required:
+      - splitPaymentAllowed
+      description: Metadata for AmadeusCheckout
+      properties:
+        paymentPageId:
+          type: string
+          example: aslkdjalwjd
+          description: Payment page Id.
+        splitPaymentAllowed:
+          type: boolean
+          example: true
+          default: false
+          description: True if split payment is allowed in Amadeus Checkout, false otherwise
+        splitOptionsByCardCompany:
+          type: array
+          items:
+            $ref: '#/components/schemas/SplitOptionByCardCompany'
+    DinersTacMetadata:
+      type: object
+      title: DinersTacMetadata
+      description: Details for Diners TAC Metadata.
+      required:
+      - card
+      properties:
+        card:
+          $ref: '#/components/schemas/Card'
+    VirtualCardMetadataWrapper:
+      type: object
+      title: VirtualCardMetadataWrapper
+      description: Wrapper for VirtualCardMetadata
+      properties:
+        virtualCardMetadata:
+          $ref: '#/components/schemas/VirtualCardMetadata'
+    DateTimeLocal:
+      title: DateTimeLocal
+      description: Local date and time in ISO 8601 format.
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?$
+          example: 2017-07-21T17:32
+    Card:
+      type: object
+      title: Card
+      description: User card info
+      required:
+      - number
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this card
+          format: uuid
+          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - CREDIT
+          - DEBIT
+          description: Type of card
+          example: CREDIT
+        company:
+          $ref: '#/components/schemas/CardCompany'
+        name:
+          description: Name on card
+          type: string
+          example: Harrison Schwartz
+          x-pii: SENSITIVE
+        address:
+          description: Billing address
+          $ref: '#/components/schemas/PostalAddress'
+          x-pii: SENSITIVE
+        number:
+          type: string
+          description: Card number
+          example: '4111111111111111'
+        expiryMonth:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+          description: Expiry month
+          example: 1
+          deprecated: true
+          x-sunset: '2026-07-01'
+        expiryYear:
+          type: integer
+          format: int32
+          description: Expiry year
+          minimum: 2000
+          example: 2010
+          deprecated: true
+          x-sunset: '2026-07-01'
+        cvv:
+          type: string
+          description: Card cvv number
+          example: '012'
+        label:
+          type: string
+          description: Card Label
+          example: Label amex
+        currency:
+          type: string
+          description: Native currency of the card.
+          example: USD
+        externalId:
+          type: string
+          description: Spotnana partner card id.
+          example: bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40
+        vaultId:
+          type: string
+          description: ID of the vault used for creating the card.
+          format: uuid
+          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
+        expiry:
+          description: Card Expiry.
+          $ref: '#/components/schemas/CardExpiry'
+        ownershipLabel:
+          $ref: '#/components/schemas/OwnershipLabel'
+          example: PERSONAL
+    FlightPassWrapper:
+      type: object
+      title: FlightPassWrapper
+      description: Wrapper for Flight Pass Payment Source.
+      required:
+      - flightPassMetadata
+      properties:
+        flightPassMetadata:
+          $ref: '#/components/schemas/FlightPassMetadata'
+    VirtualCardVendor:
+      type: string
+      description: Type of Virtual card vendor
+      enum:
+      - CONFERMA
+      example: CONFERMA
+    PaymentMethod:
+      type: string
+      description: Payment method
+      enum:
+      - PAYMENT_METHOD_UNKNOWN
+      - CREDIT_CARD
+      - BREX_POINTS
+      - CASH
+      - QANTAS_POINTS
+      - VENDOR_PROGRAM_PAYMENT
+      - DELAYED_INVOICING
+      - FLIGHT_CREDITS
+      - QANTAS_TRAVEL_FUND
+      - CUSTOM_VIRTUAL_PAYMENT
+      - FLIGHT_PASS
+      - MISCELLANEOUS_CREDIT_ORDER
+      - NO_PREPAYMENT
+      x-ignoreBreakingChanges:
+      - PaymentMethod->MISCELLANEOUS_CREDIT_ORDER
+      - PaymentMethod->NO_PREPAYMENT
+      example: BREX_POINTS
+    ThirdPartySource:
+      type: string
+      enum:
+      - UNKNOWN_SOURCE
+      - SABRE
+      - TRAVEL_FUSION
+      - AVIA
+      - NDC
+      - TRAINLINE
+      - ATPCO_NDC
+      - FARELOGIX_NDC
+      - OFFLINE
+      - CONNEXUS
+      - ROUTEHAPPY
+      - AMADEUS
+      - GIATA
+      - QBR
+      - BCD
+      - QANTAS_HOTELS
+      - SOUTHWEST
+      - EXPEDIA
+      - HOTEL_HUB
+      - MARRIOTT
+      - CLEARTRIP
+      - KYTE
+      - GROUNDSPAN
+      - SABRE_NDC
+      - BOOKING_COM
+      - CARTRAWLER
+      - PREMIER_INN
+      - TRAVELODGE
+      - ENTERPRISE
+      - HYATT
+      - EUROSTAR
+      - NATIONAL
+      - ALAMO
+      - AVIS
+      - BUDGET
+      - HERTZ
+      - DOLLAR
+      - THRIFTY
+      - FIREFLY
+      x-ignoreBreakingChanges:
+      - ThirdPartySource->BOOKING_COM
+      - ThirdPartySource->CARTRAWLER
+      - ThirdPartySource->PREMIER_INN
+      example: SABRE
+    FlightPassPaymentAmounts:
+      type: object
+      title: FlightPassPaymentAmounts
+      description: Fare breakdown for the flight pass booking.
+      properties:
+        totalAmount:
+          description: Total value (base + taxes).
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          description: Base fare excluding taxes.
+          $ref: '#/components/schemas/Money'
+        totalTaxes:
+          description: Sum of all taxes, fees, and charges.
+          $ref: '#/components/schemas/Money'
+        taxBreakdown:
+          type: array
+          description: Breakdown of taxes by code (e.g. GST_HST, QST, OTHER).
+          items:
+            $ref: '#/components/schemas/FlightPassTax'
+    Airline:
+      title: Airline
+      description: Airline Details
+      type: object
+      required:
+      - carrierCode
+      - airlineName
+      properties:
+        carrierCode:
+          type: string
+          description: Unique code for the Airline
+          example: AA
+        airlineName:
+          type: string
+          description: Full Name of the Airline
+          example: American Airlines
+        isPresentInPreferredVendors:
+          type: boolean
+          description: Whether the airline is present in preferred vendor list. This is an optional field which gets populated only in the preferred vendor autocomplete API.
+          example: true
+    UAPassPlusMetadataWrapper:
+      type: object
+      title: UAPassPlusMetadataWrapper
+      description: Wrapper for UAPassPlus Metadata.
+      properties:
+        uaPassPlusMetadata:
+          $ref: '#/components/schemas/UAPassPlusMetadata'
+    SplitOptionByCardCompany:
+      type: object
+      title: SplitOptionByCardCompany
+      required:
+      - cardCompanyCode
+      description: Split option details when using a card from a specific card company
+      properties:
+        cardCompanyCode:
+          type: string
+          description: Card company code which allows splitting the payment
+          example: VI, TP
+        splitWithCardCompanyCodes:
+          type: array
+          items:
+            type: string
+            description: Card company codes payment can be split with. Empty value will indicate that payment cannot be split with cards of any company.
+    DinersTacMetadataWrapper:
+      type: object
+      title: DinersTacMetadataWrapper
+      description: Wrapper for DinersTac Metadata.
+      properties:
+        dinersTacMetadata:
+          $ref: '#/components/schemas/DinersTacMetadata'
+    ItemNameMetadata:
+      title: ticketMetadata
+      description: Metadata for the ticket.
+      discriminator:
+        propertyName: pnrType
+        mapping:
+          AIR: '#/components/schemas/AirItemNameMetadata'
+          HOTEL: '#/components/schemas/HotelItemNameMetadata'
+          RAIL: '#/components/schemas/RailItemNameMetadata'
+      oneOf:
+      - $ref: '#/components/schemas/AirItemNameMetadata'
+      - $ref: '#/components/schemas/HotelItemNameMetadata'
+      - $ref: '#/components/schemas/RailItemNameMetadata'
+    InvoiceDataResponse:
+      type: object
+      title: InvoiceDataResponse
+      description: Invoice Data List
+      required:
+      - invoices
+      properties:
+        invoices:
+          description: List of invoices which were requested.
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    AirlineProgramMetadata:
+      type: object
+      title: AirlineProgramMetadata
+      oneOf:
+      - $ref: '#/components/schemas/UATPMetadataWrapper'
+      - $ref: '#/components/schemas/UAPassPlusMetadataWrapper'
+      - $ref: '#/components/schemas/DinersTacMetadataWrapper'
+      x-ignoreBreakingChanges:
+      - AirlineProgramMetadata->DinersTacMetadataWrapper
+    BrexBudgetMetadata:
+      type: object
+      title: BrexBudgetMetadata
+      description: Metadata for Brex Budget payment source.
+      required:
+      - budgetName
+      properties:
+        budgetName:
+          type: string
+          example: Travel Budget
+          description: Budget name.
+        budgetRemainingBalance:
+          $ref: '#/components/schemas/SimpleMoney'
+          description: Remaining balance of the budget.
+        cardId:
+          type: string
+          description: Card id of the budget.
+        budgetRemainingBalanceFormatted:
+          type: string
+          example: $90,000.00
+          description: Remaining balance of the budget formatted with currency.
+        isPersonalCardAllowed:
+          type: boolean
+          description: Whether the personal card is allowed for the trip.
+        isBudgetMasked:
+          type: boolean
+          description: Whether the budget is masked.
+    ExchangePayment:
+      title: ExchangePayment
+      type: object
+      description: In case of exchange, payment accounted to the original ticket.
+      required:
+      - originalTicketNumber
+      properties:
+        originalTicketNumber:
+          description: Ticket number which was exchanged to pay for current ticket.
+          type: string
+          example: 00129332929
+    AirlineProgramWrapper:
+      type: object
+      title: AirlineProgramWrapper
+      description: Wrapper for AirlineProgram
+      properties:
+        airlineProgram:
+          $ref: '#/components/schemas/AirlineProgram'
+    RailItemNameMetadata:
+      title: RailItemNameMetadata
+      type: object
+      description: RailItemNameMetadata information.
+      required:
+      - pnrType
+      properties:
+        railNameInvoiceMetadata:
+          description: RailNameInvoiceMetadata information.
+          type: array
+          items:
+            $ref: '#/components/schemas/RailNameInvoiceMetadata'
+        pnrType:
+          type: string
+          example: RAIL
+    RewardsProgramType:
+      type: string
+      title: RewardsProgramType
+      description: Type of Rewards Program
+      enum:
+      - BREX_POINTS
+      - QANTAS_POINTS
+    AmadeusCheckoutMetadataWrapper:
+      type: object
+      title: AmadeusCheckoutMetadataWrapper
+      description: Wrapper for AmadeusCheckoutMetadata
+      required:
+      - amadeusCheckoutMetadata
+      properties:
+        amadeusCheckoutMetadata:
+          $ref: '#/components/schemas/AmadeusCheckoutMetadata'
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    UATPMetadata:
+      type: object
+      title: UATPMetadata
+      description: Details for UATP Metadata.
+      required:
+      - card
+      properties:
+        card:
+          $ref: '#/components/schemas/Card'
+    PointsBalance:
+      type: object
+      title: PointsBalance
+      description: Point type and balance
+      required:
+      - amount
+      - pointType
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Points balance
+          example: 10
+        pointType:
+          type: string
+          description: Point type. Valid type is BREX_POINT_TYPE
+          example: BREX_POINT_TYPE
+    UATPInformation:
+      type: object
+      title: UATPInformation
+      description: Descriptor for UATPInformation.
+      required:
+      - card
+      - ticketingValidity
+      - travelValidity
+      properties:
+        card:
+          $ref: '#/components/schemas/Card'
+        ticketingValidity:
+          description: Valid ticketing datetime.
+          $ref: '#/components/schemas/DateTimeRange'
+        travelValidity:
+          description: Valid travel datetime.
+          $ref: '#/components/schemas/DateTimeRange'
+    PaymentInstruction:
+      type: object
+      title: PaymentInstruction
+      description: Payment instruction
+      required:
+      - id
+      - displayText
+      - checkoutText
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Id corresponding to the payment instruction
+          example: f49d00fe-1eda-4304-ba79-a980f565281d
+        displayText:
+          type: string
+          description: Display text corresponding to the payment instruction
+          example: Room and tax only
+        checkoutText:
+          type: string
+          description: Payment instruction text to display during checkout workflow
+          example: Room and tax only
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,3351 @@
+openapi: 3.1.0
+info:
+  title: Air Users API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Users
+  description: APIs to onboard and manage users.
+paths:
+  /v2/users:
+    post:
+      tags:
+      - Users
+      summary: Create user
+      description: 'This endpoint is used to create user profiles in Spotnana. This is typically used by
+
+        partner companies to onboard user profiles of their customer organizations.
+
+        '
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityId'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    get:
+      parameters:
+      - name: companyId
+        in: query
+        description: Identifier for company to search user for. Please specify one of the companyId or tmcId.
+        schema:
+          type: string
+          format: uuid
+        example: 4974a66b-7493-4f41-908c-58ba81093947
+      - name: tmcId
+        in: query
+        description: Identifier for TMC to search user for. Please specify one of the companyId or tmcId.
+        schema:
+          type: string
+          format: uuid
+        example: b83e9704-2e8e-4256-90bf-2e59c1bcf9f2
+      - name: email
+        in: query
+        description: Email ID of the user.
+        schema:
+          type: string
+          format: email
+        example: user@example.com
+      - name: externalId
+        in: query
+        description: The partner-assigned user identifier.
+        schema:
+          type: string
+        example: '123456'
+      - name: employeeId
+        in: query
+        description: Employee ID of the user.
+        schema:
+          type: string
+        example: EMP123456
+      - name: includeInactive
+        in: query
+        description: If true, include inactive users in the response.
+        schema:
+          type: boolean
+          default: false
+        example: true
+      tags:
+      - Users
+      summary: Query user
+      description: 'This endpoint queries user of given company based on given identifier like email or external ID.
+
+        In case includeInactive is true, inactive users are also included in the response.'
+      operationId: queryUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSummaryList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v3/users/list:
+    post:
+      tags:
+      - Users
+      summary: List users
+      description: List users of a specific TMC or a company.
+      operationId: listUsersV3
+      x-draft: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListUsersV3Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUsersV3Response'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Users
+      summary: Get user
+      description: This endpoint gets user details for user ID.
+      operationId: getUserInfo
+      parameters:
+      - name: includeInactive
+        in: query
+        description: Include inactive users in the response.
+        schema:
+          type: boolean
+          default: false
+          example: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Users
+      summary: Delete user
+      description: This endpoint deletes a user by user ID.
+      operationId: deleteUser
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    put:
+      tags:
+      - Users
+      summary: Update user
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/business-info:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: includeInactive
+      in: query
+      description: Include inactive users.
+      schema:
+        type: boolean
+        default: false
+        example: true
+    get:
+      tags:
+      - Users
+      summary: Get user business info
+      description: This endpoint gets user business info by user ID.
+      operationId: getBusinessInfo
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Users
+      summary: Update user business info
+      description: This endpoint updates user business info by user ID.
+      operationId: updateBusinessInfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BusinessInfo'
+      responses:
+        '204':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/personal-info:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: includeInactive
+      in: query
+      description: Include inactive users.
+      schema:
+        type: boolean
+        default: false
+        example: true
+    get:
+      tags:
+      - Users
+      summary: Get user personal info
+      description: This endpoint gets user personal info by user ID.
+      operationId: getPersonalInfo
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPersonalInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Users
+      summary: Update user personal info
+      description: This endpoint updates user personal info by user ID.
+      operationId: updatePersonalInfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPersonalInfo'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/travel-preferences:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Users
+      summary: Get user travel preferences
+      operationId: getUserTravelPreferences
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelPreferences'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Users
+      summary: Update user travel preferences
+      operationId: updateTravelPreferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelPreferences'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/membership-info:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Users
+      summary: Get user membership info
+      operationId: getMembershipInfo
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembershipInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Users
+      summary: Update user membership info
+      operationId: updateMembershipInfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MembershipInfo'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/roles:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    put:
+      tags:
+      - Users
+      summary: Update user roles
+      description: This endpoint updates user roles.
+      operationId: updateUserRoles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RolesConfig'
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    get:
+      tags:
+      - Users
+      summary: Get user roles
+      description: This endpoint gets user roles.
+      operationId: getUserRoles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolesConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/notification-preferences:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Users
+      summary: Get notification preferences
+      description: This endpoint gets notification preferences for a user.
+      operationId: getNotificationPreferences
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationPreferences'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Users
+      summary: Update notification preferences
+      description: This endpoint updates notification preferences for a user.
+      operationId: updateNotificationPreferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationPreferences'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/travel-arrangers:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Users
+      summary: Get user travel arrangers
+      operationId: getUserTravelArrangers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTravelArrangers'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/external-id:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: includeInactive
+      in: query
+      description: Include inactive users.
+      schema:
+        type: boolean
+        default: false
+        example: true
+    get:
+      tags:
+      - Users
+      summary: Get user's external ID
+      description: This endpoint gets user's external ID by user ID.
+      operationId: getExternalId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalIdObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Users
+      summary: Update user's external ID
+      description: This endpoint updates user's external ID by user ID.
+      operationId: updateExternalId
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalIdObject'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/activate:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Users
+      summary: Activate a user
+      description: This endpoint activates a deactivated user.
+      operationId: activateUser
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/favorites:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Users
+      summary: Add favorite
+      description: Add a favorite item for a user.
+      operationId: addFavorite
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddFavoriteRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddFavoriteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    get:
+      parameters:
+      - name: types
+        in: query
+        description: Filter by favorite types. If empty, returns all types.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: query
+        in: query
+        description: Search query to filter favorites by display name.
+        schema:
+          type: string
+      tags:
+      - Users
+      summary: List favorites
+      description: List favorite items for a user, optionally filtered by type and search query.
+      operationId: listFavorites
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFavoritesResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v2/users/{userId}/favorites/{favoriteId}:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: favoriteId
+      in: path
+      description: Identifier for the favorite item.
+      required: true
+      schema:
+        type: string
+    delete:
+      tags:
+      - Users
+      summary: Remove favorite
+      description: Remove a favorite item for a user.
+      operationId: removeFavorite
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/users/{userId}/applicable-policies:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for user.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Users
+      summary: Get user policies
+      operationId: getUserApplicablePolicies
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserApplicablePolicies'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    CoachPref:
+      type: string
+      description: The preference of coach.
+      enum:
+      - SMOKING
+      - NON_SMOKING
+      - PETS_ALLOWED
+      - RESTAURANT
+      - QUIET
+      example: NON_SMOKING
+    PrimaryServiceProviderTmc:
+      type: object
+      title: PrimaryServiceProviderTmc
+      description: Primary service provider TMC info
+      required:
+      - tmcId
+      properties:
+        tmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Id of the service provider TMC.
+    SeatPref:
+      type: object
+      title: SeatPref
+      description: Preference about seat of rail.
+      properties:
+        hasAccessibility:
+          type: boolean
+          description: Whether or not requires assistance for disability.
+          default: false
+          example: false
+        seatTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeatPrefType'
+        seatLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeatPrefLocation'
+        deckLevels:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeckLevel'
+        seatDirections:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeatPrefDirection'
+    AdhocUserInfo:
+      type: object
+      title: AdhocUserInfo
+      description: Basic information related to ad-hoc traveler profile.
+      required:
+      - profileOwner
+      properties:
+        profileOwner:
+          $ref: '#/components/schemas/ProfileOwner'
+        isSaved:
+          type: boolean
+          description: "A boolean flag to show if ad-hoc traveler is visible in search. While updating the user \nif client tries to update this field, it will throw exception.\n"
+          default: false
+    UserSummary:
+      type: object
+      title: UserSummary
+      description: Reference object containing uuid and name and other identifiers.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        externalId:
+          type: string
+          description: The partner-assigned user identifier.
+          example: user-1
+        persona:
+          $ref: '#/components/schemas/Persona'
+        isActive:
+          type: boolean
+          description: Whether the user is active or not.
+    RoleConfig:
+      type: object
+      description: Role Info
+      properties:
+        roleType:
+          $ref: '#/components/schemas/RoleTypeEnum'
+        roleMetadata:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/RoleMeta'
+        metadata:
+          $ref: '#/components/schemas/RoleMetadataV2'
+    RailPref:
+      type: object
+      title: RailPref
+      description: Travel preferences related to rail station.
+      properties:
+        preferredRailStations:
+          type: array
+          description: A list of user preferred rail stations.
+          items:
+            $ref: '#/components/schemas/PreferredRailStation'
+        seatPreference:
+          $ref: '#/components/schemas/SeatPref'
+        travelClasses:
+          type: array
+          description: A list of class of service for rail.
+          items:
+            $ref: '#/components/schemas/RailTravelClass'
+        coachPreferences:
+          type: array
+          description: A list of coach preference for rail.
+          items:
+            $ref: '#/components/schemas/CoachPref'
+        conditionalRates:
+          type: array
+          description: A list of conditional rates for rail.
+          items:
+            $ref: '#/components/schemas/ConditionalRate'
+    CompanySpecifiedAttribute:
+      type: object
+      description: Company specified user arbitrary attribute.
+      required:
+      - fixedColumnName
+      - value
+      properties:
+        fixedColumnName:
+          type: string
+          example: contingentType
+        value:
+          type: string
+          example: FSTV
+    CarPref:
+      type: object
+      title: CarPref
+      description: Travel preferences related to car.
+      properties:
+        vendors:
+          type: array
+          description: A list of car vendors.
+          items:
+            $ref: '#/components/schemas/CarVendor'
+        carTypes:
+          type: array
+          description: A list of types of car.
+          items:
+            $ref: '#/components/schemas/CarType'
+        engineTypes:
+          type: array
+          description: A list of types of engine.
+          items:
+            $ref: '#/components/schemas/EngineType'
+        transmissionTypes:
+          type: array
+          description: A list of types of transmission.
+          items:
+            $ref: '#/components/schemas/TransmissionSearchFilter'
+        conditionalRates:
+          type: array
+          description: A list of conditional rates for rail.
+          items:
+            $ref: '#/components/schemas/ConditionalRate'
+    Duration:
+      type: object
+      title: Duration
+      description: Represents a duration of time with specific units of time.
+      properties:
+        iso8601:
+          description: 'Durations define the amount of intervening time in a time interval and are represented by the
+
+            format P[n]Y[n]M[n]DT[n]H[n]M[n]S.
+
+            The [n] is replaced by the value for each of the date and time elements that follow the [n].
+
+            Leading zeros are not required. The capital letters P, Y, M, W, D, T, H, M, and S are
+
+            designators for each of the date and time elements and are not replaced. P is the duration
+
+            designator (for period) placed at the start of the duration representation.
+
+            Y is the year designator.
+
+            M is the month designator.
+
+            W is the week designator.
+
+            D is the day designator.
+
+            T is the time designator.
+
+            H is the hour designator.
+
+            M is the minute designator.
+
+            S is the second designator and can include decimal digits with arbitrary precision.
+
+            '
+          type: string
+          example: PT19H55M
+    RedressNumberWrapper:
+      type: object
+      title: RedressNumberWrapper
+      properties:
+        redress:
+          $ref: '#/components/schemas/RedressNumber'
+    ImmigrationDocument:
+      type: object
+      title: ImmigrationDocument
+      description: Immigration document details.
+      required:
+      - docId
+      - expiryDate
+      - issueCountry
+      properties:
+        authorizedStayDuration:
+          description: Duration of the stay authorized by the immigration document.
+          $ref: '#/components/schemas/Duration'
+        docId:
+          type: string
+          description: The ID of the immigration document.
+          example: ImmigrationDocumentID
+          x-pii: IDENTIFIER
+        expiryDate:
+          description: The date on which the immigration document expires.
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        issueCountry:
+          type: string
+          description: The country that issued the immigration document.
+          example: IN
+        issuedDate:
+          description: The date on which the immigration document was issued.
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        nationalityCountry:
+          type: string
+          example: IN
+          x-pii: SENSITIVE
+        reentryRequirementDuration:
+          $ref: '#/components/schemas/Duration'
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - VISA
+          example: VISA
+    UserSort:
+      type: object
+      title: UserSort
+      required:
+      - sortBy
+      - sortOrder
+      properties:
+        sortBy:
+          type: string
+          description: The column on which the sorting should be applied.
+          enum:
+          - NAME
+          default: NAME
+          example: NAME
+        sortOrder:
+          type: string
+          description: Order of sorting ie ascending or descending.
+          enum:
+          - ASCENDING
+          - DESCENDING
+          default: ASCENDING
+          example: DESCENDING
+    RoleMeta:
+      type: object
+      properties:
+        travelArrangerMetadata:
+          $ref: '#/components/schemas/TravelArrangerMetadata'
+    CompanyId:
+      type: object
+      title: CompanyId
+      description: Company ID
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: f49d00fe-1eda-4304-ba79-a980f565281d
+    NationalDocWrapper:
+      type: object
+      title: NationalDocWrapper
+      properties:
+        nationalDoc:
+          $ref: '#/components/schemas/NationalDoc'
+    LoyaltyTier:
+      type: string
+      description: Loyalty membership tier name echoed from the supplier.
+      example: GOLD
+    EmergencyContactInfo:
+      type: object
+      title: EmergencyContactInfo
+      description: Emergency contact information.
+      required:
+      - email
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+          x-pii: SENSITIVE
+        designation:
+          type: string
+          example: MANAGER
+        email:
+          type: string
+          format: email
+          example: emergency-contact@email.com
+          x-pii: IDENTIFIER
+        name:
+          $ref: '#/components/schemas/Name'
+        phoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+          x-pii: IDENTIFIER
+        userOrgId:
+          $ref: '#/components/schemas/UserOrgId'
+    UserId:
+      type: object
+      title: UserId
+      description: User identifier
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+    OrganizationId:
+      type: object
+      title: OrganizationId
+      description: Organization id for traveler.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+    UserProfile:
+      type: object
+      description: Traveler details.
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+        personalInfo:
+          $ref: '#/components/schemas/UserPersonalInfo'
+        businessInfo:
+          $ref: '#/components/schemas/BusinessInfo'
+        persona:
+          $ref: '#/components/schemas/Persona'
+        isActive:
+          type: boolean
+          description: Indicates if traveler is active.
+          example: true
+        tier:
+          $ref: '#/components/schemas/Tier'
+        stealthType:
+          deprecated: true
+          x-sunset: '2026-02-01'
+          $ref: '#/components/schemas/StealthType'
+        stealthMode:
+          $ref: '#/components/schemas/StealthMode'
+        relativeOf:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/RelativeOf'
+        travelPreferences:
+          $ref: '#/components/schemas/TravelPreferences'
+        membershipInfo:
+          $ref: '#/components/schemas/MembershipInfo'
+        notificationPreferences:
+          $ref: '#/components/schemas/NotificationPreferences'
+        travelArrangers:
+          $ref: '#/components/schemas/UserTravelArrangers'
+        adhocUserInfo:
+          $ref: '#/components/schemas/AdhocUserInfo'
+        externalId:
+          type: string
+          description: The partner-assigned user identifier.
+        contractingTmcRef:
+          $ref: '#/components/schemas/Reference'
+          description: Contracting TMC for the user.
+        bookingTmcRef:
+          $ref: '#/components/schemas/Reference'
+          description: Booking TMC for the user.
+    RailTravelClass:
+      description: Travel class
+      type: string
+      enum:
+      - FIRST
+      - STANDARD
+      - BUSINESS
+      - SLEEPER
+      - STANDARD_PREMIUM
+      - BUSINESS_PREMIUM
+      - COACH
+      - ROOM
+      - EXECUTIVE
+      example: FIRST
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    Tier:
+      type: string
+      title: Tier
+      description: 'Tier of User.
+
+        Note: In default UI, BASIC is displayed as Standard, and SEAT1A is displayed as VIP.
+
+        '
+      enum:
+      - BASIC
+      - SEAT1A
+      x-enum-varnames:
+      - BASIC
+      - SEAT1A
+      example: SEAT1A
+      default: BASIC
+    SeatPrefDirection:
+      type: string
+      description: The direction of seat of the rail.
+      enum:
+      - FORWARD
+      - BACKWARD
+      example: FORWARD
+    MembershipInfo:
+      type: object
+      description: User's loyalty program membership details.
+      properties:
+        membershipInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoyaltyInfo'
+        isLoyaltyBlocked:
+          type: boolean
+          description: Whether user is blocked to use loyalty programs. This is a read only field.
+          example: false
+    KnownTravelerNumber:
+      type: object
+      title: KnownTravelerNumber
+      description: Information about the Known Traveler Number (KTN).
+      required:
+      - number
+      - issueCountry
+      properties:
+        number:
+          type: string
+          example: '12345'
+          x-pii: IDENTIFIER
+        issueCountry:
+          type: string
+          example: US
+    RedressNumber:
+      type: object
+      title: RedressNumber
+      description: Redress details
+      required:
+      - number
+      - issueCountry
+      properties:
+        number:
+          type: string
+          example: '12345'
+          x-pii: IDENTIFIER
+        issueCountry:
+          type: string
+          example: US
+    UserTravelArrangers:
+      type: object
+      title: UserTravelArrangers
+      description: Travel arrangers for a user.
+      required:
+      - travelArrangers
+      properties:
+        travelArrangers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelArrangerBasicInfo'
+    UserPersonalInfo:
+      type: object
+      title: UserPersonalInfo
+      description: User details.
+      properties:
+        addresses:
+          type: array
+          x-pii: SENSITIVE
+          items:
+            $ref: '#/components/schemas/PostalAddress'
+        dob:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        email:
+          type: string
+          format: email
+          example: example@email.com
+          x-pii: IDENTIFIER
+        emergencyContactInfo:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/EmergencyContactInfo'
+        gender:
+          $ref: '#/components/schemas/Gender'
+          x-pii: SENSITIVE
+        identityDocs:
+          type: array
+          description: List of user identity documents.
+          items:
+            $ref: '#/components/schemas/IdentityDocument'
+          example:
+          - passport:
+              docId: PASSPORTID
+              expiryDate:
+                iso8601: '2017-07-21'
+              issueCountry: IN
+              issuedDate:
+                iso8601: '2017-07-21'
+              nationalityCountry: IN
+              type: REGULAR
+          - ktn:
+              number: '123456'
+              issueCountry: US
+        name:
+          $ref: '#/components/schemas/Name'
+        phoneNumbers:
+          type: array
+          x-pii: IDENTIFIER
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        profilePicture:
+          $ref: '#/components/schemas/Image'
+          x-pii: SENSITIVE
+        nationality:
+          type: string
+          example: Indian
+          description: Nationality of user
+          x-pii: SENSITIVE
+        title:
+          $ref: '#/components/schemas/UserTitle'
+        preferredLanguage:
+          type: string
+          description: Language preferred by user.
+          example: en-US
+        preferredPronoun:
+          description: Pronoun preferred by user.
+          $ref: '#/components/schemas/PreferredPronoun'
+        travelerName:
+          description: A name of user that does not contain special characters.
+          $ref: '#/components/schemas/Name'
+        emergencyContact:
+          $ref: '#/components/schemas/EmergencyContact'
+    UserUpdateRequest:
+      type: object
+      description: Update Traveler details.
+      required:
+      - persona
+      - businessInfo
+      x-ignoreBreakingChanges:
+      - personalInfo
+      - UsersApi.yaml->UserUpdateRequest->personalInfo
+      properties:
+        personalInfo:
+          $ref: '#/components/schemas/UserPersonalInfo'
+          x-optionalFrom: '2025-05-19'
+        businessInfo:
+          $ref: '#/components/schemas/BusinessInfo'
+        persona:
+          $ref: '#/components/schemas/Persona'
+        tier:
+          $ref: '#/components/schemas/Tier'
+        stealthType:
+          $ref: '#/components/schemas/StealthType'
+        relativeOf:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/RelativeOf'
+        travelPreferences:
+          $ref: '#/components/schemas/TravelPreferences'
+        membershipInfo:
+          $ref: '#/components/schemas/MembershipInfo'
+        notificationPreferences:
+          $ref: '#/components/schemas/NotificationPreferences'
+        adhocUserInfo:
+          $ref: '#/components/schemas/AdhocUserInfo'
+        externalId:
+          type: string
+          description: The partner-assigned user identifier.
+        travelArrangers:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/UserTravelArrangers'
+    TransmissionSearchFilter:
+      type: string
+      description: Transmission type for Filters
+      title: TransmissionSearchFilter
+      enum:
+      - MANUAL
+      - AUTOMATIC
+      example: AUTOMATIC
+    BusinessInfo:
+      type: object
+      title: BusinessInfo
+      description: User business information.
+      required:
+      - organizationRef
+      - legalEntityRef
+      properties:
+        departmentRef:
+          $ref: '#/components/schemas/Reference'
+        designation:
+          type: string
+          example: MANAGER
+        email:
+          type: string
+          format: email
+          example: user@business.com
+          x-pii: IDENTIFIER
+        employeeId:
+          description: Unique employee id. Can use email if a company don't use employee ids.
+          type: string
+          example: '101'
+        gradeRef:
+          $ref: '#/components/schemas/Reference'
+        legalEntityRef:
+          $ref: '#/components/schemas/Reference'
+        managerRef:
+          $ref: '#/components/schemas/Reference'
+        officeRef:
+          $ref: '#/components/schemas/Reference'
+        organizationRef:
+          $ref: '#/components/schemas/Reference'
+        phoneNumbers:
+          type: array
+          x-pii: IDENTIFIER
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        costCenterRef:
+          $ref: '#/components/schemas/Reference'
+        countryCode:
+          type: string
+          description: alpha-2 or alpha-3 ISO country code.
+          example: USA
+        workerType:
+          $ref: '#/components/schemas/WorkerType'
+        accountingCode:
+          type: string
+          description: Code used for accounting.
+          example: '123'
+        companySpecifiedAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanySpecifiedAttribute'
+        designatedApproverRefs:
+          type: array
+          description: A list of references for designated approvers.
+          items:
+            $ref: '#/components/schemas/Reference'
+        authorizerEmail:
+          type: string
+          description: Email address to be used as approval authorizer, when a manager is not present.
+          example: example@email.com
+          x-pii: IDENTIFIER
+    RoleMetadataV2:
+      type: object
+      discriminator:
+        propertyName: roleType
+        mapping:
+          TRAVEL_ARRANGER: '#/components/schemas/TravelArrangerMetadataV2'
+          COMPANY_ADMIN: '#/components/schemas/CompanyRoleInfo'
+          COMPANY_TRAVEL_ARRANGER: '#/components/schemas/CompanyRoleInfo'
+          COMPANY_REPORT_ADMIN: '#/components/schemas/CompanyRoleInfo'
+          TMC_ADMIN: '#/components/schemas/TmcRoleInfo'
+          TMC_AGENT: '#/components/schemas/TmcRoleInfo'
+      oneOf:
+      - $ref: '#/components/schemas/TravelArrangerMetadataV2'
+      - $ref: '#/components/schemas/CompanyRoleInfo'
+      - $ref: '#/components/schemas/TmcRoleInfo'
+    ListUsersV3CompanyId:
+      type: object
+      title: ListUsersV3CompanyId
+      description: Company ID
+      required:
+      - companyId
+      properties:
+        companyId:
+          description: Company ID
+          $ref: '#/components/schemas/EntityId'
+    NumStopsPref:
+      type: object
+      title: NumStopsPref
+      description: Preferred number of stops.
+      required:
+      - numOfStops
+      properties:
+        numOfStops:
+          type: integer
+          format: int64
+          example: 34
+    PreferredLocationLabel:
+      type: string
+      title: PreferredLocationLabel
+      description: The label of preferred airport or rail station.
+      enum:
+      - HOME
+      - WORK
+      - OTHER
+      example: HOME
+    Gender:
+      title: Gender
+      type: string
+      x-pii: SENSITIVE
+      enum:
+      - MALE
+      - FEMALE
+      - UNSPECIFIED
+      - UNDISCLOSED
+      - GENDER_REDACTED
+      example: FEMALE
+    ListUsersV3TmcId:
+      type: object
+      title: ListUsersV3TmcId
+      description: TMC ID
+      required:
+      - tmcId
+      properties:
+        tmcId:
+          description: TMC ID
+          $ref: '#/components/schemas/EntityId'
+    TmcRoleInfo:
+      type: object
+      title: TmcRoleInfo
+      required:
+      - tmcRef
+      - roleType
+      properties:
+        tmcRef:
+          $ref: '#/components/schemas/Reference'
+        roleType:
+          type: string
+          description: Role type for which tmc reference metadata is specified.
+    PreferredRailStation:
+      type: object
+      title: PreferredRailStation
+      description: Rail station preferred by traveler.
+      required:
+      - stationCode
+      - label
+      properties:
+        stationName:
+          type: string
+          description: Rail station name.
+          example: Chicago Union Station
+        stationCode:
+          type: string
+          description: Rail station code.
+          example: CHI
+        cityName:
+          type: string
+          description: Name of city where the rail station is located.
+          example: Chicago
+        countryCode:
+          type: string
+          description: Alpha-2 country code where the rail station is located.
+        label:
+          $ref: '#/components/schemas/PreferredLocationLabel'
+    TravelerConfigForArranger:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        sendConfirmationEmail:
+          type: boolean
+          description: Whether or not to send confirmation emails to user.
+          example: false
+          default: false
+        sendFlightStatsNotificationEmail:
+          type: boolean
+          description: Whether or not to send flight stat notifications to user.
+          example: false
+          default: false
+    ImmigrationDocumentWrapper:
+      type: object
+      title: ImmigrationDocumentWrapper
+      properties:
+        immigrationDoc:
+          $ref: '#/components/schemas/ImmigrationDocument'
+    Image:
+      type: object
+      title: Image
+      description: An image with meta data. Either the `data` or `url` property must be supplied to load the image.
+      properties:
+        data:
+          type: string
+          format: byte
+          example: 6935813e12584abda0e43d71cd2ea260
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        url:
+          type: string
+          example: https://static.wixstatic.com/media/73f2e2_6935813e12584abda0e43d71cd2ea260~mv2.png/v1/fill/w_630,h_94,al_c,q_85,usm_0.66_1.00_0.01/Spotnana%403x.webp
+    Passport:
+      type: object
+      title: Passport
+      description: Passport details.
+      required:
+      - docId
+      - expiryDate
+      - issueCountry
+      - nationalityCountry
+      properties:
+        docId:
+          type: string
+          example: PassportID
+          x-pii: IDENTIFIER
+        expiryDate:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        issueCountry:
+          type: string
+          example: IN
+        issuedDate:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        nationalityCountry:
+          type: string
+          example: IN
+          x-pii: SENSITIVE
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - REGULAR
+          example: REGULAR
+    WorkerType:
+      type: string
+      description: The type of worker.
+      enum:
+      - EMPLOYEE
+      - CONTINGENT
+      - SEASONAL
+      - INTERN
+      - GUEST
+      example: EMPLOYEE
+      x-enumValidFrom:
+        GUEST: '2025-06-03'
+    HotelBrand:
+      type: object
+      title: HotelBrand
+      description: The brand of hotel.
+      properties:
+        brandCode:
+          type: string
+          description: The code of hotel brand.
+          example: HY
+        brandName:
+          type: string
+          description: The name of hotel brand.
+          example: Global Hytt Corp.
+    Persona:
+      type: string
+      title: Persona
+      description: Persona of the user
+      enum:
+      - UNKNOWN_PERSONA
+      - EMPLOYEE
+      - GUEST
+      - PERSONAL
+      - RELATIVE
+      - ADHOC
+      example: EMPLOYEE
+    NotificationPreferences:
+      type: object
+      title: NotificationPreferences
+      description: Notification preferences of a user for different notification types.
+      properties:
+        preferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationPreferencePerType'
+    ExternalIdObject:
+      type: object
+      title: ExternalIdObject
+      description: User's external id within partner database.
+      required:
+      - externalId
+      properties:
+        externalId:
+          type: string
+          description: A partner-assigned user identifier. This value must be unique for all travelers within a PNR.
+          example: user-1
+    PassportWrapper:
+      type: object
+      title: PassportWrapper
+      properties:
+        passport:
+          $ref: '#/components/schemas/Passport'
+    KnownTravelerNumberWrapper:
+      type: object
+      title: KnownTravelerNumberWrapper
+      properties:
+        ktn:
+          $ref: '#/components/schemas/KnownTravelerNumber'
+    SeatPrefLocation:
+      type: string
+      description: The location of seat of the rail.
+      enum:
+      - AISLE
+      - WINDOW
+      - SOLO
+      example: AISLE
+    UserDetail:
+      type: object
+      title: UserDetail
+      description: Details of the user
+      required:
+      - userId
+      - organization
+      - persona
+      - isActive
+      - personalDetail
+      - businessDetail
+      - createdAt
+      - lastUpdatedAt
+      properties:
+        userId:
+          $ref: '#/components/schemas/UserId'
+        organization:
+          description: The organization associated with the user.
+          $ref: '#/components/schemas/Reference'
+        persona:
+          description: Persona of the user like EMPLOYEE, GUEST etc.
+          $ref: '#/components/schemas/Persona'
+        isActive:
+          description: Whether user is active or not.
+          type: boolean
+        externalId:
+          description: External ID of the user.
+          type: string
+        personalDetail:
+          description: Personal details of the user.
+          $ref: '#/components/schemas/PersonalDetail'
+        businessDetail:
+          description: Business details of the user.
+          $ref: '#/components/schemas/BusinessDetail'
+        createdAt:
+          description: Date and time of the user profile creation.
+          $ref: '#/components/schemas/DateTimeLocal'
+        lastUpdatedAt:
+          description: Date and time of the latest update made to the user profile.
+          $ref: '#/components/schemas/DateTimeLocal'
+    PostalAddress:
+      title: PostalAddress
+      description: Postal Address Details
+      type: object
+      required:
+      - addressLines
+      - regionCode
+      properties:
+        addressLines:
+          description: Address lines
+          type: array
+          items:
+            type: string
+            example: Golden Gate Bridge
+        administrativeArea:
+          type: string
+          description: 'Code of administrative area. For example: DL for Delhi, India.
+
+            Highest administrative subdivision which is used for postal
+
+            addresses of a country or region.
+
+            For example, this can be a state, a province, an oblast, or a prefecture.
+
+            Specifically, for Spain this is the province and not the autonomous
+
+            community (e.g. "Barcelona" and not "Catalonia").
+
+            Many countries don''t use an administrative area in postal addresses. E.g.
+
+            in Switzerland this should be left unpopulated.
+
+            '
+          example: CA
+        administrativeAreaName:
+          type: string
+          description: "Name of administrative area. This is full name corresponding to administrativeArea. \nLike Delhi for DL area code. For some places, code and name maybe same as well like Tokyo.\n"
+          example: California
+        description:
+          description: Address description
+          type: string
+          example: San Francisco Home
+        isDefault:
+          description: Whether this address is default address in case multiple addresses are specified.
+          type: boolean
+          example: true
+        languageCode:
+          description: "BCP-47 language code of the contents of this address (if known). This is often the UI \nlanguage of the input form or is expected to match one of the languages used in the \naddress' country/region, or their transliterated equivalents.\nThis can affect formatting in certain countries, but is not critical to the correctness \nof the data and will never affect any validation or other non-formatting related operations.\nExamples: \"zh-Hant\", \"ja\", \"ja-Latn\", \"en\".\n"
+          type: string
+          example: en
+        locality:
+          description: Generally refers to the city/town portion of the address.
+          type: string
+          example: San Francisco
+        locationCode:
+          description: IATA 3-letter location code. See https://www.iata.org/en/services/codes.
+          type: string
+          example: LAX
+        organization:
+          description: The name of the organization at the address.
+          type: string
+          example: Spotnana
+        postalCode:
+          description: Postal code of the address. This is a required field when setting for a user/legal entity/company etc.
+          type: string
+          example: '94130'
+        continentCode:
+          description: 2 letter continent code of the continent this address falls in.
+          type: string
+          example: AF
+        recipients:
+          description: The recipient at the address.
+          type: array
+          items:
+            type: string
+        regionCode:
+          description: Region code of the country/region of the address.
+          type: string
+          example: US
+        regionName:
+          description: Region name of the country/region of the address.
+          type: string
+          example: America
+        revision:
+          type: integer
+          format: int32
+          example: 1
+        sortingCode:
+          description: 'Additional, country-specific, sorting code. This is not used
+
+            in most regions. Where it is used, the value is either a string like
+
+            "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
+
+            alone, representing the "sector code" (Jamaica), "delivery area indicator"
+
+            (Malawi) or "post office indicator" (e.g. Côte d''Ivoire).
+
+            '
+          type: string
+          example: Jamaica
+        sublocality:
+          description: Sublocality of the address. This can be neighborhoods, boroughs, districts.
+          type: string
+        timezone:
+          description: Time zone of the address.
+          type: string
+          example: America/Los_Angeles
+        coordinates:
+          description: Map coordinates of the address.
+          $ref: '#/components/schemas/Latlng'
+    TravelArrangerMetadata:
+      type: object
+      required:
+      - arrangerFor
+      properties:
+        arrangerFor:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelerConfigForArranger'
+    RailCard:
+      type: object
+      title: RailCard
+      description: Rail card
+      required:
+      - name
+      - spotnanaCode
+      - vendor
+      properties:
+        cardNumber:
+          type: string
+          description: Number of card
+        expiryDate:
+          description: Expiry date of the Rail Card.
+          $ref: '#/components/schemas/DateModel'
+        name:
+          type: string
+          description: Name of the Rail Card.
+          example: Veterans Railcard
+        spotnanaCode:
+          description: Unique Spotnana code/identifier for Rail Card.
+          type: string
+          example: VET
+        vendor:
+          type: string
+          description: Vendor Name.
+          example: ATOC
+    TravelPref:
+      type: object
+      title: TravelPref
+      description: Travel preferences.
+      properties:
+        airPref:
+          $ref: '#/components/schemas/AirPref'
+        preferredCurrency:
+          type: string
+          example: USD
+        railCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/RailCard'
+        railPref:
+          $ref: '#/components/schemas/RailPref'
+        carPref:
+          $ref: '#/components/schemas/CarPref'
+        hotelPref:
+          $ref: '#/components/schemas/HotelPref'
+    NotificationPreferencePerType:
+      type: object
+      title: NotificationPreferencePerType
+      description: Notification preference for a notification type.
+      properties:
+        notificationType:
+          $ref: '#/components/schemas/NotificationType'
+        emailPreference:
+          $ref: '#/components/schemas/NotificationEmailPreference'
+    RoleTypeEnum:
+      type: string
+      enum:
+      - COMPANY_ADMIN
+      - COMPANY_TRAVEL_ARRANGER
+      - TRAVEL_ARRANGER
+      - COMPANY_REPORT_ADMIN
+      - TMC_ADMIN
+      - TMC_AGENT
+      - GLOBAL_ADMIN
+      - GLOBAL_AGENT
+    AlliancePref:
+      type: object
+      title: AlliancePref
+      description: Alliance preferences.
+      required:
+      - alliances
+      properties:
+        alliances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alliance'
+    UserTitle:
+      title: UserTitle
+      type: string
+      x-pii: SENSITIVE
+      enum:
+      - TITLE_UNKNOWN
+      - MR
+      - MS
+      - MRS
+      - MX
+      - MASTER
+      - MISS
+      - DR
+      - PROFESSOR
+      - CAPTAIN
+      - REVEREND
+      - HONOURABLE
+      - SIR
+      - LADY
+      - AMBASSADOR
+      - LORD
+      - BRIGADIER
+      - SENATOR
+      - DAME
+      - JUSTICE
+      - UK
+      - TITLE_REDACTED
+      example: MR
+    LoyaltyInfo:
+      type: object
+      title: LoyaltyInfo
+      description: Loyalty Info details.
+      required:
+      - id
+      - type
+      - issuedBy
+      properties:
+        appliedTo:
+          type: array
+          items:
+            type: string
+            example: TAJ
+        id:
+          type: string
+          example: firstId
+          x-pii: IDENTIFIER
+        issuedBy:
+          type: string
+          example: firstIssuedBy
+        type:
+          type: string
+          enum:
+          - UNKNOWN_TYPE
+          - AIR
+          - HOTEL
+          - CAR
+          - RAIL
+          example: AIR
+        linked:
+          type: boolean
+          description: Indicates if this loyalty account is linked to the external provider. Only applicable for certain loyalty types.
+          default: false
+          example: false
+        tier:
+          $ref: '#/components/schemas/LoyaltyTier'
+    ResolvedFavorite:
+      type: object
+      title: ResolvedFavorite
+      description: A favorite item with its URL.
+      properties:
+        favorite:
+          $ref: '#/components/schemas/FavoriteItem'
+        type:
+          type: string
+          description: The type of favorite.
+        url:
+          type: string
+          description: The URL for this favorite.
+    OrganizationAgencyId:
+      type: object
+      title: OrganizationAgencyId
+      description: Agency id for the organization.
+      deprecated: true
+      x-sunset: '2026-07-01'
+      required:
+      - id
+      properties:
+        id:
+          type: string
+    FavoriteItem:
+      type: object
+      title: FavoriteItem
+      description: A single favorite item.
+      properties:
+        favoriteId:
+          type: string
+          description: Unique identifier for the favorite item.
+        type:
+          type: string
+          description: The type of favorite.
+        params:
+          type: object
+          description: Key-value pairs of parameters for the favorite.
+          additionalProperties:
+            type: string
+        displayName:
+          type: string
+          description: Display name for the favorite item.
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the favorite was created.
+    TmcBasicInfo:
+      type: object
+      title: TmcBasicInfo
+      description: TMC related basic information.
+      required:
+      - contractingTmc
+      - bookingTmc
+      properties:
+        contractingTmc:
+          $ref: '#/components/schemas/CompanyRef'
+          description: Contracting TMC is the TMC the user/organization contracted.
+        bookingTmc:
+          $ref: '#/components/schemas/CompanyRef'
+          description: Booking TMC is the TMC used for the bookings for the user/organization.
+    ListUsersV3Request:
+      type: object
+      title: ListUsersV3Request
+      description: List users request
+      required:
+      - pagination
+      oneOf:
+      - $ref: '#/components/schemas/ListUsersV3TmcId'
+      - $ref: '#/components/schemas/ListUsersV3CompanyId'
+      properties:
+        userStatusFilter:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - ALL
+          description: Retrieve active, inactive, or all users.
+          default: ACTIVE
+          example: INACTIVE
+        searchText:
+          type: string
+          description: Query text to search users. The match would be case-insensitive.
+          example: chi
+        pagination:
+          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
+        filters:
+          type: array
+          description: Filters to refine the list of users returned. Users matching with any of the filters would be returned.
+          items:
+            $ref: '#/components/schemas/UserListFilter'
+        region:
+          type: string
+          description: Optional region filter to fetch user data from non US regions.
+          example: DE
+        sort:
+          $ref: '#/components/schemas/UserSort'
+    OffsetBasedPaginationResponseParams:
+      type: object
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
+      required:
+      - totalNumResults
+      properties:
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results.
+    SeatAmenityPref:
+      type: object
+      title: SeatAmenityPref
+      description: Seat amenity preference.
+      required:
+      - seatAmenityTypes
+      properties:
+        seatAmenityTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - UNKNOWN_AIR_SEAT_AMENITY_TYPE
+            - FLAT_BED
+            - WIFI
+            - IN_SEAT_POWER
+            example: WIFI
+    TravelArrangerMetadataV2:
+      type: object
+      title: TravelArrangerMetadataV2
+      required:
+      - roleType
+      - arrangerFor
+      properties:
+        roleType:
+          type: string
+          description: Discriminator property for role metadata.
+          default: TRAVEL_ARRANGER
+        arrangerFor:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelerConfigForArranger'
+    EmergencyContact:
+      type: object
+      title: EmergencyContact
+      description: Emergency contact information.
+      required:
+      - name
+      - phoneNumbers
+      properties:
+        name:
+          type: string
+          description: Full name of contact.
+          example: John Smith
+          x-pii: SENSITIVE
+        email:
+          type: string
+          description: Email address of contact.
+          format: email
+          example: emergency-contact@email.com
+          x-pii: IDENTIFIER
+        designation:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          type: string
+          description: Job title of contact.
+          example: MANAGER
+        relation:
+          type: string
+          description: Relation of contact to user.
+          example: SPOUSE
+          enum:
+          - RELATION_UNKNOWN
+          - SPOUSE
+          - PARENT
+          - SIBLING
+          - CHILD
+          - FRIEND
+          - RELATIVE
+          - COLLEAGUE
+          - OTHER
+        phoneNumbers:
+          type: array
+          description: Phone numbers of contact.
+          x-pii: IDENTIFIER
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        preferredLanguage:
+          type: string
+          description: Language preferred by user.
+          example: en-US
+    DateModel:
+      title: Date
+      description: Date in ISO 8601 standard.
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$
+          example: '2017-07-21'
+    TmcInfo:
+      type: object
+      title: TmcInfo
+      description: TMC config information.
+      required:
+      - id
+      - primaryServiceProviderTmc
+      properties:
+        id:
+          $ref: '#/components/schemas/CompanyId'
+          description: TMC id.
+        primaryServiceProviderTmc:
+          $ref: '#/components/schemas/PrimaryServiceProviderTmc'
+          description: Primary service provider TMC for the TMC.
+        secondaryServiceProviderTmcs:
+          type: array
+          description: Secondary service provider TMCs for the TMC.
+          items:
+            $ref: '#/components/schemas/SecondaryServiceProviderTmc'
+        partnerTmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Useful to identify the clients onboarded by a PARTNER_TMC
+    MealPref:
+      type: object
+      title: MealPref
+      description: Meal preferences.
+      properties:
+        exclMealPrefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealType'
+        inclMealPrefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealType'
+        specialMealDescription:
+          type: string
+          example: Veg only meal
+    DeckLevel:
+      type: string
+      description: The deck level of the rail.
+      enum:
+      - UPPER_DECK
+      - LOWER_DECK
+      example: UPPER_DECK
+    HotelChain:
+      type: object
+      title: HotelChain
+      description: The chain of hotel.
+      properties:
+        chainCode:
+          type: string
+          description: The code of hotel chain.
+          example: EM
+        chainName:
+          type: string
+          description: The name of hotel chain.
+          example: Mariott
+    CarVendor:
+      type: object
+      title: CarVendor
+      description: Car vendor.
+      required:
+      - code
+      - name
+      properties:
+        code:
+          type: string
+          description: Vendor code
+          example: ZE
+        name:
+          type: string
+          description: Vendor name
+          example: HERTZ
+        isPresentInPreferredVendors:
+          type: boolean
+          description: Whether the car vendor is present in preferred vendor list. This is an optional field which gets populated only in the preferred vendor autocomplete API.
+          example: true
+    AddFavoriteRequest:
+      type: object
+      title: AddFavoriteRequest
+      description: Request to add a favorite item for a user.
+      required:
+      - type
+      - displayName
+      properties:
+        type:
+          type: string
+          description: The type of favorite (e.g. "company", "legal_entity", "trip").
+        params:
+          type: object
+          description: Key-value pairs of parameters for the favorite.
+          additionalProperties:
+            type: string
+            maxLength: 1000
+        displayName:
+          type: string
+          description: Display name for the favorite item.
+    FarePref:
+      type: object
+      title: FarePref
+      description: Fare preferences.
+      required:
+      - fareTypes
+      properties:
+        fareTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - UNKNOWN_TYPE
+            - CHANGEABLE
+            - REFUNDABLE
+            example: CHANGEABLE
+    UserOrgId:
+      type: object
+      title: UserOrgId
+      description: User and user's organization information.
+      required:
+      - userId
+      - organizationId
+      properties:
+        organizationAgencyId:
+          $ref: '#/components/schemas/OrganizationAgencyId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        userId:
+          $ref: '#/components/schemas/UserId'
+        tmcInfo:
+          $ref: '#/components/schemas/TmcInfo'
+          deprecated: true
+          x-sunset: '2026-07-01'
+        tmcBasicInfo:
+          $ref: '#/components/schemas/TmcBasicInfo'
+    MealType:
+      type: string
+      title: MealType
+      description: Type of the meal
+      enum:
+      - UNKNOWN_MEAL
+      - AVML
+      - BBML
+      - BLML
+      - CHML
+      - DBML
+      - FPML
+      - GFML
+      - HFML
+      - HNML
+      - KSML
+      - LCML
+      - LFML
+      - LPML
+      - LSML
+      - MOML
+      - NLML
+      - NSML
+      - ORML
+      - PFML
+      - RVML
+      - SFML
+      - SPML
+      - VGML
+      - VJML
+      - VLML
+      - VOML
+      example: VGML
+    UserSummaryList:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+        elements:
+          type: array
+          description: List of references containing id and name.
+          items:
+            $ref: '#/components/schemas/UserSummary'
+    DateTimeLocal:
+      title: DateTimeLocal
+      description: Local date and time in ISO 8601 format.
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?$
+          example: 2017-07-21T17:32
+    RoomPreference:
+      type: object
+      title: RoomPreference
+      description: Room options and stay preference.
+      properties:
+        isMobilityAccessible:
+          type: boolean
+          description: Whether or not mobility accessible room, tub.
+          default: false
+          example: false
+        bedCount:
+          type: string
+          description: The number of bed in the room.
+          enum:
+          - ONE_BED
+          - TWO_BEDS
+          example: ONE_BED
+        roomType:
+          type: string
+          description: Single selection of type of room.
+          enum:
+          - SMOKING
+          - NON_SMOKING
+          example: SMOKING
+        mostImportantFact:
+          type: string
+          description: Single selection of the most import fact.
+          enum:
+          - ROOM_TYPE
+          - BED_COUNT
+          - ROOM_LOCATION
+          example: BED_COUNT
+        roomLocation:
+          type: string
+          description: Location of the hotel room
+          enum:
+          - HIGH_FLOOR
+          - LOW_FLOOR
+          - NEAR_ELEVATOR
+          example: HIGH_FLOOR
+        pillowType:
+          type: string
+          description: The type of pillow in hotel room.
+          enum:
+          - FOAM
+          - EXTRA_FOAM
+          - EXTRA_FEATHER
+          example: FOAM
+        roomAmenityPrefs:
+          type: array
+          items:
+            type: string
+            description: Amenity preference of the room.
+            enum:
+            - FEATHER_FREE_ROOM
+            - EXTRA_TOWELS
+            - REFRIGERATOR
+            example: EXTRA_TOWELS
+    RoleType:
+      type: string
+      enum:
+      - UNKNOWN_TYPE
+      - COMPANY_ADMIN
+      - COMPANY_TRAVEL_ARRANGER
+      - TRAVEL_ARRANGER
+      - COMPANY_REPORT_ADMIN
+      - GLOBAL_ADMIN
+      - GLOBAL_AGENT
+      - TMC_AGENT
+      - TMC_ADMIN
+      example: TRAVEL_ARRANGER
+    AirPref:
+      type: object
+      title: AirPref
+      description: Travel preferences related to air travel.
+      properties:
+        airlinePrefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AirlinePref'
+        alliancePref:
+          $ref: '#/components/schemas/AlliancePref'
+        farePref:
+          $ref: '#/components/schemas/FarePref'
+        homeAirport:
+          type: string
+          example: NEW YORK
+        mealPref:
+          $ref: '#/components/schemas/MealPref'
+        numStopPref:
+          $ref: '#/components/schemas/NumStopsPref'
+        seatAmenityPref:
+          $ref: '#/components/schemas/SeatAmenityPref'
+        seatLocationPrefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeatLocationPref'
+        preferredAirports:
+          type: array
+          description: A list of user preferred airports.
+          items:
+            $ref: '#/components/schemas/PreferredAirport'
+    NationalDoc:
+      type: object
+      title: NationalDoc
+      description: National Document Id details.
+      required:
+      - docId
+      - issueCountry
+      properties:
+        docId:
+          type: string
+          description: Unique id identifying the national document.
+          example: NationalDocId
+          x-pii: IDENTIFIER
+        issueCountry:
+          type: string
+          description: IS0 2 letter country code of the country issuing this id.
+          example: IN
+        issuedDate:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        expiryDate:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        type:
+          type: string
+          enum:
+          - DNI
+          - NIE
+          example: DNI
+    SupplierType:
+      type: string
+      description: Supplier type like Sabre, TravelFusion etc.
+      enum:
+      - SABRE
+      - AMADEUS
+      - TRAVEL_FUSION
+      - FARELOGIX_NDC
+      - ATPCO_NDC
+      - TRAINLINE
+      - AVIA
+      - QBR
+      - BCD
+      - QANTAS_HOTELS
+      - SOUTHWEST
+      - EXPEDIA
+      - HOTEL_HUB
+      - NDC
+      - MARRIOTT
+      - CLEARTRIP
+      - KYTE
+      - GROUNDSPAN
+      - SABRE_NDC
+      - BOOKING_COM
+      - CARTRAWLER
+      - PREMIER_INN
+      - TRAVELODGE
+      - ENTERPRISE
+      - HYATT
+      - NATIONAL
+      - ALAMO
+      - HERTZ
+      - DOLLAR
+      - THRIFTY
+      - FIREFLY
+      - EUROSTAR
+      - AVIS
+      - BUDGET
+      x-ignoreBreakingChanges:
+      - SupplierType->PREMIER_INN
+      example: SABRE
+    StealthType:
+      type: string
+      description: Stealth type.
+      enum:
+      - STEALTH_TYPE_1
+      - STEALTH_TYPE_2
+      - STEALTH_TYPE_3
+      example: STEALTH_TYPE_1
+      x-ignoreBreakingChanges:
+      - StealthType->STEALTH_TYPE_4
+      - StealthType->STEALTH_TYPE_5
+      - StealthType->STEALTH_TYPE_6
+    AirlinePref:
+      type: object
+      title: AirlinePref
+      description: Airline preferences.
+      properties:
+        airlines:
+          type: array
+          items:
+            type: string
+            example: Indigo
+        flightType:
+          type: string
+          enum:
+          - UNKNOWN_FLIGHT_TYPE
+          - DOMESTIC
+          - INTERNATIONAL
+          - ALL
+          example: DOMESTIC
+    HotelPrefAmenity:
+      type: string
+      description: Preferred hotel amenity.
+      enum:
+      - PARKING
+      - FREE_PARKING
+      - FREE_BREAKFAST
+      - POOL
+      - WIFI
+      - FITNESS_CENTER
+      - FAMILY_FRIENDLY
+      - RECEPTION
+      - SPA
+      - RESTAURANT
+      - BAR
+      - TRANSPORTATION
+      - PET_FRIENDLY
+      - BUSINESS_CENTER
+      - AIR_CONDITIONING
+      - BEACH_ACCESS
+      - LAUNDRY_SERVICES
+      - ROOM_SERVICE
+      - ACCESSIBLE
+    CarType:
+      type: string
+      title: CarType
+      description: Car type.
+      enum:
+      - OTHER
+      - MINI
+      - ECONOMY
+      - COMPACT
+      - MID_SIZE
+      - STANDARD
+      - FULL_SIZE
+      - PREMIUM
+      - LUXURY
+      - CONVERTIBLE
+      - MINIVAN
+      - SUV
+      - VAN
+      - PICKUP
+      - SPORTS
+      - SPECIAL
+      - RECREATIONAL_VEHICLE
+      - WAGON
+      example: ECONOMY
+    NameSuffix:
+      title: NameSuffix
+      description: Suffix for name
+      type: string
+      enum:
+      - NAME_SUFFIX_UNKNOWN
+      - SR
+      - JR
+      - MD
+      - PHD
+      - II
+      - III
+      - IV
+      - DO
+      - ATTY
+      - V
+      - VI
+      - ESQ
+      - DC
+      - DDS
+      - VM
+      - JD
+      - SECOND
+      - THIRD
+      example: SR
+    ProfileOwner:
+      type: object
+      title: ProfileOwner
+      description: Basic information about the owner of the ad-hoc user.
+      required:
+      - userId
+      properties:
+        userId:
+          $ref: '#/components/schemas/UserId'
+    BusinessDetail:
+      type: object
+      title: BusinessDetail
+      description: Business details of the user
+      required:
+      - legalEntity
+      properties:
+        legalEntity:
+          description: The legal entity associated with the user.
+          $ref: '#/components/schemas/Reference'
+        office:
+          description: The office associated with the user.
+          $ref: '#/components/schemas/Reference'
+        department:
+          description: The department associated with the user.
+          $ref: '#/components/schemas/Reference'
+        costCenter:
+          description: The cost center associated with the user.
+          $ref: '#/components/schemas/Reference'
+        businessEmail:
+          description: Business email of the user.
+          type: string
+        designation:
+          description: Designation or job title of the user.
+          type: string
+        employeeId:
+          description: Employee ID of the user.
+          type: string
+    UserListFilter:
+      type: object
+      title: UserListFilter
+      description: Filter object for listing users. AND operation is applied between all the filter conditions.
+      properties:
+        legalEntityIds:
+          description: Filter by legal entity ids.
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityId'
+        officeIds:
+          description: Filter by offices.
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityId'
+        departmentIds:
+          description: Filter by department IDs.
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityId'
+        costCenterIds:
+          description: Filter by cost center IDs.
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityId'
+        userIds:
+          type: array
+          description: Filter by user IDs.
+          items:
+            $ref: '#/components/schemas/EntityId'
+        emails:
+          type: array
+          description: Filter by user email IDs.
+          items:
+            type: string
+        externalIds:
+          type: array
+          description: Filter by partner-assigned external identifiers for users.
+          items:
+            type: string
+        personas:
+          type: array
+          description: Filter by user personas.
+          items:
+            $ref: '#/components/schemas/Persona'
+        roles:
+          type: array
+          description: Filter by user roles.
+          items:
+            $ref: '#/components/schemas/RoleType'
+        designations:
+          type: array
+          description: Filter by job titles or designations.
+          items:
+            type: string
+        tiers:
+          type: array
+          description: Filter by tiers.
+          items:
+            $ref: '#/components/schemas/Tier'
+    UserCreateRequest:
+      type: object
+      description: Traveler details.
+      required:
+      - persona
+      x-ignoreBreakingChanges:
+      - personalInfo
+      - UsersApi.yaml->UserCreateRequest->personalInfo
+      properties:
+        personalInfo:
+          $ref: '#/components/schemas/UserPersonalInfo'
+          x-optionalFrom: '2025-05-19'
+        businessInfo:
+          $ref: '#/components/schemas/BusinessInfo'
+        persona:
+          $ref: '#/components/schemas/Persona'
+        relativeOf:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/RelativeOf'
+        billingCurrency:
+          type: string
+          description: Preferred billing currency of the user
+          example: INR
+        tier:
+          $ref: '#/components/schemas/Tier'
+        stealthType:
+          $ref: '#/components/schemas/StealthType'
+        externalId:
+          type: string
+          description: 'A partner-assigned user identifier. This value must be unique for all travelers within a PNR.
+
+            '
+        travelPreferences:
+          $ref: '#/components/schemas/TravelPreferences'
+        membershipInfo:
+          $ref: '#/components/schemas/MembershipInfo'
+        notificationPreferences:
+          $ref: '#/components/schemas/NotificationPreferences'
+        travelArrangers:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/UserTravelArrangers'
+        adhocUserInfo:
+          $ref: '#/components/schemas/AdhocUserInfo'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleConfig'
+    TravelArrangerBasicInfo:
+      type: object
+      title: TravelArrangerBasicInfo
+      description: Traveler arranger information.
+      required:
+      - userId
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        email:
+          type: string
+          format: email
+          example: example@email.com
+        phoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        userId:
+          $ref: '#/components/schemas/UserId'
+        status:
+          $ref: '#/components/schemas/TravelerArrangerStatus'
+    TravelerArrangerStatus:
+      type: string
+      title: TravelerArrangerStatus
+      description: Status of the traveler-arranger assignment.
+      enum:
+      - PENDING
+      - ACCEPTED
+      - DENIED
+      example: PENDING
+    ListUsersV3Response:
+      type: object
+      title: ListUsersV3Response
+      description: List users response
+      properties:
+        users:
+          type: array
+          description: Users matching the filters specified in the request.
+          items:
+            $ref: '#/components/schemas/UserDetail'
+        pagination:
+          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
+    PolicyBasicInfo:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: Id for policy.
+          example: 348fcc1c-c33a-4942-8834-a7888913dd66
+        name:
+          type: string
+          description: Name of the policy
+          example: HR Policy
+    SeatPrefType:
+      type: string
+      description: The type of seat of the rail.
+      enum:
+      - SLEEPER_BED
+      - NORMAL
+      - TABLE_SEAT
+      example: NORMAL
+    UserApplicablePolicies:
+      type: object
+      description: Applicable policies for users.
+      properties:
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyBasicInfo'
+    PreferredAirport:
+      type: object
+      title: PreferredAirport
+      description: Airport preferred by traveler.
+      required:
+      - airportCode
+      - label
+      properties:
+        airportName:
+          type: string
+          description: Airport name.
+          example: San Francisco International Airport
+        airportCode:
+          type: string
+          description: IATA airport code.
+          example: SFO
+        label:
+          $ref: '#/components/schemas/PreferredLocationLabel'
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+    SecondaryServiceProviderTmc:
+      type: object
+      title: SecondaryServiceProviderTmc
+      description: Secondary service provider TMC info
+      required:
+      - tmcId
+      - supplier
+      - travelType
+      properties:
+        tmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Id of the service provider TMC.
+        supplier:
+          $ref: '#/components/schemas/SupplierType'
+          description: Supplier for which this service provider should be used.
+        travelType:
+          $ref: '#/components/schemas/TravelType'
+          description: Travel type for which this service provider should be used.
+    Name:
+      type: object
+      title: Name
+      description: Full name containing first, middle, last (family) names, and suffix.
+      required:
+      - given
+      - family1
+      properties:
+        family1:
+          type: string
+          description: Last (family) name.
+          example: Gandas
+          x-pii: SENSITIVE
+        family2:
+          type: string
+          example: FamilyTwo
+          x-pii: SENSITIVE
+        given:
+          type: string
+          description: First (given) name.
+          example: Vichitr
+          x-pii: SENSITIVE
+        middle:
+          type: string
+          description: Middle name.
+          example: Kumar
+          x-pii: SENSITIVE
+        suffix:
+          $ref: '#/components/schemas/NameSuffix'
+          description: Suffix used with the name. For example SR or JR.
+          example: SR
+        preferred:
+          type: string
+          description: Informal preferred name added by traveler. This is not used on any PNR or tickets
+          example: Don
+          x-pii: SENSITIVE
+    Reference:
+      type: object
+      title: Reference object containing uuid and name of the entity.
+      description: Reference of an entity
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+        name:
+          type: string
+          example: Name
+    IdentityDocument:
+      type: object
+      title: IdentityDocument
+      description: "Identity document details. Currently supported documents are passport, immigration document, \nknown traveler number, redress number and national document.\n"
+      oneOf:
+      - $ref: '#/components/schemas/PassportWrapper'
+      - $ref: '#/components/schemas/ImmigrationDocumentWrapper'
+      - $ref: '#/components/schemas/RedressNumberWrapper'
+      - $ref: '#/components/schemas/KnownTravelerNumberWrapper'
+      - $ref: '#/components/schemas/NationalDocWrapper'
+    TravelType:
+      type: string
+      title: TravelType
+      description: Travel Type
+      enum:
+      - AIR
+      - HOTEL
+      - CAR
+      - RAIL
+      - LIMO
+      - MISC
+      - ALL
+      example: AIR
+    PreferredPronoun:
+      title: PreferredPronoun
+      type: string
+      enum:
+      - SHE_HER_HERS
+      - HE_HIM_HIS
+      - THEY_THEM_THEIRS
+      example: SHE_HER_HERS
+    AddFavoriteResponse:
+      type: object
+      title: AddFavoriteResponse
+      description: Response after adding a favorite item.
+      properties:
+        favorite:
+          $ref: '#/components/schemas/FavoriteItem'
+    Dimensions:
+      type: object
+      title: Dimensions
+      description: Image dimensions ie width and height.
+      properties:
+        height:
+          type: integer
+          format: int32
+          example: 120
+        width:
+          type: integer
+          format: int32
+          example: 240
+    RolesConfig:
+      type: object
+      description: User's roles and associated metadata
+      required:
+      - roles
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleConfig'
+    NotificationEmailPreference:
+      type: object
+      title: NotificationEmailPreference
+      description: Email preference for notification type.
+      properties:
+        enabled:
+          type: boolean
+          description: Whether the email preference is enabled or not.
+          default: true
+        ccEmails:
+          type: array
+          description: List of cc emails for the email preference.
+          items:
+            type: string
+            format: email
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    StealthMode:
+      type: object
+      title: StealthMode
+      description: Stealth mode configuration with type and label.
+      required:
+      - stealthType
+      - label
+      properties:
+        stealthType:
+          $ref: '#/components/schemas/StealthType'
+        label:
+          type: string
+          description: Customer specific label for the stealth mode.
+    SeatLocationPref:
+      type: object
+      title: SeatLocationPref
+      description: Seat location preference.
+      properties:
+        cabins:
+          type: array
+          items:
+            type: string
+            enum:
+            - UNKNOWN_CABIN
+            - ECONOMY
+            - PREMIUM_ECONOMY
+            - BUSINESS
+            - FIRST
+            example: FIRST
+        isBulkHeadPref:
+          type: boolean
+          example: false
+        maxFlightDurationInHours:
+          type: integer
+          format: int32
+          example: 3
+        position:
+          type: string
+          enum:
+          - UNKNOWN_POSITION
+          - AISLE
+          - WINDOW
+          - AISLE_OR_WINDOW
+          example: WINDOW
+    OffsetBasedPaginationRequestParams:
+      type: object
+      title: OffsetBasedPaginationRequestParams
+      description: Pagination parameters for requests.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
+          default: 0
+          minimum: 0
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to be fetched.
+          minimum: 1
+          default: 100
+    PersonalDetail:
+      type: object
+      title: PersonalDetail
+      description: Personal details of the user
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        title:
+          $ref: '#/components/schemas/UserTitle'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        pronoun:
+          $ref: '#/components/schemas/PreferredPronoun'
+        preferredLanguage:
+          type: string
+          description: Preferred language of the user
+        nationality:
+          type: string
+          description: Nationality of the user
+        profilePicture:
+          $ref: '#/components/schemas/Image'
+    TravelPreferences:
+      type: object
+      description: User's travel preferences
+      properties:
+        preferences:
+          $ref: '#/components/schemas/TravelPref'
+    PhoneNumber:
+      type: object
+      title: PhoneNumber
+      description: Properly formatted phone number.
+      properties:
+        countryCode:
+          type: integer
+          format: int32
+          description: two digit country code
+          example: 91
+        countryCodeSource:
+          type: string
+          enum:
+          - UNSPECIFIED
+          - FROM_NUMBER_WITH_PLUS_SIGN
+          - FROM_NUMBER_WITH_IDD
+          - FROM_NUMBER_WITHOUT_PLUS_SIGN
+          - FROM_DEFAULT_COUNTRY
+          example: FROM_NUMBER_WITH_PLUS_SIGN
+        extension:
+          description: phone number extension
+          type: string
+          example: '222'
+        isoCountryCode:
+          description: ISO alpha-2 code
+          type: string
+          example: IN
+        italianLeadingZero:
+          type: boolean
+          default: false
+          example: true
+        nationalNumber:
+          type: integer
+          format: int64
+          example: 8150
+        numberOfLeadingZeros:
+          type: integer
+          format: int32
+          default: 0
+          example: 1
+        preferredDomesticCarrierCode:
+          type: string
+          example: '7'
+        rawInput:
+          type: string
+          example: '77777'
+        type:
+          type: string
+          enum:
+          - UNKNOWN_TYPE
+          - MOBILE
+          - LANDLINE
+          example: MOBILE
+    RelativeOf:
+      type: object
+      description: Link to primary traveler
+      properties:
+        userRef:
+          $ref: '#/components/schemas/Reference'
+        relation:
+          $ref: '#/components/schemas/Relation'
+    Relation:
+      deprecated: true
+      x-sunset: '2026-07-01'
+      type: string
+      enum:
+      - SPOUSE
+      - CHILD
+      - FRIEND
+      - PARENT
+      - OTHER
+      example: SPOUSE
+    CompanyRoleInfo:
+      type: object
+      title: CompanyRoleInfo
+      required:
+      - companyRef
+      - roleType
+      properties:
+        companyRef:
+          $ref: '#/components/schemas/Reference'
+        tmcRef:
+          readOnly: true
+          $ref: '#/components/schemas/Reference'
+        roleType:
+          type: string
+          description: Role type for which company reference metadata is specified.
+    ListFavoritesResponse:
+      type: object
+      title: ListFavoritesResponse
+      description: Response containing a list of resolved favorites.
+      properties:
+        favorites:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResolvedFavorite'
+    Alliance:
+      type: string
+      enum:
+      - UNKNOWN_ALLIANCE
+      - STAR_ALLIANCE
+      - ONEWORLD
+      - SKYTEAM
+      - VANILLA_ALLIANCE
+      - U_FLY_ALLIANCE
+      - VALUE_ALLIANCE
+      default: UNKNOWN_ALLIANCE
+      example: STAR_ALLIANCE
+    EngineType:
+      type: string
+      title: EngineType
+      description: Engine types.
+      enum:
+      - UNKNOWN_ENGINE
+      - PETROL
+      - DIESEL
+      - ELECTRIC
+      - CNG
+      - HYBRID
+      - HYDROGEN
+      - MULTI_FUEL
+      - ETHANOL
+      example: PETROL
+    CompanyRef:
+      type: object
+      description: Basic information about a company.
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/CompanyId'
+        name:
+          type: string
+        logo:
+          $ref: '#/components/schemas/Image'
+          description: Company logo
+    NotificationType:
+      type: string
+      enum:
+      - FLIGHT_NOTIFICATION
+      - BOOKING_NOTIFICATION
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    HotelPref:
+      type: object
+      title: HotelPref
+      description: Travel preferences related to hotel.
+      properties:
+        hotelParentChains:
+          type: array
+          description: A list of hotel parent chains.
+          items:
+            $ref: '#/components/schemas/HotelChain'
+        hotelBrands:
+          type: array
+          description: A list of hotel brands.
+          items:
+            $ref: '#/components/schemas/HotelBrand'
+        hotelAmenityTypes:
+          type: array
+          description: A list of HotelAmenities.
+          items:
+            $ref: '#/components/schemas/HotelPrefAmenity'
+        roomPreference:
+          $ref: '#/components/schemas/RoomPreference'
+        conditionalRates:
+          type: array
+          description: A list of conditional rates for rail.
+          items:
+            $ref: '#/components/schemas/ConditionalRate'
+    ConditionalRate:
+      type: string
+      title: ConditionalRate
+      description: Conditional rate.
+      enum:
+      - MILITARY
+      - AAA
+      - GOVERNMENT
+      example: AAA
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

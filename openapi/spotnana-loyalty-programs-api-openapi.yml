@@ -1,0 +1,205 @@
+openapi: 3.1.0
+info:
+  title: Air Loyalty Programs API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Loyalty Programs
+paths:
+  /v2/air/loyalty-programs:
+    parameters:
+    - name: marketingAirline
+      in: query
+      description: IATA code of the marketing airline for which the loyalty programs need to be fetched.
+      required: false
+      schema:
+        type: string
+      example: AA
+    - name: operatingAirline
+      in: query
+      description: IATA code of the operating airline for which the loyalty programs need to be fetched.
+      required: false
+      schema:
+        type: string
+      example: BA
+    - name: travelerId
+      in: query
+      description: User ID of the traveler.
+      required: false
+      schema:
+        type: string
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: travelArrangerId
+      in: query
+      description: User ID of the travel arranger.
+      required: false
+      schema:
+        type: string
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Loyalty Programs
+      summary: Get Loyalty Programs (Air)
+      description: Returns all the active loyalty programs for the requested marketing and/or operating airlines.
+      operationId: getAirApplicableLoyalties
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirApplicableLoyaltyResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    LoyaltyTier:
+      type: string
+      description: Loyalty membership tier name echoed from the supplier.
+      example: GOLD
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    AirLoyaltyProgram:
+      type: object
+      required:
+      - programName
+      - airlineCode
+      - airlineName
+      - loyaltyType
+      properties:
+        programName:
+          description: Name of the loyalty program.
+          type: string
+          example: AA Advantage
+        airlineCode:
+          description: IATA code of the airline that hosts the loyalty program.
+          type: string
+          example: AA
+        airlineName:
+          description: Name of the airline that hosts the loyalty program.
+          type: string
+          example: American Airlines
+        loyaltyType:
+          description: Type of the loyalty program. This indicates how the loyalty program is associated with the airline mentioned in the API request.
+          type: string
+          enum:
+          - OWN
+          - PARTNER
+          - ALLIANCE
+          example: OWN
+    LoyaltyInfo:
+      type: object
+      title: LoyaltyInfo
+      description: Loyalty Info details.
+      required:
+      - id
+      - type
+      - issuedBy
+      properties:
+        appliedTo:
+          type: array
+          items:
+            type: string
+            example: TAJ
+        id:
+          type: string
+          example: firstId
+          x-pii: IDENTIFIER
+        issuedBy:
+          type: string
+          example: firstIssuedBy
+        type:
+          type: string
+          enum:
+          - UNKNOWN_TYPE
+          - AIR
+          - HOTEL
+          - CAR
+          - RAIL
+          example: AIR
+        linked:
+          type: boolean
+          description: Indicates if this loyalty account is linked to the external provider. Only applicable for certain loyalty types.
+          default: false
+          example: false
+        tier:
+          $ref: '#/components/schemas/LoyaltyTier'
+    AirApplicableLoyaltyResponse:
+      type: object
+      required:
+      - loyaltyPrograms
+      properties:
+        loyaltyPrograms:
+          type: array
+          items:
+            $ref: '#/components/schemas/AirLoyaltyProgram'
+        applicableLoyalties:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoyaltyInfo'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

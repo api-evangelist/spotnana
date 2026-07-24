@@ -1,0 +1,6126 @@
+openapi: 3.1.0
+info:
+  title: Air Approval API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Approval
+  description: APIs to manage approvals.
+paths:
+  /v3/approvals/approvers/{userId}/list:
+    parameters:
+    - name: userId
+      in: path
+      description: Identifier for the approver whose approval data is requested.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Approval
+      summary: List approval data for an approver
+      description: Retrieves the list of approval data associated with an approver.
+      operationId: getApprovalUserApprovalDataList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetApprovalDataV3Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetApprovalDataV3Response'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v3/approvals/companies/{companyId}/list:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for the company whose approvals are requested.
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Approval
+      summary: List approval data for a company
+      description: Retrieves the list of approval data associated with a company.
+      operationId: getCompanyApprovalDataList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetApprovalDataV3Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetApprovalDataV3Response'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  schemas:
+    OfficeIdWrapper:
+      type: object
+      title: OfficeIdWrapper
+      properties:
+        officeId:
+          $ref: '#/components/schemas/OfficeId'
+    AdhocUserInfo:
+      type: object
+      title: AdhocUserInfo
+      description: Basic information related to ad-hoc traveler profile.
+      required:
+      - profileOwner
+      properties:
+        profileOwner:
+          $ref: '#/components/schemas/ProfileOwner'
+        isSaved:
+          type: boolean
+          description: "A boolean flag to show if ad-hoc traveler is visible in search. While updating the user \nif client tries to update this field, it will throw exception.\n"
+          default: false
+    PaginationResponseParams:
+      type: object
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
+      required:
+      - numResults
+      - numPages
+      properties:
+        numResults:
+          type: integer
+          format: int32
+          description: Total number of results in the paginated list.
+        numPages:
+          type: integer
+          format: int32
+          description: Total number of pages in the paginated list.
+    PolicyPreventBookingAction:
+      type: object
+      title: PolicyPreventBookingAction
+      description: Whether to allow booking if a rule is violated.
+      properties:
+        prevent:
+          type: boolean
+          description: True if booking is to be blocked if rule is violated, else false
+        reason:
+          type: string
+          description: Reason describing why was that specific itinerary not allowed to book.
+    CustomFieldMatchConditions:
+      type: object
+      title: CustomFieldMatchConditions
+      description: Conditions to select the custom field for given context.
+      properties:
+        travelerConditions:
+          $ref: '#/components/schemas/TravelerMatchConditions'
+        travelTypes:
+          type: array
+          description: Travel types to match.
+          items:
+            $ref: '#/components/schemas/TravelType'
+        travelRegionTypes:
+          type: array
+          description: Travel region types to match.
+          items:
+            $ref: '#/components/schemas/TravelRegionType'
+        tripUsageTypes:
+          type: array
+          description: Trip usage types to match. If empty, all trip usage types will be matched.
+          items:
+            $ref: '#/components/schemas/TripUsageType'
+    BeverageAmenity:
+      type: object
+      title: BeverageAmenity
+      description: Beverage amenity option properties.
+      properties:
+        displayText:
+          type: string
+          example: Premium alcohol beverages provided
+        beverageType:
+          type: string
+          example: premium alcoholic
+        alcoholCost:
+          type: string
+          example: free
+    AdditionalInfo:
+      type: object
+      title: AdditionalInfo
+      description: Additional data need to be sent along with the custom field response.
+      discriminator:
+        propertyName: type
+        mapping:
+          VARIABLE: '#/components/schemas/Variable'
+          EXPRESSION: '#/components/schemas/Expression'
+      oneOf:
+      - $ref: '#/components/schemas/Variable'
+      - $ref: '#/components/schemas/Expression'
+    AirlineInfo:
+      title: AirlineInfo
+      type: object
+      required:
+      - airlineCode
+      - airlineName
+      properties:
+        airlineCode:
+          type: string
+          description: IATA code for airline.
+          example: AA
+        airlineName:
+          type: string
+          description: Airline name
+          example: American Airlines
+    VendorProgramType:
+      type: string
+      description: The type of the vendor program
+      enum:
+      - UA_PASS_PLUS
+      - GENERIC_PROGRAM_TYPE
+    TripMetadata:
+      title: TripMetadata
+      description: Metadata for the trip
+      type: object
+      properties:
+        hasTripOverride:
+          type: boolean
+          description: Indicates if the trip has any profile overrides.
+          example: true
+        preferredCurrency:
+          type: string
+          description: The currency to be used for the trip.
+          example: USD
+        tripContacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TripContact'
+        tripCommunicationPreferences:
+          $ref: '#/components/schemas/TripCommunicationPreferences'
+    DoubleRangeWrapper:
+      type: object
+      title: DoubleRangeWrapper
+      properties:
+        dRange:
+          $ref: '#/components/schemas/DoubleRange'
+    CarPref:
+      type: object
+      title: CarPref
+      description: Travel preferences related to car.
+      properties:
+        vendors:
+          type: array
+          description: A list of car vendors.
+          items:
+            $ref: '#/components/schemas/CarVendor'
+        carTypes:
+          type: array
+          description: A list of types of car.
+          items:
+            $ref: '#/components/schemas/CarType'
+        engineTypes:
+          type: array
+          description: A list of types of engine.
+          items:
+            $ref: '#/components/schemas/EngineType'
+        transmissionTypes:
+          type: array
+          description: A list of types of transmission.
+          items:
+            $ref: '#/components/schemas/TransmissionSearchFilter'
+        conditionalRates:
+          type: array
+          description: A list of conditional rates for rail.
+          items:
+            $ref: '#/components/schemas/ConditionalRate'
+    FareRules:
+      type: object
+      description: The rules and restrictions associated with the fare.
+      properties:
+        baggagePolicy:
+          $ref: '#/components/schemas/BaggagePolicy'
+        cancellationPolicy:
+          $ref: '#/components/schemas/CancellationPolicy2'
+        postDepartureCancellationPolicy:
+          description: Information about the post departure cancellation policy.
+          $ref: '#/components/schemas/CancellationPolicy2'
+        exchangePolicy:
+          $ref: '#/components/schemas/ExchangePolicy'
+        postDepartureExchangePolicy:
+          description: Information about the post departure exchange policy.
+          $ref: '#/components/schemas/ExchangePolicy'
+        seatSelectionPolicy:
+          $ref: '#/components/schemas/SeatSelectionRule'
+        boardingPolicy:
+          $ref: '#/components/schemas/BoardingPolicy'
+        checkInPolicy:
+          $ref: '#/components/schemas/CheckInPolicy'
+        loungePolicy:
+          $ref: '#/components/schemas/LoungePolicy'
+        seatType:
+          $ref: '#/components/schemas/SeatTypeInfo'
+    CovidTestingAmenity:
+      type: object
+      title: CovidTestingAmenity
+      description: Covid testing amenity properties.
+      properties:
+        displayText:
+          type: string
+          example: No COVID-19 test required
+        covidTestingDescription:
+          type: string
+          example: A negative COVID-19 test is not required for this flight; check with the airline for possible destination requirements or other restrictions.
+        covidTestingAttrDescription:
+          type: string
+    TaxBreakdown:
+      type: array
+      items:
+        $ref: '#/components/schemas/Tax'
+    PercentageWrapper:
+      type: object
+      title: PercentageWrapper
+      properties:
+        percentage:
+          type: number
+          format: double
+    CompanyConfigSourceWrapper:
+      type: object
+      title: CompanyConfigSourceWrapper
+      description: Wrapper for option source company config.
+      properties:
+        companyConfig:
+          $ref: '#/components/schemas/CompanyConfigSource'
+    ApprovalDetail:
+      type: object
+      title: ApprovalDetail
+      description: Policy
+      properties:
+        originalApprovalType:
+          $ref: '#/components/schemas/ApprovalType'
+        appliedApprovalType:
+          $ref: '#/components/schemas/ApprovalType'
+    BoardingPolicy:
+      type: object
+      description: Priority boarding information.
+      required:
+      - description
+      properties:
+        description:
+          type: string
+          description: Text describing the priority boarding policy.
+          example: Priority boarding provided for free
+    KnownTravelerNumber:
+      type: object
+      title: KnownTravelerNumber
+      description: Information about the Known Traveler Number (KTN).
+      required:
+      - number
+      - issueCountry
+      properties:
+        number:
+          type: string
+          example: '12345'
+          x-pii: IDENTIFIER
+        issueCountry:
+          type: string
+          example: US
+    PassengerCapacityAmenity:
+      type: object
+      title: PassengerCapacityAmenity
+      description: Passenger capacity amenity properties.
+      properties:
+        displayText:
+          type: string
+          example: Standard passenger capacity
+        passengerCapacityDescription:
+          type: string
+          example: Ticket sales are not limited for this flight
+        passengerCapacityAttrDescription:
+          type: string
+          example: 'no'
+    Tax:
+      type: object
+      title: Tax
+      description: Tax details
+      required:
+      - amount
+      properties:
+        amount:
+          $ref: '#/components/schemas/Money'
+          description: Tax amount
+        taxCode:
+          type: string
+          description: Tax code
+          example: VAT
+        percentage:
+          type: number
+          format: double
+          description: Tax amount to total amount
+          example: 9
+    AirRestrictedFaresParamsWrapper:
+      type: object
+      title: AirRestrictedFaresParamsWrapper
+      properties:
+        airRestrictedFaresParams:
+          $ref: '#/components/schemas/AirRestrictedFaresParams'
+    AnswerPair:
+      type: object
+      properties:
+        item:
+          type: string
+          description: The option selected from the list of available choices.
+        value:
+          type: string
+          description: The additional input provided (by the user) while selecting one of the options.
+        description:
+          type: string
+          description: Description of the selected option.
+    Department:
+      type: object
+      title: Department
+      description: Department details.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/DepartmentId'
+        name:
+          type: string
+          example: IT Department
+        externalId:
+          type: string
+          description: External id of the department
+          example: department-ext-id
+        employeeCount:
+          type: integer
+          format: int32
+          description: Count of employees in the department
+          example: 57
+    NumStopsPref:
+      type: object
+      title: NumStopsPref
+      description: Preferred number of stops.
+      required:
+      - numOfStops
+      properties:
+        numOfStops:
+          type: integer
+          format: int64
+          example: 34
+    MaskAmenityWrapper:
+      type: object
+      title: MaskAmenityWrapper
+      properties:
+        maskAmenity:
+          $ref: '#/components/schemas/MaskAmenity'
+    PreferredLocationLabel:
+      type: string
+      title: PreferredLocationLabel
+      description: The label of preferred airport or rail station.
+      enum:
+      - HOME
+      - WORK
+      - OTHER
+      example: HOME
+    POSInfo:
+      type: object
+      description: Point of sale information
+      required:
+      - source
+      properties:
+        source:
+          description: The third party source for the point of sale
+          $ref: '#/components/schemas/ThirdPartySource'
+        posDescriptor:
+          type: string
+          description: The identifier for the point of sale. This would be the PCC for GDS bookings.
+          example: 6CA4
+    ItemType:
+      type: string
+      description: Type of payment item eligible for this fop rule
+      enum:
+      - SERVICE_FEE
+      - TRAVEL_TICKET
+      - SEAT
+      - BAGGAGE
+      - EARLY_BIRD
+      example: SEAT
+    EmailBucketType:
+      type: string
+      title: EmailBucketType
+      description: Email bucket type.
+      enum:
+      - BOOKING_CONFIRMATIONS
+      - BOOKING_CHANGES
+      - FLIGHT_UPDATES
+      - APPROVAL_REQUESTS
+      - APPROVAL_UPDATES
+      - REMINDERS
+      - INVOICE_UPDATES
+      x-ignoreBreakingChanges:
+      - EmailBucketType->INVOICE_UPDATES
+      example: BOOKING_CONFIRMATIONS
+    PreferredRailStation:
+      type: object
+      title: PreferredRailStation
+      description: Rail station preferred by traveler.
+      required:
+      - stationCode
+      - label
+      properties:
+        stationName:
+          type: string
+          description: Rail station name.
+          example: Chicago Union Station
+        stationCode:
+          type: string
+          description: Rail station code.
+          example: CHI
+        cityName:
+          type: string
+          description: Name of city where the rail station is located.
+          example: Chicago
+        countryCode:
+          type: string
+          description: Alpha-2 country code where the rail station is located.
+        label:
+          $ref: '#/components/schemas/PreferredLocationLabel'
+    LegalEntityId:
+      type: object
+      title: LegalEntityId
+      description: The ID of the legal entity.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          example: fc1ccbce-8413-4fe9-b233-a324dfbe7421
+    Variable:
+      type: object
+      title: Variable
+      description: Variable defining the additional value to be sent along with custom field response.
+      required:
+      - type
+      - name
+      properties:
+        type:
+          type: string
+          example: VARIABLE
+          default: VARIABLE
+        name:
+          $ref: '#/components/schemas/VariableName'
+    PnrSummary:
+      type: object
+      title: PnrSummary
+      description: Basic PNR info
+      required:
+      - pnrId
+      properties:
+        pnrId:
+          type: string
+          description: Spotnana PNR Id
+          example: '1234567890'
+        sourcePnrId:
+          type: string
+          description: Source PNR Id
+          example: QWERGF
+        pnrStatus:
+          $ref: '#/components/schemas/PnrStatus'
+        pnrSummary:
+          $ref: '#/components/schemas/PnrSummaryWrapper'
+        userFacingStatus:
+          $ref: '#/components/schemas/UserFacingStatus'
+        tmcInfo:
+          $ref: '#/components/schemas/TmcInfo'
+        source:
+          $ref: '#/components/schemas/ThirdPartySource'
+          description: Source of the booking e.g. Sabre, NDC etc.
+        travelers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Traveler'
+        pnrType:
+          $ref: '#/components/schemas/PnrType'
+        approvalData:
+          $ref: '#/components/schemas/ApprovalData'
+        policyInfo:
+          $ref: '#/components/schemas/PolicyDetail'
+        additionalMetadata:
+          type: object
+          description: Any addtional metadata associated with the booking
+          properties:
+            airportInfo:
+              type: array
+              readOnly: true
+              items:
+                $ref: '#/components/schemas/AirportDetail'
+        preBookAnswers:
+          description: The per booking answers collected from the traveler during checkout.
+          $ref: '#/components/schemas/PreBookAnswers'
+        initialCustomFieldV3Responses:
+          type: array
+          description: List of all the Custom Fields responses captured while booking.
+          items:
+            $ref: '#/components/schemas/CustomFieldV3Response'
+    Int32RangeWrapper:
+      type: object
+      title: Int32RangeWrapper
+      properties:
+        iRange:
+          $ref: '#/components/schemas/Int32Range'
+    HotelBrand:
+      type: object
+      title: HotelBrand
+      description: The brand of hotel.
+      properties:
+        brandCode:
+          type: string
+          description: The code of hotel brand.
+          example: HY
+        brandName:
+          type: string
+          description: The name of hotel brand.
+          example: Global Hytt Corp.
+    FareComponent:
+      type: string
+      description: Fare component eligible for this fop rule
+      enum:
+      - BASE
+      - TAX
+      example: BASE
+    PolicyTakeApprovalActionWrapper:
+      type: object
+      title: PolicyTakeApprovalActionWrapper
+      properties:
+        takeApproval:
+          $ref: '#/components/schemas/PolicyTakeApprovalAction'
+    FlightCommonWrapper:
+      title: FlightCommonWrapper
+      description: Wrapper of FlightCommon data to be used in oneOf.
+      properties:
+        flightData:
+          $ref: '#/components/schemas/FlightCommon'
+    Office:
+      type: object
+      title: Office
+      description: Office details.
+      required:
+      - id
+      - name
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+        id:
+          $ref: '#/components/schemas/OfficeId'
+        name:
+          type: string
+          example: Office
+        latlng:
+          $ref: '#/components/schemas/Latlng'
+        taxId:
+          type: string
+          example: '133232'
+    TokenizedExpiry:
+      title: TokenizedExpiry
+      type: object
+      description: Contains the tokenized expiry of a Card.
+      required:
+      - expiryMonth
+      - expiryYear
+      properties:
+        expiryMonth:
+          type: string
+          description: Tokenized Expiry month
+          example: KvAuPANQWCpjwRQxcC8EXg==
+        expiryYear:
+          type: string
+          description: Tokenized Expiry year
+          example: fPBm0OWrKwPyIrCVcbg4cA==
+    RatingWrapper:
+      type: object
+      title: RatingWrapper
+      properties:
+        rating:
+          type: number
+          format: double
+    PassportWrapper:
+      type: object
+      title: PassportWrapper
+      properties:
+        passport:
+          $ref: '#/components/schemas/Passport'
+    FlightDetail:
+      type: object
+      description: Describes the details of a flight segment (including the origin, destination, cabin, etc).
+      required:
+      - id
+      - cabin
+      properties:
+        id:
+          type: string
+          description: The unique ID for this flight in the itinerary.
+          example: flight_0
+        flightData:
+          $ref: '#/components/schemas/FlightData'
+        cabin:
+          description: The cabin type for this flight in the associated itinerary
+          $ref: '#/components/schemas/Cabin'
+        bookingCode:
+          type: string
+          description: The airline's one-letter code for the associated fare
+          example: B
+        seatAvailability:
+          type: integer
+          format: int32
+          description: The availability of seats on this flight
+          example: 9
+        corpAccountCode:
+          type: string
+          description: The account code is used to get corporate negotiated price
+          example: DFG
+        carbonEmission:
+          description: The CO2 emission details for this flight
+          $ref: '#/components/schemas/CO2EmissionDetail'
+        amenities:
+          description: The amenities associated with the flight.
+          type: array
+          items:
+            $ref: '#/components/schemas/AirAmenity'
+        flightAttributes:
+          description: The set of product attributes associated with the flight.
+          type: array
+          items:
+            $ref: '#/components/schemas/FlightAttribute'
+        fareBasisCode:
+          description: The fare basis code contains information about the fare.
+          type: string
+          example: QUAJZNB3
+    RailCard:
+      type: object
+      title: RailCard
+      description: Rail card
+      required:
+      - name
+      - spotnanaCode
+      - vendor
+      properties:
+        cardNumber:
+          type: string
+          description: Number of card
+        expiryDate:
+          description: Expiry date of the Rail Card.
+          $ref: '#/components/schemas/DateModel'
+        name:
+          type: string
+          description: Name of the Rail Card.
+          example: Veterans Railcard
+        spotnanaCode:
+          description: Unique Spotnana code/identifier for Rail Card.
+          type: string
+          example: VET
+        vendor:
+          type: string
+          description: Vendor Name.
+          example: ATOC
+    CostCenterId:
+      type: object
+      title: Cost center id.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+    TmcBasicInfo:
+      type: object
+      title: TmcBasicInfo
+      description: TMC related basic information.
+      required:
+      - contractingTmc
+      - bookingTmc
+      properties:
+        contractingTmc:
+          $ref: '#/components/schemas/CompanyRef'
+          description: Contracting TMC is the TMC the user/organization contracted.
+        bookingTmc:
+          $ref: '#/components/schemas/CompanyRef'
+          description: Booking TMC is the TMC used for the bookings for the user/organization.
+    PassengerCapacityAmenityWrapper:
+      type: object
+      title: PassengerCapacityAmenityWrapper
+      properties:
+        passengerCapacityAmenity:
+          $ref: '#/components/schemas/PassengerCapacityAmenity'
+    PreBookAnswers:
+      type: object
+      properties:
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityAnswer'
+        preBookQuestionResponseId:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          type: string
+          description: The unique id sent back in the pre book questions API response
+    FlightPassPaymentMetadataWrapper:
+      type: object
+      title: FlightPassPaymentMetadataWrapper
+      description: Wrapper for Flight Pass payment metadata.
+      required:
+      - flightPassMetadata
+      properties:
+        metadataType:
+          type: string
+          description: Discriminator field for polymorphic deserialization
+          example: FlightPassPaymentMetadata
+          default: FlightPassPaymentMetadata
+        flightPassMetadata:
+          $ref: '#/components/schemas/FlightPassPaymentMetadata'
+    SeatAmenityPref:
+      type: object
+      title: SeatAmenityPref
+      description: Seat amenity preference.
+      required:
+      - seatAmenityTypes
+      properties:
+        seatAmenityTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - UNKNOWN_AIR_SEAT_AMENITY_TYPE
+            - FLAT_BED
+            - WIFI
+            - IN_SEAT_POWER
+            example: WIFI
+    EntityAnswer:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: The unique ID for the question.
+        userInput:
+          type: string
+          description: The text input given by user (if any).
+        itemIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: 'The id/enum value corresponding to the option chosen by the user as
+
+            answer.
+
+            '
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnswerPair'
+        customFieldType:
+          $ref: '#/components/schemas/CustomFieldType'
+        questionDisplayText:
+          type: string
+          description: The question text to be displayed to the user.
+        question:
+          $ref: '#/components/schemas/Question'
+    ApprovalTripIdFilter:
+      type: object
+      title: ApprovalTripIdFilter
+      description: Trip IDs for the approval data list request.
+      required:
+      - filterType
+      - tripIds
+      properties:
+        filterType:
+          type: string
+          example: TRIP_ID_FILTER
+        tripIds:
+          type: array
+          description: Trip ID list
+          items:
+            type: string
+            example: '6926658168'
+    OptionSourceMetadata:
+      type: object
+      title: OptionSourceMetadata
+      description: Metadata information for the option source.
+      oneOf:
+      - $ref: '#/components/schemas/CompanyConfigSourceWrapper'
+    PnrTypeFilterV2:
+      type: object
+      title: PnrTypeFilterV2
+      description: Booking/PNR type filter for the approval data list request.
+      required:
+      - filterType
+      - pnrTypes
+      properties:
+        filterType:
+          type: string
+          example: PNR_TYPE_FILTER
+        pnrTypes:
+          type: array
+          description: PNR type list
+          items:
+            $ref: '#/components/schemas/PnrType'
+    ExpiryWrapper:
+      type: object
+      title: ExpiryWrapper
+      properties:
+        expiry:
+          $ref: '#/components/schemas/Expiry'
+    DoubleRange:
+      type: object
+      properties:
+        min:
+          type: number
+          format: double
+          description: Minimum value - inclusive.
+        max:
+          type: number
+          format: double
+          description: Maximum value - inclusive.
+    MealPref:
+      type: object
+      title: MealPref
+      description: Meal preferences.
+      properties:
+        exclMealPrefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealType'
+        inclMealPrefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/MealType'
+        specialMealDescription:
+          type: string
+          example: Veg only meal
+    LengthWrapper:
+      type: object
+      title: LengthWrapper
+      properties:
+        length:
+          $ref: '#/components/schemas/Length'
+    UserOrgId:
+      type: object
+      title: UserOrgId
+      description: User and user's organization information.
+      required:
+      - userId
+      - organizationId
+      properties:
+        organizationAgencyId:
+          $ref: '#/components/schemas/OrganizationAgencyId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        userId:
+          $ref: '#/components/schemas/UserId'
+        tmcInfo:
+          $ref: '#/components/schemas/TmcInfo'
+          deprecated: true
+          x-sunset: '2026-07-01'
+        tmcBasicInfo:
+          $ref: '#/components/schemas/TmcBasicInfo'
+    MealType:
+      type: string
+      title: MealType
+      description: Type of the meal
+      enum:
+      - UNKNOWN_MEAL
+      - AVML
+      - BBML
+      - BLML
+      - CHML
+      - DBML
+      - FPML
+      - GFML
+      - HFML
+      - HNML
+      - KSML
+      - LCML
+      - LFML
+      - LPML
+      - LSML
+      - MOML
+      - NLML
+      - NSML
+      - ORML
+      - PFML
+      - RVML
+      - SFML
+      - SPML
+      - VGML
+      - VJML
+      - VLML
+      - VOML
+      example: VGML
+    UserOrgIdListWrapper:
+      type: object
+      title: UserOrgIdListWrapper
+      properties:
+        userOrgIdList:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserOrgId'
+    AirPref:
+      type: object
+      title: AirPref
+      description: Travel preferences related to air travel.
+      properties:
+        airlinePrefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AirlinePref'
+        alliancePref:
+          $ref: '#/components/schemas/AlliancePref'
+        farePref:
+          $ref: '#/components/schemas/FarePref'
+        homeAirport:
+          type: string
+          example: NEW YORK
+        mealPref:
+          $ref: '#/components/schemas/MealPref'
+        numStopPref:
+          $ref: '#/components/schemas/NumStopsPref'
+        seatAmenityPref:
+          $ref: '#/components/schemas/SeatAmenityPref'
+        seatLocationPrefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeatLocationPref'
+        preferredAirports:
+          type: array
+          description: A list of user preferred airports.
+          items:
+            $ref: '#/components/schemas/PreferredAirport'
+    WeightLimit:
+      description: The weight limit of a baggage option.
+      type: object
+      properties:
+        weight:
+          description: The weight limit of a baggage option.
+          type: number
+          example: 32
+        unit:
+          description: The unit of measurement for the weight limit.
+          type: string
+          enum:
+          - lb
+          - kg
+          example: kg
+          x-ignoreBreakingChanges:
+          - unit->KG
+          - unit->LBS
+    CreditCardAccess:
+      type: object
+      title: CreditCardAccess
+      description: Access type for cards to check who in the organization has permission to use it
+      required:
+      - accessType
+      - entityIds
+      properties:
+        accessType:
+          $ref: '#/components/schemas/CreditCardAccessType'
+        entityIds:
+          type: array
+          items:
+            type: string
+          description: Holds the ids for for all users who can access the card or organization id
+        entities:
+          type: array
+          description: A list of cardAccessEntity consisting of central card access level if present and entity id.
+          items:
+            $ref: '#/components/schemas/CardAccessEntity'
+    PaymentMethod:
+      type: string
+      description: Payment method
+      enum:
+      - PAYMENT_METHOD_UNKNOWN
+      - CREDIT_CARD
+      - BREX_POINTS
+      - CASH
+      - QANTAS_POINTS
+      - VENDOR_PROGRAM_PAYMENT
+      - DELAYED_INVOICING
+      - FLIGHT_CREDITS
+      - QANTAS_TRAVEL_FUND
+      - CUSTOM_VIRTUAL_PAYMENT
+      - FLIGHT_PASS
+      - MISCELLANEOUS_CREDIT_ORDER
+      - NO_PREPAYMENT
+      x-ignoreBreakingChanges:
+      - PaymentMethod->MISCELLANEOUS_CREDIT_ORDER
+      - PaymentMethod->NO_PREPAYMENT
+      example: BREX_POINTS
+    SupplierType:
+      type: string
+      description: Supplier type like Sabre, TravelFusion etc.
+      enum:
+      - SABRE
+      - AMADEUS
+      - TRAVEL_FUSION
+      - FARELOGIX_NDC
+      - ATPCO_NDC
+      - TRAINLINE
+      - AVIA
+      - QBR
+      - BCD
+      - QANTAS_HOTELS
+      - SOUTHWEST
+      - EXPEDIA
+      - HOTEL_HUB
+      - NDC
+      - MARRIOTT
+      - CLEARTRIP
+      - KYTE
+      - GROUNDSPAN
+      - SABRE_NDC
+      - BOOKING_COM
+      - CARTRAWLER
+      - PREMIER_INN
+      - TRAVELODGE
+      - ENTERPRISE
+      - HYATT
+      - NATIONAL
+      - ALAMO
+      - HERTZ
+      - DOLLAR
+      - THRIFTY
+      - FIREFLY
+      - EUROSTAR
+      - AVIS
+      - BUDGET
+      x-ignoreBreakingChanges:
+      - SupplierType->PREMIER_INN
+      example: SABRE
+    ApproverUserIdFilter:
+      type: object
+      title: ApproverUserIdFilter
+      description: User IDs to filter approval data list. It is applicable only to company approval data list.
+      required:
+      - filterType
+      - userIds
+      properties:
+        filterType:
+          type: string
+          example: APPROVER_USER_ID_FILTER
+        userIds:
+          type: array
+          description: List of user IDs
+          items:
+            $ref: '#/components/schemas/UserId'
+    ThirdPartySource:
+      type: string
+      enum:
+      - UNKNOWN_SOURCE
+      - SABRE
+      - TRAVEL_FUSION
+      - AVIA
+      - NDC
+      - TRAINLINE
+      - ATPCO_NDC
+      - FARELOGIX_NDC
+      - OFFLINE
+      - CONNEXUS
+      - ROUTEHAPPY
+      - AMADEUS
+      - GIATA
+      - QBR
+      - BCD
+      - QANTAS_HOTELS
+      - SOUTHWEST
+      - EXPEDIA
+      - HOTEL_HUB
+      - MARRIOTT
+      - CLEARTRIP
+      - KYTE
+      - GROUNDSPAN
+      - SABRE_NDC
+      - BOOKING_COM
+      - CARTRAWLER
+      - PREMIER_INN
+      - TRAVELODGE
+      - ENTERPRISE
+      - HYATT
+      - EUROSTAR
+      - NATIONAL
+      - ALAMO
+      - AVIS
+      - BUDGET
+      - HERTZ
+      - DOLLAR
+      - THRIFTY
+      - FIREFLY
+      x-ignoreBreakingChanges:
+      - ThirdPartySource->BOOKING_COM
+      - ThirdPartySource->CARTRAWLER
+      - ThirdPartySource->PREMIER_INN
+      example: SABRE
+    HotelPrefAmenity:
+      type: string
+      description: Preferred hotel amenity.
+      enum:
+      - PARKING
+      - FREE_PARKING
+      - FREE_BREAKFAST
+      - POOL
+      - WIFI
+      - FITNESS_CENTER
+      - FAMILY_FRIENDLY
+      - RECEPTION
+      - SPA
+      - RESTAURANT
+      - BAR
+      - TRANSPORTATION
+      - PET_FRIENDLY
+      - BUSINESS_CENTER
+      - AIR_CONDITIONING
+      - BEACH_ACCESS
+      - LAUNDRY_SERVICES
+      - ROOM_SERVICE
+      - ACCESSIBLE
+    CarType:
+      type: string
+      title: CarType
+      description: Car type.
+      enum:
+      - OTHER
+      - MINI
+      - ECONOMY
+      - COMPACT
+      - MID_SIZE
+      - STANDARD
+      - FULL_SIZE
+      - PREMIUM
+      - LUXURY
+      - CONVERTIBLE
+      - MINIVAN
+      - SUV
+      - VAN
+      - PICKUP
+      - SPORTS
+      - SPECIAL
+      - RECREATIONAL_VEHICLE
+      - WAGON
+      example: ECONOMY
+    Int64Wrapper:
+      type: object
+      title: Int64Wrapper
+      properties:
+        l:
+          type: integer
+          format: int64
+    AirAmenity:
+      type: object
+      title: AirAmenity
+      oneOf:
+      - $ref: '#/components/schemas/SeatAmenityWrapper'
+      - $ref: '#/components/schemas/WifiAmenityWrapper'
+      - $ref: '#/components/schemas/PowerAmenityWrapper'
+      - $ref: '#/components/schemas/EntertainmentAmenityWrapper'
+      - $ref: '#/components/schemas/BeverageAmenityWrapper'
+      - $ref: '#/components/schemas/AircraftAmenityWrapper'
+      - $ref: '#/components/schemas/LayoutAmenityWrapper'
+      - $ref: '#/components/schemas/FreshFoodAmenityWrapper'
+      - $ref: '#/components/schemas/CleaningAmenityWrapper'
+      - $ref: '#/components/schemas/MaskAmenityWrapper'
+      - $ref: '#/components/schemas/TemperatureAmenityWrapper'
+      - $ref: '#/components/schemas/PassengerCapacityAmenityWrapper'
+      - $ref: '#/components/schemas/BlockedAdjacentSeatsAmenityWrapper'
+      - $ref: '#/components/schemas/CovidTestingAmenityWrapper'
+      - $ref: '#/components/schemas/VaccineAmenityWrapper'
+    BlockedAdjacentSeatsAmenity:
+      type: object
+      title: BlockedAdjacentSeatsAmenity
+      description: Passenger Capacity Amenity properties
+      properties:
+        displayText:
+          type: string
+          example: No blocked adjacent seats
+        blockedAdjacentSeatsDescription:
+          type: string
+          example: Adjacent seats are not blocked on this flight
+        blockedAdjacentSeatsAttrDescription:
+          type: string
+          example: 'no'
+    Int32Range:
+      type: object
+      properties:
+        min:
+          type: integer
+          format: int32
+          description: Minimum value - inclusive.
+        max:
+          type: integer
+          format: int32
+          description: Maximum value - inclusive.
+    FlightNumber:
+      title: FlightNumber
+      description: Flight number and airline code.
+      required:
+      - airlineCode
+      - num
+      properties:
+        num:
+          type: string
+          description: Flight number.
+          example: '321'
+        airlineCode:
+          type: string
+          description: Two-letter IATA airline code.
+          example: AA
+    PnrPolicyInfo:
+      title: PnrPolicyInfo
+      description: Policy Info applicable for the associated itinerary
+      type: object
+      properties:
+        policies:
+          type: array
+          description: List of policies applied to the itinerary.
+          items:
+            $ref: '#/components/schemas/PnrPolicyId'
+        ruleResultInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyRuleResultInfo'
+    AirportDetail:
+      title: AirportDetail
+      description: Detailed information about the airport.
+      type: object
+      required:
+      - airportCode
+      - airportName
+      properties:
+        airportCode:
+          type: string
+          description: 3-letter code of the airport.
+          example: WRA
+        airportName:
+          type: string
+          description: Full name of the airport.
+          example: Warder Airport
+        cityName:
+          type: string
+          description: Name of the city in which the airport is located (or is nearest to).
+          example: Werder
+        countryName:
+          type: string
+          description: Name of the country in which the airport is located.
+          example: Ethiopia
+        countryCode:
+          type: string
+          description: 2-letter IATA country code associated with the airport.
+          example: ET
+        zoneName:
+          type: string
+          description: Name of the time zone associated with the airport.
+          example: Africa/Addis_Ababa
+        stateCode:
+          type: string
+          description: 2-letter IATA code for the state in which the airport is located.
+          example: CA
+    AccessType:
+      type: string
+      description: Access Type of the Payment Source being created.
+      enum:
+      - CENTRALISED
+      - PERSONAL
+      - APPLICATION
+      - TMC
+      - ITINERARY
+      - EVENT
+      - EVENT_TEMPLATE
+      example: CENTRALISED
+      x-ignoreBreakingChanges:
+      - AccessType->EVENT_TEMPLATE
+    Dimensions:
+      type: object
+      title: Dimensions
+      description: Image dimensions ie width and height.
+      properties:
+        height:
+          type: integer
+          format: int32
+          example: 120
+        width:
+          type: integer
+          format: int32
+          example: 240
+    PolicySplitPaymentActionWrapper:
+      type: object
+      title: PolicySplitPaymentActionWrapper
+      properties:
+        splitPayment:
+          $ref: '#/components/schemas/SplitPayment'
+    OutOfPolicyFilter:
+      type: object
+      title: OutOfPolicyFilter
+      description: Filter to get out of policy approval data.
+      required:
+      - filterType
+      - outOfPolicy
+      properties:
+        filterType:
+          type: string
+          example: OUT_OF_POLICY_FILTER
+        outOfPolicy:
+          type: boolean
+          description: Out of policy indicator
+          example: true
+    FlightRefWrapper:
+      title: FlightRefWrapper
+      description: Wrapper of flight reference to be used in oneOf.
+      properties:
+        flightRef:
+          $ref: '#/components/schemas/FlightRef'
+    DoubleListWrapper:
+      type: object
+      title: DoubleListWrapper
+      properties:
+        dList:
+          type: array
+          items:
+            type: number
+            format: double
+    PolicyPredicate:
+      type: string
+      description: This contains the enum mentioning the policy rule which was violated.
+      enum:
+      - UNKNOWN_PREDICATE_STRING
+      - MAX_FARE_PER_TRAVELLER_VIOLATION
+      - FARE_MORE_THAN_MINIMUM
+      - FARE_MORE_THAN_MEDIAN
+      - FARE_LESS_THAN_MEDIAN
+      - FARE_MORE_THAN_LLF
+      - MAX_FARE_PER_TRAVELLER_VIOLATION_INCLUDING_TAX
+      - MAX_FARE_PER_TRAVELLER_VIOLATION_EXCLUDING_TAX
+      - HOTEL_PAYMENT_OPTIONS_VIOLATION
+      - RAIL_BOOKING_WINDOW_GAP_VIOLATION
+      - RAIL_TRAVEL_CLASS_VIOLATION
+      - RAIL_TICKET_REFUNDABLE_VIOLATION
+      - RAIL_MAX_BOOKING_PRICE_VIOLATION_INCLUDING_TAX
+      - RAIL_MAX_BOOKING_PRICE_VIOLATION_EXCLUDING_TAX
+      - AIR_MAX_PRICE_MORE_THAN_LLF_VIOLATION_INCLUDING_TAX
+      - AIR_MAX_PRICE_MORE_THAN_LLF_VIOLATION_EXCLUDING_TAX
+      - HOTEL_RESTRICTED_KEYWORDS_VIOLATION
+      - RESTRICTED_LOCATION_VIOLATION
+      - FLIGHT_ADVANCE_BOOKING_WINDOW_DOMESTIC_VIOLATION
+      - FLIGHT_ADVANCE_BOOKING_WINDOW_INTERNATIONAL_VIOLATION
+      - FLIGHT_ADVANCE_BOOKING_WINDOW_VIOLATION
+      - ITINERARY_WITHIN_EVENT_TRAVEL_WINDOW
+      - HOTEL_IN_ALLOWED_HOTEL_LIST
+      - PAYMENT_ACCESS_VIOLATION
+      - AIRPORT_IN_ALLOWED_AIRPORT_LIST
+      - ITINERARY_TYPE_IS_NOT_IN_ALLOWED_BOOKING_TYPES
+      - PAYMENT_AIR_ADDON_VIOLATION
+      - MAX_HOTEL_BOOKING_PRICE_INCLUDING_TAX
+      - MAX_HOTEL_BOOKING_PRICE_EXCLUDING_TAX
+      - AIR_NUM_TRAVELERS_ALLOWED
+      - PREFERRED_VENDOR_VIOLATION
+      - SEAT_ADDON_VIOLATION
+      - BAGGAGE_ADDON_VIOLATION
+      - EARLY_BIRD_ADDON_VIOLATION
+      - WIFI_ADDON_VIOLATION
+      - RESTRICTED_BOOKING_VIOLATION
+      - HIGHEST_ALLOWED_CABIN_VIOLATION
+      - LOWEST_FARE_PER_HOTEL_PROPERTY_VIOLATION
+      - AIR_RESTRICTED_FARES_VIOLATION
+      - AIR_ANCILLARY_VIOLATION
+      x-ignoreBreakingChanges:
+      - PolicyPredicate->LOWEST_FARE_PER_HOTEL_PROPERTY_VIOLATION
+      - PolicyPredicate->AIR_RESTRICTED_FARES_VIOLATION
+      - PolicyPredicate->AIR_ANCILLARY_VIOLATION
+    PaymentSourceCondition:
+      type: object
+      title: PaymentSourceCondition
+      description: The payment source fop condition
+      discriminator:
+        propertyName: type
+        mapping:
+          CARD: '#/components/schemas/CardCondition'
+      oneOf:
+      - $ref: '#/components/schemas/CardCondition'
+    AirSearchResponse:
+      title: AirSearchResponse
+      type: object
+      description: A list of itineraries with detailed flight information and prices for each.
+      required:
+      - searchId
+      - itineraryDetails
+      properties:
+        searchId:
+          type: string
+          description: The unique ID for this search response. This value must be passed on in the subsequent booking API calls.
+          example: ChBjZDg3ZjRjZmRmMTFmMWFiEhBjZDg3Z
+        itineraryDetails:
+          description: The list of itineraries in the search response.
+          $ref: '#/components/schemas/ItineraryInfo'
+        paginationParams:
+          $ref: '#/components/schemas/PaginationResponseParams'
+        metadata:
+          $ref: '#/components/schemas/AirMetadata'
+    EngineType:
+      type: string
+      title: EngineType
+      description: Engine types.
+      enum:
+      - UNKNOWN_ENGINE
+      - PETROL
+      - DIESEL
+      - ELECTRIC
+      - CNG
+      - HYBRID
+      - HYDROGEN
+      - MULTI_FUEL
+      - ETHANOL
+      example: PETROL
+    ApprovalDeadlineDateRangeFilter:
+      type: object
+      title: ApprovalDeadlineDateRangeFilter
+      description: Date range filter for approval deadline for the approval data list request.
+      required:
+      - filterType
+      properties:
+        filterType:
+          type: string
+          example: APPROVAL_DEADLINE_DATE_RANGE_FILTER
+        startDate:
+          description: Start date for the date range filter
+          $ref: '#/components/schemas/DateModel'
+        endDate:
+          description: End date for the date range filter
+          $ref: '#/components/schemas/DateModel'
+    CarPnrSummaryWrapper:
+      type: object
+      title: CarPnrSummaryWrapper
+      properties:
+        carPnrSummary:
+          $ref: '#/components/schemas/CarPnrSummary'
+    SeatPref:
+      type: object
+      title: SeatPref
+      description: Preference about seat of rail.
+      properties:
+        hasAccessibility:
+          type: boolean
+          description: Whether or not requires assistance for disability.
+          default: false
+          example: false
+        seatTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeatPrefType'
+        seatLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeatPrefLocation'
+        deckLevels:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeckLevel'
+        seatDirections:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeatPrefDirection'
+    CancellationPolicy2:
+      type: object
+      description: Information about the cancellation policy.
+      properties:
+        description:
+          type: string
+          description: Text describing the cancellation policy.
+          example: Non-refundable
+        fee:
+          $ref: '#/components/schemas/Money'
+        assessmentType:
+          $ref: '#/components/schemas/AssessmentType'
+          description: Assessment Type
+        isCat16:
+          type: boolean
+          description: Is source cat16
+          example: true
+        isConditional:
+          type: boolean
+          description: Is conditional
+          example: true
+    AircraftAmenity:
+      type: object
+      title: AircraftAmenity
+      description: Aircraft Amenity properties
+      properties:
+        displayText:
+          type: string
+          example: 789 (widebody)
+        aircraftType:
+          type: string
+          example: widebody
+        aircraftModel:
+          type: string
+          example: '787'
+    AssessmentType:
+      type: string
+      enum:
+      - NEUTRAL
+      - BENEFIT
+      - RESTRICTION
+      - FEE
+      example: BENEFIT
+    DisabledReason:
+      type: string
+      description: Reason why the trip is disabled if applicable.
+      enum:
+      - MAX_BOOKINGS_EXCEEDED
+      - TRIP_EXPIRED
+    PowerAmenity:
+      type: object
+      title: PowerAmenity
+      description: Power Amenity properties
+      properties:
+        displayText:
+          type: string
+          example: Power USB outlets
+        powerType:
+          type: string
+          example: power/usb
+        cost:
+          type: string
+          example: free
+        usbPort:
+          type: string
+          example: 'yes'
+        powerOutlet:
+          type: string
+          example: 'yes'
+    FlightPassTax:
+      type: object
+      title: FlightPassTax
+      description: A single tax component of the flight pass fare.
+      properties:
+        code:
+          type: string
+          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
+          example: GST_HST
+        amount:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+    CustomFieldOptionsParam:
+      type: string
+      title: CustomFieldOptionsParam
+      enum:
+      - COST_CENTER
+      - LEGAL_ENTITY
+      - OFFICE
+      - DEPARTMENT
+      description: Parameter to form options for the custom field.
+      example: COST_CENTER
+    LoungePolicy:
+      type: object
+      description: Information about the lounge policy.
+      required:
+      - description
+      properties:
+        description:
+          type: string
+          description: Lounge policy description text (may include whether a fee is charged).
+          example: Lounge access for a fee
+    PolicyConstValue:
+      type: object
+      properties:
+        displaySuffix:
+          type: string
+          description: Optional display suffix for the policy const value
+      oneOf:
+      - $ref: '#/components/schemas/Int32Wrapper'
+      - $ref: '#/components/schemas/Int64Wrapper'
+      - $ref: '#/components/schemas/StringWrapper'
+      - $ref: '#/components/schemas/DoubleWrapper'
+      - $ref: '#/components/schemas/BoolWrapper'
+      - $ref: '#/components/schemas/IntListWrapper'
+      - $ref: '#/components/schemas/DoubleListWrapper'
+      - $ref: '#/components/schemas/StringListWrapper'
+      - $ref: '#/components/schemas/MoneyWrapper'
+      - $ref: '#/components/schemas/LengthWrapper'
+      - $ref: '#/components/schemas/PostalAddressWrapper'
+      - $ref: '#/components/schemas/UserOrgIdWrapper'
+      - $ref: '#/components/schemas/LegalEntityIdWrapper'
+      - $ref: '#/components/schemas/OfficeIdWrapper'
+      - $ref: '#/components/schemas/UserOrgIdListWrapper'
+      - $ref: '#/components/schemas/LegalEntityIdListWrapper'
+      - $ref: '#/components/schemas/OfficeIdListWrapper'
+      - $ref: '#/components/schemas/RatingWrapper'
+      - $ref: '#/components/schemas/PercentageWrapper'
+      - $ref: '#/components/schemas/Int32RangeWrapper'
+      - $ref: '#/components/schemas/DoubleRangeWrapper'
+      - $ref: '#/components/schemas/PersonaWrapper'
+      - $ref: '#/components/schemas/PersonaListWrapper'
+      - $ref: '#/components/schemas/TravelClassHierarchyWrapper'
+      - $ref: '#/components/schemas/KeywordWithReasonListWrapper'
+      - $ref: '#/components/schemas/WorkerTypeWrapper'
+      - $ref: '#/components/schemas/WorkerTypeListWrapper'
+      - $ref: '#/components/schemas/AirRestrictedFaresParamsWrapper'
+      x-ignoreBreakingChanges:
+      - PolicyConstValue->AirRestrictedFaresParamsWrapper
+    RedressNumberWrapper:
+      type: object
+      title: RedressNumberWrapper
+      properties:
+        redress:
+          $ref: '#/components/schemas/RedressNumber'
+    FlightAttribute:
+      type: object
+      title: FlightAttribute
+      description: 'Information about flight product attributes such as marketing descriptions and images for superior retailing
+
+        experience.
+
+        '
+      properties:
+        description:
+          type: string
+          description: Marketing description and images associated with the flight attribute.
+          example: A fully flat bed
+        categories:
+          type: array
+          description: List of categories in which this flight attribute falls into
+          items:
+            $ref: '#/components/schemas/FlightAttributeCategory'
+        photos:
+          type: array
+          description: List of images associated with the flight attribute.
+          items:
+            $ref: '#/components/schemas/ImageGroup'
+    SplitAmount:
+      type: object
+      title: SplitAmount
+      description: Payment amount details if slider payment function is non-linear.
+      properties:
+        amount:
+          type: array
+          items:
+            $ref: '#/components/schemas/Money'
+            description: List of split amounts required for slider at checkout.
+    NationalDocWrapper:
+      type: object
+      title: NationalDocWrapper
+      properties:
+        nationalDoc:
+          $ref: '#/components/schemas/NationalDoc'
+    AircraftAmenityWrapper:
+      type: object
+      title: AircraftAmenityWrapper
+      properties:
+        aircraftAmenity:
+          $ref: '#/components/schemas/AircraftAmenity'
+    FlightData:
+      type: object
+      title: FlightData
+      oneOf:
+      - $ref: '#/components/schemas/FlightRefWrapper'
+      - $ref: '#/components/schemas/FlightCommonWrapper'
+    TravelerMatchConditions:
+      type: object
+      title: TravelerMatchConditions
+      description: Matching conditions for traveler.
+      properties:
+        workerTypes:
+          type: array
+          description: Worker types. Users belonging to any of these would match.
+          items:
+            $ref: '#/components/schemas/WorkerType'
+        countries:
+          type: array
+          description: Countries.
+          items:
+            type: string
+        legalEntities:
+          type: array
+          description: Legal entities
+          items:
+            $ref: '#/components/schemas/Reference'
+        departments:
+          type: array
+          description: Departments
+          items:
+            $ref: '#/components/schemas/Reference'
+        costCenters:
+          type: array
+          description: Cost centers
+          items:
+            $ref: '#/components/schemas/Reference'
+        offices:
+          type: array
+          description: Offices
+          items:
+            $ref: '#/components/schemas/Reference'
+    PnrStatus:
+      title: PnrStatus
+      type: string
+      enum:
+      - UNKNOWN
+      - INITIATED
+      - CANCELLED
+      - CONFIRMED
+      - GROUP_BOOKING_ON_REQUEST
+      - WAITLISTED
+      - PENDING
+      - AIRLINE_UPGRADE
+      - WAITLIST_CONFIRMED
+      - BOOKING_DENIED_CONTACT_SUPPORT
+      - NO_SHOW
+      - CONTACT_SUPPORT
+      - STATUS_CHANGED_CONTACT_SUPPORT
+      - SCHEDULE_CHANGE
+      - SEGMENT_REQUEST
+      - SCHEDULE_CHANGE_WAITLISTED_BOOKING
+      - REQUEST_PENDING
+      - WAITLISTED_NOT_CONFIRMED
+      - SCHEDULE_CHANGE_NOT_CONFIRMED
+      - SCHEDULE_CHANGE_PENDING_STATUS
+      - MIS_CONNECTION
+      - REQUESTED
+      - TICKETED
+      - VOIDED
+      - CANCELLED_BY_VENDOR
+      - CANCELLATION_IN_PROGRESS
+      - REINSTATED
+      - BOOKING_ON_HOLD
+      - AIRLINE_CONTROL
+      - MODIFIED
+      - PAYMENT_DECLINED
+      - INOPERATIVE
+      - UNCONFIRMED
+      description: Status of PNR
+      example: CONFIRMED
+    StringListWrapper:
+      type: object
+      title: StringListWrapper
+      properties:
+        sList:
+          type: array
+          items:
+            type: string
+    Tier:
+      type: string
+      title: Tier
+      description: 'Tier of User.
+
+        Note: In default UI, BASIC is displayed as Standard, and SEAT1A is displayed as VIP.
+
+        '
+      enum:
+      - BASIC
+      - SEAT1A
+      x-enum-varnames:
+      - BASIC
+      - SEAT1A
+      example: SEAT1A
+      default: BASIC
+    PersonaListWrapper:
+      type: object
+      title: PersonaListWrapper
+      properties:
+        personaList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Persona'
+    MerchantFeeInfo:
+      title: MerchantFeeInfo
+      description: Describes the merchant fee applicable on the itinerary.
+      required:
+      - amount
+      properties:
+        amount:
+          $ref: '#/components/schemas/FareAmount'
+    TravelerLegInfo:
+      title: TravelerLegInfo
+      type: object
+      description: Per leg information for the associated traveler
+      required:
+      - travelerId
+      properties:
+        travelerId:
+          type: string
+          description: Unique identifier for the traveler in this response
+          example: adult_0
+        travelerLegFare:
+          description: The fare amount for the traveler for a given leg
+          $ref: '#/components/schemas/FareAmount'
+        fareRules:
+          description: Fare rules applicable for the traveler
+          $ref: '#/components/schemas/FareRules'
+    LimoLegSummary:
+      type: object
+      title: LimoLegSummary
+      description: Limo Leg description
+      properties:
+        fromDate:
+          $ref: '#/components/schemas/DateTimeLocal'
+        toDate:
+          $ref: '#/components/schemas/DateTimeLocal'
+        pickupLocation:
+          $ref: '#/components/schemas/CarLocation'
+        dropOffLocation:
+          $ref: '#/components/schemas/CarLocation'
+    RedressNumber:
+      type: object
+      title: RedressNumber
+      description: Redress details
+      required:
+      - number
+      - issueCountry
+      properties:
+        number:
+          type: string
+          example: '12345'
+          x-pii: IDENTIFIER
+        issueCountry:
+          type: string
+          example: US
+    AirLegInfo:
+      type: object
+      description: 'Describes a leg in the itinerary. Each leg may have multiple flight segments within it, which combined together
+
+        take the traveler from the leg''s origin to its destination.
+
+        '
+      required:
+      - id
+      - flights
+      - travelerInfos
+      - totalLegFare
+      - fareCategory
+      properties:
+        id:
+          type: string
+          description: The unique ID for this leg.
+          example: leg_0
+        flights:
+          description: Details of the list of flights present in the leg.
+          type: array
+          items:
+            $ref: '#/components/schemas/FlightDetail'
+        travelerInfos:
+          description: Details of passenger(s) information for this leg.
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelerLegInfo'
+        totalLegFare:
+          description: Total cumulative fare for this leg summed across all passengers
+          $ref: '#/components/schemas/FareAmount'
+        fareCategory:
+          description: Fare category of this leg. It describes the cabin class for this flight.
+          $ref: '#/components/schemas/FareCategory'
+        brandName:
+          type: string
+          description: The brand name advertised by the airline.
+          example: Economy Flex
+        brandCode:
+          type: string
+          description: The brand code assigned by the airline corresponding brandName.
+          example: AADOM-MAIN
+        validatingAirline:
+          type: string
+          description: The airline code for the airline which is validating this booking and orchestrating the payment.
+          example: AA
+        rateType:
+          description: Rate or fare type for this leg (for example "public" or "corporate").
+          $ref: '#/components/schemas/RateType'
+        vendorProgramType:
+          $ref: '#/components/schemas/VendorProgramType'
+    CostCenter:
+      type: object
+      title: CostCenter
+      description: Cost center details.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/CostCenterId'
+        name:
+          type: string
+          example: CostCenter
+        externalId:
+          type: string
+          example: external-id
+    MaskAmenity:
+      type: object
+      title: MaskAmenity
+      description: Properties associated with the mask amenity.
+      properties:
+        displayText:
+          type: string
+          description: The basic text displayed for mask amenity.
+          example: Face covering required
+        maskDescription:
+          type: string
+          description: A full description of the mask amenity.
+          example: All passengers are required to wear a face covering throughout their journey
+        maskAttrDescription:
+          type: string
+          example: 'yes'
+    PolicyAction:
+      type: object
+      description: Action that is required / done for policy.
+      oneOf:
+      - $ref: '#/components/schemas/PolicyFlagActionWrapper'
+      - $ref: '#/components/schemas/PolicyHideActionWrapper'
+      - $ref: '#/components/schemas/PolicyAlertOnSelectionActionWrapper'
+      - $ref: '#/components/schemas/PolicyTakeApprovalActionWrapper'
+      - $ref: '#/components/schemas/PolicyPreventBookingActionWrapper'
+      - $ref: '#/components/schemas/PolicySplitPaymentActionWrapper'
+    CentralCardAccessLevel:
+      title: CentralCardAccessLevel
+      type: string
+      description: Identifies at which level central card is applicable, for example organization or legal entity.
+      enum:
+      - UNKNOWN
+      - ORGANIZATION
+      - LEGAL_ENTITY
+      - TMC
+    WorkerTypeWrapper:
+      type: object
+      title: WorkerTypeWrapper
+      properties:
+        workerType:
+          $ref: '#/components/schemas/WorkerType'
+    TravelRegionType:
+      type: string
+      title: TravelRegionType
+      description: Travel region Type
+      enum:
+      - DOMESTIC
+      - INTERNATIONAL
+      example: DOMESTIC
+    LegSummary:
+      type: object
+      title: LegSummary
+      properties:
+        legStatus:
+          $ref: '#/components/schemas/UserFacingStatus'
+        flights:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlightSummary'
+    PolicyTakeApprovalAction:
+      type: object
+      title: PolicyTakeApprovalAction
+      properties:
+        numHierarchyLevels:
+          type: integer
+          format: int32
+          description: "How many levels of hierarchy should approval be taken? If it's just immediate manager, \nthis value would be 1. If it's manager and their manager, this would ge 2 and so on.\n"
+        positionTitles:
+          type: array
+          description: "What position in the cost center or department. For eg, any business class upgrade \nmight require VP approval.\n"
+          items:
+            type: string
+        userOrgIds:
+          type: array
+          description: 'The specific users from whom to take approval. For eg, say for a company, all approvals
+
+            go through Adam.
+
+            '
+          items:
+            $ref: '#/components/schemas/UserOrgId'
+        allRequired:
+          type: boolean
+          description: "This tells whether all the people above needs to approve or if any of these approve, \nit is sufficient.\n"
+        hardApprovalRequired:
+          type: boolean
+          description: Whether to take soft approval (false) or hard approval (true).
+        approvalType:
+          $ref: '#/components/schemas/ApprovalType'
+          description: Type of approval for the policy.
+    BlockedAdjacentSeatsAmenityWrapper:
+      type: object
+      title: BlockedAdjacentSeatsAmenityWrapper
+      properties:
+        blockedAdjacentSeatsAmenity:
+          $ref: '#/components/schemas/BlockedAdjacentSeatsAmenity'
+    FlightSummary:
+      title: FlightSummary
+      description: Summary of flight
+      type: object
+      properties:
+        origin:
+          type: string
+          description: 3 letter IATA airport code for origin
+          pattern: ^[A-Z]{3}$
+          example: SFO
+        destination:
+          type: string
+          description: 3 letter IATA airport code for destination
+          pattern: ^[A-Z]{3}$
+          example: LHR
+        departureDateTime:
+          description: Departure date time of flight
+          $ref: '#/components/schemas/DateTimeLocal'
+        arrivalDateTime:
+          description: Arrival date time of flight
+          $ref: '#/components/schemas/DateTimeLocal'
+        departureGate:
+          description: Departure gate and terminal
+          $ref: '#/components/schemas/Gate'
+        arrivalGate:
+          description: Arrival gate and terminal
+          $ref: '#/components/schemas/Gate'
+        marketing:
+          description: Marketing flight number
+          $ref: '#/components/schemas/FlightNumber'
+        operating:
+          description: Operating flight number
+          $ref: '#/components/schemas/FlightNumber'
+        operatingAirlineName:
+          type: string
+          description: 'Free text operating airline name that has to be displayed to the user if present
+
+            '
+          example: SKYWEST DBA UNITED EXPRESS
+        cabin:
+          $ref: '#/components/schemas/Cabin'
+          description: Flight cabin
+    RestrictedKeywordsWithReason:
+      type: object
+      properties:
+        keyword:
+          type: string
+          description: Restricted keyword
+          example: Test Keyword
+        reason:
+          type: string
+          description: Reason for restriction
+          example: Test Reason
+    DepartmentId:
+      type: object
+      title: DepartmentId
+      description: Department id.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          example: 631ccbcf-9414-5fe0-c234-b324dfbe7422
+    LocationContactInfo:
+      type: object
+      title: LocationContactInfo
+      description: Contact info of the location
+      properties:
+        phone:
+          type: array
+          items:
+            type: string
+            description: Phone number of the location
+            example: 123 456-7890
+        fax:
+          type: array
+          items:
+            type: string
+            description: Fax contact for the location
+            example: 123 456-7890
+        email:
+          type: array
+          items:
+            type: string
+            description: Email address of the location
+            example: user@business.com
+    Persona:
+      type: string
+      title: Persona
+      description: Persona of the user
+      enum:
+      - UNKNOWN_PERSONA
+      - EMPLOYEE
+      - GUEST
+      - PERSONAL
+      - RELATIVE
+      - ADHOC
+      example: EMPLOYEE
+    PaymentInfo:
+      type: object
+      title: PaymentInfo
+      description: Payment information.
+      required:
+      - card
+      properties:
+        applicableTo:
+          type: array
+          items:
+            type: string
+            enum:
+            - UNKNOWN_APPLICABLE_TO
+            - AIR
+            - HOTEL
+            - RAIL
+            - CAR
+            - SERVICE_FEE
+            example: HOTEL
+        card:
+          $ref: '#/components/schemas/Card'
+        accessType:
+          $ref: '#/components/schemas/CreditCardAccessType'
+        access:
+          $ref: '#/components/schemas/CreditCardAccess'
+    SeatPrefLocation:
+      type: string
+      description: The location of seat of the rail.
+      enum:
+      - AISLE
+      - WINDOW
+      - SOLO
+      example: AISLE
+    SplitAmountWrapper:
+      type: object
+      title: SplitAmountWrapper
+      description: Split amount wrapper.
+      properties:
+        splitAmount:
+          $ref: '#/components/schemas/SplitAmount'
+    CabinViewFareCategory:
+      type: string
+      enum:
+      - UNKNOWN_CABIN_CATEGORY
+      - BASIC
+      - ECONOMY
+      - PREMIUM_ECONOMY
+      - ECONOMY_PLUS
+      - BUSINESS
+      - FIRST
+      default: UNKNOWN_CABIN_CATEGORY
+    BagFees:
+      type: object
+      description: This contains price info for the baggage
+      properties:
+        fee:
+          $ref: '#/components/schemas/Money'
+        applicability:
+          $ref: '#/components/schemas/BagPolicyApplicability'
+    StringWrapper:
+      type: object
+      title: StringWrapper
+      properties:
+        s:
+          type: string
+    IncludeLocation:
+      type: string
+      title: IncludeLocation
+      description: Various traveler notifications (e.g. emails) where the responses to this field should be included.
+      enum:
+      - BOOKING_CONFIRMATION_EMAILS
+      - APPROVAL_EMAILS
+      - COMPANY_REPORTS
+      - CONSOLIDATED_ITINERARY_EMAILS
+      example: APPROVAL_EMAILS
+    TicketType:
+      type: string
+      description: The ticket issuance type for a given itinerary, whether single or multiple
+      enum:
+      - SINGLE
+      - MULTI
+      default: SINGLE
+    TravelPref:
+      type: object
+      title: TravelPref
+      description: Travel preferences.
+      properties:
+        airPref:
+          $ref: '#/components/schemas/AirPref'
+        preferredCurrency:
+          type: string
+          example: USD
+        railCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/RailCard'
+        railPref:
+          $ref: '#/components/schemas/RailPref'
+        carPref:
+          $ref: '#/components/schemas/CarPref'
+        hotelPref:
+          $ref: '#/components/schemas/HotelPref'
+    PolicyFlagAction:
+      type: object
+      title: PolicyFlagAction
+      properties:
+        message:
+          type: string
+    HotelPnrSummary:
+      type: object
+      title: HotelPnrSummary
+      description: Summary of Hotel PNR
+      properties:
+        name:
+          type: string
+          description: Name of hotel
+          example: Marriot
+        city:
+          type: string
+          description: Name of city
+          example: Bangalore
+        totalAmount:
+          $ref: '#/components/schemas/Money'
+        fromDate:
+          $ref: '#/components/schemas/DateTimeLocal'
+        toDate:
+          $ref: '#/components/schemas/DateTimeLocal'
+        pnrStatus:
+          $ref: '#/components/schemas/PnrStatus'
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+    AirPnrSummaryWrapper:
+      type: object
+      title: AirPnrSummaryWrapper
+      properties:
+        airPnrSummary:
+          $ref: '#/components/schemas/AirPnrSummary'
+    CardExpiry:
+      title: CardExpiry
+      type: object
+      description: Contains the expiry of a Card.
+      oneOf:
+      - $ref: '#/components/schemas/TokenizedExpiryWrapper'
+      - $ref: '#/components/schemas/ExpiryWrapper'
+    LayoutAmenity:
+      type: object
+      title: LayoutAmenity
+      description: Layout Amenity properties
+      properties:
+        displayText:
+          type: string
+          example: 1-2-1 seat layout
+        directAisleAccess:
+          type: string
+          example: 'yes'
+    FreshFoodAmenityWrapper:
+      type: object
+      title: FreshFoodAmenityWrapper
+      properties:
+        freshFoodAmenity:
+          $ref: '#/components/schemas/FreshFoodAmenity'
+    OffsetBasedPaginationResponseParams:
+      type: object
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
+      required:
+      - totalNumResults
+      properties:
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results.
+    CompanyConfigSource:
+      type: object
+      title: CompanyConfigSource
+      description: For this option source, options would be auto generated based on specified parameter.
+      required:
+      - optionsParam
+      properties:
+        optionsParam:
+          $ref: '#/components/schemas/CustomFieldOptionsParam'
+    SeatSelectionRule:
+      type: object
+      description: Seat selection rule
+      required:
+      - description
+      properties:
+        description:
+          type: string
+          description: Seat selection policy text
+          example: Seat selection for free
+    CustomFieldLocation:
+      title: CustomFieldLocation
+      description: Display the custom fields in all these locations.
+      type: string
+      enum:
+      - POLICY_APPROVAL_EMAIL
+      - PNR_EMAIL
+      - TRIP_EMAIL
+      example: POLICY_APPROVAL_EMAIL
+    CustomFieldV3Response:
+      type: object
+      title: CustomFieldV3Response
+      description: Custom field responses.
+      required:
+      - fieldId
+      - armId
+      - selectedOptions
+      properties:
+        fieldId:
+          type: string
+          format: uuid
+          description: Custom field id
+        fieldName:
+          type: string
+          description: Name of the custom field
+        armId:
+          type: string
+          format: uuid
+          description: Arm id which is applicable
+        includeLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IncludeLocation'
+        selectedOptions:
+          type: array
+          description: The list of options that are selected by user or auto populated.
+          items:
+            $ref: '#/components/schemas/CustomFieldSelectedOption'
+    SizeInfo:
+      type: object
+      description: Information about the baggage size.
+      properties:
+        length:
+          description: The weight limit of a baggage option.
+          type: number
+          example: 32
+        unit:
+          description: The unit of measurement for the bag size.
+          type: string
+          enum:
+          - CENTIMETER
+          - METER
+    DateTimeOffset:
+      title: DateTimeOffset
+      description: ISO8601 UTC Date Time
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?(Z|([+-](0[0-9]|1[0-4]):([0-5][0-9])))$
+          example: 2017-07-21T17:32Z
+    DateModel:
+      title: Date
+      description: Date in ISO 8601 standard.
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$
+          example: '2017-07-21'
+    TmcInfo:
+      type: object
+      title: TmcInfo
+      description: TMC config information.
+      required:
+      - id
+      - primaryServiceProviderTmc
+      properties:
+        id:
+          $ref: '#/components/schemas/CompanyId'
+          description: TMC id.
+        primaryServiceProviderTmc:
+          $ref: '#/components/schemas/PrimaryServiceProviderTmc'
+          description: Primary service provider TMC for the TMC.
+        secondaryServiceProviderTmcs:
+          type: array
+          description: Secondary service provider TMCs for the TMC.
+          items:
+            $ref: '#/components/schemas/SecondaryServiceProviderTmc'
+        partnerTmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Useful to identify the clients onboarded by a PARTNER_TMC
+    RailPnrSummaryWrapper:
+      type: object
+      title: RailPnrSummaryWrapper
+      properties:
+        railPnrSummary:
+          $ref: '#/components/schemas/RailPnrSummary'
+    LayoutAmenityWrapper:
+      type: object
+      title: LayoutAmenityWrapper
+      properties:
+        layoutAmenity:
+          $ref: '#/components/schemas/LayoutAmenity'
+    CovidTestingAmenityWrapper:
+      type: object
+      title: CovidTestingAmenityWrapper
+      properties:
+        covidTestingAmenity:
+          $ref: '#/components/schemas/CovidTestingAmenity'
+    OwnershipLabel:
+      title: OwnershipLabel
+      type: string
+      description: Ownership label of the card whether it is personal, corporate or central.
+      enum:
+      - CORPORATE
+      - PERSONAL
+      - CENTRAL
+    HotelChain:
+      type: object
+      title: HotelChain
+      description: The chain of hotel.
+      properties:
+        chainCode:
+          type: string
+          description: The code of hotel chain.
+          example: EM
+        chainName:
+          type: string
+          description: The name of hotel chain.
+          example: Mariott
+    FarePref:
+      type: object
+      title: FarePref
+      description: Fare preferences.
+      required:
+      - fareTypes
+      properties:
+        fareTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - UNKNOWN_TYPE
+            - CHANGEABLE
+            - REFUNDABLE
+            example: CHANGEABLE
+    UnusableReason:
+      type: string
+      description: Reason why a payment source is not usable.
+      enum:
+      - SUPPLIER_RESTRICTION
+      - POLICY_RESTRICTION
+    DateTimeLocal:
+      title: DateTimeLocal
+      description: Local date and time in ISO 8601 format.
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?$
+          example: 2017-07-21T17:32
+    Card:
+      type: object
+      title: Card
+      description: User card info
+      required:
+      - number
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this card
+          format: uuid
+          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - CREDIT
+          - DEBIT
+          description: Type of card
+          example: CREDIT
+        company:
+          $ref: '#/components/schemas/CardCompany'
+        name:
+          description: Name on card
+          type: string
+          example: Harrison Schwartz
+          x-pii: SENSITIVE
+        address:
+          description: Billing address
+          $ref: '#/components/schemas/PostalAddress'
+          x-pii: SENSITIVE
+        number:
+          type: string
+          description: Card number
+          example: '4111111111111111'
+        expiryMonth:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+          description: Expiry month
+          example: 1
+          deprecated: true
+          x-sunset: '2026-07-01'
+        expiryYear:
+          type: integer
+          format: int32
+          description: Expiry year
+          minimum: 2000
+          example: 2010
+          deprecated: true
+          x-sunset: '2026-07-01'
+        cvv:
+          type: string
+          description: Card cvv number
+          example: '012'
+        label:
+          type: string
+          description: Card Label
+          example: Label amex
+        currency:
+          type: string
+          description: Native currency of the card.
+          example: USD
+        externalId:
+          type: string
+          description: Spotnana partner card id.
+          example: bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40
+        vaultId:
+          type: string
+          description: ID of the vault used for creating the card.
+          format: uuid
+          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
+        expiry:
+          description: Card Expiry.
+          $ref: '#/components/schemas/CardExpiry'
+        ownershipLabel:
+          $ref: '#/components/schemas/OwnershipLabel'
+          example: PERSONAL
+    TripDisabledInfo:
+      title: TripDisabledInfo
+      description: Information regarding whether the trip is disabled and if so, the reason why.
+      type: object
+      properties:
+        disabledReason:
+          $ref: '#/components/schemas/DisabledReason'
+        isDisabled:
+          type: boolean
+          description: Indicates whether the trip is disabled or not.
+          example: false
+    EntertainmentAmenity:
+      type: object
+      title: EntertainmentAmenity
+      description: The properties of an entertainment amenity.
+      properties:
+        displayText:
+          type: string
+          example: Seatback on-demand video
+        entertainmentType:
+          type: string
+          example: on-demand
+        cost:
+          type: string
+          example: free
+    PaymentSplitCriterion:
+      type: object
+      description: The criterion for the payment split.
+      properties:
+        accessType:
+          description: Access Type of the Payment Sources applicable for a portion of payment.
+          $ref: '#/components/schemas/AccessType'
+    PrimaryTravelerIdFilter:
+      type: object
+      title: PrimaryTravelerIdFilter
+      description: Primary/Lead Traveler IDs for the approval data list request.
+      required:
+      - filterType
+      - primaryTravelerIds
+      properties:
+        filterType:
+          type: string
+          example: PRIMARY_TRAVELER_ID_FILTER
+        primaryTravelerIds:
+          type: array
+          description: Primary traveler's user ID list
+          items:
+            $ref: '#/components/schemas/UserId'
+    FlightPassPaymentAmounts:
+      type: object
+      title: FlightPassPaymentAmounts
+      description: Fare breakdown for the flight pass booking.
+      properties:
+        totalAmount:
+          description: Total value (base + taxes).
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          description: Base fare excluding taxes.
+          $ref: '#/components/schemas/Money'
+        totalTaxes:
+          description: Sum of all taxes, fees, and charges.
+          $ref: '#/components/schemas/Money'
+        taxBreakdown:
+          type: array
+          description: Breakdown of taxes by code (e.g. GST_HST, QST, OTHER).
+          items:
+            $ref: '#/components/schemas/FlightPassTax'
+    MinMaxAmountWrapper:
+      type: object
+      title: MinMaxAmountWrapper
+      description: Min max amount wrapper.
+      properties:
+        minMaxAmount:
+          $ref: '#/components/schemas/MinMaxAmount'
+    NameSuffix:
+      title: NameSuffix
+      description: Suffix for name
+      type: string
+      enum:
+      - NAME_SUFFIX_UNKNOWN
+      - SR
+      - JR
+      - MD
+      - PHD
+      - II
+      - III
+      - IV
+      - DO
+      - ATTY
+      - V
+      - VI
+      - ESQ
+      - DC
+      - DDS
+      - VM
+      - JD
+      - SECOND
+      - THIRD
+      example: SR
+    PreCheckoutQuestionType:
+      type: string
+      enum:
+      - UNKNOWN_CHECKOUT_QUESTION_TYPE
+      - USER_DEFINED_QUESTION
+      - OOP_REASON_CODE
+      description: 'Types of pre-checkout questions.
+
+        USER_DEFINED_QUESTION the default question type for all pre checkout questions which have been created from UI.
+
+        OOP_REASON_CODE is kept separate so that existing OOP flow doesn''t break.
+
+        '
+      example: OOP_REASON_CODE
+    Expression:
+      type: object
+      title: Expression
+      description: 'Expression consisting of variables and constants which needs to be sent along with custom
+
+        field response.
+
+        '
+      required:
+      - type
+      - formatExpression
+      properties:
+        type:
+          type: string
+          example: EXPRESSION
+          default: EXPRESSION
+        formatExpression:
+          type: string
+          description: "The expression must be of format : `<any_text> ${expression} <any_text>`.The expression \ncan consist of a combination of variables and mathematical operations.\n Variable names must be same as VariableName Enum.\n  To define mathematical operations, the operation name should follow the format\n`math.<math_op>(arg1, arg2)`. Both `arg1` and `arg2` can be variables or constants. \nThe supported math operations (math_op) include: `add, mul, div, sub, min,\nand max`. All keywords, such as `<math_op>, math, and var` must be written in lowercase.\n"
+          example: 'Result:  ${math.mul(LLF,5)}  ${ADD_COLLECT_AMOUNT}'
+        variables:
+          type: array
+          description: Reference names of the variables present in the expression.
+          deprecated: true
+          x-sunset: '2026-07-01'
+          items:
+            $ref: '#/components/schemas/VariableName'
+    PreDefinedAnswers:
+      type: string
+      enum:
+      - UNKNOWN_CHECKOUT_ANSWER_TYPE
+      - OTHER
+      - TIMING_OR_SCHEDULING
+      - AIRLINE_PREFERENCE
+      - AIRPORT_PREFERENCE
+      - MILEAGE_OR_PROGRAM_UPGRADE
+      - NO_OTHER_OPTION_AVAILABLE
+      - FASTER_OPTION
+      - NO_ANSWER
+      - NOT_AVAILABLE
+      description: Predefined answers to pre search/pre checkout questions
+      example: TIMING_OR_SCHEDULING
+    GateInfo:
+      type: object
+      title: GateInfo
+      description: Information about the flight's departure / arrival gates and terminals.
+      properties:
+        gate:
+          type: string
+          description: Gate number
+          example: 1A
+        terminal:
+          type: string
+          description: Airport terminal
+          example: '1'
+    Grade:
+      type: object
+      title: Grade
+      description: Grade details.
+      required:
+      - id
+      - name
+      properties:
+        employeeCount:
+          type: integer
+          format: int32
+          description: Count of employees in the grade
+          example: 75
+        id:
+          $ref: '#/components/schemas/GradeId'
+        name:
+          type: string
+          example: Grade
+    SecondaryServiceProviderTmc:
+      type: object
+      title: SecondaryServiceProviderTmc
+      description: Secondary service provider TMC info
+      required:
+      - tmcId
+      - supplier
+      - travelType
+      properties:
+        tmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Id of the service provider TMC.
+        supplier:
+          $ref: '#/components/schemas/SupplierType'
+          description: Supplier for which this service provider should be used.
+        travelType:
+          $ref: '#/components/schemas/TravelType'
+          description: Travel type for which this service provider should be used.
+    ApprovalStatus:
+      type: string
+      description: APPROVAL Status
+      enum:
+      - APPROVAL_PENDING
+      - APPROVED
+      - DENIED
+      - TIMED_OUT
+      - SOFT_APPROVAL_TIMEOUT
+      example: APPROVED
+    ApprovalStatusV2:
+      type: string
+      description: Approval Status
+      enum:
+      - APPROVAL_PENDING
+      - APPROVED
+      - DENIED
+      - AUTO_APPROVED
+      - AUTO_DENIED
+      example: APPROVED
+    WorkerTypeListWrapper:
+      type: object
+      title: WorkerTypeListWrapper
+      properties:
+        workerTypeList:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkerType'
+    IdentityDocument:
+      type: object
+      title: IdentityDocument
+      description: "Identity document details. Currently supported documents are passport, immigration document, \nknown traveler number, redress number and national document.\n"
+      oneOf:
+      - $ref: '#/components/schemas/PassportWrapper'
+      - $ref: '#/components/schemas/ImmigrationDocumentWrapper'
+      - $ref: '#/components/schemas/RedressNumberWrapper'
+      - $ref: '#/components/schemas/KnownTravelerNumberWrapper'
+      - $ref: '#/components/schemas/NationalDocWrapper'
+    UserOrgIdWrapper:
+      type: object
+      title: UserOrgIdWrapper
+      properties:
+        userOrgId:
+          $ref: '#/components/schemas/UserOrgId'
+    CheckInPolicy:
+      type: object
+      description: Information about the check-in policy.
+      required:
+      - description
+      properties:
+        description:
+          type: string
+          description: Description text for the check-in policy.
+          example: Standard check-in priority
+    VaccineAmenity:
+      type: object
+      title: VaccineAmenity
+      description: Vaccine Amenity properties
+      properties:
+        displayText:
+          type: string
+          example: Vaccination facility available
+        vaccineDescription:
+          type: string
+          description: chek
+        vaccineAttrDescription:
+          type: string
+    PolicyFlagActionWrapper:
+      type: object
+      title: PolicyFlagActionWrapper
+      properties:
+        flag:
+          $ref: '#/components/schemas/PolicyFlagAction'
+    SeatLocationPref:
+      type: object
+      title: SeatLocationPref
+      description: Seat location preference.
+      properties:
+        cabins:
+          type: array
+          items:
+            type: string
+            enum:
+            - UNKNOWN_CABIN
+            - ECONOMY
+            - PREMIUM_ECONOMY
+            - BUSINESS
+            - FIRST
+            example: FIRST
+        isBulkHeadPref:
+          type: boolean
+          example: false
+        maxFlightDurationInHours:
+          type: integer
+          format: int32
+          example: 3
+        position:
+          type: string
+          enum:
+          - UNKNOWN_POSITION
+          - AISLE
+          - WINDOW
+          - AISLE_OR_WINDOW
+          example: WINDOW
+    MiscPnrSummary:
+      type: object
+      title: MiscPnrSummary
+      required:
+      - description
+      - endDateTime
+      - rate
+      - startDateTime
+      description: Summary of Misc PNR
+      properties:
+        description:
+          type: string
+          description: Description of the segment
+          example: MiscellaneousPnr
+        startDateTime:
+          $ref: '#/components/schemas/DateTimeLocal'
+        endDateTime:
+          $ref: '#/components/schemas/DateTimeLocal'
+        totalAmount:
+          $ref: '#/components/schemas/Money'
+        status:
+          $ref: '#/components/schemas/PnrStatus'
+        sortingPriority:
+          type: integer
+          format: int32
+          description: Sorting priority of the segment
+          example: 1
+    ApprovalTypeFilter:
+      type: object
+      title: ApprovalTypeFilter
+      description: Approval type filter for the approval data list request.
+      required:
+      - filterType
+      - approvalTypes
+      properties:
+        filterType:
+          type: string
+          example: APPROVAL_TYPE_FILTER
+        approvalTypes:
+          type: array
+          description: Approval Types
+          items:
+            $ref: '#/components/schemas/ApprovalType'
+    LegalEntityIdWrapper:
+      type: object
+      title: LegalEntityIdWrapper
+      properties:
+        legalEntityId:
+          $ref: '#/components/schemas/LegalEntityId'
+    CustomFieldType:
+      type: string
+      description: The type of custom field.
+      enum:
+      - QUESTION
+      - MEETING
+      - BUDGET
+      - BREX_TOKEN
+      default: QUESTION
+    WeeklyOperatingSchedule:
+      type: object
+      title: WeeklyOperatingSchedule
+      description: Weekly operating schedule of vendor with day of week
+      required:
+      - interval
+      properties:
+        interval:
+          type: array
+          description: Operating schedule intervals
+          items:
+            $ref: '#/components/schemas/DateTimeRange'
+        dayOfWeek:
+          type: string
+          description: Day of the week for which operating schedule is valid
+          example: SUN
+    SeatAmenity:
+      type: object
+      title: SeatAmenity
+      description: Seat Amenity properties
+      properties:
+        displayText:
+          type: string
+          example: Full flat all aisle access
+        seatType:
+          type: string
+          example: full flat pod
+        width:
+          type: string
+        legroom:
+          type: string
+        pitch:
+          type: number
+          format: double
+          example: 78
+    LimoPnrSummaryWrapper:
+      type: object
+      title: LimoPnrSummaryWrapper
+      properties:
+        limoPnrSummary:
+          $ref: '#/components/schemas/LimoPnrSummary'
+    FlightAttributeCategory:
+      type: string
+      enum:
+      - AIRCRAFT
+      - SEAT
+      - MEALS
+      - BEVERAGES
+      - ENTERTAINMENT
+      - POWER
+      - WIFI
+      - SERVICE_INFLIGHT
+      - UPGRADE
+      - TRANSPORT_TO_AIRPORT
+      - CHECK_IN
+      - DEPARTURE_TERMINAL
+      - DEPARTMENT_LOUNGE
+      - GATE_BOARDING
+      - SERVICE_DEPARTURE
+      - STOPOVER
+      - CONNECTING_EASE
+      - CONNECTING_TERMINAL
+      - CONNECTING_LOUNGE
+      - SERVICE_CONNECTING
+      - BAGGAGE_COLLECTION
+      - ARRIVAL_TERMINAL
+      - ARRIVAL_LOUNGE
+      - ARRIVAL_TRANSPORT
+      - SERVICE_ARRIVAL
+      - SCHEDULE_ROUTE
+      - LOYALITY_PROGRAM
+      - BRAND
+      - PROMOTION
+      example: STOPOVER
+    MinMaxAmount:
+      type: object
+      title: MinMaxAmount
+      description: Payment amount details if slider payment function is linear.
+      properties:
+        minLimit:
+          $ref: '#/components/schemas/Money'
+          description: The minimum amount that must be charged using this fop
+        maxLimit:
+          $ref: '#/components/schemas/Money'
+          description: The maximum amount that could be charged using this fop
+    PowerAmenityWrapper:
+      type: object
+      title: PowerAmenityWrapper
+      properties:
+        powerAmenity:
+          $ref: '#/components/schemas/PowerAmenity'
+    TemperatureAmenity:
+      type: object
+      title: TemperatureAmenity
+      description: Temperature Amenity properties
+      properties:
+        displayText:
+          type: string
+          example: No pre-flight temperature check
+        temperatureDescription:
+          type: string
+          example: A temperature check is not required before boarding
+        temperatureAttrDescription:
+          type: string
+          example: 'no'
+    ApprovalFilterV2:
+      title: ApprovalFilterV2
+      type: object
+      description: Filter parameters for the approval data list request.
+      discriminator:
+        propertyName: filterType
+        mapping:
+          APPROVAL_STATUS_FILTER: '#/components/schemas/ApprovalStatusFilterV2'
+          APPROVER_USER_ID_FILTER: '#/components/schemas/ApproverUserIdFilter'
+          APPROVAL_TYPE_FILTER: '#/components/schemas/ApprovalTypeFilter'
+          APPROVAL_DEADLINE_DATE_RANGE_FILTER: '#/components/schemas/ApprovalDeadlineDateRangeFilter'
+          PRIMARY_TRAVELER_ID_FILTER: '#/components/schemas/PrimaryTravelerIdFilter'
+          PNR_TYPE_FILTER: '#/components/schemas/PnrTypeFilterV2'
+          OUT_OF_POLICY_FILTER: '#/components/schemas/OutOfPolicyFilter'
+          TRIP_ID_FILTER: '#/components/schemas/ApprovalTripIdFilter'
+      oneOf:
+      - $ref: '#/components/schemas/ApprovalStatusFilterV2'
+      - $ref: '#/components/schemas/ApproverUserIdFilter'
+      - $ref: '#/components/schemas/ApprovalTypeFilter'
+      - $ref: '#/components/schemas/ApprovalDeadlineDateRangeFilter'
+      - $ref: '#/components/schemas/PrimaryTravelerIdFilter'
+      - $ref: '#/components/schemas/PnrTypeFilterV2'
+      - $ref: '#/components/schemas/OutOfPolicyFilter'
+      - $ref: '#/components/schemas/ApprovalTripIdFilter'
+    CoachPref:
+      type: string
+      description: The preference of coach.
+      enum:
+      - SMOKING
+      - NON_SMOKING
+      - PETS_ALLOWED
+      - RESTAURANT
+      - QUIET
+      example: NON_SMOKING
+    PrimaryServiceProviderTmc:
+      type: object
+      title: PrimaryServiceProviderTmc
+      description: Primary service provider TMC info
+      required:
+      - tmcId
+      properties:
+        tmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Id of the service provider TMC.
+    EntertainmentAmenityWrapper:
+      type: object
+      title: EntertainmentAmenityWrapper
+      properties:
+        entertainmentAmenity:
+          $ref: '#/components/schemas/EntertainmentAmenity'
+    Money:
+      type: object
+      title: Money
+      description: 'Money object containing details such as the amount, the currency code, and the converted amount.
+
+        '
+      required:
+      - amount
+      - currencyCode
+      properties:
+        amount:
+          type: number
+          format: double
+          description: The numeric value for the amount of money.
+          example: 510
+        currencyCode:
+          type: string
+          description: The 3-letter currency code for the money amount (defined using ISO 4217 standard).
+          example: GBP
+        convertedAmount:
+          type: number
+          format: double
+          description: 'The converted currency and amount that has been converted (if a currency conversion has been requested).
+
+            For example, if the call requests that money be sent in a specified currency (because the frontend requested
+
+            the backend to send money in the user''s preferred currency).
+
+            '
+          example: 715.42
+        convertedCurrency:
+          type: string
+          description: The 3-letter currency code for the converted currency (defined using ISO 4217 standard).
+          example: USD
+        otherCoinage:
+          type: array
+          title: OtherCoinage
+          description: List of the dollar amount in other coinage systems like reward points, cryptocurrency etc.
+          items:
+            type: object
+            properties:
+              coinageCode:
+                $ref: '#/components/schemas/PaymentMethod'
+                description: Payment method
+              amount:
+                type: number
+                format: double
+                example: 1000
+              conversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              preferredCurrencyConversionRate:
+                type: number
+                format: double
+                description: 1 coin in this system equals to how many currency value
+                example: 0.01
+              otherCoinageMetadata:
+                description: Metadata to store additional information related to the payment method
+                discriminator:
+                  propertyName: metadataType
+                  mapping:
+                    FlightPassPaymentMetadata: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+                oneOf:
+                - $ref: '#/components/schemas/FlightPassPaymentMetadataWrapper'
+    RailPref:
+      type: object
+      title: RailPref
+      description: Travel preferences related to rail station.
+      properties:
+        preferredRailStations:
+          type: array
+          description: A list of user preferred rail stations.
+          items:
+            $ref: '#/components/schemas/PreferredRailStation'
+        seatPreference:
+          $ref: '#/components/schemas/SeatPref'
+        travelClasses:
+          type: array
+          description: A list of class of service for rail.
+          items:
+            $ref: '#/components/schemas/RailTravelClass'
+        coachPreferences:
+          type: array
+          description: A list of coach preference for rail.
+          items:
+            $ref: '#/components/schemas/CoachPref'
+        conditionalRates:
+          type: array
+          description: A list of conditional rates for rail.
+          items:
+            $ref: '#/components/schemas/ConditionalRate'
+    UnusablePaymentSource:
+      type: object
+      title: UnusablePaymentSource
+      description: The payment sources which are not usable for the payment rule
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier identifying this payment source
+          example: f49d00fe-1eda-4304-ba79-a980f565281d
+        reason:
+          $ref: '#/components/schemas/UnusableReason'
+    LegalEntityIdListWrapper:
+      type: object
+      title: LegalEntityIdListWrapper
+      properties:
+        legalEntityIdList:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegalEntityId'
+    TokenizedExpiryWrapper:
+      type: object
+      title: TokenizedExpiryWrapper
+      properties:
+        tokenizedExpiry:
+          $ref: '#/components/schemas/TokenizedExpiry'
+    ImmigrationDocument:
+      type: object
+      title: ImmigrationDocument
+      description: Immigration document details.
+      required:
+      - docId
+      - expiryDate
+      - issueCountry
+      properties:
+        authorizedStayDuration:
+          description: Duration of the stay authorized by the immigration document.
+          $ref: '#/components/schemas/Duration'
+        docId:
+          type: string
+          description: The ID of the immigration document.
+          example: ImmigrationDocumentID
+          x-pii: IDENTIFIER
+        expiryDate:
+          description: The date on which the immigration document expires.
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        issueCountry:
+          type: string
+          description: The country that issued the immigration document.
+          example: IN
+        issuedDate:
+          description: The date on which the immigration document was issued.
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        nationalityCountry:
+          type: string
+          example: IN
+          x-pii: SENSITIVE
+        reentryRequirementDuration:
+          $ref: '#/components/schemas/Duration'
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - VISA
+          example: VISA
+    EmergencyContactInfo:
+      type: object
+      title: EmergencyContactInfo
+      description: Emergency contact information.
+      required:
+      - email
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+          x-pii: SENSITIVE
+        designation:
+          type: string
+          example: MANAGER
+        email:
+          type: string
+          format: email
+          example: emergency-contact@email.com
+          x-pii: IDENTIFIER
+        name:
+          $ref: '#/components/schemas/Name'
+        phoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+          x-pii: IDENTIFIER
+        userOrgId:
+          $ref: '#/components/schemas/UserOrgId'
+    OrganizationId:
+      type: object
+      title: OrganizationId
+      description: Organization id for traveler.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+    RailTravelClass:
+      description: Travel class
+      type: string
+      enum:
+      - FIRST
+      - STANDARD
+      - BUSINESS
+      - SLEEPER
+      - STANDARD_PREMIUM
+      - BUSINESS_PREMIUM
+      - COACH
+      - ROOM
+      - EXECUTIVE
+      example: FIRST
+    OfficeIdListWrapper:
+      type: object
+      title: OfficeIdListWrapper
+      properties:
+        officeIdList:
+          type: array
+          description: A list of office IDs.
+          items:
+            $ref: '#/components/schemas/OfficeId'
+    SeatPrefDirection:
+      type: string
+      description: The direction of seat of the rail.
+      enum:
+      - FORWARD
+      - BACKWARD
+      example: FORWARD
+    SplitPayment:
+      type: object
+      title: SplitPayment
+      description: Split payment details for claiming reimbursements.
+      properties:
+        inPolicyAmount:
+          $ref: '#/components/schemas/Money'
+          description: Amount approved by Company to be reimbursed.
+        isAmountReimbursable:
+          type: boolean
+          description: If the in policy amount is reimbursable or not.
+        personalFopChargeableAmount:
+          $ref: '#/components/schemas/Money'
+          description: Amount that is to be paid by traveler itself.
+    CardCompany:
+      type: string
+      enum:
+      - NONE
+      - VISA
+      - MASTERCARD
+      - AMEX
+      - DISCOVER
+      - AIR_TRAVEL_UATP
+      - CARTE_BLANCHE
+      - DINERS_CLUB
+      - JCB
+      - BREX
+      - UNION_PAY
+      - EURO_CARD
+      - ACCESS_CARD
+      - ELO_CARD
+      description: The issuing company of card
+      example: VISA
+    QuestionFormat:
+      type: string
+      enum:
+      - INPUT_BOX
+      - RADIO_BUTTON
+      - CHECKBOX
+      - CHECKBOX_WITH_PERCENTAGE
+      description: 'Question types. INPUT_BOX will make user enter a free flowing text.
+
+        RADIO_BUTTON will have multiple options, user can select only one.
+
+        CHECKBOX questions contain the possible set of options, from which the user can choose multiple options.
+
+        CHECKBOX_WITH_PERCENTAGE is similar to checkbox, with the difference being that each option having an additional input field whose values must add up to 100.
+
+        '
+      example: CHECKBOX
+    PassengerType:
+      title: PassengerType
+      description: Type of passenger
+      type: string
+      enum:
+      - UNKNOWN_PASSENGER_TYPE
+      - ADULT
+      - CHILD
+      - INFANT
+      - INFANT_ON_LAP
+      - YOUTH
+      - SENIOR
+      - TEEN
+      example: ADULT
+    TripCommunicationPreferences:
+      title: TripCommunicationPreferences
+      description: Communication preferences for the trip
+      type: object
+      properties:
+        tripEmailPreferences:
+          $ref: '#/components/schemas/TripEmailPreferences'
+    Gender:
+      title: Gender
+      type: string
+      x-pii: SENSITIVE
+      enum:
+      - MALE
+      - FEMALE
+      - UNSPECIFIED
+      - UNDISCLOSED
+      - GENDER_REDACTED
+      example: FEMALE
+    DateTimeRange:
+      type: object
+      properties:
+        min:
+          $ref: '#/components/schemas/DateTimeLocal'
+          description: Minimum value - inclusive.
+        max:
+          $ref: '#/components/schemas/DateTimeLocal'
+          description: Maximum value - inclusive.
+    CarPnrSummary:
+      type: object
+      title: CarPnrSummary
+      description: Summary of Car PNR
+      properties:
+        vehicleName:
+          type: string
+          description: Name of vehicle
+          example: mercedez
+        vendor:
+          $ref: '#/components/schemas/Vendor'
+        totalAmount:
+          $ref: '#/components/schemas/Money'
+        fromDate:
+          $ref: '#/components/schemas/DateTimeLocal'
+        toDate:
+          $ref: '#/components/schemas/DateTimeLocal'
+        pnrStatus:
+          $ref: '#/components/schemas/PnrStatus'
+        pickupLocation:
+          $ref: '#/components/schemas/CarLocation'
+        dropOffLocation:
+          $ref: '#/components/schemas/CarLocation'
+    FlightPassPaymentMetadata:
+      type: object
+      title: FlightPassPaymentMetadata
+      description: Metadata specific to Flight Pass payment method in OtherCoinage.
+      properties:
+        flightPassNumber:
+          type: string
+          description: Flight pass number
+          example: FP123456789
+        flightPassAmounts:
+          $ref: '#/components/schemas/FlightPassPaymentAmounts'
+    ImmigrationDocumentWrapper:
+      type: object
+      title: ImmigrationDocumentWrapper
+      properties:
+        immigrationDoc:
+          $ref: '#/components/schemas/ImmigrationDocument'
+    WifiAmenityWrapper:
+      type: object
+      title: WifiAmenityWrapper
+      properties:
+        wifiAmenity:
+          $ref: '#/components/schemas/WifiAmenity'
+    CreditCardAccessType:
+      title: CreditCardAccessType
+      type: string
+      description: Identifies the different ways the card can be used across an organization
+      enum:
+      - UNKNOWN_TYPE
+      - CENTRALISED
+      - INDIVIDUAL
+      - PERSONAL
+      - TMC
+      - APPLICATION
+      - ITINERARY
+      - EVENTS
+      - TRAVEL_ARRANGER_MANAGED
+      - COMPANY_TRAVEL_ARRANGER_MANAGED
+      - EVENT_TEMPLATE
+      x-ignoreBreakingChanges:
+      - CreditCardAccessType->EVENT_TEMPLATE
+    Image:
+      type: object
+      title: Image
+      description: An image with meta data. Either the `data` or `url` property must be supplied to load the image.
+      properties:
+        data:
+          type: string
+          format: byte
+          example: 6935813e12584abda0e43d71cd2ea260
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        url:
+          type: string
+          example: https://static.wixstatic.com/media/73f2e2_6935813e12584abda0e43d71cd2ea260~mv2.png/v1/fill/w_630,h_94,al_c,q_85,usm_0.66_1.00_0.01/Spotnana%403x.webp
+    Passport:
+      type: object
+      title: Passport
+      description: Passport details.
+      required:
+      - docId
+      - expiryDate
+      - issueCountry
+      - nationalityCountry
+      properties:
+        docId:
+          type: string
+          example: PassportID
+          x-pii: IDENTIFIER
+        expiryDate:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        issueCountry:
+          type: string
+          example: IN
+        issuedDate:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        nationalityCountry:
+          type: string
+          example: IN
+          x-pii: SENSITIVE
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - REGULAR
+          example: REGULAR
+    FareAmount:
+      type: object
+      title: FareAmount
+      description: Fare amount including base fare and tax.
+      required:
+      - base
+      - tax
+      properties:
+        base:
+          description: Base fare amount.
+          $ref: '#/components/schemas/Money'
+        tax:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+        taxBreakdown:
+          description: Breakdown of tax amounts.
+          $ref: '#/components/schemas/TaxBreakdown'
+    NGSFareCategory:
+      type: string
+      enum:
+      - UNKNOWN_NGS_CATEGORY
+      - BASE
+      - STANDARD
+      - ENHANCED
+      - PREMIUM
+      - LUXURY
+      - ULTRA_LUXURY
+      default: UNKNOWN_NGS_CATEGORY
+    FareAttributes:
+      type: object
+      description: The rules and attributes related to the fare.
+      properties:
+        isVoidable:
+          type: boolean
+          description: Designates whether the fare is voidable or not.
+        holdDeadline:
+          description: Designates the dateTime until which the fare will be held (when a traveler places a hold on the fare).
+          $ref: '#/components/schemas/DateTimeLocal'
+        isNonVerifiedExchangeOffer:
+          type: boolean
+          description: "Designates whether the fare is a non-verified exchange offer. For these fares, the \nexchange price guarantee is not provided by the supplier.\n"
+    Length:
+      type: object
+      title: Length
+      description: Specifies the length or a distance.
+      required:
+      - length
+      - unit
+      properties:
+        length:
+          type: number
+          description: Distance from search point.
+          format: double
+          example: 150
+        unit:
+          type: string
+          description: Unit of measure being applied.
+          enum:
+          - UNKNOWN_UNIT
+          - KM
+          - MILE
+          - CENTIMETER
+          - METER
+          example: MILE
+          x-ignoreBreakingChanges:
+          - unit->CENTIMETER
+          - unit->METER
+    Vendor:
+      type: object
+      description: Car vendor.
+      required:
+      - code
+      - name
+      properties:
+        code:
+          type: string
+          description: Vendor code.
+          example: ZE
+        name:
+          type: string
+          description: Vendor name.
+          example: HERTZ
+        email:
+          type: string
+          description: Vendor email.
+          example: abc@xyz.com
+        phone:
+          description: Vendor contact number.
+          $ref: '#/components/schemas/PhoneNumber'
+    UserBusinessInfo:
+      type: object
+      title: UserBusinessInfo
+      description: User business information.
+      required:
+      - email
+      - employeeId
+      - organizationId
+      - legalEntityId
+      properties:
+        department:
+          $ref: '#/components/schemas/Department'
+        designation:
+          type: string
+          example: MANAGER
+        email:
+          type: string
+          format: email
+          example: user@business.com
+          x-pii: IDENTIFIER
+        employeeId:
+          description: Unique employee id. Can use email if a company don't use employee ids.
+          type: string
+          example: '101'
+        grade:
+          $ref: '#/components/schemas/Grade'
+        legalEntityId:
+          $ref: '#/components/schemas/LegalEntityId'
+        managerBasicInfo:
+          $ref: '#/components/schemas/UserBasicInfo'
+        office:
+          $ref: '#/components/schemas/Office'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        phoneNumbers:
+          type: array
+          x-pii: IDENTIFIER
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        userCostCenter:
+          $ref: '#/components/schemas/CostCenter'
+        designatedApproverInfos:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          type: array
+          description: A list of user basic info for designated approvers.
+          items:
+            $ref: '#/components/schemas/UserBasicInfo'
+        designatedApproverUserIds:
+          type: array
+          description: A list of userId for designated approvers.
+          items:
+            $ref: '#/components/schemas/UserId'
+        authorizerEmail:
+          type: string
+          description: Email address to be used as approval authorizer, when a manager is not present.
+          example: example@email.com
+          x-pii: IDENTIFIER
+    BaggageInfo:
+      type: object
+      description: Information about the baggage policy.
+      properties:
+        description:
+          type: string
+          description: Baggage policy text
+          example: 1 checked bag, 33 lbs
+        count:
+          type: integer
+          description: Count of bags
+          example: 3
+        sizeLimitInfo:
+          type: array
+          description: Size of bag in cm
+          items:
+            $ref: '#/components/schemas/SizeInfo'
+        weightLimitInfo:
+          type: array
+          description: Array of bag weight limits
+          items:
+            $ref: '#/components/schemas/BagWeightLimit'
+        fee:
+          type: array
+          description: Array of bag weight fees
+          items:
+            $ref: '#/components/schemas/BagFees'
+        sizeLimitDescription:
+          type: string
+          description: The baggage size limit in string format.
+          example: 55 x 35 x 25 cm
+    VariableName:
+      type: string
+      title: VariableName
+      description: Name of the variable.
+      enum:
+      - PUBLISHED_FARE
+      - LLF
+      - ADD_COLLECT_AMOUNT
+      - SELECTED_FARE
+      - SPLIT_PAYMENT_FARE
+      example: LLF
+      x-ignoreBreakingChanges:
+      - VariableName->ADD_COLLECT_AMOUNT
+      - VariableName->SELECTED_FARE
+      - VariableName->SPLIT_PAYMENT_FARE
+    PostalAddress:
+      title: PostalAddress
+      description: Postal Address Details
+      type: object
+      required:
+      - addressLines
+      - regionCode
+      properties:
+        addressLines:
+          description: Address lines
+          type: array
+          items:
+            type: string
+            example: Golden Gate Bridge
+        administrativeArea:
+          type: string
+          description: 'Code of administrative area. For example: DL for Delhi, India.
+
+            Highest administrative subdivision which is used for postal
+
+            addresses of a country or region.
+
+            For example, this can be a state, a province, an oblast, or a prefecture.
+
+            Specifically, for Spain this is the province and not the autonomous
+
+            community (e.g. "Barcelona" and not "Catalonia").
+
+            Many countries don''t use an administrative area in postal addresses. E.g.
+
+            in Switzerland this should be left unpopulated.
+
+            '
+          example: CA
+        administrativeAreaName:
+          type: string
+          description: "Name of administrative area. This is full name corresponding to administrativeArea. \nLike Delhi for DL area code. For some places, code and name maybe same as well like Tokyo.\n"
+          example: California
+        description:
+          description: Address description
+          type: string
+          example: San Francisco Home
+        isDefault:
+          description: Whether this address is default address in case multiple addresses are specified.
+          type: boolean
+          example: true
+        languageCode:
+          description: "BCP-47 language code of the contents of this address (if known). This is often the UI \nlanguage of the input form or is expected to match one of the languages used in the \naddress' country/region, or their transliterated equivalents.\nThis can affect formatting in certain countries, but is not critical to the correctness \nof the data and will never affect any validation or other non-formatting related operations.\nExamples: \"zh-Hant\", \"ja\", \"ja-Latn\", \"en\".\n"
+          type: string
+          example: en
+        locality:
+          description: Generally refers to the city/town portion of the address.
+          type: string
+          example: San Francisco
+        locationCode:
+          description: IATA 3-letter location code. See https://www.iata.org/en/services/codes.
+          type: string
+          example: LAX
+        organization:
+          description: The name of the organization at the address.
+          type: string
+          example: Spotnana
+        postalCode:
+          description: Postal code of the address. This is a required field when setting for a user/legal entity/company etc.
+          type: string
+          example: '94130'
+        continentCode:
+          description: 2 letter continent code of the continent this address falls in.
+          type: string
+          example: AF
+        recipients:
+          description: The recipient at the address.
+          type: array
+          items:
+            type: string
+        regionCode:
+          description: Region code of the country/region of the address.
+          type: string
+          example: US
+        regionName:
+          description: Region name of the country/region of the address.
+          type: string
+          example: America
+        revision:
+          type: integer
+          format: int32
+          example: 1
+        sortingCode:
+          description: 'Additional, country-specific, sorting code. This is not used
+
+            in most regions. Where it is used, the value is either a string like
+
+            "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
+
+            alone, representing the "sector code" (Jamaica), "delivery area indicator"
+
+            (Malawi) or "post office indicator" (e.g. Côte d''Ivoire).
+
+            '
+          type: string
+          example: Jamaica
+        sublocality:
+          description: Sublocality of the address. This can be neighborhoods, boroughs, districts.
+          type: string
+        timezone:
+          description: Time zone of the address.
+          type: string
+          example: America/Los_Angeles
+        coordinates:
+          description: Map coordinates of the address.
+          $ref: '#/components/schemas/Latlng'
+    RailJourneySummary:
+      type: object
+      title: RailJourneySummary
+      required:
+      - origin
+      - destination
+      properties:
+        origin:
+          type: string
+          example: London
+        destination:
+          type: string
+          example: London
+        departureDateTime:
+          $ref: '#/components/schemas/DateTimeOffset'
+        arrivalDateTime:
+          $ref: '#/components/schemas/DateTimeOffset'
+        pnrStatus:
+          $ref: '#/components/schemas/PnrStatus'
+        journeyStatus:
+          $ref: '#/components/schemas/PnrStatus'
+    FlightCommon:
+      title: FlightCommon
+      description: Basic information about the flight.
+      type: object
+      required:
+      - departureDateTime
+      - arrivalDateTime
+      - origin
+      - destination
+      - marketing
+      - operating
+      properties:
+        flightRef:
+          type: string
+          description: Unique ID for this flight in the response.
+          example: flight_3
+        departureDateTime:
+          description: Departure date and time of the flight.
+          $ref: '#/components/schemas/DateTimeLocal'
+        arrivalDateTime:
+          description: Arrival date and time of the flight.
+          $ref: '#/components/schemas/DateTimeLocal'
+        origin:
+          description: The airport from which the flight departs (origin).
+          $ref: '#/components/schemas/AirportInfo'
+        destination:
+          description: The airport at which the flight arrives (destination).
+          $ref: '#/components/schemas/AirportInfo'
+        departureGate:
+          description: Departure gate and terminal.
+          $ref: '#/components/schemas/GateInfo'
+        arrivalGate:
+          description: Arrival gate and terminal.
+          $ref: '#/components/schemas/GateInfo'
+        marketing:
+          description: Marketing flight number.
+          $ref: '#/components/schemas/FlightNumber'
+        operating:
+          description: Operating flight number (for the airline which actually operates the flight).
+          $ref: '#/components/schemas/FlightNumber'
+        operationalDisclosure:
+          type: string
+          description: Operating airline name that has to be displayed to the user
+          example: SKYWEST DBA UNITED EXPRESS
+        hiddenStops:
+          type: array
+          description: Any stops for refueling or boarding additional passengers.
+          items:
+            type: object
+            title: FlightHiddenStop
+            required:
+            - airport
+            - arrivalDateTime
+            - departureDateTime
+            properties:
+              airport:
+                description: The airport where the flight will make a stop (not a traditional layover stop).
+                $ref: '#/components/schemas/AirportInfo'
+              arrivalDateTime:
+                description: The start date and time for the stop.
+                $ref: '#/components/schemas/DateTimeLocal'
+              departureDateTime:
+                description: The end date and time for the stop.
+                $ref: '#/components/schemas/DateTimeLocal'
+        duration:
+          description: The duration of the flight (travel time).
+          $ref: '#/components/schemas/Duration'
+        equipment:
+          description: The equipment or aircraft type used for the flight
+          $ref: '#/components/schemas/Equipment'
+    SeatAmenityWrapper:
+      type: object
+      title: SeatAmenityWrapper
+      properties:
+        seatAmenity:
+          $ref: '#/components/schemas/SeatAmenity'
+    GetApprovalDataV3Response:
+      title: GetApprovalDataV3Response
+      description: Response to approval data list request
+      type: object
+      required:
+      - paginationResponseParams
+      properties:
+        paginationResponseParams:
+          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
+        approvalDataList:
+          type: array
+          description: List of Approval Data
+          items:
+            $ref: '#/components/schemas/ApprovalDataV2'
+    OrganizationAgencyId:
+      type: object
+      title: OrganizationAgencyId
+      description: Agency id for the organization.
+      deprecated: true
+      x-sunset: '2026-07-01'
+      required:
+      - id
+      properties:
+        id:
+          type: string
+    EmergencyContact:
+      type: object
+      title: EmergencyContact
+      description: Emergency contact information.
+      required:
+      - name
+      - phoneNumbers
+      properties:
+        name:
+          type: string
+          description: Full name of contact.
+          example: John Smith
+          x-pii: SENSITIVE
+        email:
+          type: string
+          description: Email address of contact.
+          format: email
+          example: emergency-contact@email.com
+          x-pii: IDENTIFIER
+        designation:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          type: string
+          description: Job title of contact.
+          example: MANAGER
+        relation:
+          type: string
+          description: Relation of contact to user.
+          example: SPOUSE
+          enum:
+          - RELATION_UNKNOWN
+          - SPOUSE
+          - PARENT
+          - SIBLING
+          - CHILD
+          - FRIEND
+          - RELATIVE
+          - COLLEAGUE
+          - OTHER
+        phoneNumbers:
+          type: array
+          description: Phone numbers of contact.
+          x-pii: IDENTIFIER
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        preferredLanguage:
+          type: string
+          description: Language preferred by user.
+          example: en-US
+    RateType:
+      type: string
+      title: RateType
+      description: Type of booked fare
+      enum:
+      - RATE_TYPE_UNKNOWN
+      - PUBLISHED
+      - TMC_NEGOTIATED
+      - COMPANY_NEGOTIATED
+      example: PUBLISHED
+    WifiAmenity:
+      type: object
+      title: WifiAmenity
+      description: Wifi Amenity properties
+      properties:
+        displayText:
+          type: string
+          example: Basic web browsing (fee)
+        cost:
+          type: string
+          example: paid
+    User:
+      type: object
+      title: User
+      description: User details.
+      properties:
+        addresses:
+          type: array
+          x-pii: SENSITIVE
+          items:
+            $ref: '#/components/schemas/PostalAddress'
+        dob:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        email:
+          type: string
+          format: email
+          example: example@email.com
+          x-pii: IDENTIFIER
+        emergencyContactInfo:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/EmergencyContactInfo'
+        emergencyContact:
+          $ref: '#/components/schemas/EmergencyContact'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        identityDocs:
+          description: List of user identity documents.
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityDocument'
+          example:
+          - passport:
+              docId: PASSPORTID
+              expiryDate:
+                iso8601: '2017-07-21'
+              issueCountry: IN
+              issuedDate:
+                iso8601: '2017-07-21'
+              nationalityCountry: IN
+              type: REGULAR
+          - ktn:
+              number: '123456'
+              issueCountry: US
+        name:
+          $ref: '#/components/schemas/Name'
+        paymentInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentInfo'
+        phoneNumbers:
+          type: array
+          x-pii: IDENTIFIER
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        profilePicture:
+          $ref: '#/components/schemas/Image'
+          x-pii: SENSITIVE
+        nationality:
+          type: string
+          example: Indian
+          description: Nationality of user
+          x-pii: SENSITIVE
+        title:
+          $ref: '#/components/schemas/UserTitle'
+    KeywordsWithReasonList:
+      type: object
+      properties:
+        keywords:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestrictedKeywordsWithReason'
+    IntListWrapper:
+      type: object
+      title: IntListWrapper
+      properties:
+        iList:
+          type: array
+          items:
+            type: integer
+            format: int32
+    DeckLevel:
+      type: string
+      description: The deck level of the rail.
+      enum:
+      - UPPER_DECK
+      - LOWER_DECK
+      example: UPPER_DECK
+    UserFacingStatus:
+      type: string
+      title: UserFacingStatus
+      description: User facing booking status
+      enum:
+      - UNKNOWN_STATUS
+      - PENDING_STATUS
+      - CONFIRMED_STATUS
+      - ACTIVE_STATUS
+      - COMPLETED_STATUS
+      - CANCELLED_STATUS
+      - REFUNDED_STATUS
+      - VOIDED_STATUS
+      - PROCESSING_STATUS
+      - UNCONFIRMED_STATUS
+      - AIRLINE_CONTROL_STATUS
+      - PAYMENT_DECLINED_STATUS
+      - SCHEDULE_CHANGE_STATUS
+      - HOLD_STATUS
+      - APPROVAL_REQUESTED_STATUS
+      - APPROVAL_DENIED_STATUS
+      - CANCELLATION_IN_PROGRESS_STATUS
+      - INOPERATIVE_STATUS
+      - FLIGHT_UNCONFIRMED_STATUS
+      example: PENDING_STATUS
+    CleaningAmenity:
+      type: object
+      title: CleaningAmenity
+      description: Cleaning amenity properties.
+      properties:
+        displayText:
+          type: string
+          example: Enhanced aircraft cleaning every flight
+        cleaningDescription:
+          type: string
+          example: This flight features an aircraft that will be thoroughly cleaned using disinfectants for every flight
+        cleaningAttrDescription:
+          type: string
+          example: enhanced every flight
+    NationalDoc:
+      type: object
+      title: NationalDoc
+      description: National Document Id details.
+      required:
+      - docId
+      - issueCountry
+      properties:
+        docId:
+          type: string
+          description: Unique id identifying the national document.
+          example: NationalDocId
+          x-pii: IDENTIFIER
+        issueCountry:
+          type: string
+          description: IS0 2 letter country code of the country issuing this id.
+          example: IN
+        issuedDate:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        expiryDate:
+          $ref: '#/components/schemas/DateModel'
+          x-pii: SENSITIVE
+        type:
+          type: string
+          enum:
+          - DNI
+          - NIE
+          example: DNI
+    BagPolicyApplicability:
+      type: string
+      description: This represents that the info is applicable for per bag/combined bags
+      enum:
+      - EACH
+      - TOTAL
+    VaccineAmenityWrapper:
+      type: object
+      title: VaccineAmenityWrapper
+      properties:
+        vaccineAmenity:
+          $ref: '#/components/schemas/VaccineAmenity'
+    StealthType:
+      type: string
+      description: Stealth type.
+      enum:
+      - STEALTH_TYPE_1
+      - STEALTH_TYPE_2
+      - STEALTH_TYPE_3
+      example: STEALTH_TYPE_1
+      x-ignoreBreakingChanges:
+      - StealthType->STEALTH_TYPE_4
+      - StealthType->STEALTH_TYPE_5
+      - StealthType->STEALTH_TYPE_6
+    AirlinePref:
+      type: object
+      title: AirlinePref
+      description: Airline preferences.
+      properties:
+        airlines:
+          type: array
+          items:
+            type: string
+            example: Indigo
+        flightType:
+          type: string
+          enum:
+          - UNKNOWN_FLIGHT_TYPE
+          - DOMESTIC
+          - INTERNATIONAL
+          - ALL
+          example: DOMESTIC
+    DoubleWrapper:
+      type: object
+      title: DoubleWrapper
+      properties:
+        d:
+          type: number
+          format: double
+    HotelPnrSummaryWrapper:
+      type: object
+      title: HotelPnrSummaryWrapper
+      properties:
+        hotelPnrSummary:
+          $ref: '#/components/schemas/HotelPnrSummary'
+    PolicyRuleResultInfo:
+      type: object
+      properties:
+        violationInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyViolationInfo'
+        subViolationInfos:
+          type: array
+          description: "In case of complex rules this will contain extra information as to how the rule was \ncalculated.\n"
+          items:
+            $ref: '#/components/schemas/PolicyViolationInfo'
+        actions:
+          type: array
+          description: Followed actions if rule was satisfied else violated actions.
+          items:
+            $ref: '#/components/schemas/PolicyAction'
+    ApproverInfo:
+      type: object
+      description: Info about approver
+      properties:
+        basicInfo:
+          $ref: '#/components/schemas/UserBasicInfo'
+    AirRestrictedKeyword:
+      type: object
+      title: AirRestrictedKeyword
+      description: Airline/Keyword to be restricted
+      required:
+      - keyword
+      properties:
+        keyword:
+          type: string
+          description: Restricted keyword.
+        airlineCode:
+          type: string
+          description: IATA airline code. If not set, the restriction applies to all airlines.
+    AirportInfo:
+      title: AirportInfo
+      description: Detailed information about the airport.
+      type: object
+      properties:
+        airportCode:
+          type: string
+          description: 3-letter code of the airport.
+          example: WRA
+        airportName:
+          type: string
+          description: Full name of the airport.
+          example: Warder Airport
+        cityName:
+          type: string
+          description: Name of the city in which the airport is located (or is nearest to).
+          example: Werder
+        countryName:
+          type: string
+          description: Name of the country in which the airport is located.
+          example: Ethiopia
+        countryCode:
+          type: string
+          description: 2-letter IATA country code associated with the airport.
+          example: ET
+        zoneName:
+          type: string
+          description: Name of the time zone associated with the airport.
+          example: Africa/Addis_Ababa
+        stateCode:
+          type: string
+          description: 2-letter IATA code for the state in which the airport is located.
+          example: CA
+    CustomFieldSelectedOption:
+      type: object
+      title: CustomFieldSelectedOption
+      description: Selected response for the custom field.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Value of the selection
+        translatedName:
+          type: string
+          description: Translated value of the selection
+        description:
+          type: string
+          description: Description of the selection
+        translatedDescription:
+          type: string
+          description: Translated description of the selection
+        additionalUserInput:
+          type: string
+          description: Additional user input
+        additionalInfos:
+          type: array
+          description: Actual values of the additional infos
+          items:
+            type: string
+        additionalInfoConfigs:
+          type: array
+          description: Additional info configs for the selected option
+          items:
+            $ref: '#/components/schemas/AdditionalInfo'
+    ApprovalDataV2:
+      title: ApprovalDataV2
+      description: Approval Data
+      type: object
+      properties:
+        approvalId:
+          type: string
+          description: Unique ID to identify approval data
+          format: uuid
+          example: f49d00fe-1eda-4304-ba79-a980f565281d
+        pnrId:
+          type: string
+          description: PNR ID
+          example: 1234567890
+        tripId:
+          type: string
+          description: Trip ID
+          example: 1234567890
+        approvalVoidDeadline:
+          $ref: '#/components/schemas/DateTimeOffset'
+          description: Deadline at which approval gets void and auto action taken
+        approvalStatus:
+          $ref: '#/components/schemas/ApprovalStatusV2'
+          description: Approval Status
+        companyId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Company ID
+        outOfPolicy:
+          type: boolean
+          description: Out of policy indicator
+          example: true
+        pnrType:
+          $ref: '#/components/schemas/PnrType'
+          description: PNR type
+        approvalType:
+          $ref: '#/components/schemas/ApprovalType'
+          description: Approval type applied
+        approversUserIds:
+          type: array
+          description: User IDs of assigned approvers
+          items:
+            $ref: '#/components/schemas/UserId'
+          deprecated: true
+          x-sunset: '2026-07-01'
+        approvalProcessedBy:
+          $ref: '#/components/schemas/UserId'
+          description: User Id of approval action (approved/denied) taken by
+        legalEntityId:
+          $ref: '#/components/schemas/LegalEntityId'
+          description: The ID of the legal entity.
+        pnrVersion:
+          type: integer
+          format: int32
+          description: Version number associated with the PNR when approval raised
+        pnrSummary:
+          $ref: '#/components/schemas/PnrSummary'
+          description: Corresponding PNR summary object for the approval data
+        approvers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApproverInfo'
+        basicTripInfo:
+          $ref: '#/components/schemas/BasicTripInfo'
+          description: Basic trip info associated with the approval
+    CardAccessEntity:
+      title: CardAccessEntity
+      type: object
+      description: Contains the central access level and entity id.
+      required:
+      - entityId
+      properties:
+        entityId:
+          type: string
+          description: Holds the id for for the user who can access the card or organization id or legal entity
+        centralCardAccessLevel:
+          $ref: '#/components/schemas/CentralCardAccessLevel'
+    PreferredAirport:
+      type: object
+      title: PreferredAirport
+      description: Airport preferred by traveler.
+      required:
+      - airportCode
+      - label
+      properties:
+        airportName:
+          type: string
+          description: Airport name.
+          example: San Francisco International Airport
+        airportCode:
+          type: string
+          description: IATA airport code.
+          example: SFO
+        label:
+          $ref: '#/components/schemas/PreferredLocationLabel'
+    LimoPnrSummary:
+      type: object
+      title: CarPnrSummary
+      description: Summary of Limo PNR
+      properties:
+        vehicleName:
+          type: string
+          description: Name of vehicle
+          example: mercedez
+        vendor:
+          $ref: '#/components/schemas/Vendor'
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/LimoLegSummary'
+        totalAmount:
+          $ref: '#/components/schemas/Money'
+        pnrStatus:
+          $ref: '#/components/schemas/PnrStatus'
+    TravelerPersonalInfo:
+      type: object
+      title: TravelerPersonalInfo
+      description: Traveler personal information.
+      properties:
+        loyaltyInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoyaltyInfo'
+        travelPref:
+          $ref: '#/components/schemas/TravelPref'
+        blockLoyalty:
+          type: boolean
+          description: If true, hides the loyalty program input on the checkout page for this traveler.
+          default: false
+          example: false
+    MiscPnrSummaryWrapper:
+      type: object
+      title: MiscPnrSummaryWrapper
+      properties:
+        miscPnrSummary:
+          $ref: '#/components/schemas/MiscPnrSummary'
+    Equipment:
+      type: object
+      title: Equipment
+      description: The type of the aircraft equipment
+      properties:
+        code:
+          type: string
+          description: Aircraft equipment code
+          example: '777'
+        type:
+          type: string
+          description: Code representing the type of the equipment
+          example: N
+          deprecated: true
+          x-sunset: '2026-07-01'
+        name:
+          type: string
+          description: The name of the flight aircraft type
+          example: Boeing 737-800
+    OptionInfo:
+      type: object
+      title: OptionInfo
+      description: Options related information for the question.
+      required:
+      - source
+      properties:
+        source:
+          $ref: '#/components/schemas/OptionSource'
+          default: MANUAL
+        sourceMetadata:
+          $ref: '#/components/schemas/OptionSourceMetadata'
+        totalNumOptions:
+          type: integer
+          description: Total number of options
+        options:
+          type: array
+          description: "Available options for the question. This will contain only max 10 options if only \nsummary is requested.\n"
+          items:
+            $ref: '#/components/schemas/Option'
+    Name:
+      type: object
+      title: Name
+      description: Full name containing first, middle, last (family) names, and suffix.
+      required:
+      - given
+      - family1
+      properties:
+        family1:
+          type: string
+          description: Last (family) name.
+          example: Gandas
+          x-pii: SENSITIVE
+        family2:
+          type: string
+          example: FamilyTwo
+          x-pii: SENSITIVE
+        given:
+          type: string
+          description: First (given) name.
+          example: Vichitr
+          x-pii: SENSITIVE
+        middle:
+          type: string
+          description: Middle name.
+          example: Kumar
+          x-pii: SENSITIVE
+        suffix:
+          $ref: '#/components/schemas/NameSuffix'
+          description: Suffix used with the name. For example SR or JR.
+          example: SR
+        preferred:
+          type: string
+          description: Informal preferred name added by traveler. This is not used on any PNR or tickets
+          example: Don
+          x-pii: SENSITIVE
+    OfficeId:
+      type: object
+      title: OfficeId
+      description: The unique ID of the office.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: The value of the unique ID for the office.
+          example: 531ccbce-8413-4fe9-b233-a324dfbe7421
+    PreSearchQuestionType:
+      type: string
+      enum:
+      - UNKNOWN_SEARCH_QUESTION_TYPE
+      - PURPOSE_OF_TRIP
+      description: 'Types of pre-search questions.
+
+        PURPOSE_OF_TRIP required to ask purpose of the trip user is going to. For example: meeting, training, interview.
+
+        '
+      example: PURPOSE_OF_TRIP
+    ApprovalData:
+      title: ApprovalData
+      type: object
+      description: Details about approval
+      properties:
+        approvalId:
+          type: string
+          example: uniqueId
+          description: Unique approval Id request
+        approvers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApproverInfo'
+        approvalStatus:
+          $ref: '#/components/schemas/ApprovalStatus'
+        approvalVoidDeadline:
+          $ref: '#/components/schemas/DateTimeOffset'
+        approvalDetail:
+          $ref: '#/components/schemas/ApprovalDetail'
+    ImageGroup:
+      type: object
+      title: ImageGroup
+      description: Contains different sizes of the same image.
+      required:
+      - images
+      properties:
+        caption:
+          type: string
+          description: Caption for the image.
+          example: Exterior
+        images:
+          type: array
+          description: List of images.
+          items:
+            $ref: '#/components/schemas/Image'
+    TripEmailPreferences:
+      title: TripEmailPreferences
+      description: Email preferences for the trip
+      type: object
+      properties:
+        bucketEmailPreferences:
+          $ref: '#/components/schemas/BucketEmailPreferences'
+    StealthMode:
+      type: object
+      title: StealthMode
+      description: Stealth mode configuration with type and label.
+      required:
+      - stealthType
+      - label
+      properties:
+        stealthType:
+          $ref: '#/components/schemas/StealthType'
+        label:
+          type: string
+          description: Customer specific label for the stealth mode.
+    PhoneNumber:
+      type: object
+      title: PhoneNumber
+      description: Properly formatted phone number.
+      properties:
+        countryCode:
+          type: integer
+          format: int32
+          description: two digit country code
+          example: 91
+        countryCodeSource:
+          type: string
+          enum:
+          - UNSPECIFIED
+          - FROM_NUMBER_WITH_PLUS_SIGN
+          - FROM_NUMBER_WITH_IDD
+          - FROM_NUMBER_WITHOUT_PLUS_SIGN
+          - FROM_DEFAULT_COUNTRY
+          example: FROM_NUMBER_WITH_PLUS_SIGN
+        extension:
+          description: phone number extension
+          type: string
+          example: '222'
+        isoCountryCode:
+          description: ISO alpha-2 code
+          type: string
+          example: IN
+        italianLeadingZero:
+          type: boolean
+          default: false
+          example: true
+        nationalNumber:
+          type: integer
+          format: int64
+          example: 8150
+        numberOfLeadingZeros:
+          type: integer
+          format: int32
+          default: 0
+          example: 1
+        preferredDomesticCarrierCode:
+          type: string
+          example: '7'
+        rawInput:
+          type: string
+          example: '77777'
+        type:
+          type: string
+          enum:
+          - UNKNOWN_TYPE
+          - MOBILE
+          - LANDLINE
+          example: MOBILE
+    Int32Wrapper:
+      type: object
+      title: Int32Wrapper
+      properties:
+        i:
+          type: integer
+          format: int32
+    CounterLocation:
+      type: string
+      title: CounterLocation
+      description: Rental car counter location.
+      enum:
+      - UNKNOWN_COUNTER
+      - NON_AIRPORT_LOCATION
+      - IN_TERMINAL
+      - OFF_AIRPORT_RENTAL_SHUTTLE
+      - IN_TERMINAL_RENTAL_SHUTTLE
+      - ON_AIRPORT_RENTAL_SHUTTLE
+      - ON_AIRPORT_AIRPORT_SHUTTLE
+      - CALL_FOR_SHUTTLE
+      - TWO_SHUTTLES_AIRPORT_AND_RENTAL
+      example: OFF_AIRPORT_RENTAL_SHUTTLE
+    BagWeightLimit:
+      type: object
+      description: This contains weight limit details of bag
+      properties:
+        weightLimit:
+          type: array
+          description: Weight limit in different units
+          items:
+            $ref: '#/components/schemas/WeightLimit'
+        applicability:
+          $ref: '#/components/schemas/BagPolicyApplicability'
+    GetApprovalDataV3Request:
+      title: GetApprovalDataV3Request
+      description: Request to get Approval Data summaries for a user
+      type: object
+      properties:
+        paginationRequestParams:
+          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
+        includePnrSummaries:
+          type: boolean
+          description: Boolean flag to include PNR summaries in the response
+          example: true
+        approvalFilters:
+          type: array
+          description: Filter for the approval data list request.
+          items:
+            $ref: '#/components/schemas/ApprovalFilterV2'
+    PolicyDetail:
+      type: object
+      title: PolicyDetail
+      required:
+      - appliedPolicyInfo
+      properties:
+        reasonCode:
+          description: Reason code for booking out of policy
+          $ref: '#/components/schemas/PreDefinedAnswers'
+        reason:
+          type: string
+          description: Free form text if selected reason code is OTHER
+          example: Business class cheaper than economy
+        appliedPolicyInfo:
+          description: 'Information related to policies and results of those evaluation on this pnr
+
+            '
+          $ref: '#/components/schemas/PnrPolicyInfo'
+        isOutOfPolicy:
+          type: boolean
+          description: Flag to indicate if the booking is out of policy
+          example: true
+    Alliance:
+      type: string
+      enum:
+      - UNKNOWN_ALLIANCE
+      - STAR_ALLIANCE
+      - ONEWORLD
+      - SKYTEAM
+      - VANILLA_ALLIANCE
+      - U_FLY_ALLIANCE
+      - VALUE_ALLIANCE
+      default: UNKNOWN_ALLIANCE
+      example: STAR_ALLIANCE
+    CompanyRef:
+      type: object
+      description: Basic information about a company.
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/CompanyId'
+        name:
+          type: string
+        logo:
+          $ref: '#/components/schemas/Image'
+          description: Company logo
+    TravelClassHierarchyWrapper:
+      type: object
+      title: TravelClassHierarchyWrapper
+      properties:
+        railTravelClass:
+          $ref: '#/components/schemas/TravelClassHierarchy'
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    HotelPref:
+      type: object
+      title: HotelPref
+      description: Travel preferences related to hotel.
+      properties:
+        hotelParentChains:
+          type: array
+          description: A list of hotel parent chains.
+          items:
+            $ref: '#/components/schemas/HotelChain'
+        hotelBrands:
+          type: array
+          description: A list of hotel brands.
+          items:
+            $ref: '#/components/schemas/HotelBrand'
+        hotelAmenityTypes:
+          type: array
+          description: A list of HotelAmenities.
+          items:
+            $ref: '#/components/schemas/HotelPrefAmenity'
+        roomPreference:
+          $ref: '#/components/schemas/RoomPreference'
+        conditionalRates:
+          type: array
+          description: A list of conditional rates for rail.
+          items:
+            $ref: '#/components/schemas/ConditionalRate'
+    ConditionalRate:
+      type: string
+      title: ConditionalRate
+      description: Conditional rate.
+      enum:
+      - MILITARY
+      - AAA
+      - GOVERNMENT
+      example: AAA
+    TripLocation:
+      title: TripLocation
+      description: Location information for a trip.
+      type: object
+      properties:
+        metroAreaName:
+          type: string
+          description: Name of the metropolitan area.
+          example: San Francisco
+    PaymentSplitDetails:
+      type: object
+      title: PaymentSplitDetails
+      description: Payment details of slider payment function.
+      oneOf:
+      - $ref: '#/components/schemas/MinMaxAmountWrapper'
+      - $ref: '#/components/schemas/SplitAmountWrapper'
+    CardCondition:
+      type: object
+      title: CardCondition
+      description: The card payment source fop condition
+      required:
+      - type
+      properties:
+        type:
+          type: string
+        cardCompanies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardCompany'
+          description: List of card companies allowed for the payment
+    PolicyViolationInfo:
+      type: object
+      description: Policy Violation info.
+      title: PolicyViolationInfo
+      properties:
+        predicateString:
+          type: string
+        predicate:
+          $ref: '#/components/schemas/PolicyPredicate'
+        expectedValue:
+          $ref: '#/components/schemas/PolicyConstValue'
+        actualValue:
+          $ref: '#/components/schemas/PolicyConstValue'
+    BucketEmailPreferences:
+      type: object
+      title: BucketEmailPreferences
+      description: Email communication preferences based on bucket types.
+      required:
+      - bucketTypes
+      properties:
+        bucketTypes:
+          type: array
+          description: List of email bucket types.
+          items:
+            $ref: '#/components/schemas/EmailBucketType'
+        isEnabled:
+          type: boolean
+          description: Indicates whether emails are disabled.
+          default: false
+        toEmails:
+          type: array
+          description: List of email address to be included in emails.
+          items:
+            type: string
+            format: email
+            example: example@email.com
+        ccEmails:
+          type: array
+          description: List of email address to be cc-ed in emails.
+          items:
+            type: string
+            format: email
+            example: example@email.com
+        bccEmails:
+          type: array
+          description: List of email address to be bcc-ed in emails.
+          items:
+            type: string
+            format: email
+            example: example@email.com
+    KeywordWithReasonListWrapper:
+      type: object
+      title: KeywordWithReasonListWrapper
+      properties:
+        keywordWithReasonList:
+          $ref: '#/components/schemas/KeywordsWithReasonList'
+    Duration:
+      type: object
+      title: Duration
+      description: Represents a duration of time with specific units of time.
+      properties:
+        iso8601:
+          description: 'Durations define the amount of intervening time in a time interval and are represented by the
+
+            format P[n]Y[n]M[n]DT[n]H[n]M[n]S.
+
+            The [n] is replaced by the value for each of the date and time elements that follow the [n].
+
+            Leading zeros are not required. The capital letters P, Y, M, W, D, T, H, M, and S are
+
+            designators for each of the date and time elements and are not replaced. P is the duration
+
+            designator (for period) placed at the start of the duration representation.
+
+            Y is the year designator.
+
+            M is the month designator.
+
+            W is the week designator.
+
+            D is the day designator.
+
+            T is the time designator.
+
+            H is the hour designator.
+
+            M is the minute designator.
+
+            S is the second designator and can include decimal digits with arbitrary precision.
+
+            '
+          type: string
+          example: PT19H55M
+    PassengerAge:
+      title: PassengerAge
+      type: object
+      required:
+      - numYears
+      description: Age of the traveler
+      properties:
+        numYears:
+          type: integer
+          description: Age of the passenger
+          example: 22
+    OptionSource:
+      type: string
+      enum:
+      - MANUAL
+      - COMPANY_CONFIG
+      description: Option source
+      example: MANUAL
+    BasicTripInfo:
+      title: BasicTripInfo
+      description: Basic trip info
+      type: object
+      required:
+      - tripId
+      - tripName
+      properties:
+        tripId:
+          type: string
+          description: Spotnana trip Id
+          example: '6926658168'
+        tripName:
+          type: string
+          description: Name of the trip
+          example: JFK SFO Trip
+        tripDescription:
+          type: string
+          description: Trip description
+          example: JFK SFO Business Trip
+        applicationId:
+          type: string
+          format: uuid
+          description: Application id used for the trip.
+        startDate:
+          $ref: '#/components/schemas/DateModel'
+        endDate:
+          $ref: '#/components/schemas/DateModel'
+        userId:
+          description: The user Id of the traveler to whom the trip belongs to.
+          $ref: '#/components/schemas/UserId'
+        registrarUserId:
+          description: The user Id of the registrar of the adhoc traveler.
+          $ref: '#/components/schemas/UserId'
+        tripMetadata:
+          $ref: '#/components/schemas/TripMetadata'
+        tripDisabledInfo:
+          $ref: '#/components/schemas/TripDisabledInfo'
+        stealthType:
+          deprecated: true
+          x-sunset: '2027-01-01'
+          $ref: '#/components/schemas/StealthType'
+        stealthMode:
+          $ref: '#/components/schemas/StealthMode'
+        tripLocations:
+          type: array
+          description: Locations associated with the trip.
+          items:
+            $ref: '#/components/schemas/TripLocation'
+    CleaningAmenityWrapper:
+      type: object
+      title: CleaningAmenityWrapper
+      properties:
+        cleaningAmenity:
+          $ref: '#/components/schemas/CleaningAmenity'
+    CompanyId:
+      type: object
+      title: CompanyId
+      description: Company ID
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: f49d00fe-1eda-4304-ba79-a980f565281d
+    LoyaltyTier:
+      type: string
+      description: Loyalty membership tier name echoed from the supplier.
+      example: GOLD
+    UserId:
+      type: object
+      title: UserId
+      description: User identifier
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    SeatTypeInfo:
+      type: object
+      description: Seat information
+      required:
+      - seatType
+      properties:
+        seatType:
+          type: string
+          description: Description of the type of seat available
+          example: Recliner seat
+    CO2EmissionDetail:
+      type: object
+      title: CO2EmissionDetail
+      description: CO2 emission details for the flight.
+      required:
+      - emissionValue
+      properties:
+        emissionValue:
+          type: number
+          format: double
+          description: Estimated C02 emissions value for selected flight and seating class, per passenger (in tons)
+          example: 10
+        averageEmissionValue:
+          type: number
+          format: double
+          description: Average estimated C02 emissions per passenger for same route (in tons)
+          example: 10
+        flightDistanceKm:
+          type: number
+          format: double
+          description: Total distance flown by the flight in kilometres.
+          example: 10
+        isApproximate:
+          type: boolean
+          description: Indicates whether the emissions value is approximate or not.
+          example: true
+    TripUsageType:
+      title: TripUsageType
+      description: Trip usage type.
+      type: string
+      enum:
+      - STANDARD
+      - EVENT
+    Question:
+      type: object
+      title: Question
+      description: The message defines the format of a question which can be asked to a user in any kind of workflows.
+      required:
+      - id
+      - name
+      - isRequired
+      - isDisabled
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: Question display name that the user will see. For eg, 'Choose the purpose of your trip'.
+        questionFormat:
+          $ref: '#/components/schemas/QuestionFormat'
+        optionInfo:
+          $ref: '#/components/schemas/OptionInfo'
+        isRequired:
+          type: boolean
+          description: Whether its compulsory to answer the question or not.
+          default: false
+          example: true
+        isDisabled:
+          type: boolean
+          description: Whether the question is disabled or not. If true, this should not be asked.
+          default: true
+          example: true
+        includeInItinerary:
+          type: boolean
+          description: Whether to include this question in the itinerary related emails.
+          default: false
+          example: true
+          deprecated: true
+          x-sunset: '2026-07-01'
+        customFieldLocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldLocation'
+        matchConditions:
+          $ref: '#/components/schemas/CustomFieldMatchConditions'
+        questionType:
+          $ref: '#/components/schemas/QuestionType'
+    AirPnrSummary:
+      type: object
+      title: AirPnrSummary
+      description: Summary of Air PNR
+      properties:
+        legInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegSummary'
+        totalAmount:
+          $ref: '#/components/schemas/Money'
+        llfItinerary:
+          $ref: '#/components/schemas/AirSearchResponse'
+    PolicyHideActionWrapper:
+      type: object
+      title: PolicyHideActionWrapper
+      properties:
+        hide:
+          type: boolean
+    TransmissionSearchFilter:
+      type: string
+      description: Transmission type for Filters
+      title: TransmissionSearchFilter
+      enum:
+      - MANUAL
+      - AUTOMATIC
+      example: AUTOMATIC
+    Expiry:
+      title: Expiry
+      type: object
+      description: Contains the expiry of a Card.
+      required:
+      - expiryMonth
+      - expiryYear
+      properties:
+        expiryMonth:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+          description: Expiry month
+          example: 1
+        expiryYear:
+          type: integer
+          format: int32
+          description: Expiry year
+          minimum: 2000
+          example: 2010
+    PnrSummaryWrapper:
+      title: ApprovalFilter
+      type: object
+      description: Approval filter
+      oneOf:
+      - $ref: '#/components/schemas/AirPnrSummaryWrapper'
+      - $ref: '#/components/schemas/RailPnrSummaryWrapper'
+      - $ref: '#/components/schemas/HotelPnrSummaryWrapper'
+      - $ref: '#/components/schemas/CarPnrSummaryWrapper'
+      - $ref: '#/components/schemas/LimoPnrSummaryWrapper'
+      - $ref: '#/components/schemas/MiscPnrSummaryWrapper'
+    ApprovalType:
+      type: string
+      description: Type of APPROVAL
+      enum:
+      - HARD_APPROVAL
+      - SOFT_APPROVAL
+      - PASSIVE_APPROVAL
+      - PRE_APPROVAL
+      x-ignoreBreakingChanges:
+      - ApprovalType->PRE_APPROVAL
+      example: SOFT_APPROVAL
+    BoolWrapper:
+      type: object
+      title: BoolWrapper
+      properties:
+        b:
+          type: boolean
+    PaymentRule:
+      type: object
+      description: The payment rule applicable for a booking
+      properties:
+        paymentSplitDetails:
+          $ref: '#/components/schemas/PaymentSplitDetails'
+          description: Payment details of slider payment function
+        paymentSourceIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: Unique identifier identifying this payment source
+            example: f49d00fe-1eda-4304-ba79-a980f565281d
+        allowAddCard:
+          type: boolean
+          description: Whether to allow user to add a new card for the selected split payment.
+        splitCriterion:
+          $ref: '#/components/schemas/PaymentSplitCriterion'
+          description: Defines the criteria for splitting a payment
+        unusablePaymentSources:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnusablePaymentSource'
+          description: List of payment sources that are not usable for this payment rule
+        paymentSourceConditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentSourceCondition'
+          description: List of conditions for payment sources
+    ExchangePolicy:
+      type: object
+      description: Information about the exchange policy.
+      properties:
+        description:
+          type: string
+          description: Text describing the exchange policy.
+          example: Change allowed for free
+        fee:
+          $ref: '#/components/schemas/Money'
+        assessmentType:
+          $ref: '#/components/schemas/AssessmentType'
+        isCat16:
+          type: boolean
+          description: Is source cat16
+          example: true
+        isConditional:
+          type: boolean
+          description: Is conditional
+          example: true
+    ItineraryInfo:
+      type: object
+      description: Describes the detailed itinerary information provided in the search response.
+      properties:
+        itineraries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AirItin'
+            description: List of itineraries available for selection in the search results.
+        flightData:
+          type: array
+          description: The set of flights and their details that are contained in this response.
+          items:
+            $ref: '#/components/schemas/FlightCommon'
+    WorkerType:
+      type: string
+      description: The type of worker.
+      enum:
+      - EMPLOYEE
+      - CONTINGENT
+      - SEASONAL
+      - INTERN
+      - GUEST
+      example: EMPLOYEE
+      x-enumValidFrom:
+        GUEST: '2025-06-03'
+    AirItin:
+      type: object
+      description: Describes an itinerary containing legs and flights.
+      required:
+      - itineraryId
+      - legs
+      - travelers
+      - fareInfo
+      - ticketType
+      properties:
+        itineraryId:
+          type: string
+          description: The unique ID for this itinerary.
+          example: kjdUjak8hX
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AirLegInfo'
+            description: List of legs present in the itinerary.
+        travelers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravelerDetail'
+            description: List of passenger details in the itinerary.
+        fareInfo:
+          description: Describes the fare amount and taxes.
+          $ref: '#/components/schemas/FareInfo'
+        ticketType:
+          description: Indicates whether this itinerary will be a single or multi ticket
+          $ref: '#/components/schemas/TicketType'
+        policyInfos:
+          description: The policy details evaluated on the itinerary.
+          $ref: '#/components/schemas/PnrPolicyInfo'
+        posInfo:
+          type: array
+          description: The point of sales which offer the itinerary.
+          items:
+            $ref: '#/components/schemas/POSInfo'
+        publicFare:
+          description: The public fare attribute in case private fare is applied for any pax
+          $ref: '#/components/schemas/FareAmount'
+        allowedFopRules:
+          type: array
+          description: The payment method types applicable to the itinerary.
+          items:
+            $ref: '#/components/schemas/AllowedFopRule'
+        fareAttributes:
+          description: The fare attributes applicable to the itinerary.
+          $ref: '#/components/schemas/FareAttributes'
+    TravelClassHierarchy:
+      type: string
+      description: "Rail Travel classes in hierarchy numbering higher to keep scope for future additions in \nbetween.\n"
+      enum:
+      - UNKNOWN
+      - STANDARD
+      - COACH
+      - STANDARD_PREMIUM
+      - BUSINESS
+      - BUSINESS_PREMIUM
+      - FIRST
+      - SLEEPER
+      example: STANDARD
+    KnownTravelerNumberWrapper:
+      type: object
+      title: KnownTravelerNumberWrapper
+      properties:
+        ktn:
+          $ref: '#/components/schemas/KnownTravelerNumber'
+    Gate:
+      type: object
+      title: Gate
+      description: Flight boarding / arrival gate
+      properties:
+        gate:
+          type: string
+          description: Gate number
+          example: 1A
+        terminal:
+          type: string
+          description: Airport terminal
+          example: '1'
+    Traveler:
+      type: object
+      title: Traveler
+      description: Traveler details.
+      deprecated: true
+      x-sunset: '2026-07-01'
+      properties:
+        travelerPersonalInfo:
+          $ref: '#/components/schemas/TravelerPersonalInfo'
+        user:
+          $ref: '#/components/schemas/User'
+        userBusinessInfo:
+          $ref: '#/components/schemas/UserBusinessInfo'
+        userOrgId:
+          $ref: '#/components/schemas/UserOrgId'
+        persona:
+          $ref: '#/components/schemas/Persona'
+        isActive:
+          type: boolean
+          description: A boolean flag to show if traveler is active.
+          example: true
+        tier:
+          $ref: '#/components/schemas/Tier'
+        adhocUserInfo:
+          $ref: '#/components/schemas/AdhocUserInfo'
+        externalId:
+          type: string
+          description: External id of this user.
+    AlliancePref:
+      type: object
+      title: AlliancePref
+      description: Alliance preferences.
+      required:
+      - alliances
+      properties:
+        alliances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alliance'
+    LoyaltyInfo:
+      type: object
+      title: LoyaltyInfo
+      description: Loyalty Info details.
+      required:
+      - id
+      - type
+      - issuedBy
+      properties:
+        appliedTo:
+          type: array
+          items:
+            type: string
+            example: TAJ
+        id:
+          type: string
+          example: firstId
+          x-pii: IDENTIFIER
+        issuedBy:
+          type: string
+          example: firstIssuedBy
+        type:
+          type: string
+          enum:
+          - UNKNOWN_TYPE
+          - AIR
+          - HOTEL
+          - CAR
+          - RAIL
+          example: AIR
+        linked:
+          type: boolean
+          description: Indicates if this loyalty account is linked to the external provider. Only applicable for certain loyalty types.
+          default: false
+          example: false
+        tier:
+          $ref: '#/components/schemas/LoyaltyTier'
+    UserTitle:
+      title: UserTitle
+      type: string
+      x-pii: SENSITIVE
+      enum:
+      - TITLE_UNKNOWN
+      - MR
+      - MS
+      - MRS
+      - MX
+      - MASTER
+      - MISS
+      - DR
+      - PROFESSOR
+      - CAPTAIN
+      - REVEREND
+      - HONOURABLE
+      - SIR
+      - LADY
+      - AMBASSADOR
+      - LORD
+      - BRIGADIER
+      - SENATOR
+      - DAME
+      - JUSTICE
+      - UK
+      - TITLE_REDACTED
+      example: MR
+    Cabin:
+      title: Cabin
+      description: Flight cabin
+      type: string
+      enum:
+      - UNKNOWN_CABIN
+      - ECONOMY
+      - PREMIUM_ECONOMY
+      - BUSINESS
+      - FIRST
+      example: ECONOMY
+    AirRestrictedFaresParams:
+      type: object
+      title: AirRestrictedFaresParams
+      properties:
+        airRestrictedKeywords:
+          type: array
+          description: List of keywords grouped by airline
+          items:
+            $ref: '#/components/schemas/AirRestrictedKeyword'
+    FlightRef:
+      title: FlightRef
+      description: Flight reference information.
+      type: object
+      required:
+      - flightRef
+      properties:
+        flightRef:
+          type: string
+          description: 'Points to the detailed flight information in auxiliary flight data fields. flightRef is present in
+
+            FlightCommon. As a result, FlightRef can be used to point to the FlightCommon object.
+
+            '
+          example: flight_3
+    GradeId:
+      type: object
+      title: GradeId
+      description: Grade id.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
+    BeverageAmenityWrapper:
+      type: object
+      title: BeverageAmenityWrapper
+      properties:
+        beverageAmenity:
+          $ref: '#/components/schemas/BeverageAmenity'
+    PolicyAlertOnSelectionAction:
+      type: object
+      title: PolicyAlertOnSelectionAction
+      properties:
+        message:
+          type: string
+    Option:
+      type: object
+      title: Option
+      description: Answer option for a question
+      required:
+      - displayCode
+      properties:
+        displayCode:
+          type: string
+          description: The code which is sent in answer response.
+        displayValue:
+          type: string
+          description: The text to be displayed to the user beside this option.
+    CarVendor:
+      type: object
+      title: CarVendor
+      description: Car vendor.
+      required:
+      - code
+      - name
+      properties:
+        code:
+          type: string
+          description: Vendor code
+          example: ZE
+        name:
+          type: string
+          description: Vendor name
+          example: HERTZ
+        isPresentInPreferredVendors:
+          type: boolean
+          description: Whether the car vendor is present in preferred vendor list. This is an optional field which gets populated only in the preferred vendor autocomplete API.
+          example: true
+    PnrPolicyId:
+      title: PnrPolicyId
+      description: Pnr Policy id
+      type: object
+      required:
+      - id
+      - version
+      properties:
+        id:
+          type: string
+          description: Policy id
+        version:
+          type: string
+          description: version of the policy
+        policyName:
+          type: string
+          description: Name of the policy applied.
+        approvalType:
+          type: string
+          enum:
+          - HARD_APPROVAL
+          - SOFT_APPROVAL
+          - PASSIVE_APPROVAL
+          example: SOFT_APPROVAL
+        policyType:
+          type: string
+          enum:
+          - GLOBAL
+          - DEFAULT
+          - GROUP
+          example: GLOBAL
+    AllowedFopRule:
+      type: object
+      description: The payment method applicable for the itinerary
+      properties:
+        paymentItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentItem'
+            description: List of payment items eligible for associated payment rules.
+        amount:
+          $ref: '#/components/schemas/Money'
+          description: Total amount for specified fare components
+        paymentRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentRule'
+            description: List of payment rules applicable for the itinerary
+    MoneyWrapper:
+      type: object
+      title: MoneyWrapper
+      properties:
+        money:
+          $ref: '#/components/schemas/Money'
+    RoomPreference:
+      type: object
+      title: RoomPreference
+      description: Room options and stay preference.
+      properties:
+        isMobilityAccessible:
+          type: boolean
+          description: Whether or not mobility accessible room, tub.
+          default: false
+          example: false
+        bedCount:
+          type: string
+          description: The number of bed in the room.
+          enum:
+          - ONE_BED
+          - TWO_BEDS
+          example: ONE_BED
+        roomType:
+          type: string
+          description: Single selection of type of room.
+          enum:
+          - SMOKING
+          - NON_SMOKING
+          example: SMOKING
+        mostImportantFact:
+          type: string
+          description: Single selection of the most import fact.
+          enum:
+          - ROOM_TYPE
+          - BED_COUNT
+          - ROOM_LOCATION
+          example: BED_COUNT
+        roomLocation:
+          type: string
+          description: Location of the hotel room
+          enum:
+          - HIGH_FLOOR
+          - LOW_FLOOR
+          - NEAR_ELEVATOR
+          example: HIGH_FLOOR
+        pillowType:
+          type: string
+          description: The type of pillow in hotel room.
+          enum:
+          - FOAM
+          - EXTRA_FOAM
+          - EXTRA_FEATHER
+          example: FOAM
+        roomAmenityPrefs:
+          type: array
+          items:
+            type: string
+            description: Amenity preference of the room.
+            enum:
+            - FEATHER_FREE_ROOM
+            - EXTRA_TOWELS
+            - REFRIGERATOR
+            example: EXTRA_TOWELS
+    CarLocation:
+      type: object
+      title: CarLocation
+      description: Pickup and drop-off location info.
+      required:
+      - address
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+          description: Location address / airport code.
+        coordinates:
+          $ref: '#/components/schemas/Latlng'
+          description: Latitude and longitude of the location.
+        counterLocation:
+          $ref: '#/components/schemas/CounterLocation'
+          description: Counter location. If airport counter, set locationCode in address.
+        contactInfo:
+          $ref: '#/components/schemas/LocationContactInfo'
+        operatingSchedule:
+          $ref: '#/components/schemas/LocationOperatingSchedule'
+        weeklyOperatingSchedule:
+          type: array
+          description: Weekly operating schedule of vendor
+          items:
+            $ref: '#/components/schemas/WeeklyOperatingSchedule'
+    TripContact:
+      title: TripContact
+      description: Contacts for the trip
+      type: object
+      required:
+      - label
+      - name
+      properties:
+        label:
+          type: string
+          description: Label for the contact
+          example: Coordinator
+        name:
+          type: string
+          description: Name of the contact
+          example: Himani Jain
+          x-pii: SENSITIVE
+        email:
+          type: string
+          description: Email of the contact
+          example: himani@spotnana.com
+          x-pii: IDENTIFIER
+        phoneNumber:
+          description: Phone no. of the trip contact
+          $ref: '#/components/schemas/PhoneNumber'
+        isPrimary:
+          type: boolean
+          description: Whether the contact is primary or not
+          example: true
+          default: false
+        restrictVisibility:
+          type: boolean
+          description: Whether to restrict visibility of the contact to only agents and admins
+          example: true
+          default: false
+    PaymentItem:
+      type: object
+      description: The payment item eligible for associated payment rules
+      properties:
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+          description: Type of payment item eligible for this fop rule
+        fareComponent:
+          type: array
+          items:
+            $ref: '#/components/schemas/FareComponent'
+            description: List of fare components of associated payment item
+    ApprovalStatusFilterV2:
+      type: object
+      title: ApprovalStatusFilterV2
+      description: Approval status filter for the approval data list request.
+      required:
+      - filterType
+      - approvalStatuses
+      properties:
+        filterType:
+          type: string
+          example: APPROVAL_STATUS_FILTER
+        approvalStatuses:
+          type: array
+          description: Approval Status list
+          items:
+            $ref: '#/components/schemas/ApprovalStatusV2'
+    ProfileOwner:
+      type: object
+      title: ProfileOwner
+      description: Basic information about the owner of the ad-hoc user.
+      required:
+      - userId
+      properties:
+        userId:
+          $ref: '#/components/schemas/UserId'
+    FareInfo:
+      title: FareInfo
+      description: The detailed information about the fare (including tax and merchant fee details).
+      required:
+      - totalFare
+      properties:
+        totalFare:
+          description: Total fare applicable to the associated entity.
+          $ref: '#/components/schemas/FareAmount'
+        taxBreakdown:
+          description: Details about of the tax amount in totalFare field.
+          $ref: '#/components/schemas/TaxBreakdown'
+        merchantFeeInfo:
+          $ref: '#/components/schemas/MerchantFeeInfo'
+    SeatPrefType:
+      type: string
+      description: The type of seat of the rail.
+      enum:
+      - SLEEPER_BED
+      - NORMAL
+      - TABLE_SEAT
+      example: NORMAL
+    FreshFoodAmenity:
+      type: object
+      title: FreshFoodAmenity
+      description: Properties associated with the fresh food amenity.
+      properties:
+        displayText:
+          type: string
+        freshFoodType:
+          type: string
+        cost:
+          type: string
+    TravelType:
+      type: string
+      title: TravelType
+      description: Travel Type
+      enum:
+      - AIR
+      - HOTEL
+      - CAR
+      - RAIL
+      - LIMO
+      - MISC
+      - ALL
+      example: AIR
+    QuestionType:
+      type: object
+      title: QuestionType
+      description: Question type.
+      properties:
+        preSearchQuestionType:
+          $ref: '#/components/schemas/PreSearchQuestionType'
+        preCheckoutQuestionType:
+          $ref: '#/components/schemas/PreCheckoutQuestionType'
+    TravelerDetail:
+      title: TravelerDetail
+      description: Passenger information in the search response
+      type: object
+      required:
+      - travelerId
+      - travelerType
+      - fareInfo
+      properties:
+        travelerId:
+          type: string
+          description: Unique identifier for the traveler in this response
+          example: adult_0
+        travelerType:
+          $ref: '#/components/schemas/PassengerType'
+        travelerAge:
+          $ref: '#/components/schemas/PassengerAge'
+        fareInfo:
+          $ref: '#/components/schemas/FareInfo'
+        fareMetadata:
+          $ref: '#/components/schemas/FareMetadata'
+    Reference:
+      type: object
+      title: Reference object containing uuid and name of the entity.
+      description: Reference of an entity
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+        name:
+          type: string
+          example: Name
+    PnrType:
+      type: string
+      description: Type of PNR
+      enum:
+      - AIR
+      - CAR
+      - RAIL
+      - HOTEL
+      - LIMO
+      - MISC
+    FareCategory:
+      type: object
+      properties:
+        ngsCategory:
+          $ref: '#/components/schemas/NGSFareCategory'
+        cabinViewCategory:
+          $ref: '#/components/schemas/CabinViewFareCategory'
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    PersonaWrapper:
+      type: object
+      title: PersonaWrapper
+      properties:
+        persona:
+          $ref: '#/components/schemas/Persona'
+    OffsetBasedPaginationRequestParams:
+      type: object
+      title: OffsetBasedPaginationRequestParams
+      description: Pagination parameters for requests.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
+          default: 0
+          minimum: 0
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to be fetched.
+          minimum: 1
+          default: 100
+    AirMetadata:
+      type: object
+      description: Metadata associated with the air search response.
+      properties:
+        airlineInfo:
+          type: array
+          description: Metadata for all airlines available in the specific route.
+          items:
+            $ref: '#/components/schemas/AirlineInfo'
+        applicableAlliances:
+          type: array
+          description: Alliances which are applicable based on the airlines info
+          items:
+            $ref: '#/components/schemas/Alliance'
+        legBylegPricing:
+          type: boolean
+          description: 'Flag indicating whether itineraries are priced on a leg-by-leg basis (instead of the overall itinerary
+
+            pricing, which is the default).
+
+            '
+        enableFareCategories:
+          type: array
+          description: Fare categories that need to be used for the given air search
+          items:
+            $ref: '#/components/schemas/FareCategory'
+        isExpressSearch:
+          type: boolean
+          description: Flag indicating whether the search was performed as an express search.
+        availableConnectingAirports:
+          type: array
+          description: 'List of connecting airports (layover locations) available in the search results.
+
+            Sorted by: 1) number of results (descending), 2) alphabetically (ascending).
+
+            '
+          items:
+            $ref: '#/components/schemas/AirportInfo'
+    BaggagePolicy:
+      type: object
+      description: Baggage policy for this traveler.
+      required:
+      - checkedIn
+      - carryOn
+      properties:
+        checkedIn:
+          type: array
+          description: Policies for checked-in baggage
+          items:
+            $ref: '#/components/schemas/BaggageInfo'
+        carryOn:
+          type: array
+          description: Policies for carry-on baggage
+          items:
+            $ref: '#/components/schemas/BaggageInfo'
+    PostalAddressWrapper:
+      type: object
+      title: PostalAddressWrapper
+      properties:
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+    LocationOperatingSchedule:
+      type: object
+      title: LocationOperatingSchedule
+      description: Operating schedule of vendor
+      required:
+      - interval
+      properties:
+        interval:
+          type: array
+          description: Operating schedule interval
+          items:
+            $ref: '#/components/schemas/DateTimeRange'
+    TemperatureAmenityWrapper:
+      type: object
+      title: TemperatureAmenityWrapper
+      properties:
+        temperatureAmenity:
+          $ref: '#/components/schemas/TemperatureAmenity'
+    RailPnrSummary:
+      type: object
+      title: RailPnrSummary
+      description: Summary of Rail PNR
+      properties:
+        journeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/RailJourneySummary'
+        totalAmount:
+          $ref: '#/components/schemas/Money'
+    PolicyAlertOnSelectionActionWrapper:
+      type: object
+      title: PolicyAlertOnSelectionActionWrapper
+      properties:
+        alertOnSelection:
+          $ref: '#/components/schemas/PolicyAlertOnSelectionAction'
+    PolicyPreventBookingActionWrapper:
+      type: object
+      title: PolicyPreventBookingActionWrapper
+      properties:
+        preventBooking:
+          $ref: '#/components/schemas/PolicyPreventBookingAction'
+    UserBasicInfo:
+      type: object
+      title: UserBasicInfo
+      description: Basic user information.
+      properties:
+        userOrgId:
+          $ref: '#/components/schemas/UserOrgId'
+        persona:
+          $ref: '#/components/schemas/Persona'
+        email:
+          type: string
+          format: email
+          example: example@email.com
+          x-pii: IDENTIFIER
+        name:
+          $ref: '#/components/schemas/Name'
+        profilePicture:
+          $ref: '#/components/schemas/Image'
+        tier:
+          $ref: '#/components/schemas/Tier'
+        phoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+          x-pii: IDENTIFIER
+        employeeId:
+          type: string
+          description: Employee id of the user
+        isActive:
+          type: boolean
+          description: Whether user profile is active or not.
+          example: true
+    FareMetadata:
+      description: Metadata about pax fare
+      properties:
+        corpAccountCode:
+          type: string
+          description: The corp account code for each pax.
+          example: 6CA4
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,436 @@
+openapi: 3.1.0
+info:
+  title: Air Cost Centers API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Cost Centers
+  description: APIs to create and manage company cost centers.
+paths:
+  /v2/companies/{companyId}/cost-centers:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Cost Centers
+      summary: Create cost center
+      description: This endpoint creates a cost center.
+      operationId: createCostCenter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCostCenterRequest'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    get:
+      tags:
+      - Cost Centers
+      summary: List cost centers
+      description: 'This endpoint lists cost centers of a company. If an externalId is provided in the query parameter
+
+        only the cost center with the provided externalId is returned.
+
+        '
+      operationId: listCostCenters
+      deprecated: true
+      x-sunset: '2026-07-01'
+      parameters:
+      - name: externalId
+        in: query
+        description: External id of the cost center.
+        required: false
+        schema:
+          type: string
+        example: cost-center-external-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfReference'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v2/companies/{companyId}/cost-centers/{costCenterId}:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: costCenterId
+      in: path
+      description: Identifier for cost-center.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Cost Centers
+      summary: Get cost center
+      description: This endpoint gets a cost center by ID.
+      operationId: getCostCenter
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostCenter'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Cost Centers
+      summary: Update cost center
+      operationId: updateCostCenter
+      description: This endpoint updates a cost center by ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostCenter'
+      responses:
+        '204':
+          description: Updated Successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Cost Centers
+      summary: Delete cost center
+      description: This endpoint deletes a cost center by ID.
+      operationId: deleteCostCenter
+      parameters:
+      - name: detachUsers
+        in: query
+        description: Whether to remove this cost center's reference from associated user entities.
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/companies/{companyId}/cost-centers/list:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Cost Centers
+      summary: List cost centers
+      description: 'This endpoint lists cost centers of a company.
+
+        '
+      operationId: listCostCentersV3
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListCostCentersRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCostCentersResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    OffsetBasedPaginationResponseParams:
+      type: object
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
+      required:
+      - totalNumResults
+      properties:
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results.
+    ListCostCentersFilter:
+      type: object
+      title: ListCostCentersFilter
+      description: Filter parameters for cost centers.
+      properties:
+        externalIds:
+          type: array
+          items:
+            type: string
+            example: external-id
+          description: List of external ids.
+        costCenterIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+          description: List of cost center ids.
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+    CostCenterId:
+      type: object
+      title: Cost center id.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+    ListCostCentersResponse:
+      type: object
+      description: Response for list cost centers API.
+      required:
+      - paginationParams
+      properties:
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
+        costCenters:
+          type: array
+          description: List of cost centers containing id and name.
+          items:
+            $ref: '#/components/schemas/CostCenterInfo'
+    OffsetBasedPaginationRequestParams:
+      type: object
+      title: OffsetBasedPaginationRequestParams
+      description: Pagination parameters for requests.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
+          default: 0
+          minimum: 0
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to be fetched.
+          minimum: 1
+          default: 100
+    ArrayOfReference:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+        elements:
+          type: array
+          description: List of references containing id and name.
+          items:
+            $ref: '#/components/schemas/Reference'
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results
+    CostCenter:
+      type: object
+      title: CostCenter
+      description: Cost center details.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/CostCenterId'
+        name:
+          type: string
+          example: CostCenter
+        externalId:
+          type: string
+          example: external-id
+    CostCenterInfo:
+      type: object
+      title: CostCenterInfo
+      description: Cost center information with UUID and entity name.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+        name:
+          type: string
+          example: Credit
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    ListCostCentersRequest:
+      type: object
+      description: Request body for list cost centers API.
+      required:
+      - paginationParams
+      properties:
+        searchText:
+          type: string
+          description: Search string entered by the user
+          example: Credit
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
+        filters:
+          type: array
+          description: List of filters. Cost centers matching with any filter would be returned.
+          items:
+            $ref: '#/components/schemas/ListCostCentersFilter'
+    CreateCostCenterRequest:
+      type: object
+      description: Request body for cost center create API.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        numberOfEmployees:
+          type: integer
+          format: int32
+        externalId:
+          type: string
+          example: external-id
+    Reference:
+      type: object
+      title: Reference object containing uuid and name of the entity.
+      description: Reference of an entity
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+        name:
+          type: string
+          example: Name
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

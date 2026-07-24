@@ -1,0 +1,155 @@
+openapi: 3.1.0
+info:
+  title: Air Authentication API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Authentication
+  description: Authentication APIs for user login, logout, and token management
+paths:
+  /v2/auth/oauth2-token:
+    post:
+      tags:
+      - Authentication
+      summary: Get oauth2 token
+      description: 'Get oauth2 token using the client credentials.
+
+        {% admonition type="warning" %}
+
+        **Note:** API calls to the `/v2/auth/oauth2-token` and `/get-auth-token` (legacy) endpoints are rate limited.
+
+        We recommend reusing the existing tokens until they expire.
+
+        {% /admonition %}
+
+        '
+      operationId: fetchOauth2Token
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OAuthTokenRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthTokenResponse'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    OAuthTokenResponse:
+      type: object
+      title: OAuthTokenResponse
+      required:
+      - access_token
+      - token_type
+      x-ignore-naming-case: true
+      properties:
+        access_token:
+          type: string
+          description: The token to be used in subsequent API calls made to the Spotnana platform.
+        expires_in:
+          type: integer
+          description: The length of time (in seconds) for which the access token is valid.
+          format: int32
+        token_type:
+          type: string
+          description: "A case-insensitive value specifying the method of using the access token issued, as \nspecified in Section 7.1 of [RFC6749].\n"
+          example: Bearer
+        refresh_token:
+          type: string
+          description: 'Used to fetch a new access token when the existing token expires.
+
+            The refresh token will not be available if the `grant_type` is `client_credentials`.
+
+            '
+        scope:
+          type: string
+          description: "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \n[RFC6749], that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    OAuthTokenRequest:
+      type: object
+      title: OAuthTokenRequest
+      x-ignore-naming-case: true
+      required:
+      - grant_type
+      - client_id
+      - client_secret
+      properties:
+        grant_type:
+          type: string
+          description: Supported values are `client_credentials` and `urn:ietf:params:oauth:grant-type:token-exchange`.
+        client_id:
+          type: string
+          description: Identifier for the API user.
+        client_secret:
+          type: string
+          description: Password
+        audience:
+          type: string
+          description: Identifies the API being accessed in Spotnana.
+          example: https://apis.spotnana.com/v2
+        subject_token:
+          type: string
+          description: "A security token that represents the identity of the entity on whose behalf the request \nis being made.\n"
+        subject_token_type:
+          type: string
+          description: "Indicates the type of the `subject_token` used for token exchange. \nThis field supports the valid types as per the OAUTH 2.0 security framework.\n"
+        scope:
+          type: string
+          description: "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \nRFC6749 OAuth 2.0 framework, that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

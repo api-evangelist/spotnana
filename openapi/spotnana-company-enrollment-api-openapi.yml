@@ -1,0 +1,208 @@
+openapi: 3.1.0
+info:
+  title: Air Company Enrollment API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Company Enrollment
+paths:
+  /v2/companies/{companyId}/enrollment-config:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    put:
+      tags:
+      - Company Enrollment
+      summary: Updates Enrollment config
+      description: This endpoint stores Enrollment config for the company at TMC level.
+      operationId: updateCompanyEnrollmentConfig
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrollmentConfig'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    get:
+      tags:
+      - Company Enrollment
+      summary: Get enrollment config
+      description: This endpoint fetches the enrollment config for the company.
+      operationId: getCompanyEnrollmentConfig
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrollmentConfig'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    CompanySpecifiedAttributeConfig:
+      type: object
+      title: CompanySpecifiedAttributeConfig
+      description: Configuration for a company-specified attribute on the enrollment form.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The attribute name.
+        isHidden:
+          type: boolean
+          description: Whether this attribute should be hidden from the enrollment form UI.
+          default: false
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    EnrollmentTemplateSettings:
+      type: object
+      title: EnrollmentTemplateSettings
+      description: Template settings for enrollment emails.
+      properties:
+        applicationReceivedTemplate:
+          type: string
+          description: Template ID for application received emails.
+        applicationRejectedTemplate:
+          type: string
+          description: Template ID for application rejected emails.
+        applicationApprovedTemplate:
+          type: string
+          description: Template ID for application approved emails.
+    EnrollmentConfig:
+      type: object
+      title: EnrollmentConfig
+      description: Enrollment configuration.
+      required:
+      - termsAndConditions
+      properties:
+        termsAndConditions:
+          type: string
+          example: https://www.spotnana.com/terms/
+          description: 'Deprecated: Use termsAndConditionsList instead. Link to terms and conditions.'
+          deprecated: true
+          x-sunset: '2027-01-01'
+        termsAndConditionsList:
+          type: array
+          description: List of terms and conditions. Each item is rich text that renders a bullet point with text and link.
+          items:
+            type: string
+          example:
+          - I agree to the <a href="https://www.spotnana.com/terms/">Terms of Service</a>
+          - I agree to the <a href="https://www.spotnana.com/privacy/">Privacy Policy</a>
+        templateSettings:
+          $ref: '#/components/schemas/EnrollmentTemplateSettings'
+        industryDropdownOptions:
+          type: array
+          items:
+            type: string
+          description: Dropdown options for company industry selection.
+        skipOfacComplianceCheck:
+          type: boolean
+          description: Skip OFAC compliance check during enrollment.
+        registrarLoginActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoginActionType'
+          description: Login action types assigned to users created via enrollment.
+        companySpecifiedAttributeConfigs:
+          type: array
+          description: Configuration for company-specified attributes on the enrollment form.
+          items:
+            $ref: '#/components/schemas/CompanySpecifiedAttributeConfig'
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    LoginActionType:
+      type: string
+      description: Type of login action.
+      enum:
+      - PRIVACY_CONSENT_ACTION
+      - ONBOARDING_ACTION
+      - HYATT_LOYALTY_VALIDATION
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,478 @@
+openapi: 3.1.0
+info:
+  title: Air Autocomplete API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Autocomplete
+paths:
+  /v2/air-autocomplete:
+    get:
+      tags:
+      - Autocomplete
+      summary: airAutocomplete
+      operationId: airAutocomplete
+      parameters:
+      - name: query
+        in: query
+        description: Query to get autocomplete response
+        required: true
+        schema:
+          type: string
+        example: LHR
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AirAutocompleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /v2/hotel-supplier-autocomplete:
+    get:
+      tags:
+      - Autocomplete
+      summary: Hotel Supplier Autocomplete
+      description: This endpoint provides autocomplete suggestions for hotels based on the query provided.
+      operationId: hotelSupplierAutocomplete
+      parameters:
+      - name: query
+        in: query
+        description: Query to get autocomplete response
+        required: true
+        schema:
+          type: string
+        example: New York Marquis
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelAutocompleteResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ContactInfo:
+      type: object
+      title: Contact Information
+      description: Provides contact information for a hotel.
+      required:
+      - phone
+      - email
+      properties:
+        phone:
+          type: array
+          description: List of phone numbers for the hotel.
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        fax:
+          type: array
+          description: List of fax numbers for the hotel.
+          items:
+            type: string
+        email:
+          type: array
+          description: List of email addresses for the hotel.
+          items:
+            type: string
+    Airport:
+      title: Airport
+      description: Airport Details
+      type: object
+      required:
+      - airportCode
+      - airportName
+      - cityCode
+      properties:
+        airportCode:
+          type: string
+          description: Unique code for the Airport
+          example: LHR
+        airportName:
+          type: string
+          description: Full Name of the Airport
+          example: Heathrow Airport
+        cityCode:
+          type: string
+          description: City Code for the location
+          example: LON
+        location:
+          $ref: '#/components/schemas/Location'
+        groupInfo:
+          $ref: '#/components/schemas/AirportGroupInfo'
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    HotelAutocompleteResponse:
+      title: HotelAutocompleteResponse
+      type: object
+      required:
+      - hotels
+      properties:
+        hotels:
+          type: array
+          description: List of Hotels matching the Autocomplete query
+          items:
+            $ref: '#/components/schemas/AutocompleteHotel'
+    Location:
+      title: Location
+      description: Location details
+      type: object
+      required:
+      - name
+      properties:
+        countryCode:
+          type: string
+          description: Unique country code for a location
+          example: TR
+        countryName:
+          type: string
+          description: Full name of the country
+          example: Turkey
+        googlePlaceId:
+          type: string
+          description: Unique place ID for the location assigned by Google
+          example: ChIJL_P_CXMEDTkRw0ZdG-0GVvw
+        latlong:
+          $ref: '#/components/schemas/Latlng'
+        name:
+          type: string
+          description: Full name of the Location
+          example: Denver
+        stateName:
+          type: string
+          description: Full name of the state
+          example: Colorado
+    AutocompleteHotel:
+      title: AutocompleteHotel
+      description: Hotel Details
+      type: object
+      required:
+      - hotelName
+      properties:
+        hotelCode:
+          type: string
+          description: Unique Code for the hotel
+          example: '100259788'
+        hotelName:
+          type: string
+          description: Full Name of the hotel
+          example: Delphin Deluxe Resort
+        location:
+          $ref: '#/components/schemas/Location'
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+        isPresentInPreferredVendors:
+          type: boolean
+          description: Whether the hotel is present in preferred vendor list. This is an optional field which gets populated only in the preferred vendor autocomplete API.
+          example: true
+        brandCode:
+          type: string
+          example: MC
+          description: The code of hotel brand.
+        chainCode:
+          type: string
+          example: EM
+          description: The code of hotel chain.
+        starRating:
+          $ref: '#/components/schemas/HotelStarRatingInfo'
+          description: Hotel star rating detail.
+        contactInfo:
+          $ref: '#/components/schemas/ContactInfo'
+          description: Contact information for the hotel.
+    PostalAddress:
+      title: PostalAddress
+      description: Postal Address Details
+      type: object
+      required:
+      - addressLines
+      - regionCode
+      properties:
+        addressLines:
+          description: Address lines
+          type: array
+          items:
+            type: string
+            example: Golden Gate Bridge
+        administrativeArea:
+          type: string
+          description: 'Code of administrative area. For example: DL for Delhi, India.
+
+            Highest administrative subdivision which is used for postal
+
+            addresses of a country or region.
+
+            For example, this can be a state, a province, an oblast, or a prefecture.
+
+            Specifically, for Spain this is the province and not the autonomous
+
+            community (e.g. "Barcelona" and not "Catalonia").
+
+            Many countries don''t use an administrative area in postal addresses. E.g.
+
+            in Switzerland this should be left unpopulated.
+
+            '
+          example: CA
+        administrativeAreaName:
+          type: string
+          description: "Name of administrative area. This is full name corresponding to administrativeArea. \nLike Delhi for DL area code. For some places, code and name maybe same as well like Tokyo.\n"
+          example: California
+        description:
+          description: Address description
+          type: string
+          example: San Francisco Home
+        isDefault:
+          description: Whether this address is default address in case multiple addresses are specified.
+          type: boolean
+          example: true
+        languageCode:
+          description: "BCP-47 language code of the contents of this address (if known). This is often the UI \nlanguage of the input form or is expected to match one of the languages used in the \naddress' country/region, or their transliterated equivalents.\nThis can affect formatting in certain countries, but is not critical to the correctness \nof the data and will never affect any validation or other non-formatting related operations.\nExamples: \"zh-Hant\", \"ja\", \"ja-Latn\", \"en\".\n"
+          type: string
+          example: en
+        locality:
+          description: Generally refers to the city/town portion of the address.
+          type: string
+          example: San Francisco
+        locationCode:
+          description: IATA 3-letter location code. See https://www.iata.org/en/services/codes.
+          type: string
+          example: LAX
+        organization:
+          description: The name of the organization at the address.
+          type: string
+          example: Spotnana
+        postalCode:
+          description: Postal code of the address. This is a required field when setting for a user/legal entity/company etc.
+          type: string
+          example: '94130'
+        continentCode:
+          description: 2 letter continent code of the continent this address falls in.
+          type: string
+          example: AF
+        recipients:
+          description: The recipient at the address.
+          type: array
+          items:
+            type: string
+        regionCode:
+          description: Region code of the country/region of the address.
+          type: string
+          example: US
+        regionName:
+          description: Region name of the country/region of the address.
+          type: string
+          example: America
+        revision:
+          type: integer
+          format: int32
+          example: 1
+        sortingCode:
+          description: 'Additional, country-specific, sorting code. This is not used
+
+            in most regions. Where it is used, the value is either a string like
+
+            "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
+
+            alone, representing the "sector code" (Jamaica), "delivery area indicator"
+
+            (Malawi) or "post office indicator" (e.g. Côte d''Ivoire).
+
+            '
+          type: string
+          example: Jamaica
+        sublocality:
+          description: Sublocality of the address. This can be neighborhoods, boroughs, districts.
+          type: string
+        timezone:
+          description: Time zone of the address.
+          type: string
+          example: America/Los_Angeles
+        coordinates:
+          description: Map coordinates of the address.
+          $ref: '#/components/schemas/Latlng'
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    AirAutocompleteResponse:
+      title: AirAutocompleteResponse
+      type: object
+      required:
+      - airports
+      properties:
+        airports:
+          type: array
+          description: List of Airports matching the query
+          items:
+            $ref: '#/components/schemas/Airport'
+    HotelStarRatingInfo:
+      type: object
+      title: Hotel Start Rating Information
+      description: Details about hotel star rating.
+      required:
+      - starRating
+      - ratingType
+      properties:
+        starRating:
+          type: number
+          format: float
+          example: 3
+          description: Star rating of the hotel.
+          minimum: 0
+          maximum: 5
+        ratingType:
+          type: string
+          title: Star Rating Type
+          enum:
+          - OFFICIAL
+          - SELF_RATED
+          description: Enum representing the type of star rating.
+    AirportGroupInfo:
+      title: AirportGroupInfo
+      description: Grouping criteria for the airports in same group
+      type: object
+      required:
+      - groupId
+      - mainAirportLocation
+      properties:
+        groupId:
+          type: string
+          description: Id of the airport group
+          example: NYC
+        groupCityCode:
+          type: string
+          description: City code of the airport group. If airport group does not have a recognized city code, then this field will be empty.
+          example: NYC
+        mainAirportLocation:
+          description: Location of the main airport in the group
+          $ref: '#/components/schemas/Location'
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    PhoneNumber:
+      type: object
+      title: PhoneNumber
+      description: Properly formatted phone number.
+      properties:
+        countryCode:
+          type: integer
+          format: int32
+          description: two digit country code
+          example: 91
+        countryCodeSource:
+          type: string
+          enum:
+          - UNSPECIFIED
+          - FROM_NUMBER_WITH_PLUS_SIGN
+          - FROM_NUMBER_WITH_IDD
+          - FROM_NUMBER_WITHOUT_PLUS_SIGN
+          - FROM_DEFAULT_COUNTRY
+          example: FROM_NUMBER_WITH_PLUS_SIGN
+        extension:
+          description: phone number extension
+          type: string
+          example: '222'
+        isoCountryCode:
+          description: ISO alpha-2 code
+          type: string
+          example: IN
+        italianLeadingZero:
+          type: boolean
+          default: false
+          example: true
+        nationalNumber:
+          type: integer
+          format: int64
+          example: 8150
+        numberOfLeadingZeros:
+          type: integer
+          format: int32
+          default: 0
+          example: 1
+        preferredDomesticCarrierCode:
+          type: string
+          example: '7'
+        rawInput:
+          type: string
+          example: '77777'
+        type:
+          type: string
+          enum:
+          - UNKNOWN_TYPE
+          - MOBILE
+          - LANDLINE
+          example: MOBILE
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

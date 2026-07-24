@@ -1,0 +1,133 @@
+openapi: 3.1.0
+info:
+  title: Air Tenant Encryption API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Tenant Encryption
+  description: APIs to enable per-tenant encryption (PTE) for a company.
+paths:
+  /v3/tenant-encryption/{companyId}/key:
+    parameters:
+    - name: companyId
+      in: path
+      description: Tenant (company) identifier
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Tenant Encryption
+      summary: Create or rotate tenant CMK
+      description: 'First call provisions a Spotnana-managed CMK and DEK.
+
+        Subsequent calls rotate the CMK and re-wrap the existing DEK.
+
+        Returns 429 if called within the one-hour cooldown window.
+
+        Requires the COMPANY_MANAGEMENT WRITE permission on the company.
+
+        '
+      operationId: provisionOrRotateTenantKey
+      responses:
+        '200':
+          description: Key provisioned or rotated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProvisionOrRotateTenantKeyResponse'
+              example:
+                configId: 4974a66b-7493-4f41-908c-58ba81093947
+                created: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          description: Key rotation cooldown not elapsed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    ProvisionOrRotateTenantKeyResponse:
+      type: object
+      title: ProvisionOrRotateTenantKeyResponse
+      properties:
+        configId:
+          type: string
+          format: uuid
+          example: 4974a66b-7493-4f41-908c-58ba81093947
+        created:
+          type: boolean
+          description: True on first provision; false on CMK rotation.
+          example: true
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer

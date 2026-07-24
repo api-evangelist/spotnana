@@ -1,0 +1,2785 @@
+openapi: 3.1.0
+info:
+  title: Air Company Policies API
+  version: v2
+  description: APIs to perform search, checkout and book an air pnr
+servers:
+- url: https://api-ext-sboxmeta.partners.spotnana.com
+  description: Sandbox URL
+security:
+- Bearer: []
+tags:
+- name: Company Policies
+  description: APIs to configure company travel policies.
+paths:
+  /v2/companies/{companyId}/policies:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    post:
+      tags:
+      - Company Policies
+      summary: Create policy
+      description: This endpoint creates a policy.
+      operationId: createPolicy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePolicyRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    get:
+      tags:
+      - Company Policies
+      summary: List company policies
+      description: This endpoint list company policies.
+      operationId: listPolicies
+      parameters:
+      - name: categories
+        in: query
+        description: Filter policies by categories. Defaults to EMPLOYEE if not provided.
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyCategory'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfReference'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v2/companies/{companyId}/policies/{policyId}:
+    parameters:
+    - name: companyId
+      in: path
+      description: Identifier for company.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    - name: policyId
+      in: path
+      description: Identifier for policy.
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 4974a66b-7493-4f41-908c-58ba81093947
+    get:
+      tags:
+      - Company Policies
+      summary: Get policy
+      description: This endpoint gets a policy by ID.
+      operationId: readPolicy
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Company Policies
+      summary: Update policy
+      description: This endpoint updates a policy by ID.
+      operationId: updatePolicy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Policy'
+      responses:
+        '204':
+          description: Updated Successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+      - Company Policies
+      summary: Delete policy
+      description: This endpoint deletes a policy by ID.
+      operationId: deletePolicy
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    HotelRestrictedKeyword:
+      type: object
+      title: HotelRestrictedKeyword
+      description: Keyword that should not be allowed in hotel name/description.
+      required:
+      - keyword
+      - reason
+      properties:
+        keyword:
+          type: string
+          description: Keyword that should not be allowed in hotel name/description.
+        reason:
+          type: string
+          description: Reason for not allowing the keyword.
+    RuleTierExemptionConfig:
+      type: object
+      title: RuleTierExemptionConfig
+      description: Per-rule tier exemption configuration with defaults.
+      properties:
+        defaultExemptedTiers:
+          type: array
+          description: 'Default tiers exempted for every rule not explicitly listed in ruleTierExemptions.
+
+            '
+          items:
+            $ref: '#/components/schemas/PreferenceTierLevel'
+        ruleTierExemptions:
+          type: array
+          description: 'Per-rule exemption configuration. Overrides defaultExemptedTiers for the listed rule types.
+
+            '
+          items:
+            $ref: '#/components/schemas/RuleTierExemption'
+    FlightAdvanceBookingWindow:
+      type: object
+      title: FlightAdvanceBookingWindow
+      description: 'Air rule to describe whether to use default policy or a different advance booking window for
+
+        a flight.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/FlightAdvanceBookingWindowPropsWrapper'
+    RestrictedAirlinesProps:
+      type: object
+      title: RestrictedAirlinesProps
+      description: List of IATA Airline code.
+      required:
+      - airlineCodes
+      properties:
+        airlineCodes:
+          type: array
+          items:
+            type: string
+    ContinentProps:
+      type: object
+      title: ContinentProps
+      description: List of continent with their type of restriction.
+      required:
+      - restrictions
+      properties:
+        restrictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContinentRestriction'
+    Co2EmissionPerPassengerPerKmProps:
+      type: object
+      title: Co2EmissionPerPassengerPerKmProps
+      description: 'Maximum allowed Co2 emission (in grams) per passenger per flight distance covered (in Kms).
+
+        '
+      required:
+      - emission
+      properties:
+        emission:
+          type: number
+          format: double
+    HotelPolicyRules:
+      type: object
+      title: HotelPolicyRules
+      description: Details of rules related to hotel.
+      properties:
+        restrictedHotels:
+          $ref: '#/components/schemas/RestrictedHotels'
+        maxHotelPriceByLocation:
+          $ref: '#/components/schemas/MaxHotelPriceByLocation'
+        hotelAdvanceBookingWindow:
+          $ref: '#/components/schemas/HotelAdvanceBookingWindow'
+        hotelCancellation:
+          $ref: '#/components/schemas/HotelCancellation'
+        hotelChainCodes:
+          $ref: '#/components/schemas/HotelChainCodes'
+        hotelStarRating:
+          $ref: '#/components/schemas/HotelStarRating'
+        hotelMedianRateNightly:
+          $ref: '#/components/schemas/HotelMedianRate'
+        hotelCentralTierExemption:
+          $ref: '#/components/schemas/HotelCentralTierExemption'
+    MaxFlightBookingPriceByDurationProps:
+      type: object
+      title: MaxFlightBookingPriceByDurationProps
+      description: List of max price of flight booking for different flight duration.
+      required:
+      - maxPricePerDurationList
+      properties:
+        maxPricePerDurationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaxFlightPricePerDuration'
+        isTaxIncluded:
+          type: boolean
+          default: false
+    FlightCabinUpgradePropsWrapper:
+      type: object
+      title: FlightCabinUpgradePropsWrapper
+      properties:
+        flightCabinUpgradeProps:
+          $ref: '#/components/schemas/FlightCabinUpgradeProps'
+    CarPolicyRules:
+      type: object
+      title: CarPolicyRules
+      description: Details of rules related to car.
+      properties:
+        maxCarPricePerNumberOfDays:
+          $ref: '#/components/schemas/MaxCarPricePerNumberOfDays'
+        allowedCarTypes:
+          $ref: '#/components/schemas/AllowedCarTypes'
+    HotelStarRating:
+      type: object
+      title: HotelStarRatingRule
+      description: 'Hotel rule to describe whether to use default policy rule or use the specific range of star
+
+        rated hotels.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/HotelStarRatingPropsWrapper'
+      properties:
+        approvalProcessType:
+          type: string
+          description: Out of policy action to take when hotel star rating rule is violated.
+          enum:
+          - NONE
+          - SOFT_APPROVAL
+          - HARD_APPROVAL
+          - PASSIVE_APPROVAL
+          - PREVENT_BOOKING
+          - PRE_APPROVAL
+    HotelChainCodes:
+      type: object
+      title: HotelChainCodes
+      description: "Hotel rule to describe whether to use default policy or use a different set of allowed hotel \nchain codes.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/HotelChainCodesPropsWrapper'
+    LprFilterConfigWrapper:
+      type: object
+      title: LprFilterConfigWrapper
+      properties:
+        lprFilterConfig:
+          $ref: '#/components/schemas/LprFilterConfig'
+    HotelAdvanceBookingWindow:
+      type: object
+      title: HotelAdvanceBookingWindow
+      description: 'Hotel rule to describe whether to use default policy or different rule for advance booking.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/HotelAdvanceBookingWindowPropsWrapper'
+    MaxFlightBookingPrice:
+      type: object
+      title: MaxFlightBookingPrice
+      description: Max allowed flight booking price for that selected cabin.
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/MaxFlightBookingPricePropsWrapper'
+    LowestLogicalFarePropsWrapper:
+      type: object
+      title: LlfPropsWrapper
+      properties:
+        props:
+          $ref: '#/components/schemas/LowestLogicalFareProps'
+    PreventBookingWrapper:
+      type: object
+      title: PreventBookingWrapper
+      properties:
+        preventBooking:
+          $ref: '#/components/schemas/PreventBooking'
+    HotelRateType:
+      type: string
+      title: HotelRate Type
+      enum:
+      - PUBLISHED
+      - CORPORATE
+      - SPOTNANA
+      - REGULAR
+      - AAA
+      - AARP
+      - SENIOR_CITIZEN
+      - GOVERNMENT
+      - MILITARY
+      - MEMBERSHIP
+      - BEST_AVAILABLE_RATE
+      - TMC
+    RestrictedAirCraftsProps:
+      type: object
+      title: RestrictedAirCraftsProps
+      description: List of IATA Aircraft code.
+      required:
+      - airCraftCodes
+      properties:
+        airCraftCodes:
+          type: array
+          items:
+            type: string
+            description: IATA Aircraft code
+    RailTicketsRefundablePropsWrapper:
+      type: object
+      title: RailTicketsRefundablePropsWrapper
+      properties:
+        railTicketsRefundableProps:
+          $ref: '#/components/schemas/RailTicketsRefundableProps'
+    MaxCarPricePerNumberOfDays:
+      type: object
+      title: MaxCarPricePerNumberOfDays
+      description: "Car rule to describe whether to use default policy rules \nor list of rules for max price for given number of days.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/MaxCarPricePerNumberOfDaysPropsWrapper'
+    LowestLogicalFareProps:
+      type: object
+      title: LowestLogicalFareProps
+      description: Properties which will be used to filter candidates for a given flight in order to calculate lowest possible fare for the group.
+      properties:
+        flightTimeWindowInHoursDomestic:
+          description: Time window (in hours) applied at both departure and arrival to get time bounds of candidate flights for domestic travel.
+          type: integer
+          format: int32
+          deprecated: true
+          x-sunset: '2026-07-01'
+        flightTimeWindowInHoursInternational:
+          description: Time window (in hours) applied at both departure and arrival to get time bounds of candidate flights for international travel.
+          type: integer
+          format: int32
+          deprecated: true
+          x-sunset: '2026-07-01'
+        maxLayoverDurationInHoursDomestic:
+          description: Maximum layover duration (in hours) possible for candidate flights for domestic travel.
+          type: integer
+          format: int32
+          deprecated: true
+          x-sunset: '2026-07-01'
+        maxLayoverDurationInHoursInternational:
+          description: Maximum layover duration (in hours) possible for candidate flights for international travel.
+          type: integer
+          format: int32
+          deprecated: true
+          x-sunset: '2026-07-01'
+        maxLayoverDurationMinutesDomestic:
+          description: Maximum layover duration (in minutes) possible for candidate flights for domestic travel.
+          type: integer
+          format: int32
+          example: 120
+        maxLayoverDurationMinutesInternational:
+          description: Maximum layover duration (in minutes) possible for candidate flights for international travel.
+          type: integer
+          format: int32
+          example: 150
+        flightTimeWindowMinutesDomestic:
+          description: "Time window (in minutes) applied at both departure and arrival \nto get time bounds of candidate flights for domestic travel.\n"
+          type: integer
+          format: int32
+          example: 60
+        flightTimeWindowMinutesInternational:
+          description: "Time window (in minutes) applied at both departure and arrival \nto get time bounds of candidate flights for international travel.\n"
+          type: integer
+          format: int32
+          example: 90
+        maxNumberOfStops:
+          description: Maximum number of stops possible in a leg to be for it to be considered as a valid llf candidate.
+          type: string
+          enum:
+          - ANY
+          - ONE_OR_LESS
+          - TWO_OR_LESS
+          - FEWEST
+        airportConnectionChanges:
+          description: Is more than one distinct airport possible in a leg.
+          type: string
+          enum:
+          - NOT_ALLOWED
+        carrier:
+          description: Carriers which may be excluded / included for llf calculation.
+          type: object
+          properties:
+            type:
+              description: Whether to include / exclude carriers.
+              type: string
+              enum:
+              - PREFERRED
+              - EXCLUDE
+            airlines:
+              description: List of airline codes.
+              type: array
+              items:
+                type: string
+    ApprovalCondition:
+      type: object
+      title: ApprovalCondition
+      description: Rules which should be satisfied to use an approval action. There is AND relationship between rules.
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRule'
+    PolicyRuleType:
+      type: string
+      description: Policy Rule type.
+      title: PolicyRuleType
+      enum:
+      - BASIC_ECONOMY_FARES_DOMESTIC
+      - BASIC_ECONOMY_FARES_INTERNATIONAL
+      - CABIN_CLASS_NOT_ALLOWED_DOMESTIC
+      - CABIN_CLASS_NOT_ALLOWED_INTERNATIONAL
+      - HOTEL_RATE_CONDITIONS_NOT_ALLOWED
+      - CAR_TYPES_NOT_ALLOWED
+      - RAIL_ADVANCE_BOOKING_WINDOW
+      - MAX_RAIL_BOOKING_PRICE_BY_DURATION
+      - HIGHEST_RAIL_TRAVEL_CLASS_BY_DURATION
+      - RAIL_TICKETS_REFUNDABLE
+      - HOTEL_RESTRICTED_KEYWORDS
+      - FLIGHT_ADVANCE_BOOKING_WINDOW_DOMESTIC
+      - FLIGHT_ADVANCE_BOOKING_WINDOW_INTERNATIONAL
+      - ALLOWED_AIR_ADDONS
+      - MAX_HOTEL_BOOKING_PRICE
+      - CAR_ENGINE_TYPES_NOT_ALLOWED
+      - LOWEST_FARE_PER_HOTEL_PROPERTY
+      - AIR_RESTRICTED_FARES
+      - RESTRICT_AIRPORT_TRANSFERS
+      - HOTEL_LPR_FILTER
+      - HOTEL_PROPERTY_TYPE
+      - LIMO_TYPES_NOT_ALLOWED
+      example: CAR_TYPES_NOT_ALLOWED
+      x-ignoreBreakingChanges:
+      - PolicyRuleType->RESTRICT_AIRPORT_TRANSFERS
+      - PolicyRuleType->HOTEL_LPR_FILTER
+      - PolicyRuleType->HOTEL_PROPERTY_TYPE
+      - PolicyRuleType->LIMO_TYPES_NOT_ALLOWED
+    UserId:
+      type: object
+      title: UserId
+      description: User identifier
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+    HotelChainCodesProps:
+      type: object
+      title: HotelChainCodesProps
+      description: List of hotel chain codes.
+      required:
+      - hotelChainCodes
+      properties:
+        hotelChainCodes:
+          type: array
+          items:
+            type: string
+            description: Unique chain codes of the hotel.
+    MaxHotelPriceByLocationPropsWrapper:
+      type: object
+      title: MaxHotelPriceByLocationPropsWrapper
+      properties:
+        maxHotelPriceByLocationProps:
+          $ref: '#/components/schemas/MaxHotelPriceByLocationProps'
+    TravelRegionRuleWrapper:
+      type: object
+      title: TravelRegionRuleWrapper
+      description: Rule to evaluate travel region, INTERNATIONAL or DOMESTIC.
+      properties:
+        travelRegionRule:
+          $ref: '#/components/schemas/TravelRegionRule'
+    RailTravelClass:
+      description: Travel class
+      type: string
+      enum:
+      - FIRST
+      - STANDARD
+      - BUSINESS
+      - SLEEPER
+      - STANDARD_PREMIUM
+      - BUSINESS_PREMIUM
+      - COACH
+      - ROOM
+      - EXECUTIVE
+      example: FIRST
+    DifferenceBetweenFlightFareAndMedianFare:
+      type: object
+      title: DifferenceBetweenFlightFareAndMedianFare
+      description: 'Air rule to describe whether to use default policy or different rule for difference between
+
+        a flight fare and median fare of the flights for a destination.
+
+        Note: Median fare was calculated based on number of stops, cabin class and flight duration.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/DifferenceBetweenFlightFareAndMedianFarePropsWrapper'
+    LimoType:
+      type: string
+      title: LimoType
+      description: Limo type.
+      enum:
+      - STANDARD_CAR
+      - EXECUTIVE_CAR
+      - BUSINESS_VAN
+      - FIRST_CLASS
+      - SUV
+      - SEDAN
+      - EXECUTIVE_SEDAN
+      - LUXURY_SEDAN
+      - EXECUTIVE_VAN
+      - BUSINESS_SEDAN
+      example: STANDARD_CAR
+    IsLinkedWrapper:
+      type: object
+      title: IsLinkedWrapper
+      properties:
+        isLinked:
+          type: boolean
+          description: If the value has to be taken from default policy.
+          example: true
+    HotelPropertyEnum:
+      type: string
+      enum:
+      - ALL_SUITE
+      - ALL_INCLUSIVE_RESORT
+      - APARTMENT
+      - BED_AND_BREAKFAST
+      - CABIN_OR_BUNGALOW
+      - CAMPGROUND
+      - CHALET
+      - CONDOMINIUM
+      - CONFERENCE_CENTER
+      - CORPORATE_BUSINESS_TRANSIENT
+      - CRUISE
+      - EXTENDED_STAY
+      - GUEST_FARM
+      - GUEST_HOUSE_LIMITED_SERVICE
+      - HEALTH_SPA
+      - HOLIDAY_RESORT
+      - HOSTEL
+      - HOTEL
+      - INN
+      - LODGE
+      - MONASTERY
+      - MOTEL
+      - RANCH
+      - RESIDENTIAL_APARTMENT
+      - RESORT
+      - TENT
+      - VACATION_HOME
+      - VILLA
+      - WILDLIFE_RESERVE
+      - CASTLE
+      - GOLF
+      - PENSION
+      - SKI
+      - SPA
+      - BOATEL
+      - HISTORICAL
+      - RECREATIONAL_VEHICLE_PARK
+      - CHARM_HOTEL
+      - OTHER
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    HotelCentralTierExemptionPropsWrapper:
+      type: object
+      title: HotelCentralTierExemptionPropsWrapper
+      properties:
+        hotelCentralTierExemptionProps:
+          $ref: '#/components/schemas/HotelCentralTierExemptionProps'
+    MaxHotelBookingPricePropsWrapper:
+      type: object
+      title: MaxHotelBookingPricePropsWrapper
+      properties:
+        maxHotelBookingPriceProps:
+          $ref: '#/components/schemas/MaxHotelBookingPriceProps'
+    HotelMedianRate:
+      type: object
+      title: HotelMedianRate
+      description: 'Defines the attributes/filters used to identify candidate hotels
+
+        for calculating the median nightly rate in hotel search.
+
+
+        The calculated median rate serves as the reference value for
+
+        MaxHotelBookingPriceProps when enforcing price limits.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/HotelMedianRatePropsWrapper'
+    MaxFlightBookingPriceProps:
+      type: object
+      title: MaxFlightBookingPriceProps
+      description: 'Air rule to describing how the maximum allowed flight price will be calculated and set for policy.
+
+        '
+      required:
+      - type
+      - sign
+      - difference
+      properties:
+        type:
+          type: string
+          enum:
+          - MINIMUM
+          - MEDIAN
+          - LOWEST_LOGICAL_FARE
+        sign:
+          type: string
+          enum:
+          - MORE
+          - LESS
+        difference:
+          $ref: '#/components/schemas/DifferenceValue'
+        isTaxIncluded:
+          type: boolean
+          default: true
+    PolicyCategory:
+      type: string
+      description: Category of the policy.
+      title: PolicyCategory
+      enum:
+      - EMPLOYEE
+      - GUEST
+      example: EMPLOYEE
+    Policy:
+      allOf:
+      - $ref: '#/components/schemas/CreatePolicyRequest'
+      type: object
+      title: Policy details.
+      description: Details of policy.
+      required:
+      - id
+      - name
+      - type
+      - currency
+      - userGroups
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 4974a66b-7493-4f41-908c-58ba81093947
+        version:
+          type: integer
+          format: int32
+        updatedAt:
+          $ref: '#/components/schemas/DateTimeOffset'
+        isMembershipViaHrFeed:
+          type: boolean
+          description: True if membership is via HR feed. Read-only.
+          example: true
+        hrFeedPolicyDetails:
+          $ref: '#/components/schemas/HrFeedPolicyDetails'
+          description: User group details if membership is via HR feed. Read-only.
+    PolicyCurrency:
+      title: PolicyCurrency
+      description: Currency for the policy.
+      oneOf:
+      - $ref: '#/components/schemas/CurrencyCodeWrapper'
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+    HotelPolicyRuleType:
+      type: string
+      title: HotelPolicyRuleType
+      description: Policy rule types applicable to hotel central tier exemption configuration.
+      enum:
+      - HOTEL_RESTRICTED_KEYWORDS
+      - HOTEL_PROPERTY_TYPE
+      - HOTEL_ADVANCE_BOOKING_WINDOW
+      - HOTEL_RATING
+      - MAX_HOTEL_PRICE_BY_LOCATION
+      - MAX_HOTEL_BOOKING_PRICE
+    HotelCancellationProps:
+      type: object
+      title: HotelCancellationProps
+      description: Different types of cancellation rules for hotel booking.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - NONE
+          - REFUNDABLE
+          - REFUNDABLE_WITH_PENALTY
+          - DONT_ALLOW
+        conditionalRefundability:
+          $ref: '#/components/schemas/ConditionalRefundability'
+    QuestionFormat:
+      type: string
+      enum:
+      - INPUT_BOX
+      - RADIO_BUTTON
+      - CHECKBOX
+      - CHECKBOX_WITH_PERCENTAGE
+      description: 'Question types. INPUT_BOX will make user enter a free flowing text.
+
+        RADIO_BUTTON will have multiple options, user can select only one.
+
+        CHECKBOX questions contain the possible set of options, from which the user can choose multiple options.
+
+        CHECKBOX_WITH_PERCENTAGE is similar to checkbox, with the difference being that each option having an additional input field whose values must add up to 100.
+
+        '
+      example: CHECKBOX
+    AirRestrictedFaresPropsWrapper:
+      type: object
+      title: AirRestrictedFaresPropsWrapper
+      properties:
+        airRestrictedFaresProps:
+          $ref: '#/components/schemas/AirRestrictedFaresProps'
+    MaxFlightBookingPricePropsWrapper:
+      type: object
+      title: MaxFlightBookingPricePropsWrapper
+      properties:
+        maxFlightBookingPriceProps:
+          $ref: '#/components/schemas/MaxFlightBookingPriceProps'
+    SimpleMoney:
+      type: object
+      title: SimpleMoney
+      description: Money object containing just amount and currency code.
+      required:
+      - amount
+      - currencyCode
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Amount
+          example: 510
+        currencyCode:
+          type: string
+          description: The 3-letter currency code defined in ISO 4217.
+          example: GBP
+    MaxFlightBookingPriceByDuration:
+      type: object
+      title: MaxFlightBookingPriceByDuration
+      description: 'Air rule to describe whether to use default policy or different set of max booking price
+
+        for different flight durations.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/MaxFlightBookingPriceByDurationPropsWrapper'
+    HighestFlightCabinOvernightPropsWrapper:
+      type: object
+      title: HighestFlightCabinOvernightPropsWrapper
+      properties:
+        highestFlightCabinOvernightProps:
+          $ref: '#/components/schemas/HighestFlightCabinOvernightProps'
+    AllTiersWrapper:
+      type: object
+      title: AllTiersWrapper
+      properties:
+        allTiers:
+          type: boolean
+          description: When true, all preference tiers are exempted for this rule.
+    HotelAdvanceBookingWindowPropsWrapper:
+      type: object
+      title: HotelAdvanceBookingWindowPropsWrapper
+      properties:
+        hotelAdvanceBookingWindowProps:
+          $ref: '#/components/schemas/HotelAdvanceBookingWindowProps'
+    RestrictAirportTransfersPropsWrapper:
+      type: object
+      title: RestrictAirportTransfersPropsWrapper
+      properties:
+        restrictAirportTransfersProps:
+          $ref: '#/components/schemas/RestrictAirportTransfersProps'
+    MaxRailPricePerDuration:
+      type: object
+      title: MaxRailPricePerDuration
+      description: Maximum price of a rail booking for given duration.
+      required:
+      - maxPrice
+      - durationRange
+      properties:
+        maxPrice:
+          $ref: '#/components/schemas/SimpleMoney'
+        durationRange:
+          $ref: '#/components/schemas/Int32Range'
+    MaxFlightBookingPriceByDurationPropsWrapper:
+      type: object
+      title: MaxFlightBookingPriceByDurationPropsWrapper
+      properties:
+        maxFlightBookingPriceByDurationProps:
+          $ref: '#/components/schemas/MaxFlightBookingPriceByDurationProps'
+    FlightAdvanceBookingWindowInternationalProps:
+      type: object
+      title: FlightAdvanceBookingWindowInternationalProps
+      description: Number of days in advance one can book an international flight.
+      required:
+      - numDaysInAdvance
+      properties:
+        numDaysInAdvance:
+          type: integer
+          format: int32
+    TravelRegionType:
+      type: string
+      title: TravelRegionType
+      description: Travel region Type
+      enum:
+      - DOMESTIC
+      - INTERNATIONAL
+      example: DOMESTIC
+    HighestFlightCabinByDurationPropsWrapper:
+      type: object
+      title: HighestFlightCabinByDurationPropsWrapper
+      properties:
+        highestFlightCabinByDurationProps:
+          $ref: '#/components/schemas/HighestFlightCabinByDurationProps'
+    UniversalRule:
+      type: object
+      title: UniversalRule
+      description: Policy Rules.
+      required:
+      - ruleType
+      properties:
+        ruleType:
+          $ref: '#/components/schemas/PolicyRuleType'
+        action:
+          $ref: '#/components/schemas/Action'
+        policyValue:
+          $ref: '#/components/schemas/PolicyValue'
+    FlightCabinUpgradeProps:
+      type: object
+      title: FlightCabinUpgradeProps
+      description: Details whether flight cabin upgrade is allowed or not if cheaper.
+      required:
+      - isAllowed
+      properties:
+        isAllowed:
+          type: boolean
+    HotelPropertyTypePropsWrapper:
+      type: object
+      title: HotelPropertyTypePropsWrapper
+      properties:
+        hotelPropertyTypeProps:
+          $ref: '#/components/schemas/HotelPropertyTypeProps'
+    RestrictedAirlines:
+      type: object
+      title: RestrictedAirlines
+      description: "Air rule to describe whether to use default policy or use the specific set of airlines that \nare restricted.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/RestrictedAirlinesPropsWrapper'
+    MaxRailBookingPriceByDurationProps:
+      type: object
+      title: MaxRailBookingPriceByDurationProps
+      description: List of max price of rail booking for different rail duration.
+      required:
+      - maxPricePerDurationList
+      properties:
+        maxPricePerDurationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaxRailPricePerDuration'
+        isTaxIncluded:
+          type: boolean
+          default: false
+    ContinentPropsWrapper:
+      type: object
+      title: ContinentPropsWrapper
+      properties:
+        continentProps:
+          $ref: '#/components/schemas/ContinentProps'
+    HotelMedianRateProps:
+      type: object
+      title: HotelMedianRateProps
+      description: Props for hotel median rate calculation.
+      required:
+      - searchRadius
+      - ratingRange
+      properties:
+        searchRadius:
+          description: Search radius within which candidate hotel has to be.
+          $ref: '#/components/schemas/Length'
+        ratingRange:
+          description: Rating range of candidate hotels.
+          $ref: '#/components/schemas/DoubleRange'
+        hideRateStatistics:
+          type: boolean
+          default: false
+          description: If true, rate statistics will be hidden.
+        prepaidQualifier:
+          type: string
+          enum:
+          - INCLUDE_PREPAID
+          - EXCLUDE_PREPAID
+          - PREPAID_ONLY
+          description: Filter for prepaid rates to include in median calculation.
+        refundableOnly:
+          type: boolean
+          default: false
+          description: If true, only refundable rates will be included in median calculation.
+        statisticalMethod:
+          type: string
+          enum:
+          - MEDIAN
+          - MEAN
+          default: MEDIAN
+          description: 'Statistical method used to calculate the recommended maximum hotel rate. Defaults to MEDIAN. Buffer and statistical method can be adjusted per policy.
+
+            '
+    ConditionalRefundability:
+      type: object
+      title: ConditionalRefundability
+      description: 'Configuration for time-based exceptions to hotel refundability or cancellation policy rules.
+
+        When enabled, otherwise restricted hotel rates may be allowed if booking occurs within the
+
+        configured window before check-in.
+
+        '
+      properties:
+        enableGracePeriodLogic:
+          type: boolean
+          description: When true, applies the configured booking-window exception.
+        allowedBookingWindowHours:
+          type: integer
+          format: int32
+          description: 'Number of hours before check-in during which the exception applies.
+
+            Only evaluated when enableGracePeriodLogic is true.
+
+            '
+    FlightTicketsChangeable:
+      type: object
+      title: FlightTicketsChangeable
+      description: "Air rule to describe whether to use default policy or different rule regarding flight \ntickets exchange.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/FlightTicketsChangeablePropsWrapper'
+    HotelChainCodesPropsWrapper:
+      type: object
+      title: HotelChainCodesPropsWrapper
+      properties:
+        hotelChainCodesProps:
+          $ref: '#/components/schemas/HotelChainCodesProps'
+    FlightAdvanceBookingWindowDomesticProps:
+      type: object
+      title: FlightAdvanceBookingWindowDomesticProps
+      description: Number of days in advance one can book a domestic flight.
+      required:
+      - numDaysInAdvance
+      properties:
+        numDaysInAdvance:
+          type: integer
+          format: int32
+    TierList:
+      type: object
+      title: TierList
+      description: List of preference tier levels.
+      properties:
+        tiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PreferenceTierLevel'
+    WorkerType:
+      type: string
+      description: The type of worker.
+      enum:
+      - EMPLOYEE
+      - CONTINGENT
+      - SEASONAL
+      - INTERN
+      - GUEST
+      example: EMPLOYEE
+      x-enumValidFrom:
+        GUEST: '2025-06-03'
+    OopReasonCodeUde:
+      type: object
+      title: OopReasonCodeUde
+      description: The message defines the format of a OOP reason code related question which would be asked during checkout on policy violation.
+      properties:
+        entityId:
+          type: string
+        displayInfo:
+          type: string
+          description: Question display name that the user will see. For eg, 'Choose the purpose of your trip'.
+        questionFormat:
+          $ref: '#/components/schemas/QuestionFormat'
+        options:
+          description: List of potential options for any question. Options will be present if the question type provides options to select.
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+        isRequired:
+          type: boolean
+          description: Whether its compulsory to answer the question or not.
+          default: false
+          example: true
+        isDisabled:
+          type: boolean
+          description: Whether the question is disabled or not. If true, this should not be asked.
+          default: false
+          example: true
+    Persona:
+      type: string
+      title: Persona
+      description: Persona of the user
+      enum:
+      - UNKNOWN_PERSONA
+      - EMPLOYEE
+      - GUEST
+      - PERSONAL
+      - RELATIVE
+      - ADHOC
+      example: EMPLOYEE
+    HighestFlightCabinOvernightProps:
+      type: object
+      title: HighestFlightCabinOvernightProps
+      description: Highest cabin that can be booked for overnight flight.
+      required:
+      - cabin
+      properties:
+        cabin:
+          $ref: '#/components/schemas/Cabin'
+        overnightTimeParams:
+          $ref: '#/components/schemas/OvernightTimeParams'
+    KeywordWithReason:
+      type: object
+      title: KeywordWithReason
+      description: A keyword with an optional reason
+      required:
+      - keyword
+      properties:
+        keyword:
+          type: string
+          description: The keyword to restrict
+        reason:
+          type: string
+          description: Optional reason for restriction
+    PolicyValue:
+      type: object
+      title: PolicyValue
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/UniversalPropsWrapper'
+    HotelCancellation:
+      type: object
+      title: HotelCancellation
+      description: "Hotel rule to describe whether to use default policy or allow booking of any specific type \nof cancellation.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/HotelCancellationPropsWrapper'
+    DifferenceBetweenFlightFareAndMedianFarePropsWrapper:
+      type: object
+      title: DifferenceBetweenFlightFareAndMedianFarePropsWrapper
+      properties:
+        differenceBetweenFlightFareAndMedianFareProps:
+          $ref: '#/components/schemas/DifferenceBetweenFlightFareAndMedianFareProps'
+    RailAdvanceBookingWindowPropsWrapper:
+      type: object
+      title: RailAdvanceBookingWindowPropsWrapper
+      properties:
+        railAdvanceBookingWindowProps:
+          $ref: '#/components/schemas/RailAdvanceBookingWindowProps'
+    CarEngineTypesProps:
+      type: object
+      title: CarEngineTypesProps
+      description: List of car engine types.
+      required:
+      - carEngineTypes
+      properties:
+        carEngineTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EngineType'
+    UniversalProps:
+      type: object
+      title: UniversalProps
+      description: Universal Props.
+      oneOf:
+      - $ref: '#/components/schemas/CabinClassNotAllowedDomesticPropsWrapper'
+      - $ref: '#/components/schemas/CabinClassNotAllowedInternationalPropsWrapper'
+      - $ref: '#/components/schemas/CarTypesNotAllowedPropsWrapper'
+      - $ref: '#/components/schemas/CarEngineTypesNotAllowedPropsWrapper'
+      - $ref: '#/components/schemas/HotelRateConditionsNotAllowedPropsWrapper'
+      - $ref: '#/components/schemas/RailAdvanceBookingWindowPropsWrapper'
+      - $ref: '#/components/schemas/MaxRailBookingPriceByDurationPropsWrapper'
+      - $ref: '#/components/schemas/RailTicketsRefundablePropsWrapper'
+      - $ref: '#/components/schemas/HighestRailTravelClassByDurationPropsWrapper'
+      - $ref: '#/components/schemas/HotelRestrictedKeywordsPropsWrapper'
+      - $ref: '#/components/schemas/FlightAdvanceBookingWindowDomesticPropsWrapper'
+      - $ref: '#/components/schemas/FlightAdvanceBookingWindowInternationalPropsWrapper'
+      - $ref: '#/components/schemas/AllowedAirAddonsPropsWrapper'
+      - $ref: '#/components/schemas/MaxHotelBookingPricePropsWrapper'
+      - $ref: '#/components/schemas/LowestFarePerHotelPropertyPropsWrapper'
+      - $ref: '#/components/schemas/AirRestrictedFaresPropsWrapper'
+      - $ref: '#/components/schemas/RestrictAirportTransfersPropsWrapper'
+      - $ref: '#/components/schemas/HotelLprFilterPropsWrapper'
+      - $ref: '#/components/schemas/HotelPropertyTypePropsWrapper'
+      - $ref: '#/components/schemas/LimoTypesNotAllowedPropsWrapper'
+      x-ignoreBreakingChanges:
+      - UniversalProps->AirRestrictedFaresPropsWrapper
+      - UniversalProps->RestrictAirportTransfersPropsWrapper
+      - UniversalProps->LimoTypesNotAllowedPropsWrapper
+    RestrictedAirCrafts:
+      type: object
+      title: RestrictedAirCrafts
+      description: "Air rule to describe whether to use default policy or use the specific set of air crafts \nthat are restricted.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/RestrictedAirCraftsPropsWrapper'
+    Length:
+      type: object
+      title: Length
+      description: Specifies the length or a distance.
+      required:
+      - length
+      - unit
+      properties:
+        length:
+          type: number
+          description: Distance from search point.
+          format: double
+          example: 150
+        unit:
+          type: string
+          description: Unit of measure being applied.
+          enum:
+          - UNKNOWN_UNIT
+          - KM
+          - MILE
+          - CENTIMETER
+          - METER
+          example: MILE
+          x-ignoreBreakingChanges:
+          - unit->CENTIMETER
+          - unit->METER
+    Addon:
+      title: Addon
+      description: Add-ons which can be selected as part of an air reservation.
+      type: string
+      enum:
+      - SEAT
+      - BAGGAGE
+      - WIFI
+      - CARBON_OFFSET
+      - EARLY_BIRD
+      - ALL
+      - NONE
+      example: SEAT
+    CurrencyCodeWrapper:
+      type: object
+      title: CurrencyCodeWrapper
+      properties:
+        currencyCode:
+          type: string
+          description: iso code of the currency.
+          example: USD
+    RestrictedContinents:
+      type: object
+      title: RestrictedContinents
+      description: Details containing about the continent restrictions or use default policy restrictions.
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/ContinentPropsWrapper'
+    SimpleMoneyWrapper:
+      type: object
+      title: SimpleMoneyWrapper
+      properties:
+        money:
+          $ref: '#/components/schemas/SimpleMoney'
+    FlightTicketsRefundableProps:
+      type: object
+      title: FlightTicketsRefundableProps
+      description: Different type of refund policy allowed for flight ticket booking.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - NONE
+          - REFUNDABLE
+          - REFUNDABLE_WITH_PENALTY
+          - DONT_ALLOW
+    HighestCabinForDuration:
+      type: object
+      title: HighestCabinForDuration
+      description: For a given duration of a flight, the highest cabin that can be booked.
+      required:
+      - cabin
+      - durationRange
+      properties:
+        cabin:
+          $ref: '#/components/schemas/Cabin'
+        durationRange:
+          $ref: '#/components/schemas/Int32Range'
+    RestrictedCountries:
+      type: object
+      title: RestrictedCountries
+      description: Details containing country related restrictions or use default policy restrictions.
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/CountryPropsWrapper'
+    Co2EmissionPerPassengerPerKm:
+      type: object
+      title: Co2EmissionPerPassengerPerKm
+      description: 'Air rule to describe whether to use default policy or different rule regarding CO2 emission.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/Co2EmissionPerPassengerPerKmPropsWrapper'
+    OopReasonCodes:
+      type: object
+      title: OopReasonCodes
+      description: OOP reason codes value. Either linked to default policy or actual values.
+      oneOf:
+      - $ref: '#/components/schemas/OopReasonCodesPropsWrapper'
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+    CabinClassNotAllowedProps:
+      type: object
+      title: CabinClassNotAllowedProps
+      description: List of cabins which should not be allowed.
+      required:
+      - cabins
+      properties:
+        cabins:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cabin'
+    FlightTicketsRefundablePropsWrapper:
+      type: object
+      title: FlightTicketsRefundablePropsWrapper
+      properties:
+        flightTicketsRefundableProps:
+          $ref: '#/components/schemas/FlightTicketsRefundableProps'
+    LocationStarRating:
+      type: object
+      title: LocationStarRating
+      description: Location-specific star rating override with optional major chain exemption.
+      required:
+      - ratingRange
+      - address
+      properties:
+        ratingRange:
+          $ref: '#/components/schemas/DoubleRange'
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+        majorChainRatingRange:
+          description: Exemption rating range for major chain properties at this location.
+          $ref: '#/components/schemas/DoubleRange'
+        enableMajorChainExemption:
+          type: boolean
+          description: Per-location toggle for major chain exemption.
+    PostalAddress:
+      title: PostalAddress
+      description: Postal Address Details
+      type: object
+      required:
+      - addressLines
+      - regionCode
+      properties:
+        addressLines:
+          description: Address lines
+          type: array
+          items:
+            type: string
+            example: Golden Gate Bridge
+        administrativeArea:
+          type: string
+          description: 'Code of administrative area. For example: DL for Delhi, India.
+
+            Highest administrative subdivision which is used for postal
+
+            addresses of a country or region.
+
+            For example, this can be a state, a province, an oblast, or a prefecture.
+
+            Specifically, for Spain this is the province and not the autonomous
+
+            community (e.g. "Barcelona" and not "Catalonia").
+
+            Many countries don''t use an administrative area in postal addresses. E.g.
+
+            in Switzerland this should be left unpopulated.
+
+            '
+          example: CA
+        administrativeAreaName:
+          type: string
+          description: "Name of administrative area. This is full name corresponding to administrativeArea. \nLike Delhi for DL area code. For some places, code and name maybe same as well like Tokyo.\n"
+          example: California
+        description:
+          description: Address description
+          type: string
+          example: San Francisco Home
+        isDefault:
+          description: Whether this address is default address in case multiple addresses are specified.
+          type: boolean
+          example: true
+        languageCode:
+          description: "BCP-47 language code of the contents of this address (if known). This is often the UI \nlanguage of the input form or is expected to match one of the languages used in the \naddress' country/region, or their transliterated equivalents.\nThis can affect formatting in certain countries, but is not critical to the correctness \nof the data and will never affect any validation or other non-formatting related operations.\nExamples: \"zh-Hant\", \"ja\", \"ja-Latn\", \"en\".\n"
+          type: string
+          example: en
+        locality:
+          description: Generally refers to the city/town portion of the address.
+          type: string
+          example: San Francisco
+        locationCode:
+          description: IATA 3-letter location code. See https://www.iata.org/en/services/codes.
+          type: string
+          example: LAX
+        organization:
+          description: The name of the organization at the address.
+          type: string
+          example: Spotnana
+        postalCode:
+          description: Postal code of the address. This is a required field when setting for a user/legal entity/company etc.
+          type: string
+          example: '94130'
+        continentCode:
+          description: 2 letter continent code of the continent this address falls in.
+          type: string
+          example: AF
+        recipients:
+          description: The recipient at the address.
+          type: array
+          items:
+            type: string
+        regionCode:
+          description: Region code of the country/region of the address.
+          type: string
+          example: US
+        regionName:
+          description: Region name of the country/region of the address.
+          type: string
+          example: America
+        revision:
+          type: integer
+          format: int32
+          example: 1
+        sortingCode:
+          description: 'Additional, country-specific, sorting code. This is not used
+
+            in most regions. Where it is used, the value is either a string like
+
+            "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
+
+            alone, representing the "sector code" (Jamaica), "delivery area indicator"
+
+            (Malawi) or "post office indicator" (e.g. Côte d''Ivoire).
+
+            '
+          type: string
+          example: Jamaica
+        sublocality:
+          description: Sublocality of the address. This can be neighborhoods, boroughs, districts.
+          type: string
+        timezone:
+          description: Time zone of the address.
+          type: string
+          example: America/Los_Angeles
+        coordinates:
+          description: Map coordinates of the address.
+          $ref: '#/components/schemas/Latlng'
+    HotelStarRatingPropsWrapper:
+      type: object
+      title: HotelRatingPropsWrapper
+      properties:
+        hotelStarRatingProps:
+          $ref: '#/components/schemas/HotelStarRatingProps'
+    LowestFarePerHotelPropertyPropsWrapper:
+      type: object
+      title: LowestFarePerHotelPropertyPropsWrapper
+      properties:
+        lowestFarePerHotelPropertyProps:
+          $ref: '#/components/schemas/LowestFarePerHotelPropertyProps'
+    CabinClassNotAllowedDomesticProps:
+      allOf:
+      - $ref: '#/components/schemas/CabinClassNotAllowedProps'
+    RestrictedAirlinesPropsWrapper:
+      type: object
+      title: RestrictedAirlinesPropsWrapper
+      properties:
+        restrictedAirlinesProps:
+          $ref: '#/components/schemas/RestrictedAirlinesProps'
+    RailAdvanceBookingWindowProps:
+      type: object
+      title: RailAdvanceBookingWindowProps
+      description: Number of days in advance one can book a Rail ticket.
+      required:
+      - numDaysInAdvance
+      properties:
+        numDaysInAdvance:
+          type: integer
+          format: int32
+    Action:
+      type: object
+      title: Action
+      oneOf:
+      - $ref: '#/components/schemas/PreventBookingWrapper'
+    LprFilterConfig:
+      type: object
+      title: LprFilterConfig
+      description: Configuration for filtering rates in LPR calculation.
+      properties:
+        rateConditions:
+          type: array
+          description: Rate conditions to exclude (NON_REFUNDABLE, PREPAID, etc.)
+          items:
+            type: string
+            enum:
+            - NON_REFUNDABLE
+            - PREPAID
+            - REQUIRES_DEPOSIT
+            - PAY_AT_PROPERTY
+        restrictedKeywords:
+          type: array
+          description: Keywords to exclude from LPR calculation
+          items:
+            $ref: '#/components/schemas/KeywordWithReason'
+        excludedRateTypes:
+          type: array
+          description: Rate types to exclude (CORPORATE, GOVERNMENT, etc.)
+          items:
+            $ref: '#/components/schemas/HotelRateType'
+    HotelCodesProps:
+      type: object
+      title: HotelCodesProps
+      description: List of hotel codes.
+      required:
+      - hotelCodes
+      properties:
+        hotelCodes:
+          type: array
+          items:
+            type: string
+            description: Unique code of the hotel.
+    Cabin:
+      title: Cabin
+      description: Flight cabin
+      type: string
+      enum:
+      - UNKNOWN_CABIN
+      - ECONOMY
+      - PREMIUM_ECONOMY
+      - BUSINESS
+      - FIRST
+      example: ECONOMY
+    AllowedCarTypesPropsWrapper:
+      type: object
+      title: AllowedCarTypesPropsWrapper
+      properties:
+        allowedCarTypesProps:
+          $ref: '#/components/schemas/AllowedCarTypesProps'
+    RestrictedAirCraftsPropsWrapper:
+      type: object
+      title: RestrictedAirCraftsPropsWrapper
+      properties:
+        restrictedAirCraftsProps:
+          $ref: '#/components/schemas/RestrictedAirCraftsProps'
+    Co2EmissionPerPassengerPerKmPropsWrapper:
+      type: object
+      title: Co2EmissionPerPassengerPerKmPropsWrapper
+      properties:
+        co2EmissionPerPassengerPerKmProps:
+          $ref: '#/components/schemas/Co2EmissionPerPassengerPerKmProps'
+    PolicyApprovalInfo:
+      type: object
+      title: PolicyApprovalInfo
+      required:
+      - approvalProcessType
+      properties:
+        approvalProcessType:
+          type: string
+          enum:
+          - NONE
+          - SOFT_APPROVAL
+          - HARD_APPROVAL
+          - PASSIVE_APPROVAL
+          - PREVENT_BOOKING
+          - PRE_APPROVAL
+        designatedApprovers:
+          type: array
+          description: List of designated approvers.
+          items:
+            $ref: '#/components/schemas/UserId'
+        isManagerApprover:
+          type: boolean
+          example: false
+        isEmployeeLevelDesignatedApprover:
+          type: boolean
+          description: Indicate whether the policy is approved by employee level designated approver or not.
+          example: false
+          default: false
+        shouldNotifyManager:
+          type: boolean
+          description: Indicate whether approval emails should be cc'ed to manager or not.
+          example: false
+          default: false
+        travelTypes:
+          type: array
+          description: List of travel types for which this ApprovalInfo is applicable.
+          items:
+            type: string
+            enum:
+            - AIR
+            - HOTEL
+            - RAIL
+            - CAR
+            - LIMO
+        approvalConditions:
+          type: array
+          description: List of approval conditions. OR operator is applied between the approval conditions.
+          items:
+            $ref: '#/components/schemas/ApprovalCondition'
+        defaultApprovers:
+          type: array
+          description: List of designated default approvers.
+          items:
+            $ref: '#/components/schemas/UserId'
+    FlightTicketsChangeablePropsWrapper:
+      type: object
+      title: FlightTicketsChangeablePropsWrapper
+      properties:
+        flightTicketsChangeableProps:
+          $ref: '#/components/schemas/FlightTicketsChangeableProps'
+    MaxCarPricePerNumberOfDaysPropsWrapper:
+      type: object
+      title: MaxCarPricePerNumberOfDaysPropsWrapper
+      properties:
+        maxCarPricePerNumberOfDaysProps:
+          $ref: '#/components/schemas/MaxCarPricePerNumberOfDaysProps'
+    CarTypesNotAllowedProps:
+      allOf:
+      - $ref: '#/components/schemas/AllowedCarTypesProps'
+    HotelStarRatingProps:
+      type: object
+      title: HotelStar RatingProps
+      description: Range of hotel star ratings with optional major chain exemptions.
+      required:
+      - ratingRange
+      properties:
+        ratingRange:
+          $ref: '#/components/schemas/DoubleRange'
+        majorChainRatingRange:
+          description: 'Default exemption rating range for major chain properties (Accor, Hilton, Hyatt, IHG, Marriott). When enabled, properties belonging to these chains use this rating range instead of the default.
+
+            '
+          $ref: '#/components/schemas/DoubleRange'
+        enableMajorChainExemptions:
+          type: boolean
+          description: 'Master toggle for major chain exemptions. When false, all major chain exemption ranges are ignored.
+
+            '
+        ratingRangeByLocation:
+          type: array
+          description: Location-specific star rating overrides. More specific locations take precedence (City > Country > Region).
+          items:
+            $ref: '#/components/schemas/LocationStarRating'
+    HotelRestrictedKeywordsProps:
+      type: object
+      title: HotelRestrictedKeywordsProps
+      description: List of keywords that should not be allowed in hotel name/description.
+      properties:
+        hotelRestrictedKeywordsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/HotelRestrictedKeyword'
+        exemptMajorChains:
+          type: boolean
+          description: 'When true, hotels belonging to major chains (Accor, Hilton, Hyatt, IHG, Marriott)
+
+            are exempt from restricted keyword checks.
+
+            '
+    Option:
+      type: object
+      title: Option
+      description: Answer option for a question
+      required:
+      - displayCode
+      properties:
+        displayCode:
+          type: string
+          description: The code which is sent in answer response.
+        displayValue:
+          type: string
+          description: The text to be displayed to the user beside this option.
+    FlightCabinUpgrade:
+      type: object
+      title: FlightCabinUpgrade
+      description: "Air rule to describe whether to use default policy or specific rules regarding flight cabin \nupgrade.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/FlightCabinUpgradePropsWrapper'
+    DateTimeOffset:
+      title: DateTimeOffset
+      description: ISO8601 UTC Date Time
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?(Z|([+-](0[0-9]|1[0-4]):([0-5][0-9])))$
+          example: 2017-07-21T17:32Z
+    LimoTypesNotAllowedPropsWrapper:
+      type: object
+      title: LimoTypesNotAllowedPropsWrapper
+      properties:
+        limoTypesNotAllowedProps:
+          $ref: '#/components/schemas/LimoTypesNotAllowedProps'
+    HotelCodesPropsWrapper:
+      type: object
+      title: HotelCodesPropsWrapper
+      properties:
+        hotelCodesProps:
+          $ref: '#/components/schemas/HotelCodesProps'
+    MaxHotelBookingPriceProps:
+      type: object
+      title: MaxHotelBookingPriceProps
+      description: 'Defines the maximum allowed hotel booking price relative to the
+
+        median nightly rate calculated using HotelMedianRate.
+
+
+        This rule enforces whether a booking can exceed or must remain
+
+        below the median rate by a configured difference value.
+
+        '
+      required:
+      - difference
+      - type
+      properties:
+        difference:
+          $ref: '#/components/schemas/DifferenceValue'
+        isTaxIncluded:
+          type: boolean
+          default: true
+        type:
+          type: string
+          enum:
+          - MORE_THAN_MEDIAN
+          - LESS_THAN_MEDIAN
+    PreventBooking:
+      type: object
+      title: PreventBooking
+      description: Whether to allow booking if a rule is violated.
+      properties:
+        prevent:
+          type: boolean
+          default: false
+        reason:
+          type: string
+    PreferenceTierLevel:
+      title: PreferenceTierLevel
+      type: string
+      description: Different levels of tier.
+      enum:
+      - TIER_1
+      - TIER_2
+      - TIER_3
+      - TIER_4
+      - TIER_5
+      - TIER_6
+    DoubleRange:
+      type: object
+      properties:
+        min:
+          type: number
+          format: double
+          description: Minimum value - inclusive.
+        max:
+          type: number
+          format: double
+          description: Maximum value - inclusive.
+    MaxFlightPricePerDuration:
+      type: object
+      title: MaxFlightPricePerDuration
+      description: Maximum price of a flight booking for given duration.
+      required:
+      - maxPrice
+      - durationRange
+      properties:
+        maxPrice:
+          $ref: '#/components/schemas/SimpleMoney'
+        durationRange:
+          $ref: '#/components/schemas/Int32Range'
+    PaymentSourceAccessType:
+      title: PaymentSourceAccessType
+      description: Payment source access type which can be selected for payment.
+      type: string
+      enum:
+      - CENTRALISED
+      - PERSONAL
+      example: CENTRALISED
+    HotelCentralTierExemptionProps:
+      type: object
+      title: HotelCentralTierExemptionProps
+      description: Props for hotel central tier exemption. Choose one exemption mode.
+      oneOf:
+      - $ref: '#/components/schemas/AllRulesAllTiersWrapper'
+      - $ref: '#/components/schemas/RuleTierExemptionConfigWrapper'
+    FlightTicketsChangeableProps:
+      type: object
+      title: FlightTicketsChangeableProps
+      description: Different type of ticket exchange policy allowed for flight ticket booking.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - NONE
+          - CHANGEABLE
+          - CHANGEABLE_WITH_PENALTY
+          - DONT_ALLOW
+    HrFeedPolicyDetails:
+      type: object
+      title: User Group Via Hr Feed Details.
+      description: User group details if membership is via HR feed.
+      properties:
+        totalMemberCount:
+          type: integer
+          format: int32
+          description: Total member count configured via HR feed.
+    HighestTravelClassForDuration:
+      type: object
+      title: HighestTravelClassForDuration
+      description: For a given duration of a rail, the highest travel class that can be booked.
+      required:
+      - travelClass
+      - durationRange
+      properties:
+        travelClass:
+          $ref: '#/components/schemas/RailTravelClass'
+        durationRange:
+          $ref: '#/components/schemas/Int32Range'
+    OvernightTimeParams:
+      type: object
+      title: OvernightTimeParams
+      description: This defines what is considered as overnight.
+      required:
+      - nightTimeStart
+      - nightTimeEnd
+      - nightTimeOverlapMinutes
+      - includeLayover
+      properties:
+        nightTimeStart:
+          description: Time when night starts.
+          $ref: '#/components/schemas/TimeLocal'
+        nightTimeEnd:
+          description: Time when night ends.
+          $ref: '#/components/schemas/TimeLocal'
+        includeLayover:
+          description: Whether layover time should be included in the overnight time.
+          type: boolean
+          default: false
+        nightTimeOverlapMinutes:
+          description: The minimum night flight time needed to qualify as an overnight flight.
+          type: integer
+          format: int32
+          minimum: 0
+    HotelLprFilterPropsWrapper:
+      type: object
+      title: HotelLprFilterPropsWrapper
+      properties:
+        hotelLprFilterProps:
+          $ref: '#/components/schemas/HotelLprFilterProps'
+    RestrictAirportTransfersProps:
+      type: object
+      title: RestrictAirportTransfersProps
+      description: Restrict airport transfers configuration.
+      required:
+      - isRestricted
+      properties:
+        isRestricted:
+          type: boolean
+          description: Whether airport transfers are restricted or not.
+    UserGroup:
+      type: object
+      title: UserGroup
+      description: Grouping of users on the basis of different criteria such as org, department, etc.
+      properties:
+        userIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserId'
+        legalEntityIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityId'
+        officeIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityId'
+        departments:
+          type: array
+          description: List of department ids.
+          items:
+            type: string
+        costCenters:
+          type: array
+          description: List of cost center ids.
+          items:
+            type: string
+        grades:
+          type: array
+          description: List of grade ids.
+          items:
+            type: string
+        positionTitles:
+          type: array
+          items:
+            type: string
+        personas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Persona'
+          deprecated: true
+          x-sunset: '2027-01-01'
+        customFieldIds:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldId'
+        countryCodes:
+          type: array
+          items:
+            type: string
+            description: Alpha-2 or Alpha-3 ISO country code.
+            example: GB
+        workerTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkerType'
+        accountingCodes:
+          type: array
+          items:
+            type: string
+            description: Code used for accounting.
+    FlightAdvanceBookingWindowDomesticPropsWrapper:
+      type: object
+      title: FlightAdvanceBookingWindowDomesticPropsWrapper
+      properties:
+        flightAdvanceBookingWindowDomesticProps:
+          $ref: '#/components/schemas/FlightAdvanceBookingWindowDomesticProps'
+    CarEngineTypesNotAllowedPropsWrapper:
+      type: object
+      title: CarEngineTypesNotAllowedPropsWrapper
+      properties:
+        carEngineTypesNotAllowedProps:
+          $ref: '#/components/schemas/CarEngineTypesNotAllowedProps'
+    PolicyType:
+      type: string
+      description: Policy type.
+      title: PolicyType
+      enum:
+      - DEFAULT
+      - GROUP
+      - INTERNAL
+      example: GROUP
+    HighestRailTravelClassByDurationPropsWrapper:
+      type: object
+      title: HighestRailTravelClassByDurationPropsWrapper
+      properties:
+        highestRailTravelClassByDurationProps:
+          $ref: '#/components/schemas/HighestRailTravelClassByDurationProps'
+    LowestFarePerHotelPropertyProps:
+      type: object
+      title: LowestFarePerHotelPropertyProps
+      description: Props for lowest fare per hotel property rule.
+      required:
+      - onlyAllowLowestFare
+      properties:
+        onlyAllowLowestFare:
+          type: boolean
+          description: If true, only the lowest fare per hotel property will be allowed.
+    RestrictedHotels:
+      type: object
+      title: RestrictedHotels
+      description: "Hotel rule to describe whether to use default policy rule or a different set of restricted \nhotels.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/HotelCodesPropsWrapper'
+    LowestLogicalFare:
+      type: object
+      title: LowestLogicalFare
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/LowestLogicalFarePropsWrapper'
+    ExemptedTiersWrapper:
+      type: object
+      title: ExemptedTiersWrapper
+      properties:
+        exemptedTiers:
+          $ref: '#/components/schemas/TierList'
+    CarType:
+      type: string
+      title: CarType
+      description: Car type.
+      enum:
+      - OTHER
+      - MINI
+      - ECONOMY
+      - COMPACT
+      - MID_SIZE
+      - STANDARD
+      - FULL_SIZE
+      - PREMIUM
+      - LUXURY
+      - CONVERTIBLE
+      - MINIVAN
+      - SUV
+      - VAN
+      - PICKUP
+      - SPORTS
+      - SPECIAL
+      - RECREATIONAL_VEHICLE
+      - WAGON
+      example: ECONOMY
+    MaxPriceInLocation:
+      type: object
+      title: MaxPriceInLocation
+      description: Max price of a booking for a given location.
+      required:
+      - maxPrice
+      - address
+      properties:
+        maxPrice:
+          $ref: '#/components/schemas/SimpleMoney'
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+        isTaxIncluded:
+          type: boolean
+    LimoTypesNotAllowedProps:
+      type: object
+      title: LimoTypesNotAllowedProps
+      description: Properties for restricting limo car types.
+      required:
+      - limoTypes
+      properties:
+        limoTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LimoType'
+    UniversalPropsWrapper:
+      type: object
+      title: UniversalPropsWrapper
+      properties:
+        universalProps:
+          $ref: '#/components/schemas/UniversalProps'
+    HotelRateConditionsNotAllowedPropsWrapper:
+      type: object
+      title: HotelRateConditionsNotAllowedPropsWrapper
+      properties:
+        hotelRateConditionsNotAllowedProps:
+          $ref: '#/components/schemas/HotelRateConditionsNotAllowedProps'
+    MaxHotelPriceByLocationProps:
+      type: object
+      title: MaxHotelPriceByLocationProps
+      description: List of max price of a hotel booking in a location.
+      required:
+      - maxPricePerLocationList
+      properties:
+        maxDefaultPrice:
+          $ref: '#/components/schemas/SimpleMoney'
+        isTaxIncluded:
+          type: boolean
+          default: false
+        maxPricePerLocationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaxPriceInLocation'
+    TravelRegionRule:
+      type: object
+      title: TravelRegionRule
+      description: Rule to evaluate travel region, INTERNATIONAL or DOMESTIC.
+      properties:
+        travelRegionType:
+          $ref: '#/components/schemas/TravelRegionType'
+    ArrayOfReference:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+        elements:
+          type: array
+          description: List of references containing id and name.
+          items:
+            $ref: '#/components/schemas/Reference'
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results
+    CarEngineTypesNotAllowedProps:
+      allOf:
+      - $ref: '#/components/schemas/CarEngineTypesProps'
+    MaxHotelPriceByLocation:
+      type: object
+      title: MaxHotelPriceByLocation
+      description: "Hotel Rule to describe whether to use default policy rule or different set of rules for max  \nbooking price for different locations.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/MaxHotelPriceByLocationPropsWrapper'
+    AirRestrictedKeyword:
+      type: object
+      title: AirRestrictedKeyword
+      description: Airline/Keyword to be restricted
+      required:
+      - keyword
+      properties:
+        keyword:
+          type: string
+          description: Restricted keyword.
+        airlineCode:
+          type: string
+          description: IATA airline code. If not set, the restriction applies to all airlines.
+    TimeLocal:
+      title: TimeLocal
+      description: ISO8601 Local Time
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?$
+          example: '17:32'
+    Int32Range:
+      type: object
+      properties:
+        min:
+          type: integer
+          format: int32
+          description: Minimum value - inclusive.
+        max:
+          type: integer
+          format: int32
+          description: Maximum value - inclusive.
+    LprAmountWrapper:
+      type: object
+      title: LprAmountWrapper
+      properties:
+        lprAmount:
+          $ref: '#/components/schemas/SimpleMoney'
+    HighestRailTravelClassByDurationProps:
+      type: object
+      title: HighestRailTravelClassByDurationProps
+      description: List of highest travel class that can be booked for different rail durations.
+      required:
+      - highestTravelClassForDurationList
+      properties:
+        highestTravelClassForDurationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/HighestTravelClassForDuration'
+    CountryProps:
+      type: object
+      title: CountryProps
+      description: List of country related restrictions.
+      required:
+      - restrictions
+      properties:
+        restrictions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryRestriction'
+    AllowedCarTypesProps:
+      type: object
+      title: AllowedCarTypesProps
+      description: List of allowed car types.
+      required:
+      - carTypes
+      properties:
+        carTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarType'
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+    CabinClassNotAllowedInternationalProps:
+      allOf:
+      - $ref: '#/components/schemas/CabinClassNotAllowedProps'
+    HighestFlightCabinByDuration:
+      type: object
+      title: HighestFlightCabinByDuration
+      description: 'Air rule to describe whether to use default policy or different set of rules for cabin based
+
+        on flight duration.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/HighestFlightCabinByDurationPropsWrapper'
+    AirRestrictedFaresProps:
+      type: object
+      title: AirRestrictedFaresProps
+      description: Airline fare restrictions.
+      required:
+      - restrictedKeywords
+      properties:
+        restrictedKeywords:
+          type: array
+          items:
+            $ref: '#/components/schemas/AirRestrictedKeyword'
+    ApprovalRule:
+      type: object
+      title: ApprovalRule
+      description: One of rule which should be satisfied to use an approval action.
+      oneOf:
+      - $ref: '#/components/schemas/TravelRegionRuleWrapper'
+    CabinClassNotAllowedInternationalPropsWrapper:
+      type: object
+      title: CabinClassNotAllowedInternationalPropsWrapper
+      properties:
+        cabinClassNotAllowedInternationalProps:
+          $ref: '#/components/schemas/CabinClassNotAllowedInternationalProps'
+    AllowedCarTypes:
+      type: object
+      title: AllowedCarTypes
+      description: "Car rule to describe whether to use default policy rule or use different set of \nallowed car types for booking.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/AllowedCarTypesPropsWrapper'
+    RuleTierExemptionConfigWrapper:
+      type: object
+      title: RuleTierExemptionConfigWrapper
+      properties:
+        ruleTierExemptionConfig:
+          $ref: '#/components/schemas/RuleTierExemptionConfig'
+    Reference:
+      type: object
+      title: Reference object containing uuid and name of the entity.
+      description: Reference of an entity
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+        name:
+          type: string
+          example: Name
+    FlightAdvanceBookingWindowPropsWrapper:
+      type: object
+      title: FlightAdvanceBookingWindowPropsWrapper
+      properties:
+        flightAdvanceBookingWindowProps:
+          $ref: '#/components/schemas/FlightAdvanceBookingWindowProps'
+    RailTicketsRefundableProps:
+      type: object
+      title: RailTicketsRefundableProps
+      description: Different type of refund policy allowed for rail ticket booking.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - REFUNDABLE_WITHOUT_FEES
+          - REFUNDABLE_WITH_OR_WITHOUT_FEES
+          - NON_REFUNDABLE
+    DifferenceBetweenFlightFareAndMedianFareProps:
+      type: object
+      title: DifferenceBetweenFlightFareAndMedianFareProps
+      description: 'Allowed difference between flight''s total fare and median fare for all
+
+        flights for that destination.
+
+        '
+      required:
+      - percentage
+      properties:
+        percentage:
+          description: 'Percentage difference between flight''s total fare and median fare for all
+
+            flights for that destination.
+
+            '
+          type: integer
+          format: int32
+    HotelLprFilterProps:
+      type: object
+      title: HotelLprFilterProps
+      description: Properties for LPR filter configuration.
+      required:
+      - isEnabled
+      properties:
+        isEnabled:
+          type: boolean
+          description: If true, only the lowest property rate is allowed.
+      oneOf:
+      - $ref: '#/components/schemas/LprFilterConfigWrapper'
+      - $ref: '#/components/schemas/LprAmountWrapper'
+    OopReasonCodesProps:
+      type: object
+      description: Out of policy reason codes.
+      properties:
+        reasonCodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OopReasonCodeUde'
+            description: Questions to capture oop reason codes during checkout.
+    FlightTicketsRefundable:
+      type: object
+      title: FlightTicketsRefundable
+      description: 'Air rule to describe whether to use default policy or different rule regarding refundable
+
+        flight tickets.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/FlightTicketsRefundablePropsWrapper'
+    CommonPolicyRules:
+      type: object
+      title: CommonPolicyRules
+      description: Details of policy that is common to all travel type.
+      properties:
+        restrictedContinents:
+          $ref: '#/components/schemas/RestrictedContinents'
+        restrictedCountries:
+          $ref: '#/components/schemas/RestrictedCountries'
+    HotelCancellationPropsWrapper:
+      type: object
+      title: HotelCancellationPropsWrapper
+      properties:
+        hotelCancellationProps:
+          $ref: '#/components/schemas/HotelCancellationProps'
+    AllowedAirAddonsPropsWrapper:
+      type: object
+      title: AllowedAirAddonsPropsWrapper
+      properties:
+        allowedAirAddonsProps:
+          $ref: '#/components/schemas/AllowedAirAddonsProps'
+    CustomFieldId:
+      type: object
+      title: CustomFieldId
+      description: The custom field type and the id associated with it.
+      required:
+      - type
+      - externalId
+      properties:
+        type:
+          $ref: '#/components/schemas/CustomFieldType'
+        externalId:
+          type: string
+          description: Meeting id or budget id based on custom field type.
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    HotelRestrictedKeywordsPropsWrapper:
+      type: object
+      title: HotelRestrictedKeywordsPropsWrapper
+      properties:
+        hotelRestrictedKeywordsProps:
+          $ref: '#/components/schemas/HotelRestrictedKeywordsProps'
+    HotelPropertyTypeProps:
+      type: object
+      title: HotelPropertyTypeProps
+      description: Properties for hotel property type restriction rule.
+      required:
+      - restrictedPropertyTypes
+      properties:
+        restrictedPropertyTypes:
+          type: array
+          description: List of hotel property types that are restricted.
+          items:
+            $ref: '#/components/schemas/HotelPropertyEnum'
+        approvalProcessType:
+          type: string
+          description: Out of policy action to take when this rule is violated.
+          enum:
+          - NONE
+          - SOFT_APPROVAL
+          - HARD_APPROVAL
+          - PASSIVE_APPROVAL
+          - PREVENT_BOOKING
+          - PRE_APPROVAL
+    HotelRateConditionsNotAllowedProps:
+      type: object
+      title: HotelRateConditionsNotAllowedProps
+      description: List of cancellation types and payment options which should not be allowed.
+      required:
+      - types
+      properties:
+        types:
+          type: array
+          items:
+            type: string
+            enum:
+            - NON_REFUNDABLE
+            - PREPAID
+            - REQUIRES_DEPOSIT
+            - PAY_AT_PROPERTY
+        conditionalRefundability:
+          $ref: '#/components/schemas/ConditionalRefundability'
+    CreatePolicyRequest:
+      type: object
+      title: Create Policy Request.
+      description: Request containing details of policy to be created.
+      required:
+      - name
+      - type
+      - currency
+      - userGroups
+      properties:
+        name:
+          type: string
+          description: Name of the policy.
+        type:
+          $ref: '#/components/schemas/PolicyType'
+        parentPolicyId:
+          type: string
+          format: uuid
+          description: Policy to inherit the values of linked rules. If empty, consider the company default policy.
+          example: f7b3b3b3-7b3b-4b3b-8b3b-3b3b3b3b3b3b
+        currency:
+          $ref: '#/components/schemas/PolicyCurrency'
+        inPolicyApprovalInfo:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/PolicyApprovalInfo'
+        outOfPolicyApprovalInfo:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          $ref: '#/components/schemas/PolicyApprovalInfo'
+        inPolicyApprovalInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyApprovalInfo'
+        outOfPolicyApprovalInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyApprovalInfo'
+        outOfPolicyAgentApprovalInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyApprovalInfo'
+        enableAgentActionOverride:
+          type: boolean
+          description: True if agent can override the PREVENT_BOOKING action. If enabled, outOfPolicyAgentApprovalInfos for all travel types should be provided.
+        userGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserGroup'
+        commonPolicyRules:
+          $ref: '#/components/schemas/CommonPolicyRules'
+        carPolicyRules:
+          $ref: '#/components/schemas/CarPolicyRules'
+        hotelPolicyRules:
+          $ref: '#/components/schemas/HotelPolicyRules'
+        airPolicyRules:
+          $ref: '#/components/schemas/AirPolicyRules'
+        isRestrictive:
+          deprecated: true
+          x-sunset: '2026-07-01'
+          type: boolean
+          description: True if policy is a restrictive policy.
+          example: true
+        rules:
+          type: array
+          description: A list of general policy rules for all travel types air, hotel, car and rail.
+          items:
+            $ref: '#/components/schemas/UniversalRule'
+        airOopReasonCodes:
+          $ref: '#/components/schemas/OopReasonCodes'
+          description: Out of policy reason code question to be asked to user for air booking.
+        hotelOopReasonCodes:
+          $ref: '#/components/schemas/OopReasonCodes'
+          description: Out of policy reason code question to be asked to user for hotel booking.
+        carOopReasonCodes:
+          $ref: '#/components/schemas/OopReasonCodes'
+          description: Out of policy reason code question to be asked to user for car booking.
+        railOopReasonCodes:
+          $ref: '#/components/schemas/OopReasonCodes'
+          description: Out of policy reason code question to be asked to user for rail booking.
+        category:
+          $ref: '#/components/schemas/PolicyCategory'
+          description: Category of the policy.
+          default: EMPLOYEE
+    CustomFieldType:
+      type: string
+      description: The type of custom field.
+      enum:
+      - QUESTION
+      - MEETING
+      - BUDGET
+      - BREX_TOKEN
+      default: QUESTION
+    MaxCarPricePerNumberOfDaysProps:
+      type: object
+      title: MaxCarPricePerNumberOfDaysProps
+      description: Max price for given number days for a car booking.
+      required:
+      - maxPrice
+      properties:
+        maxPrice:
+          $ref: '#/components/schemas/SimpleMoney'
+        isTaxIncluded:
+          type: boolean
+          default: false
+    HotelMedianRatePropsWrapper:
+      type: object
+      title: HotelMedianRatePropsWrapper
+      properties:
+        hotelMedianRateProps:
+          $ref: '#/components/schemas/HotelMedianRateProps'
+    RuleTierExemption:
+      type: object
+      title: RuleTierExemption
+      description: Tier exemption configuration for a specific hotel policy rule type.
+      required:
+      - ruleType
+      properties:
+        ruleType:
+          $ref: '#/components/schemas/HotelPolicyRuleType'
+      oneOf:
+      - $ref: '#/components/schemas/AllTiersWrapper'
+      - $ref: '#/components/schemas/ExemptedTiersWrapper'
+    HotelCentralTierExemption:
+      type: object
+      title: HotelCentralTierExemption
+      description: 'Central tier exemption configuration for hotel rules. Configures which hotel preference tiers bypass individual policy rules. Properties in selected tiers are considered in-policy regardless of the rule configuration.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/HotelCentralTierExemptionPropsWrapper'
+    MaxRailBookingPriceByDurationPropsWrapper:
+      type: object
+      title: MaxRailBookingPriceByDurationPropsWrapper
+      properties:
+        maxRailBookingPriceByDurationProps:
+          $ref: '#/components/schemas/MaxRailBookingPriceByDurationProps'
+    AllowedAirAddonsProps:
+      type: object
+      title: AllowedAirAddonsProps
+      description: Add-ons which can be booked on a central card as part of an air reservation.
+      required:
+      - addons
+      properties:
+        addons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Addon'
+        paymentSourceAccessTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentSourceAccessType'
+          default:
+          - CENTRALISED
+    ContinentRestriction:
+      type: object
+      title: ContinentRestriction
+      description: Continent code with type of restriction.
+      required:
+      - type
+      - continentCode
+      properties:
+        type:
+          type: string
+          enum:
+          - BLOCK_TRAVEL_TO_CONTINENT
+          - ALLOW_WITHIN_CONTINENT
+        continentCode:
+          type: string
+          description: 2-letter continent code.
+          example: NA
+    EngineType:
+      type: string
+      title: EngineType
+      description: Engine types.
+      enum:
+      - UNKNOWN_ENGINE
+      - PETROL
+      - DIESEL
+      - ELECTRIC
+      - CNG
+      - HYBRID
+      - HYDROGEN
+      - MULTI_FUEL
+      - ETHANOL
+      example: PETROL
+    HighestFlightCabinByDurationProps:
+      type: object
+      title: HighestFlightCabinByDurationProps
+      description: List of highest cabin that can be booked for different flight durations.
+      required:
+      - highestCabinForDurationList
+      properties:
+        highestCabinForDurationList:
+          type: array
+          items:
+            $ref: '#/components/schemas/HighestCabinForDuration'
+    AllRulesAllTiersWrapper:
+      type: object
+      title: AllRulesAllTiersWrapper
+      properties:
+        allRulesAllTiers:
+          type: boolean
+          description: When true, all preference tiers are exempted for all hotel rules.
+    AirPolicyRules:
+      type: object
+      title: AirPolicyRules
+      description: Details of rules related to air.
+      properties:
+        restrictedAirlines:
+          $ref: '#/components/schemas/RestrictedAirlines'
+        restrictedAirCrafts:
+          $ref: '#/components/schemas/RestrictedAirCrafts'
+        maxFlightBookingPriceByDuration:
+          $ref: '#/components/schemas/MaxFlightBookingPriceByDuration'
+        flightCabinUpgrade:
+          $ref: '#/components/schemas/FlightCabinUpgrade'
+        flightAdvanceBookingWindow:
+          $ref: '#/components/schemas/FlightAdvanceBookingWindow'
+        flightTicketsRefundable:
+          $ref: '#/components/schemas/FlightTicketsRefundable'
+        flightTicketsChangeable:
+          $ref: '#/components/schemas/FlightTicketsChangeable'
+        highestFlightCabinByDurationDomestic:
+          $ref: '#/components/schemas/HighestFlightCabinByDuration'
+        highestFlightCabinByDurationInternational:
+          $ref: '#/components/schemas/HighestFlightCabinByDuration'
+        highestFlightCabinOvernight:
+          $ref: '#/components/schemas/HighestFlightCabinOvernight'
+        differenceBetweenFlightFareAndMedianFare:
+          $ref: '#/components/schemas/DifferenceBetweenFlightFareAndMedianFare'
+        co2EmissionPerPassengerPerKm:
+          $ref: '#/components/schemas/Co2EmissionPerPassengerPerKm'
+        maxFlightBookingPriceInternational:
+          $ref: '#/components/schemas/MaxFlightBookingPrice'
+        maxFlightBookingPriceDomestic:
+          $ref: '#/components/schemas/MaxFlightBookingPrice'
+        lowestLogicalFare:
+          $ref: '#/components/schemas/LowestLogicalFare'
+    HighestFlightCabinOvernight:
+      type: object
+      title: HighestFlightCabinOvernight
+      description: "Air rule to describe whether to use default policy or different cabin rule for overnight \nflight.\n"
+      oneOf:
+      - $ref: '#/components/schemas/IsLinkedWrapper'
+      - $ref: '#/components/schemas/HighestFlightCabinOvernightPropsWrapper'
+    CountryRestriction:
+      type: object
+      title: CountryRestriction
+      description: Country with their restriction type.
+      required:
+      - type
+      - countryCode
+      properties:
+        type:
+          type: string
+          enum:
+          - BLOCK_TRAVEL_TO_COUNTRY
+          - ALLOW_WITHIN_COUNTRY
+        countryCode:
+          type: string
+          description: ISO 2-letter country code.
+    FlightAdvanceBookingWindowInternationalPropsWrapper:
+      type: object
+      title: FlightAdvanceBookingWindowInternationalPropsWrapper
+      properties:
+        flightAdvanceBookingWindowInternationalProps:
+          $ref: '#/components/schemas/FlightAdvanceBookingWindowInternationalProps'
+    CabinClassNotAllowedDomesticPropsWrapper:
+      type: object
+      title: CabinClassNotAllowedDomesticPropsWrapper
+      properties:
+        cabinClassNotAllowedDomesticProps:
+          $ref: '#/components/schemas/CabinClassNotAllowedDomesticProps'
+    Percentage:
+      title: Percentage
+      type: object
+      description: Number expressed as a fraction of 100.
+      properties:
+        percentage:
+          type: number
+          format: double
+          example: 20
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    CountryPropsWrapper:
+      type: object
+      title: CountryPropsWrapper
+      properties:
+        countryProps:
+          $ref: '#/components/schemas/CountryProps'
+    DifferenceValue:
+      type: object
+      title: Different Types Of Values.
+      oneOf:
+      - $ref: '#/components/schemas/SimpleMoneyWrapper'
+      - $ref: '#/components/schemas/Percentage'
+    CarTypesNotAllowedPropsWrapper:
+      type: object
+      title: CarTypesNotAllowedPropsWrapper
+      properties:
+        carTypesNotAllowedProps:
+          $ref: '#/components/schemas/CarTypesNotAllowedProps'
+    HotelAdvanceBookingWindowProps:
+      type: object
+      title: HotelAdvanceBookingWindowProps
+      description: Number of advance days for a hotel booking.
+      required:
+      - numDaysInAdvance
+      properties:
+        numDaysInAdvance:
+          type: integer
+          format: int32
+    FlightAdvanceBookingWindowProps:
+      type: object
+      title: FlightAdvanceBookingWindowProps
+      description: Number of days in advance one can book a flight.
+      required:
+      - numDaysInAdvance
+      properties:
+        numDaysInAdvance:
+          type: integer
+          format: int32
+    OopReasonCodesPropsWrapper:
+      type: object
+      title: OopReasonCodesPropsWrapper
+      properties:
+        props:
+          $ref: '#/components/schemas/OopReasonCodesProps'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
