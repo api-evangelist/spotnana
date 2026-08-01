@@ -1,0 +1,34 @@
+generated: '2026-07-21'
+method: searched
+source: live probe of /.well-known/ on Spotnana hosts
+notes: >-
+  The only /.well-known document that resolves is oauth-authorization-server,
+  served by the Redocly-hosted developer portal (issuer auth.cloud.redocly.com)
+  to advertise the portal's documentation MCP server OAuth endpoints — it is NOT
+  the Spotnana platform API's own authorization server. Captured for completeness.
+hosts:
+  - host: https://developer.spotnana.com
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: spotnana-oauth-authorization-server.json
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://apis.spotnana.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+  - host: https://spotnana.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404

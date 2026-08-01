@@ -1,0 +1,20 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Spotnana Users API
+  version: 1.0.0
+extends: openapi/spotnana-users-openapi-original.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: spotnana
+      x-apievangelist-api: users
+      x-apievangelist-artifacts:
+        authentication: authentication/spotnana-authentication.yml
+        conventions: conventions/spotnana-conventions.yml
+        errors: errors/spotnana-problem-types.yml
+        lifecycle: lifecycle/spotnana-lifecycle.yml
+        agentic_access: agentic-access/spotnana-agentic-access.yml
+  - target: $.info
+    update:
+      x-apievangelist-production-host: https://apis.spotnana.com
+      x-apievangelist-sandbox-host: https://api-ext-sboxmeta.partners.spotnana.com

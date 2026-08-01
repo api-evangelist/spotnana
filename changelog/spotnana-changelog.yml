@@ -1,0 +1,55 @@
+generated: '2026-07-21'
+method: searched
+source: https://developer.spotnana.com/changelog/changelog
+docs: https://developer.spotnana.com/changelog/changelog
+release_timeline: https://developer.spotnana.com/releases/breaking_change_logs
+scheme: date-based
+notes: >-
+  Spotnana publishes an interactive, dated API changelog plus a separate breaking-change
+  release timeline. API versions (v2, v3) are carried in the URL path, not as release tags.
+  Entries below captured from the live changelog on 2026-07-21 (recent window only).
+current_version: v2
+entries:
+  - date: '2026-07-20'
+    title: EventPolicyTemplateUpdates
+    breaking: false
+    highlights:
+      - Added tmcFilter.showToTraveler property across Event, Policy, and Template APIs.
+  - date: '2026-07-14'
+    title: EventPolicyTemplateUpdates
+    breaking: false
+    highlights:
+      - Introduced flightPassMetadata.flightPassAmounts in Event/Template payment sources.
+      - Updated descriptions for hotel refundability conditions and grace-period logic.
+  - date: '2026-07-09'
+    title: AirTripUpdates
+    breaking: false
+    highlights:
+      - Added manualRemarks property to the Air cancellation endpoint.
+      - Expanded inlineQCInfo enum with EXTERNAL_COMMISSIONS_PROCESSING_RULE.
+  - date: '2026-07-06'
+    title: CompanyPaymentsTripUpdatesDeprecations
+    breaking: false
+    highlights:
+      - Introduced noPrepaymentMetadata across multiple payment-related endpoints.
+      - Deprecated transaction-related properties (penalty, totalAmount, transactionFares).
+  - date: '2026-07-01'
+    title: CarCompanyTripUpdates
+    breaking: false
+    highlights:
+      - Expanded car extras enum with 34 new equipment types.
+      - Added NO_PREPAYMENT rate-type support.
+      - New Company endpoints for preference tiers and vendor preferences.
+  - date: '2026-06-25'
+    title: AirCarCompanyEventHotelPaymentsPolicyTemplateTripUserManagementUpdatesDeprecations
+    breaking: false
+    highlights:
+      - Widespread NO_PREPAYMENT support across transportation modules.
+      - Added loyalty-tier properties throughout traveler management.
+      - Deprecated legacy transaction itemGroups properties.
+  - date: '2026-06-18'
+    title: AccessManagementAirCompanyEventHotelPolicyTemplateTripUserManagementUpdates
+    breaking: false
+    highlights:
+      - Five new contact-center permissions added.
+      - Gender and title fields support REDACTED values.

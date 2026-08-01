@@ -1,0 +1,100 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/spotnana-*-openapi-original.json (path hierarchy + id path-parameters)
+notes: >-
+  Entity-relationship graph derived from the URL hierarchy and id path-parameters
+  across the 11 OpenAPI documents. Relationships are inferred from nested resource
+  paths (e.g. /companies/{companyId}/legal-entities/{legalEntityId}/offices/{officeId})
+  and id reference fields.
+entities:
+  - name: Company
+    id: companyId
+    api: openapi/spotnana-company-openapi-original.json
+  - name: LegalEntity
+    id: legalEntityId
+    api: openapi/spotnana-company-openapi-original.json
+  - name: Office
+    id: officeId
+    api: openapi/spotnana-company-openapi-original.json
+  - name: CostCenter
+    id: costCenterId
+    api: openapi/spotnana-company-openapi-original.json
+  - name: Department
+    id: departmentId
+    api: openapi/spotnana-company-openapi-original.json
+  - name: Grade
+    id: gradeId
+    api: openapi/spotnana-company-openapi-original.json
+  - name: Policy
+    id: policyId
+    api: openapi/spotnana-policy-openapi-original.json
+  - name: User
+    id: userId
+    api: openapi/spotnana-users-openapi-original.json
+  - name: PaymentSource
+    id: paymentSourceId
+    api: openapi/spotnana-payments-openapi-original.json
+  - name: Trip
+    id: tripId
+    api: openapi/spotnana-trip-openapi-original.json
+  - name: PNR
+    id: pnrId
+    api: openapi/spotnana-trip-openapi-original.json
+  - name: Event
+    id: eventId
+    api: openapi/spotnana-event-openapi-original.json
+  - name: EventTemplate
+    id: templateId
+    api: openapi/spotnana-template-openapi-original.json
+  - name: Document
+    id: documentId
+    api: openapi/spotnana-document-openapi-original.json
+relationships:
+  - from: LegalEntity
+    to: Company
+    kind: belongs_to
+    via: companyId
+  - from: Office
+    to: LegalEntity
+    kind: belongs_to
+    via: legalEntityId
+  - from: CostCenter
+    to: Company
+    kind: belongs_to
+    via: companyId
+  - from: Department
+    to: Company
+    kind: belongs_to
+    via: companyId
+  - from: Grade
+    to: Company
+    kind: belongs_to
+    via: companyId
+  - from: Policy
+    to: Company
+    kind: belongs_to
+    via: companyId
+  - from: Company
+    to: User
+    kind: has_many
+    via: companyId
+  - from: PaymentSource
+    to: User
+    kind: belongs_to
+    via: userId
+  - from: PNR
+    to: Trip
+    kind: belongs_to
+    via: tripId
+  - from: Trip
+    to: User
+    kind: belongs_to
+    via: userId
+  - from: Event
+    to: EventTemplate
+    kind: has_one
+    via: templateId
+  - from: Event
+    to: User
+    kind: has_many
+    via: travelerId

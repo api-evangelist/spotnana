@@ -1,0 +1,30 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://developer.spotnana.com/changelog/changelog,
+  https://developer.spotnana.com/releases/breaking_change_logs,
+  https://status.spotnana.com
+versioning:
+  scheme: uri-path
+  current: v2
+  notes: >-
+    Endpoints are versioned in the path (v2 predominant, v3 for newer trip/user/air
+    endpoints). Both v2 and v3 operations are served concurrently across the 11 APIs.
+  docs: https://developer.spotnana.com/spotnana/api_release_management_intro
+deprecation:
+  policy_url: https://developer.spotnana.com/releases/breaking_change_logs
+  changelog_url: https://developer.spotnana.com/changelog/changelog
+  notes: >-
+    Spotnana maintains a dated breaking-change release timeline and marks deprecated
+    properties/operations in the changelog (e.g. transaction itemGroups, penalty,
+    totalAmount, transactionFares deprecated across 2026-06/07). Deprecations are
+    announced ahead of removal via the release timeline.
+status_page: https://status.spotnana.com
+status_page_provider: Atlassian Statuspage
+status_feeds:
+  atom: https://status.spotnana.com/history.atom
+  rss: https://status.spotnana.com/history.rss
+  uptime: https://status.spotnana.com/uptime
+monitored_components: 29
+uptime_observed_90d: 99.85%-100%
+deprecated_operations: []

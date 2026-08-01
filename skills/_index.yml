@@ -1,0 +1,24 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/spotnana-*-openapi-original.json (operationIds verified verbatim)
+skills:
+  - file: spotnana-authenticate.md
+    name: Authenticate and obtain a Spotnana API token
+    api: openapi/spotnana-auth-openapi-original.json
+    operations: [createApiUser, fetchOauth2Token, rotateClientSecret, deleteApiUser]
+  - file: spotnana-search-and-book-air.md
+    name: Search and book a flight
+    api: openapi/spotnana-air-openapi-original.json
+    operations: [airSearch, airSelectedItinerary, airFlightCheckout, airInitiateBooking, airCreatePnr, airCancelPnr]
+  - file: spotnana-search-and-book-hotel.md
+    name: Search and book a hotel
+    api: openapi/spotnana-hotel-openapi-original.json
+    operations: [hotelSearch, hotelDetails, hotelPriceCheck, hotelCreatePnr, hotelCancelPnr]
+  - file: spotnana-onboard-company.md
+    name: Onboard a company, its structure, and a traveler
+    api: openapi/spotnana-company-openapi-original.json
+    operations: [createCompany, createLegalEntity, createOffice, createUser, createPolicy]
+  - file: spotnana-manage-trip-pnr.md
+    name: Create a trip and manage its PNRs
+    api: openapi/spotnana-trip-openapi-original.json
+    operations: [createTrip, createPnrV3, finalizePnr, getTripDetailsV3, cancelPnrV3]

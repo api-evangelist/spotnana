@@ -1,0 +1,524 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Auth API",
+    "version": "v2"
+  },
+  "servers": [
+    {
+      "url": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "description": "Sandbox URL"
+    }
+  ],
+  "security": [],
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ApiUserCredentialTypeEnum": {
+        "type": "string",
+        "description": "Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.",
+        "enum": [
+          "CLIENT_CREDENTIALS",
+          "SCIM_TOKEN"
+        ],
+        "default": "CLIENT_CREDENTIALS",
+        "example": "CLIENT_CREDENTIALS"
+      },
+      "ApiUserRoleEnum": {
+        "type": "string",
+        "description": "Roles supported for api user creation",
+        "enum": [
+          "TMC_ADMIN",
+          "COMPANY_ADMIN"
+        ],
+        "default": "TMC_ADMIN",
+        "example": "TMC_ADMIN"
+      },
+      "ApiUsersInfo": {
+        "type": "object",
+        "title": "ApiUsersInfo",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Api user client id",
+            "example": "1ddj3hs95to28iag7m4hl9lv2"
+          }
+        }
+      },
+      "CreateApiUsersRequest": {
+        "type": "object",
+        "title": "CreateApiUsersRequest",
+        "properties": {
+          "tmcId": {
+            "type": "string",
+            "description": "Tmc id",
+            "example": "ecc5b835-8001-430c-98f8-fedeccebe4cf"
+          },
+          "orgId": {
+            "type": "string",
+            "description": "Org id",
+            "example": "ecc5b835-8001-430c-98f8-fedeccebe4cf"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ApiUserRoleEnum",
+            "description": "Roles supported for api user creation"
+          },
+          "credentialType": {
+            "$ref": "#/components/schemas/ApiUserCredentialTypeEnum",
+            "description": "Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS."
+          }
+        }
+      },
+      "CreateApiUsersResponse": {
+        "type": "object",
+        "title": "CreateApiUsersResponse",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Api user client id",
+            "example": "1ddj3hs95to28iag7m4hl9lv2"
+          },
+          "clientSecret": {
+            "type": "string",
+            "description": "Api user client secret. Present for CLIENT_CREDENTIALS credential type.",
+            "example": "1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml"
+          },
+          "scimToken": {
+            "type": "string",
+            "description": "SCIM bearer token (Base64-encoded JSON envelope with encrypted secret). Present only for SCIM_TOKEN credential type.",
+            "example": "eyJzY29wZSI6InNjaW0iLCJjbGllbnRJZCI6Ii4uLiIsImVuY3J5cHRlZFNlY3JldCI6Ii4uLiJ9"
+          }
+        }
+      },
+      "DeleteApiUsersRequest": {
+        "type": "object",
+        "title": "DeleteApiUsersRequest",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Api user client id"
+          }
+        }
+      },
+      "ErrorParameter": {
+        "type": "object",
+        "title": "ErrorParameter",
+        "description": "Error parameter",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Parameter name"
+          },
+          "value": {
+            "type": "string",
+            "description": "Parameter value"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "debugIdentifier": {
+            "type": "string",
+            "description": "Link to debug the error internally."
+          },
+          "errorMessages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "string",
+                  "description": "Error code to identify the specific errors."
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Message containing details of error."
+                },
+                "errorParameters": {
+                  "type": "array",
+                  "description": "Error message parameters.",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorParameter"
+                  }
+                },
+                "errorDetail": {
+                  "type": "string",
+                  "description": "More details about the error."
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetApiUsersResponse": {
+        "type": "object",
+        "title": "GetApiUsersResponse",
+        "properties": {
+          "apiUsers": {
+            "type": "array",
+            "description": "List of api users",
+            "items": {
+              "$ref": "#/components/schemas/ApiUsersInfo"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "Total count of api users",
+            "example": 25
+          }
+        }
+      },
+      "OAuthTokenRequest": {
+        "type": "object",
+        "title": "OAuthTokenRequest",
+        "x-ignore-naming-case": true,
+        "required": [
+          "grant_type",
+          "client_id",
+          "client_secret"
+        ],
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "description": "Supported values are `client_credentials` and `urn:ietf:params:oauth:grant-type:token-exchange`."
+          },
+          "client_id": {
+            "type": "string",
+            "description": "Identifier for the API user."
+          },
+          "client_secret": {
+            "type": "string",
+            "description": "Password"
+          },
+          "audience": {
+            "type": "string",
+            "description": "Identifies the API being accessed in Spotnana.",
+            "example": "https://apis.spotnana.com/v2"
+          },
+          "subject_token": {
+            "type": "string",
+            "description": "A security token that represents the identity of the entity on whose behalf the request \nis being made.\n"
+          },
+          "subject_token_type": {
+            "type": "string",
+            "description": "Indicates the type of the `subject_token` used for token exchange. \nThis field supports the valid types as per the OAUTH 2.0 security framework.\n"
+          },
+          "scope": {
+            "type": "string",
+            "description": "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \nRFC6749 OAuth 2.0 framework, that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
+          }
+        }
+      },
+      "OAuthTokenResponse": {
+        "type": "object",
+        "title": "OAuthTokenResponse",
+        "required": [
+          "access_token",
+          "token_type"
+        ],
+        "x-ignore-naming-case": true,
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "The token to be used in subsequent API calls made to the Spotnana platform."
+          },
+          "expires_in": {
+            "type": "integer",
+            "description": "The length of time (in seconds) for which the access token is valid.",
+            "format": "int32"
+          },
+          "token_type": {
+            "type": "string",
+            "description": "A case-insensitive value specifying the method of using the access token issued, as \nspecified in Section 7.1 of [RFC6749].\n",
+            "example": "Bearer"
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "Used to fetch a new access token when the existing token expires.\nThe refresh token will not be available if the `grant_type` is `client_credentials`.\n"
+          },
+          "scope": {
+            "type": "string",
+            "description": "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \n[RFC6749], that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
+          }
+        }
+      },
+      "RotateClientSecretRequest": {
+        "type": "object",
+        "title": "RotateClientSecretRequest",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Api user client id"
+          }
+        }
+      },
+      "RotateClientSecretResponse": {
+        "type": "object",
+        "title": "RotateClientSecretResponse",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Api user client id",
+            "example": "1ddj3hs95to28iag7m4hl9lv2"
+          },
+          "clientSecret": {
+            "type": "string",
+            "description": "Api user client secret",
+            "example": "1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Authentication APIs for user login, logout, and token management"
+    }
+  ],
+  "paths": {
+    "/v2/auth/oauth2-token": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Get oauth2 token",
+        "description": "Get oauth2 token using the client credentials.\n{% admonition type=\"warning\" %}\n**Note:** API calls to the `/v2/auth/oauth2-token` and `/get-auth-token` (legacy) endpoints are rate limited.\nWe recommend reusing the existing tokens until they expire.\n{% /admonition %}\n",
+        "operationId": "fetchOauth2Token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/OAuthTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthTokenResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v2/api-users": {
+      "post": {
+        "tags": [
+          "API User"
+        ],
+        "summary": "Create a new API user",
+        "description": "Creates a new API user (also known as a machine user) that your application\ncan use to authenticate with Spotnana APIs. Each API user is scoped to a specific TMC and role,\ngiving you control over what level of access the credentials grant.\n\n**Use this endpoint to:**\n- Generate a dedicated `clientId` and `clientSecret` pair that your backend services can use to obtain access tokens.\n- Assign either a TMC admin or a company admin role to scope what the API user can do across your organization.\n- Create a SCIM API user by setting `credentialType` to `SCIM_TOKEN` with `role` set to `COMPANY_ADMIN`. This returns a SCIM bearer token instead of a client secret.\n\n**Next steps:**\n- For `CLIENT_CREDENTIALS` (default): Use the `clientId` and `clientSecret` in the `POST /v2/auth/oauth2-token` endpoint to obtain an access token.\n- For `SCIM_TOKEN`: Use the returned `scimToken` as the Bearer token in the `Authorization` header for SCIM API requests (`/v2/scim/Users`, etc.).\n\n**Notes:**\n- Store the `clientSecret` or `scimToken` securely. They are only returned once at creation and cannot be retrieved later.\n- You can create up to 5 API users per TMC. To increase this limit, contact your Spotnana representative.\n- Only a TMC admin can use this endpoint to create API users.\n- `SCIM_TOKEN` credential type requires `role` to be `COMPANY_ADMIN`.\n",
+        "operationId": "createApiUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApiUsersRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateApiUsersResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "description": "Max users for this tmcId already exist"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "API User"
+        ],
+        "summary": "Get API users for a TMC",
+        "description": "Retrieves the list of all active API users associated with the caller's TMC.\n\n**Use this endpoint to:**\n- Audit existing API users and their `clientIds` under a TMC.\n- Look up the `clientId` for a specific API user before rotating its client secret or revoking access.\n\n**Notes:**\n- This endpoint supports pagination using `limit` and `offset` query parameters.\n- The response includes only the `clientId` for each user. The `clientSecret` is never returned.\n- Returns only the API users belonging to the caller's contracting TMC.\n- Only a TMC admin can use this endpoint.\n",
+        "operationId": "getApiUsers",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Number of results to return",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 0,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "description": "Offset for pagination",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetApiUsersResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/v2/api-users/revoke": {
+      "post": {
+        "tags": [
+          "API User"
+        ],
+        "summary": "Delete an API user",
+        "description": "Permanently deletes an API user and revokes its access to the Spotnana platform. This immediately \ninvalidates all existing access tokens and removes the API user's ability to authenticate.\n\n**Use this endpoint to:**\n- Revoke access for an API user that is no longer needed.\n- Decommission an integration or clean up unused API users.\n- Free up a slot in your TMC's API user quota (default up to 5 API users per TMC).\n\n**Best practice:**\n\nBefore revoking, ensure no active integrations are using this `clientId`. Be sure to:\n1. create a new API user first\n2. update your integrations to use the new credentials\n3. verify they work\n4. and then revoke the old API user.\n\n**Notes:**\n- This action is permanent and cannot be undone. The `clientId` and `clientSecret` are permanently invalidated.\n- All active tokens for this API user are invalidated immediately. Any in-flight API requests using those tokens will fail.\n- The API user being revoked must belong to the same TMC as the caller.\n- Only a TMC admin can use this endpoint.\n",
+        "operationId": "deleteApiUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteApiUsersRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/v2/api-users/rotate": {
+      "post": {
+        "tags": [
+          "API User"
+        ],
+        "summary": "Rotate client secret for an API user",
+        "description": "Generates a new `clientSecret` for an existing API user. The old `clientSecret` is \nimmediately invalidated and all existing access tokens for the API user will be expired.\n\n**Use this endpoint to:**\n- Rotate credentials as part of a regular security hygiene practice.\n- Replace a `clientSecret` without deleting the API user.\n- Generate a new `clientSecret` if the old secret was lost or not stored.\n\n**Best practice:**\n- Update your integrations with the new `clientSecret` immediately after rotation. Any authentication requests using the old secret will fail.\n\n**Notes:**\n- The new `clientSecret` is only returned once in the response and cannot be retrieved later. Store it securely.\n- The `clientId` remains the same.\n- The old `clientSecret` stops working immediately. Any integration using it will need to re-authenticate with the new secret.\n- All existing access tokens created using the old `clientSecret` are immediately invalidated.\n- Only a TMC admin can use this endpoint.\n",
+        "operationId": "rotateClientSecret",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RotateClientSecretRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Client secret generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RotateClientSecretResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    }
+  }
+}

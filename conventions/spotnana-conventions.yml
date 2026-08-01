@@ -1,0 +1,56 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  openapi/spotnana-*-openapi-original.json (11 specs, 211 operations),
+  https://developer.spotnana.com/spotnana/concepts_intro
+notes: >-
+  Cross-cutting request/response semantics for the Spotnana travel-as-a-service
+  platform, derived from the 11 published OpenAPI documents and the concepts docs.
+authentication:
+  style: oauth2-then-bearer
+  scheme: http bearer
+  token_flow: >-
+    Obtain an access token from POST /v2/auth/oauth2-token (grant_type
+    client_credentials or urn:ietf:params:oauth:grant-type:token-exchange with
+    client_id/client_secret), then send it as Authorization: Bearer <token>.
+  audience_example: https://apis.spotnana.com/v2
+  see: authentication/spotnana-authentication.yml
+idempotency:
+  supported: false
+  notes: >-
+    No Idempotency-Key header or idempotency parameter is declared in any of the
+    11 OpenAPI documents. Write operations are not advertised as idempotent; no
+    Idempotency pointer is emitted for this provider.
+pagination:
+  styles:
+    - offset-limit
+    - page-number
+  params:
+    - limit
+    - offset
+    - pageSize
+    - pageNumber
+  notes: >-
+    List endpoints use either offset/limit or pageNumber/pageSize. Newer v3 "list"
+    endpoints are POST-with-body list operations that carry paging in the request body.
+request_headers:
+  - name: x-application-id
+    notes: Application identifier header present across operations.
+tracing:
+  request_id: null
+  debug_identifier: >-
+    Error responses carry a debugIdentifier string linking an error to Spotnana's
+    internal debugging — the closest thing to a correlation id.
+versioning:
+  style: uri-path
+  see: lifecycle/spotnana-lifecycle.yml
+error_envelope:
+  format: custom
+  shape: >-
+    { debugIdentifier: string, errorMessages: [ { errorCode: string,
+    message: string, errorParameters: [ { name, value } ] } ] }
+  problem_json: false
+  see: errors/spotnana-problem-types.yml
+rate_limit_signaling:
+  documented: false
+  notes: A 429 Too Many Requests response is declared on at least one operation, but no rate-limit response headers are documented in the specs.

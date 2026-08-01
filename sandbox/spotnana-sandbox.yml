@@ -1,0 +1,30 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://developer.spotnana.com/openapi/authapi,
+  openapi/spotnana-auth-openapi-original.json
+notes: >-
+  Spotnana ships a dedicated partner sandbox environment. All 11 published OpenAPI
+  documents declare the sandbox host as their single server; the docs also expose a
+  hosted mock server per API. No magic/test card numbers or fixture values are
+  published in the specs, so none are invented here.
+environments:
+  - name: sandbox
+    api_host: https://api-ext-sboxmeta.partners.spotnana.com
+    label: Partner sandbox (api-ext-sboxmeta)
+    default_in_specs: true
+  - name: production
+    api_host: https://apis.spotnana.com
+    label: Production (token audience https://apis.spotnana.com/v2)
+mock_servers:
+  pattern: https://developer.spotnana.com/_mock/openapi/<api>
+  example: https://developer.spotnana.com/_mock/openapi/authapi
+access:
+  model: >-
+    Sandbox credentials are provisioned per partner. An API user (client_id /
+    client_secret) is created via POST /v2/api-users, then exchanged for a Bearer
+    token at POST /v2/auth/oauth2-token (grant_type client_credentials). Secrets can
+    be rotated (rotateClientSecret) and revoked (deleteApiUser).
+test_values:
+  published: false
+  notes: No public test card / traveler / PNR fixture values are documented.

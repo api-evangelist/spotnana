@@ -1,0 +1,760 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Document API",
+    "version": "v2"
+  },
+  "servers": [
+    {
+      "url": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "description": "Sandbox URL"
+    }
+  ],
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "responses": {
+      "Forbidden": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "The specified resource was not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Document": {
+        "type": "object",
+        "title": "Document",
+        "description": "Document details.",
+        "required": [
+          "url",
+          "documentId",
+          "documentMetadata"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "S3 location of the document.",
+            "example": "https://s3.amazonaws.com/bucket-name/folder-name/file-name"
+          },
+          "documentId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the document.",
+            "example": "f49d00fe-1eda-4304-ba79-a980f565281d"
+          },
+          "documentMetadata": {
+            "$ref": "#/components/schemas/DocumentMetadata"
+          }
+        }
+      },
+      "DocumentMetadata": {
+        "title": "DocumentMetadata",
+        "description": "Metadata related to document.",
+        "type": "object",
+        "required": [
+          "documentType",
+          "entityType",
+          "entityId",
+          "entityMetadata",
+          "name"
+        ],
+        "properties": {
+          "documentType": {
+            "$ref": "#/components/schemas/DocumentType"
+          },
+          "entityType": {
+            "$ref": "#/components/schemas/EntityType"
+          },
+          "entityId": {
+            "type": "string",
+            "description": "Entity Id for the given entity type.",
+            "example": "123124"
+          },
+          "entityMetadata": {
+            "$ref": "#/components/schemas/EntityMetadata"
+          },
+          "name": {
+            "type": "string",
+            "description": "Document name.",
+            "example": "BoardingPass.pdf"
+          }
+        }
+      },
+      "DocumentType": {
+        "title": "DocumentType",
+        "description": "Document type.",
+        "type": "string",
+        "enum": [
+          "BOARDING_PASS",
+          "CONFIRMATION",
+          "INVOICE",
+          "VISA",
+          "MISCELLANEOUS",
+          "OTHERS",
+          "TASK_PROCESSOR",
+          "EVENT_COVER_IMAGE",
+          "LOGO_IMAGE"
+        ],
+        "example": "VISA",
+        "x-ignoreBreakingChanges": [
+          "DocumentType->LOGO_IMAGE"
+        ]
+      },
+      "EntityMetadata": {
+        "title": "EntityMetadata",
+        "description": "Metadata for associated entity of document.",
+        "type": "object",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PnrMetadataWrapper"
+          },
+          {
+            "$ref": "#/components/schemas/EventMetadataWrapper"
+          }
+        ]
+      },
+      "EntityType": {
+        "title": "EntityType",
+        "description": "Entity type against which the document is to uploaded.",
+        "type": "string",
+        "enum": [
+          "PNR",
+          "COMPANY",
+          "AIR_ITINERARY",
+          "EVENT",
+          "LOCATION_IMAGE",
+          "AIR_COMMISSION_CONTRACT"
+        ],
+        "example": "PNR",
+        "x-ignoreBreakingChanges": [
+          "EntityType->TRIP",
+          "EntityType->TICKETING_ERROR"
+        ]
+      },
+      "ErrorParameter": {
+        "type": "object",
+        "title": "ErrorParameter",
+        "description": "Error parameter",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Parameter name"
+          },
+          "value": {
+            "type": "string",
+            "description": "Parameter value"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "debugIdentifier": {
+            "type": "string",
+            "description": "Link to debug the error internally."
+          },
+          "errorMessages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "string",
+                  "description": "Error code to identify the specific errors."
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Message containing details of error."
+                },
+                "errorParameters": {
+                  "type": "array",
+                  "description": "Error message parameters.",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorParameter"
+                  }
+                },
+                "errorDetail": {
+                  "type": "string",
+                  "description": "More details about the error."
+                }
+              }
+            }
+          }
+        }
+      },
+      "EventEntityMetadata": {
+        "title": "EventEntityMetadata",
+        "description": "Metadata when document is associated to an event.",
+        "type": "object",
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/PostalAddress"
+          }
+        }
+      },
+      "EventMetadataWrapper": {
+        "type": "object",
+        "title": "EventMetadataWrapper",
+        "properties": {
+          "eventMetadata": {
+            "$ref": "#/components/schemas/EventEntityMetadata"
+          }
+        }
+      },
+      "FlightMetadata": {
+        "title": "FlightMetadata",
+        "description": "Flight metadata against which document is associated.",
+        "type": "object",
+        "properties": {
+          "flightId": {
+            "type": "string",
+            "description": "Unique identifier of the flight.",
+            "example": "CgNERU4SA1NGTxoKNTQ1NzI5ODcxMQ"
+          }
+        }
+      },
+      "FlightMetadataWrapper": {
+        "type": "object",
+        "title": "FlightMetadataWrapper",
+        "properties": {
+          "flightMetadata": {
+            "$ref": "#/components/schemas/FlightMetadata"
+          }
+        }
+      },
+      "GetDocumentResponse": {
+        "type": "object",
+        "title": "GetDocumentResponse",
+        "description": "Response containing a document.",
+        "required": [
+          "document"
+        ],
+        "properties": {
+          "document": {
+            "$ref": "#/components/schemas/Document"
+          }
+        }
+      },
+      "GetDocumentsResponse": {
+        "type": "object",
+        "title": "GetDocumentsResponse",
+        "description": "Response containing a list of documents.",
+        "required": [
+          "documents"
+        ],
+        "properties": {
+          "documents": {
+            "type": "array",
+            "description": "List of documents.",
+            "items": {
+              "$ref": "#/components/schemas/Document"
+            }
+          }
+        }
+      },
+      "Latlng": {
+        "title": "Latlng",
+        "description": "Latitude and Longitude for a Location",
+        "type": "object",
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "description": "Latitude of the Location",
+            "format": "double",
+            "example": 77.1025
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude of the Location",
+            "format": "double",
+            "example": 28.7041
+          }
+        }
+      },
+      "LegMetadata": {
+        "title": "LegMetadata",
+        "description": "Leg metadata against which document is associated.",
+        "type": "object",
+        "properties": {
+          "legId": {
+            "type": "string",
+            "description": "Unique identifier of the leg.",
+            "example": "CgNTRk8SA0RFThoKNTQ1NzI5ODcxMQ=="
+          }
+        }
+      },
+      "LegMetadataWrapper": {
+        "type": "object",
+        "title": "LegMetadataWrapper",
+        "properties": {
+          "legMetadata": {
+            "$ref": "#/components/schemas/LegMetadata"
+          }
+        }
+      },
+      "PnrMetadata": {
+        "title": "PnrMetadata",
+        "description": "Metadata when document is associated to pnr entity.",
+        "type": "object",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FlightMetadataWrapper"
+          },
+          {
+            "$ref": "#/components/schemas/LegMetadataWrapper"
+          }
+        ]
+      },
+      "PnrMetadataWrapper": {
+        "type": "object",
+        "title": "PnrMetadataWrapper",
+        "required": [
+          "travelType"
+        ],
+        "properties": {
+          "pnrMetadata": {
+            "$ref": "#/components/schemas/PnrMetadata"
+          },
+          "invoiceMetadata": {
+            "type": "object",
+            "title": "InvoiceMetadata",
+            "description": "Metadata associated with an invoice document.",
+            "required": [
+              "invoiceNumber"
+            ],
+            "properties": {
+              "invoiceNumber": {
+                "type": "string",
+                "example": "SPOT-0001"
+              },
+              "invoiceType": {
+                "type": "string",
+                "example": "FARE_INVOICE",
+                "enum": [
+                  "SERVICE_FEE_INVOICE",
+                  "FARE_INVOICE",
+                  "GENERIC_INVOICE"
+                ]
+              }
+            }
+          },
+          "travelType": {
+            "$ref": "#/components/schemas/TravelType"
+          }
+        }
+      },
+      "PostalAddress": {
+        "title": "PostalAddress",
+        "description": "Postal Address Details",
+        "type": "object",
+        "required": [
+          "addressLines",
+          "regionCode"
+        ],
+        "properties": {
+          "addressLines": {
+            "description": "Address lines",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Golden Gate Bridge"
+            }
+          },
+          "administrativeArea": {
+            "type": "string",
+            "description": "Code of administrative area. For example: DL for Delhi, India.\nHighest administrative subdivision which is used for postal\naddresses of a country or region.\nFor example, this can be a state, a province, an oblast, or a prefecture.\nSpecifically, for Spain this is the province and not the autonomous\ncommunity (e.g. \"Barcelona\" and not \"Catalonia\").\nMany countries don't use an administrative area in postal addresses. E.g.\nin Switzerland this should be left unpopulated.\n",
+            "example": "CA"
+          },
+          "administrativeAreaName": {
+            "type": "string",
+            "description": "Name of administrative area. This is full name corresponding to administrativeArea. \nLike Delhi for DL area code. For some places, code and name maybe same as well like Tokyo.\n",
+            "example": "California"
+          },
+          "description": {
+            "description": "Address description",
+            "type": "string",
+            "example": "San Francisco Home"
+          },
+          "isDefault": {
+            "description": "Whether this address is default address in case multiple addresses are specified.",
+            "type": "boolean",
+            "example": true
+          },
+          "languageCode": {
+            "description": "BCP-47 language code of the contents of this address (if known). This is often the UI \nlanguage of the input form or is expected to match one of the languages used in the \naddress' country/region, or their transliterated equivalents.\nThis can affect formatting in certain countries, but is not critical to the correctness \nof the data and will never affect any validation or other non-formatting related operations.\nExamples: \"zh-Hant\", \"ja\", \"ja-Latn\", \"en\".\n",
+            "type": "string",
+            "example": "en"
+          },
+          "locality": {
+            "description": "Generally refers to the city/town portion of the address.",
+            "type": "string",
+            "example": "San Francisco"
+          },
+          "locationCode": {
+            "description": "IATA 3-letter location code. See https://www.iata.org/en/services/codes.",
+            "type": "string",
+            "example": "LAX"
+          },
+          "organization": {
+            "description": "The name of the organization at the address.",
+            "type": "string",
+            "example": "Spotnana"
+          },
+          "postalCode": {
+            "description": "Postal code of the address. This is a required field when setting for a user/legal entity/company etc.",
+            "type": "string",
+            "example": "94130"
+          },
+          "continentCode": {
+            "description": "2 letter continent code of the continent this address falls in.",
+            "type": "string",
+            "example": "AF"
+          },
+          "recipients": {
+            "description": "The recipient at the address.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "regionCode": {
+            "description": "Region code of the country/region of the address.",
+            "type": "string",
+            "example": "US"
+          },
+          "regionName": {
+            "description": "Region name of the country/region of the address.",
+            "type": "string",
+            "example": "America"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "sortingCode": {
+            "description": "Additional, country-specific, sorting code. This is not used\nin most regions. Where it is used, the value is either a string like\n\"CEDEX\", optionally followed by a number (e.g. \"CEDEX 7\"), or just a number\nalone, representing the \"sector code\" (Jamaica), \"delivery area indicator\"\n(Malawi) or \"post office indicator\" (e.g. Côte d'Ivoire).\n",
+            "type": "string",
+            "example": "Jamaica"
+          },
+          "sublocality": {
+            "description": "Sublocality of the address. This can be neighborhoods, boroughs, districts.",
+            "type": "string"
+          },
+          "timezone": {
+            "description": "Time zone of the address.",
+            "type": "string",
+            "example": "America/Los_Angeles"
+          },
+          "coordinates": {
+            "description": "Map coordinates of the address.",
+            "$ref": "#/components/schemas/Latlng"
+          }
+        }
+      },
+      "TravelType": {
+        "type": "string",
+        "title": "TravelType",
+        "description": "Travel Type",
+        "enum": [
+          "AIR",
+          "HOTEL",
+          "CAR",
+          "RAIL",
+          "LIMO",
+          "MISC",
+          "ALL"
+        ],
+        "example": "AIR"
+      },
+      "UploadDocumentRequest": {
+        "type": "object",
+        "title": "UploadDocumentRequest",
+        "description": "Request body for upload document.",
+        "required": [
+          "file"
+        ],
+        "x-ignoreBreakingChanges": [
+          "DocumentApi.yaml->UploadDocumentRequest->documentMetadata",
+          "UploadDocumentRequest->documentMetadata"
+        ],
+        "properties": {
+          "documentMetadata": {
+            "$ref": "#/components/schemas/DocumentMetadata",
+            "x-optionalFrom": "2026-01-14"
+          },
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "Contents of the document to be uploaded (PDF only). Accepts application/pdf or application/octet-stream."
+          },
+          "documentMetadataStr": {
+            "type": "string",
+            "description": "JSON string of DocumentMetadata - accepts application/octet-stream. Either documentMetadata or documentMetadataStr must be present."
+          }
+        }
+      },
+      "UploadDocumentResponse": {
+        "type": "object",
+        "title": "UploadDocumentResponse",
+        "description": "Response for upload document.",
+        "required": [
+          "documentId",
+          "documentMetadata"
+        ],
+        "properties": {
+          "documentId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the document.",
+            "example": "f49d00fe-1eda-4304-ba79-a980f565281d"
+          },
+          "documentMetadata": {
+            "$ref": "#/components/schemas/DocumentMetadata"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Document",
+      "description": "APIs for managing and performing operations on documents related to trips and bookings."
+    }
+  ],
+  "paths": {
+    "/v2/documents": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Upload a document",
+        "description": "Upload a document for a specific entity type (e.g., a PNR).",
+        "operationId": "uploadDocument",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadDocumentRequest"
+              },
+              "encoding": {
+                "file": {
+                  "contentType": "application/pdf"
+                },
+                "documentMetadata": {
+                  "contentType": "application/json"
+                },
+                "documentMetadataStr": {
+                  "contentType": "application/json"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "curl",
+            "source": "curl --location 'https://api-ext-sboxmeta.partners.spotnana.com/v2/documents' \\\n  --header 'Authorization: Bearer <YOUR_TOKEN_HERE>' \\\n  --header 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36' \\\n  --form 'file=@\"/Path/to/file/document.pdf\"' \\\n  --form 'documentMetadata=\"{\n    \\\"documentType\\\": \\\"INVOICE\\\",\n    \\\"entityType\\\": \\\"PNR\\\",\n    \\\"entityId\\\": \\\"1234567890\\\",\n    \\\"entityMetadata\\\": {\n      \\\"travelType\\\": \\\"AIR\\\",\n      \\\"invoiceMetadata\\\": {\n        \\\"invoiceNumber\\\": \\\"ABCD-1234\\\"\n      }\n    },\n    \\\"name\\\": \\\"Trip-Invoice-Test\\\"\n  }\";type=application/json'\n"
+          },
+          {
+            "lang": "Node.js",
+            "source": "import fetch from 'node-fetch';\nimport FormData from 'form-data';\nimport fs from 'fs';\n\n// Create the multipart form\nconst form = new FormData();\n\n// File part\nform.append(\n  'file',\n  fs.createReadStream('/Path/to/file/document.pdf'),\n  {\n    filename: 'document.pdf',\n    contentType: 'application/pdf'\n  }\n);\n\n// Metadata part (JSON)\nform.append(\n  'documentMetadata',\n  JSON.stringify({\n    documentType: \"INVOICE\",\n    entityType: \"PNR\",\n    entityId: \"1234567890\",\n    entityMetadata: {\n      travelType: \"AIR\",\n      invoiceMetadata: {\n        invoiceNumber: \"ABCD-1234\"\n      }\n    },\n    name: \"Trip-Invoice-Test\"\n  }),\n  {\n    contentType: 'application/json'\n  }\n);\n\n// Send the request\nconst response = await fetch('https://api.spotnana.com/v2/documents', {\n  method: 'POST',\n  headers: {\n    Authorization: 'Bearer auth-token',\n    ...form.getHeaders() // IMPORTANT: includes multipart boundary\n  },\n  body: form\n});\n\nconst result = await response.text();\nconsole.log(result);\n"
+          },
+          {
+            "lang": "JavaScript",
+            "source": "import fs from \"fs\";\nimport path from \"path\";\n\nasync function uploadDocument() {\n  const filePath = \"/Path/to/file/document.pdf\";\n\n  // Read file as a buffer\n  const fileBuffer = fs.readFileSync(filePath);\n\n  // Create FormData\n  const formData = new FormData();\n\n  // Add file using Blob (Node 18+)\n  formData.append(\n    \"file\",\n    new Blob([fileBuffer], { type: \"application/pdf\" }),\n    \"document.pdf\"\n  );\n\n  // Metadata object\n  const metadata = {\n    documentType: \"INVOICE\",\n    entityType: \"PNR\",\n    entityId: \"1234567890\",\n    entityMetadata: {\n      travelType: \"AIR\",\n      invoiceMetadata: {\n        invoiceNumber: \"ABCD-1234\"\n      }\n    },\n    name: \"Trip-Invoice-Test\"\n  };\n\n  // Add metadata JSON string\n  formData.append(\"documentMetadata\", JSON.stringify(metadata));\n\n  // Make request using native fetch\n  const response = await fetch(\n    \"https://api-ext-sboxmeta.partners.spotnana.com/v2/documents\",\n    {\n      method: \"POST\",\n      headers: {\n        Authorization: \"Bearer <YOUR_TOKEN_HERE>\"\n        // Don't set Content-Type — fetch will add the multipart boundary automatically\n      },\n      body: formData\n    }\n  );\n\n  const result = await response.text();\n  console.log(result);\n}\n\nuploadDocument().catch(console.error);\n"
+          },
+          {
+            "lang": "Python",
+            "source": "import requests\n\nurl = \"https://api-ext-sboxmeta.partners.spotnana.com/v2/documents\"\n\npayload = {\n  'documentMetadata': '''{\n    \"documentType\": \"INVOICE\",\n    \"entityType\": \"PNR\",\n    \"entityId\": \"1234567890\",\n    \"entityMetadata\": {\n      \"travelType\": \"AIR\",\n      \"invoiceMetadata\": {\n        \"invoiceNumber\": \"ABCD-1234\"\n      }\n    },\n    \"name\": \"Trip-Invoice-Test\"\n  }'''\n}\n\nfiles = [\n  (\n    'file',\n    (\n      'document.pdf',\n      open('/Path/to/file/document.pdf', 'rb'),\n      'application/pdf'\n    )\n  )\n]\n\nheaders = {\n  'Authorization': 'Bearer <YOUR_TOKEN_HERE>'\n}\n\nresponse = requests.request(\n  \"POST\",\n  url,\n  headers=headers,\n  data=payload,\n  files=files\n)\n\nprint(response.text)\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadDocumentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "List documents",
+        "description": "List all the uploaded documents for a specific entity ID and type.",
+        "operationId": "listDocuments",
+        "parameters": [
+          {
+            "name": "entityType",
+            "in": "query",
+            "description": "Entity type against which document is associated.",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/EntityType"
+            }
+          },
+          {
+            "name": "entityId",
+            "in": "query",
+            "description": "Entity Id for the given entity type.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "123124"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDocumentsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v2/documents/{documentId}": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Get document",
+        "description": "Retrieve a document.",
+        "operationId": "getDocument",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "description": "Document Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "f49d00fe-1eda-4304-ba79-a980f565281d"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDocumentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Documents"
+        ],
+        "summary": "Delete document",
+        "description": "Delete a document.",
+        "operationId": "deleteDocument",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "description": "Document Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "f49d00fe-1eda-4304-ba79-a980f565281d"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  }
+}

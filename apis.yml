@@ -1,23 +1,1109 @@
 aid: spotnana
 name: Spotnana
-description: 'Spotnana is a company surfaced as a portfolio company of 8vc, iconiq-capital and added to
-  the API Evangelist network as a stub for enrichment. Sector: travel. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: Spotnana is a travel-as-a-service platform that powers corporate travel for travel management
+  companies, enterprises, and partners through a modern, API-first booking and management stack. Its public
+  developer platform exposes 11 REST APIs — Authentication, Users, Company, Policy, Trip, Air, Hotel,
+  Event, Event Template, Payments, and Document — spanning ~211 operations for shopping and booking flights,
+  hotels, and cars, managing trips and PNRs, modeling company structure and travel policy, running group
+  events, and handling payments and documents. APIs use OAuth2 (client-credentials and RFC 8693 token-exchange)
+  Bearer auth, a documented webhook surface for booking-lifecycle events, a dated changelog, an Atlassian
+  status page, and a Redocly-hosted documentation MCP server.
 url: https://raw.githubusercontent.com/api-evangelist/spotnana/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - 8vc
 - iconiq-capital
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: active
+x-tier-reason: enriched-provider
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
 - Travel
-apis: []
+- Corporate Travel
+- Travel Management
+- Booking
+- Air
+- Hotel
+- Payments
+- Travel as a Service
+image: https://developer.spotnana.com/img/logo.svg
+apis:
+- aid: spotnana:spotnana-air-api
+  name: Spotnana Air API
+  description: APIs to perform search, checkout and book an air pnr
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Air
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-air-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-air-credits-api
+  name: Spotnana Air Credits API
+  description: >-
+    Manage airline credits including company credit pools, credit transfers, and credit redemptions.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Air Credits
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-air-credits-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-api-user-api
+  name: Spotnana API User API
+  description: The API User API from Spotnana — 3 operation(s) for api user.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - API User
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-api-user-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-approval-api
+  name: Spotnana Approval API
+  description: APIs to manage approvals.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Approval
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-approval-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-authentication-api
+  name: Spotnana Authentication API
+  description: Authentication APIs for user login, logout, and token management
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-authentication-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-autocomplete-api
+  name: Spotnana Autocomplete API
+  description: The Autocomplete API from Spotnana — 2 operation(s) for autocomplete.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Autocomplete
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-autocomplete-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-companies-api
+  name: Spotnana Companies API
+  description: APIs to onboard and manage company.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Companies
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-companies-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-company-enrollment-api
+  name: Spotnana Company Enrollment API
+  description: The Company Enrollment API from Spotnana — 1 operation(s) for company enrollment.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Company Enrollment
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-company-enrollment-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-company-policies-api
+  name: Spotnana Company Policies API
+  description: APIs to configure company travel policies.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Company Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-company-policies-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-company-tier-api
+  name: Spotnana Company Tier API
+  description: The Company Tier API from Spotnana — 1 operation(s) for company tier.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Company Tier
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-company-tier-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-cost-centers-api
+  name: Spotnana Cost Centers API
+  description: APIs to create and manage company cost centers.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Cost Centers
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-cost-centers-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-custom-fields-api
+  name: Spotnana Custom Fields API
+  description: APIs to manage company custom fields.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Custom Fields
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-custom-fields-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-departments-api
+  name: Spotnana Departments API
+  description: APIs to create and manage departments.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Departments
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-departments-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-documents-api
+  name: Spotnana Documents API
+  description: The Documents API from Spotnana — 2 operation(s) for documents.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-documents-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-event-templates-api
+  name: Spotnana Event Templates API
+  description: APIs to create and manage event templates.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Event Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-event-templates-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-events-api
+  name: Spotnana Events API
+  description: APIs to create and manage events.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-events-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-grades-api
+  name: Spotnana Grades API
+  description: APIs to create and manage grades.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Grades
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-grades-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-hotel-api
+  name: Spotnana Hotel API
+  description: >-
+    These endpoints provide comprehensive functionality for managing hotel bookings. They enable users
+    to search for hotels, check room rates and availability, create and modify bookings, and handle cancellations
+    and rebooking.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Hotel
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-hotel-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-invoicing-api
+  name: Spotnana Invoicing API
+  description: APIs to manage invoicing.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Invoicing
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-invoicing-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-legal-entities-api
+  name: Spotnana Legal Entities API
+  description: APIs to create and manage company legal entities.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Legal Entities
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-legal-entities-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-loyalty-programs-api
+  name: Spotnana Loyalty Programs API
+  description: The Loyalty Programs API from Spotnana — 1 operation(s) for loyalty programs.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Loyalty Programs
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-loyalty-programs-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-offices-api
+  name: Spotnana Offices API
+  description: APIs to create and manage company offices.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Offices
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-offices-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-partner-public-keys-api
+  name: Spotnana Partner Public Keys API
+  description: APIs to manage partner public keys for token exchange authentication.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Partner Public Keys
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-partner-public-keys-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-personal-payment-sources-api
+  name: Spotnana Personal Payment Sources API
+  description: >-
+    The Personal Payment Sources API from Spotnana — 2 operation(s) for personal payment sources.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Personal Payment Sources
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-personal-payment-sources-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-roles-api
+  name: Spotnana Roles API
+  description: The Roles API from Spotnana — 1 operation(s) for roles.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Roles
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-roles-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-service-charge-api
+  name: Spotnana Service Charge API
+  description: The Service Charge API from Spotnana — 1 operation(s) for service charge.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Service Charge
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-service-charge-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-service-charge-plan-api
+  name: Spotnana Service Charge Plan API
+  description: APIs to manage service charge plans.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Service Charge Plan
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-service-charge-plan-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-stealth-config-api
+  name: Spotnana Stealth Config API
+  description: The Stealth Config API from Spotnana — 1 operation(s) for stealth config.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Stealth Config
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-stealth-config-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-tenant-encryption-api
+  name: Spotnana Tenant Encryption API
+  description: APIs to enable per-tenant encryption (PTE) for a company.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Tenant Encryption
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-tenant-encryption-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-trip-notes-api
+  name: Spotnana Trip Notes API
+  description: The Trip Notes API from Spotnana — 2 operation(s) for trip notes.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Trip Notes
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-trip-notes-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-trip-pnrs-api
+  name: Spotnana Trip PNRs API
+  description: APIs to manage PNRs within trips.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Trip PNRs
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-trip-pnrs-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-trips-api
+  name: Spotnana Trips API
+  description: APIs to manage trips.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Trips
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-trips-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
+- aid: spotnana:spotnana-users-api
+  name: Spotnana Users API
+  description: APIs to onboard and manage users.
+  humanURL: https://developer.spotnana.com/openapi/authapi
+  baseURL: https://apis.spotnana.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/spotnana-users-api-openapi.yml
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/authapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/usersapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/companyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/policyapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/tripapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/airapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/hotelapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/eventapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/templateapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/paymentsapi
+  - type: APIReference
+    url: https://developer.spotnana.com/openapi/documentapi
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -26,3 +1112,62 @@ maintainers:
 common:
 - type: Website
   url: https://spotnana.com
+- type: DeveloperPortal
+  url: https://developer.spotnana.com
+- type: Documentation
+  url: https://developer.spotnana.com
+- type: APIReference
+  url: https://developer.spotnana.com/openapi/authapi
+- type: GettingStarted
+  url: https://developer.spotnana.com/integration/integration-intro
+- type: Guides
+  url: https://developer.spotnana.com/guides/guides-main
+- type: ChangeLog
+  url: https://developer.spotnana.com/changelog/changelog
+- type: ChangeLog
+  url: changelog/spotnana-changelog.yml
+- type: StatusPage
+  url: https://status.spotnana.com
+- type: Deprecation
+  url: https://developer.spotnana.com/releases/breaking_change_logs
+- type: Webhooks
+  url: https://developer.spotnana.com/webhooks/webhook-main-intro
+- type: Webhooks
+  url: asyncapi/spotnana-webhooks.yml
+- type: TrustCenter
+  url: https://trust.spotnana.com
+- type: GitHubOrganization
+  url: https://github.com/Spotnana-Tech
+- type: Login
+  url: https://app.spotnana.com
+- type: MCPServer
+  url: mcp/spotnana-mcp.yml
+- type: LLMsTxt
+  url: llms/spotnana-llms.txt
+- type: WellKnown
+  url: well-known/spotnana-well-known.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/spotnana-agentic-access.yml
+- type: Authentication
+  url: authentication/spotnana-authentication.yml
+- type: Conventions
+  url: conventions/spotnana-conventions.yml
+- type: ErrorCatalog
+  url: errors/spotnana-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/spotnana-lifecycle.yml
+- type: Conformance
+  url: conformance/spotnana-conformance.yml
+- type: DataModel
+  url: data-model/spotnana-data-model.yml
+- type: Sandbox
+  url: sandbox/spotnana-sandbox.yml
+- type: DomainSecurity
+  url: security/spotnana-domain-security.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 42
+  pass: local-v1

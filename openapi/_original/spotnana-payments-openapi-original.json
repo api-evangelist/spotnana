@@ -1,0 +1,3045 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Payments API",
+    "version": "v2"
+  },
+  "servers": [
+    {
+      "url": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "description": "Sandbox URL"
+    }
+  ],
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "The specified resource was not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "AgentAssistedTransactionFeeInfo": {
+        "title": "Agent Assisted Transaction Fee Info",
+        "type": "object",
+        "description": "Transaction Fees when Agent is booking for Traveler.",
+        "required": [
+          "agentFeeType"
+        ],
+        "properties": {
+          "agentFeeType": {
+            "type": "string",
+            "example": "AGENT_ASSISTED_TRANSACTION_FEE"
+          },
+          "transactionFeeType": {
+            "$ref": "#/components/schemas/ServiceFeeTransactionType"
+          },
+          "calculatedAmount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "chargeProcessorInfo": {
+            "$ref": "#/components/schemas/ChargeProcessorInfo"
+          }
+        }
+      },
+      "AgentAssistedTripFeeInfo": {
+        "title": "Agent Assisted Trip Fee Info",
+        "type": "object",
+        "description": "Trip Fees when Agent is booking for Traveler.",
+        "required": [
+          "agentFeeType"
+        ],
+        "properties": {
+          "agentFeeType": {
+            "type": "string",
+            "example": "AGENT_ASSISTED_TRIP_FEE"
+          },
+          "calculatedAmount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "chargeProcessorInfo": {
+            "$ref": "#/components/schemas/ChargeProcessorInfo"
+          }
+        }
+      },
+      "AgentContact": {
+        "type": "object",
+        "title": "AgentContact",
+        "description": "Details of agent contact event.",
+        "required": [
+          "contactType",
+          "contactId",
+          "contactOp",
+          "billable"
+        ],
+        "properties": {
+          "contactType": {
+            "description": "Mode of agent contact.",
+            "$ref": "#/components/schemas/AgentContactType",
+            "example": "PHONE"
+          },
+          "contactId": {
+            "type": "string",
+            "description": "Unique ID for agent contact.",
+            "example": "1234567890"
+          },
+          "contactOp": {
+            "description": "Operation that the agent performed.",
+            "$ref": "#/components/schemas/AgentContactOp",
+            "example": "AGENT_BOOKING"
+          },
+          "agentId": {
+            "$ref": "#/components/schemas/UserId",
+            "description": "User ID of agent."
+          },
+          "billable": {
+            "type": "boolean",
+            "description": "Is the agent contact event billable?",
+            "example": true
+          },
+          "pnrId": {
+            "type": "string",
+            "description": "PNR ID (if applicable).",
+            "example": "1234567890"
+          },
+          "travelType": {
+            "description": "Travel type.",
+            "$ref": "#/components/schemas/TravelType",
+            "example": "AIR"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Agent notes.",
+            "example": "Requested by customer"
+          },
+          "nonBillableReason": {
+            "$ref": "#/components/schemas/NonBillableReason",
+            "description": "Reason for non-billable agent contact"
+          }
+        }
+      },
+      "AgentContactOp": {
+        "type": "string",
+        "title": "AgentContactOp",
+        "description": "Agent contact operation.",
+        "enum": [
+          "AGENT_BOOKING",
+          "AGENT_MODIFY",
+          "AGENT_CANCEL",
+          "AGENT_OTHER",
+          "AGENT_EXCHANGE",
+          "ANCILLARY_PURCHASE",
+          "SHELL_PNR_CREATE",
+          "SHELL_PNR_MODIFY",
+          "SHELL_PNR_CANCEL",
+          "SHELL_PNR_EXCHANGE",
+          "MANUAL_FORM_CREATE",
+          "MANUAL_FORM_MODIFY",
+          "MANUAL_FORM_CANCEL",
+          "MANUAL_FORM_EXCHANGE",
+          "UNUSED_TICKET_MANAGEMENT"
+        ]
+      },
+      "AgentContactType": {
+        "type": "string",
+        "title": "Agent contact type",
+        "description": "Agent contact type",
+        "enum": [
+          "PHONE",
+          "CHAT",
+          "EMAIL"
+        ]
+      },
+      "AgentFeeInfo": {
+        "type": "object",
+        "title": "AgentFeeInfo",
+        "required": [
+          "feeType"
+        ],
+        "discriminator": {
+          "propertyName": "agentFeeType",
+          "mapping": {
+            "AGENT_ASSISTED_TRIP_FEE": "#/components/schemas/AgentAssistedTripFeeInfo",
+            "AGENT_ASSISTED_TRANSACTION_FEE": "#/components/schemas/AgentAssistedTransactionFeeInfo"
+          }
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/AgentAssistedTripFeeInfo"
+          },
+          {
+            "$ref": "#/components/schemas/AgentAssistedTransactionFeeInfo"
+          }
+        ],
+        "properties": {
+          "feeType": {
+            "type": "string",
+            "description": "Type of the fee",
+            "example": "AGENT_FEE"
+          }
+        }
+      },
+      "AppliedWaiveOffInfo": {
+        "type": "object",
+        "title": "Applied Waive-Off Information",
+        "description": "Information about TMC fee waivers applied by an agent during checkout.",
+        "properties": {
+          "waiveOffAmount": {
+            "description": "The amount of TMC fee that has been waived",
+            "$ref": "#/components/schemas/FareAmount"
+          },
+          "waiveOffReason": {
+            "description": "The reason provided by the agent for waiving the fee",
+            "$ref": "#/components/schemas/WaiveOffFeeReason"
+          }
+        }
+      },
+      "AuthenticationInfo": {
+        "type": "object",
+        "title": "AuthenticationInfo",
+        "description": "Provides authentication details, such as URLs for 3DS.",
+        "properties": {
+          "authUrl": {
+            "type": "string",
+            "description": "URL provided by the payment gateway for completing authentication."
+          }
+        }
+      },
+      "BookingDetails": {
+        "type": "object",
+        "title": "BookingDetails",
+        "description": "Booking information",
+        "properties": {
+          "pnrId": {
+            "type": "string",
+            "description": "PNR Id"
+          },
+          "pnrVersion": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Version number associated with the PNR"
+          },
+          "tripUsageType": {
+            "type": "string",
+            "description": "Trip Usage Type",
+            "enum": [
+              "TRIP_USAGE_TYPE_UNKNOWN",
+              "STANDARD",
+              "EVENT"
+            ]
+          },
+          "source": {
+            "description": "Third party source",
+            "$ref": "#/components/schemas/ThirdPartySource"
+          },
+          "sourcePnrId": {
+            "type": "string",
+            "description": "Source PNR Id from thirdparty source"
+          }
+        }
+      },
+      "BookingFeeInfo": {
+        "type": "object",
+        "title": "BookingFeeInfo",
+        "required": [
+          "feeType"
+        ],
+        "discriminator": {
+          "propertyName": "bookingFeeType",
+          "mapping": {
+            "TRIP_FEE": "#/components/schemas/TripFeeInfo",
+            "TRANSACTION_FEE": "#/components/schemas/TransactionFeeInfo",
+            "VALUE_ADDED_SERVICE_FEE": "#/components/schemas/ValueAddedServiceFeeInfo",
+            "OTHER_FEE": "#/components/schemas/OtherFeeInfo"
+          }
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/TripFeeInfo"
+          },
+          {
+            "$ref": "#/components/schemas/TransactionFeeInfo"
+          },
+          {
+            "$ref": "#/components/schemas/ValueAddedServiceFeeInfo"
+          },
+          {
+            "$ref": "#/components/schemas/OtherFeeInfo"
+          }
+        ],
+        "properties": {
+          "feeType": {
+            "type": "string",
+            "description": "Type of the fee",
+            "example": "BOOKING_FEE"
+          }
+        }
+      },
+      "Card": {
+        "type": "object",
+        "title": "Card",
+        "description": "User card info",
+        "required": [
+          "number"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for this card",
+            "format": "uuid",
+            "example": "34d536b6-f8ff-11eb-9a61-0242ac180002"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "UNKNOWN",
+              "CREDIT",
+              "DEBIT"
+            ],
+            "description": "Type of card",
+            "example": "CREDIT"
+          },
+          "company": {
+            "$ref": "#/components/schemas/CardCompany"
+          },
+          "name": {
+            "description": "Name on card",
+            "type": "string",
+            "example": "Harrison Schwartz",
+            "x-pii": "SENSITIVE"
+          },
+          "address": {
+            "description": "Billing address",
+            "$ref": "#/components/schemas/PostalAddress",
+            "x-pii": "SENSITIVE"
+          },
+          "number": {
+            "type": "string",
+            "description": "Card number",
+            "example": "4111111111111111"
+          },
+          "expiryMonth": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 12,
+            "description": "Expiry month",
+            "example": 1,
+            "deprecated": true,
+            "x-sunset": "2026-07-01"
+          },
+          "expiryYear": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Expiry year",
+            "minimum": 2000,
+            "example": 2010,
+            "deprecated": true,
+            "x-sunset": "2026-07-01"
+          },
+          "cvv": {
+            "type": "string",
+            "description": "Card cvv number",
+            "example": "012"
+          },
+          "label": {
+            "type": "string",
+            "description": "Card Label",
+            "example": "Label amex"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Native currency of the card.",
+            "example": "USD"
+          },
+          "externalId": {
+            "type": "string",
+            "description": "Spotnana partner card id.",
+            "example": "bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40"
+          },
+          "vaultId": {
+            "type": "string",
+            "description": "ID of the vault used for creating the card.",
+            "format": "uuid",
+            "example": "34d536b6-f8ff-11eb-9a61-0242ac180002"
+          },
+          "expiry": {
+            "description": "Card Expiry.",
+            "$ref": "#/components/schemas/CardExpiry"
+          },
+          "ownershipLabel": {
+            "$ref": "#/components/schemas/OwnershipLabel",
+            "example": "PERSONAL"
+          }
+        }
+      },
+      "CardAccessEntity": {
+        "title": "CardAccessEntity",
+        "type": "object",
+        "description": "Contains the central access level and entity id.",
+        "required": [
+          "entityId"
+        ],
+        "properties": {
+          "entityId": {
+            "type": "string",
+            "description": "Holds the id for for the user who can access the card or organization id or legal entity"
+          },
+          "centralCardAccessLevel": {
+            "$ref": "#/components/schemas/CentralCardAccessLevel"
+          }
+        }
+      },
+      "CardCompany": {
+        "type": "string",
+        "enum": [
+          "NONE",
+          "VISA",
+          "MASTERCARD",
+          "AMEX",
+          "DISCOVER",
+          "AIR_TRAVEL_UATP",
+          "CARTE_BLANCHE",
+          "DINERS_CLUB",
+          "JCB",
+          "BREX",
+          "UNION_PAY",
+          "EURO_CARD",
+          "ACCESS_CARD",
+          "ELO_CARD"
+        ],
+        "description": "The issuing company of card",
+        "example": "VISA"
+      },
+      "CardExpiry": {
+        "title": "CardExpiry",
+        "type": "object",
+        "description": "Contains the expiry of a Card.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/TokenizedExpiryWrapper"
+          },
+          {
+            "$ref": "#/components/schemas/ExpiryWrapper"
+          }
+        ]
+      },
+      "CardMetadata2": {
+        "type": "object",
+        "title": "CardMetadata",
+        "description": "Metadata for Card payment source.",
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/Card"
+          },
+          "accessType": {
+            "$ref": "#/components/schemas/CreditCardAccess"
+          },
+          "isLodgeCard": {
+            "type": "boolean",
+            "description": "Whether the payment is made using a lodge card",
+            "example": false
+          },
+          "bta": {
+            "type": "string",
+            "description": "Whether this is a BTA card. Possible values are 'Y' or 'N'. Relevant only for lodge cards.",
+            "example": "Y"
+          }
+        }
+      },
+      "CardPaymentSource": {
+        "type": "object",
+        "title": "CardPaymentSource",
+        "description": "Represents payment source details for a credit card.",
+        "required": [
+          "type",
+          "card"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "CARD"
+          },
+          "card": {
+            "$ref": "#/components/schemas/CardV2"
+          }
+        }
+      },
+      "CardPaymentSourceUpdate": {
+        "type": "object",
+        "title": "CardPaymentSourceUpdate",
+        "description": "This describes the details for a card payment source.",
+        "required": [
+          "paymentType",
+          "card"
+        ],
+        "properties": {
+          "paymentType": {
+            "type": "string",
+            "example": "CARD"
+          },
+          "card": {
+            "$ref": "#/components/schemas/CardUpdate"
+          }
+        }
+      },
+      "CardUpdate": {
+        "type": "object",
+        "title": "CardUpdate",
+        "description": "Card Details to be updated",
+        "properties": {
+          "address": {
+            "description": "Billing address",
+            "$ref": "#/components/schemas/PostalAddress"
+          },
+          "label": {
+            "type": "string",
+            "description": "Card Label",
+            "example": "Label amex"
+          },
+          "ownershipLabel": {
+            "$ref": "#/components/schemas/OwnershipLabel"
+          }
+        }
+      },
+      "CardV2": {
+        "type": "object",
+        "title": "CardV2",
+        "description": "Card Details",
+        "required": [
+          "company",
+          "name",
+          "address",
+          "number",
+          "label",
+          "expiry"
+        ],
+        "properties": {
+          "company": {
+            "$ref": "#/components/schemas/CardCompany"
+          },
+          "name": {
+            "description": "Name on card",
+            "type": "string",
+            "example": "Harrison Schwartz",
+            "x-pii": "SENSITIVE"
+          },
+          "address": {
+            "description": "Billing address",
+            "$ref": "#/components/schemas/PostalAddress",
+            "x-pii": "SENSITIVE"
+          },
+          "number": {
+            "type": "string",
+            "description": "Card number",
+            "example": "4111111111111111"
+          },
+          "cvv": {
+            "type": "string",
+            "description": "Card cvv number",
+            "example": "012"
+          },
+          "label": {
+            "type": "string",
+            "description": "Card Label",
+            "example": "Label amex"
+          },
+          "expiry": {
+            "description": "Card Expiry.",
+            "$ref": "#/components/schemas/Expiry"
+          },
+          "ownershipLabel": {
+            "$ref": "#/components/schemas/OwnershipLabel",
+            "example": "PERSONAL"
+          }
+        }
+      },
+      "CentralCardAccessLevel": {
+        "title": "CentralCardAccessLevel",
+        "type": "string",
+        "description": "Identifies at which level central card is applicable, for example organization or legal entity.",
+        "enum": [
+          "UNKNOWN",
+          "ORGANIZATION",
+          "LEGAL_ENTITY",
+          "TMC"
+        ]
+      },
+      "ChargeProcessorInfo": {
+        "title": "ChargeProcessorInfo",
+        "type": "object",
+        "description": "Information about the processor that calculated the charge",
+        "discriminator": {
+          "propertyName": "chargeProcessorType",
+          "mapping": {
+            "RULE_BASED_INFO": "#/components/schemas/RuleBasedInfo",
+            "TMC_CALCULATOR_INFO": "#/components/schemas/TmcCalculatorInfo"
+          }
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/RuleBasedInfo"
+          },
+          {
+            "$ref": "#/components/schemas/TmcCalculatorInfo"
+          }
+        ]
+      },
+      "CompanyId": {
+        "type": "object",
+        "title": "CompanyId",
+        "description": "Company ID",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "f49d00fe-1eda-4304-ba79-a980f565281d"
+          }
+        }
+      },
+      "CompanyRef": {
+        "type": "object",
+        "description": "Basic information about a company.",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CompanyId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "logo": {
+            "$ref": "#/components/schemas/Image",
+            "description": "Company logo"
+          }
+        }
+      },
+      "ConfermaInfo": {
+        "type": "object",
+        "title": "ConfermaInfo",
+        "description": "Details of conferma - one of virtual card vendors.",
+        "required": [
+          "deploymentId"
+        ],
+        "properties": {
+          "deploymentId": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Unique identifier assigned to the virtual card deployment at the point of creation.",
+            "example": 68793680
+          }
+        }
+      },
+      "CreatePaymentSourceRequestV2": {
+        "type": "object",
+        "title": "CreatePaymentSourceRequestV2",
+        "description": "Represents the request payload to create a new payment source.",
+        "required": [
+          "paymentSourceInfo"
+        ],
+        "properties": {
+          "paymentSourceInfo": {
+            "description": "Detailed information about the payment source to be created.",
+            "$ref": "#/components/schemas/PaymentSourceInfoV2"
+          }
+        }
+      },
+      "CreatePaymentSourceResponseV2": {
+        "type": "object",
+        "title": "CreatePaymentSourceResponseV2",
+        "description": "Response returned upon creating a payment source.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier identifying the created payment source, if created.",
+            "example": "f49d00fe-1eda-4304-ba79-a980f565281d"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PaymentSourceStatus",
+            "description": "Current status of the payment source."
+          },
+          "authenticationInfo": {
+            "$ref": "#/components/schemas/AuthenticationInfo",
+            "description": "Information required for additional authentication steps, such as 3D Secure verification."
+          }
+        }
+      },
+      "CreditCardAccess": {
+        "type": "object",
+        "title": "CreditCardAccess",
+        "description": "Access type for cards to check who in the organization has permission to use it",
+        "required": [
+          "accessType",
+          "entityIds"
+        ],
+        "properties": {
+          "accessType": {
+            "$ref": "#/components/schemas/CreditCardAccessType"
+          },
+          "entityIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Holds the ids for for all users who can access the card or organization id"
+          },
+          "entities": {
+            "type": "array",
+            "description": "A list of cardAccessEntity consisting of central card access level if present and entity id.",
+            "items": {
+              "$ref": "#/components/schemas/CardAccessEntity"
+            }
+          }
+        }
+      },
+      "CreditCardAccessType": {
+        "title": "CreditCardAccessType",
+        "type": "string",
+        "description": "Identifies the different ways the card can be used across an organization",
+        "enum": [
+          "UNKNOWN_TYPE",
+          "CENTRALISED",
+          "INDIVIDUAL",
+          "PERSONAL",
+          "TMC",
+          "APPLICATION",
+          "ITINERARY",
+          "EVENTS",
+          "TRAVEL_ARRANGER_MANAGED",
+          "COMPANY_TRAVEL_ARRANGER_MANAGED",
+          "EVENT_TEMPLATE"
+        ],
+        "x-ignoreBreakingChanges": [
+          "CreditCardAccessType->EVENT_TEMPLATE"
+        ]
+      },
+      "DateRange": {
+        "type": "object",
+        "description": "Date range within which the virtual card can be charged.",
+        "required": [
+          "startDate",
+          "endDate"
+        ],
+        "properties": {
+          "startDate": {
+            "$ref": "#/components/schemas/DateTimeLocal"
+          },
+          "endDate": {
+            "$ref": "#/components/schemas/DateTimeLocal"
+          }
+        }
+      },
+      "DateTimeLocal": {
+        "title": "DateTimeLocal",
+        "description": "Local date and time in ISO 8601 format.",
+        "type": "object",
+        "required": [
+          "iso8601"
+        ],
+        "properties": {
+          "iso8601": {
+            "type": "string",
+            "pattern": "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?$",
+            "example": "2017-07-21T17:32"
+          }
+        }
+      },
+      "DateTimeOffset": {
+        "title": "DateTimeOffset",
+        "description": "ISO8601 UTC Date Time",
+        "type": "object",
+        "required": [
+          "iso8601"
+        ],
+        "properties": {
+          "iso8601": {
+            "type": "string",
+            "pattern": "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?(Z|([+-](0[0-9]|1[0-4]):([0-5][0-9])))$",
+            "example": "2017-07-21T17:32Z"
+          }
+        }
+      },
+      "Dimensions": {
+        "type": "object",
+        "title": "Dimensions",
+        "description": "Image dimensions ie width and height.",
+        "properties": {
+          "height": {
+            "type": "integer",
+            "format": "int32",
+            "example": 120
+          },
+          "width": {
+            "type": "integer",
+            "format": "int32",
+            "example": 240
+          }
+        }
+      },
+      "DirectBilling2": {
+        "title": "DirectBilling",
+        "type": "object",
+        "description": "Metadata for Direct Billing",
+        "required": [
+          "vendorId"
+        ],
+        "properties": {
+          "vendorId": {
+            "type": "string",
+            "description": "Unique vendor id/code",
+            "example": "ZI"
+          },
+          "directBillingCode": {
+            "type": "string",
+            "description": "Direct billing code provided by the vendor",
+            "example": "123456"
+          }
+        }
+      },
+      "DirectBillingWrapper2": {
+        "type": "object",
+        "title": "DirectBillingWrapper",
+        "description": "Wrapper for DirectBilling metadata",
+        "required": [
+          "directBilling"
+        ],
+        "properties": {
+          "directBilling": {
+            "$ref": "#/components/schemas/DirectBilling2"
+          }
+        }
+      },
+      "ErrorParameter": {
+        "type": "object",
+        "title": "ErrorParameter",
+        "description": "Error parameter",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Parameter name"
+          },
+          "value": {
+            "type": "string",
+            "description": "Parameter value"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "debugIdentifier": {
+            "type": "string",
+            "description": "Link to debug the error internally."
+          },
+          "errorMessages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "errorCode": {
+                  "type": "string",
+                  "description": "Error code to identify the specific errors."
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Message containing details of error."
+                },
+                "errorParameters": {
+                  "type": "array",
+                  "description": "Error message parameters.",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorParameter"
+                  }
+                },
+                "errorDetail": {
+                  "type": "string",
+                  "description": "More details about the error."
+                }
+              }
+            }
+          }
+        }
+      },
+      "Expiry": {
+        "title": "Expiry",
+        "type": "object",
+        "description": "Contains the expiry of a Card.",
+        "required": [
+          "expiryMonth",
+          "expiryYear"
+        ],
+        "properties": {
+          "expiryMonth": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 12,
+            "description": "Expiry month",
+            "example": 1
+          },
+          "expiryYear": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Expiry year",
+            "minimum": 2000,
+            "example": 2010
+          }
+        }
+      },
+      "ExpiryWrapper": {
+        "type": "object",
+        "title": "ExpiryWrapper",
+        "properties": {
+          "expiry": {
+            "$ref": "#/components/schemas/Expiry"
+          }
+        }
+      },
+      "FailureDetails": {
+        "type": "object",
+        "title": "FailureDetails",
+        "description": "Failure details",
+        "properties": {
+          "failureCode": {
+            "type": "string",
+            "description": "failure code",
+            "enum": [
+              "FAILURE_CODE_UNKNOWN",
+              "PAYMENT_METHOD_MISSING",
+              "PAYMENT_GATEWAY_FAILURE"
+            ]
+          },
+          "failureMessage": {
+            "type": "string",
+            "description": "failure message"
+          }
+        }
+      },
+      "FailureReason": {
+        "type": "object",
+        "title": "FailureReason",
+        "description": "Contains the failure reason in case of any Failed Transaction",
+        "properties": {
+          "reasonCode": {
+            "type": "string",
+            "description": "Reason Code associated with the Failure",
+            "enum": [
+              "PAYMENT_METHOD_MISSING",
+              "PAYMENT_GATEWAY_FAILURE"
+            ],
+            "example": "PAYMENT_METHOD_MISSING"
+          }
+        }
+      },
+      "FareAmount": {
+        "type": "object",
+        "title": "FareAmount",
+        "description": "Fare amount including base fare and tax.",
+        "required": [
+          "base",
+          "tax"
+        ],
+        "properties": {
+          "base": {
+            "description": "Base fare amount.",
+            "$ref": "#/components/schemas/Money"
+          },
+          "tax": {
+            "description": "Tax amount.",
+            "$ref": "#/components/schemas/Money"
+          },
+          "taxBreakdown": {
+            "description": "Breakdown of tax amounts.",
+            "$ref": "#/components/schemas/TaxBreakdown"
+          }
+        }
+      },
+      "FeeInfo": {
+        "type": "object",
+        "title": "FeeInfo",
+        "discriminator": {
+          "propertyName": "feeType",
+          "mapping": {
+            "BOOKING_FEE": "#/components/schemas/BookingFeeInfo",
+            "AGENT_FEE": "#/components/schemas/AgentFeeInfo"
+          }
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/BookingFeeInfo"
+          },
+          {
+            "$ref": "#/components/schemas/AgentFeeInfo"
+          }
+        ],
+        "x-oneOfValidFrom": {
+          "AgentFeeInfo": "2025-08-20"
+        }
+      },
+      "FlightPassPaymentAmounts": {
+        "type": "object",
+        "title": "FlightPassPaymentAmounts",
+        "description": "Fare breakdown for the flight pass booking.",
+        "properties": {
+          "totalAmount": {
+            "description": "Total value (base + taxes).",
+            "$ref": "#/components/schemas/Money"
+          },
+          "baseAmount": {
+            "description": "Base fare excluding taxes.",
+            "$ref": "#/components/schemas/Money"
+          },
+          "totalTaxes": {
+            "description": "Sum of all taxes, fees, and charges.",
+            "$ref": "#/components/schemas/Money"
+          },
+          "taxBreakdown": {
+            "type": "array",
+            "description": "Breakdown of taxes by code (e.g. GST_HST, QST, OTHER).",
+            "items": {
+              "$ref": "#/components/schemas/FlightPassTax"
+            }
+          }
+        }
+      },
+      "FlightPassPaymentMetadata": {
+        "type": "object",
+        "title": "FlightPassPaymentMetadata",
+        "description": "Metadata specific to Flight Pass payment method in OtherCoinage.",
+        "properties": {
+          "flightPassNumber": {
+            "type": "string",
+            "description": "Flight pass number",
+            "example": "FP123456789"
+          },
+          "flightPassAmounts": {
+            "$ref": "#/components/schemas/FlightPassPaymentAmounts"
+          }
+        }
+      },
+      "FlightPassPaymentMetadataWrapper": {
+        "type": "object",
+        "title": "FlightPassPaymentMetadataWrapper",
+        "description": "Wrapper for Flight Pass payment metadata.",
+        "required": [
+          "flightPassMetadata"
+        ],
+        "properties": {
+          "metadataType": {
+            "type": "string",
+            "description": "Discriminator field for polymorphic deserialization",
+            "example": "FlightPassPaymentMetadata",
+            "default": "FlightPassPaymentMetadata"
+          },
+          "flightPassMetadata": {
+            "$ref": "#/components/schemas/FlightPassPaymentMetadata"
+          }
+        }
+      },
+      "FlightPassTax": {
+        "type": "object",
+        "title": "FlightPassTax",
+        "description": "A single tax component of the flight pass fare.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Tax code identifier (e.g. GST_HST, QST, OTHER).",
+            "example": "GST_HST"
+          },
+          "amount": {
+            "description": "Tax amount.",
+            "$ref": "#/components/schemas/Money"
+          }
+        }
+      },
+      "FormOfPayment": {
+        "title": "Form of Payment",
+        "description": "Information about form of payment to be used to charge customer",
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "UNKNOWN",
+              "CARD",
+              "CASH",
+              "TFPAY",
+              "CHEQUE",
+              "BREX_POINTS",
+              "QANTAS_POINTS"
+            ],
+            "title": "PaymentType",
+            "description": "Type of payment used",
+            "example": "CARD",
+            "deprecated": true,
+            "x-sunset": "2026-07-01"
+          },
+          "card": {
+            "description": "The payment card to be used to charge customer. This is only set if the payment type is 'CARD'",
+            "$ref": "#/components/schemas/Card"
+          },
+          "additionalInfo": {
+            "type": "string",
+            "description": "Additional info to be added if payment type is 'UNKNOWN'."
+          },
+          "accessType": {
+            "$ref": "#/components/schemas/CreditCardAccess"
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod",
+            "description": "Payment method used to pay for this transaction"
+          },
+          "paymentMetadata": {
+            "$ref": "#/components/schemas/PaymentMetadata"
+          },
+          "paymentSourceType": {
+            "$ref": "#/components/schemas/PaymentSourceType"
+          }
+        }
+      },
+      "GatewayIdentifier": {
+        "type": "object",
+        "properties": {
+          "gatewayId": {
+            "type": "string",
+            "description": "Gateway Id for which the payment method should be verified."
+          },
+          "gatewayType": {
+            "type": "string",
+            "description": "Gateway Type for of the verification gateway.",
+            "enum": [
+              "PAYMENT_GATEWAY_UNKNOWN",
+              "STRIPE",
+              "BREX",
+              "RAZORPAY"
+            ]
+          }
+        }
+      },
+      "GatewayInfo": {
+        "type": "object",
+        "title": "GatewayInfo",
+        "description": "Payment gateway information",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/StripeInfoWrapper"
+          }
+        ]
+      },
+      "GetPaymentSourceResponseV2": {
+        "type": "object",
+        "title": "GetPaymentSourceResponseV2",
+        "description": "Response returned when fetching details of a payment source.",
+        "properties": {
+          "paymentSource": {
+            "description": "Details of the payment source",
+            "$ref": "#/components/schemas/PaymentSourceInfoV2"
+          }
+        }
+      },
+      "Image": {
+        "type": "object",
+        "title": "Image",
+        "description": "An image with meta data. Either the `data` or `url` property must be supplied to load the image.",
+        "properties": {
+          "data": {
+            "type": "string",
+            "format": "byte",
+            "example": "6935813e12584abda0e43d71cd2ea260"
+          },
+          "dimensions": {
+            "$ref": "#/components/schemas/Dimensions"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://static.wixstatic.com/media/73f2e2_6935813e12584abda0e43d71cd2ea260~mv2.png/v1/fill/w_630,h_94,al_c,q_85,usm_0.66_1.00_0.01/Spotnana%403x.webp"
+          }
+        }
+      },
+      "Latlng": {
+        "title": "Latlng",
+        "description": "Latitude and Longitude for a Location",
+        "type": "object",
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "description": "Latitude of the Location",
+            "format": "double",
+            "example": 77.1025
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude of the Location",
+            "format": "double",
+            "example": 28.7041
+          }
+        }
+      },
+      "LegalEntityId": {
+        "type": "object",
+        "title": "LegalEntityId",
+        "description": "The ID of the legal entity.",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "fc1ccbce-8413-4fe9-b233-a324dfbe7421"
+          }
+        }
+      },
+      "ListPaymentSourceResponse": {
+        "type": "object",
+        "title": "ListPaymentSourceResponse",
+        "description": "Response containing a list of payment sources along with pagination details.",
+        "properties": {
+          "paymentSourceInfos": {
+            "type": "array",
+            "description": "List of payment sources",
+            "items": {
+              "$ref": "#/components/schemas/PaymentSourceInfoV2"
+            }
+          },
+          "paginationParams": {
+            "$ref": "#/components/schemas/OffsetBasedPaginationResponseParams"
+          }
+        }
+      },
+      "ListServiceChargesRequest": {
+        "type": "object",
+        "title": "ListServiceChargesRequest",
+        "description": "Request for list service charges.",
+        "properties": {
+          "serviceType": {
+            "$ref": "#/components/schemas/ServiceType",
+            "description": "Type of service charge (Optional)."
+          }
+        }
+      },
+      "ListServiceChargesResponse": {
+        "type": "object",
+        "title": "ListServiceChargesResponse",
+        "description": "Response for list service charges.",
+        "properties": {
+          "serviceCharges": {
+            "type": "array",
+            "description": "List of service charges.",
+            "items": {
+              "$ref": "#/components/schemas/ServiceChargeRecord"
+            }
+          }
+        }
+      },
+      "ManagedTravelerPaymentAccess": {
+        "type": "object",
+        "description": "Settings for sharing this payment method with managed traveler profiles. Applicable for Arranger Roles.",
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if this payment method can be used on the Traveler Profiles being managed by this User.",
+            "default": false
+          },
+          "visibility": {
+            "type": "object",
+            "description": "Controls how this payment method is displayed on checkout for managed traveler profiles, applicable only if sharing is enabled.",
+            "properties": {
+              "showToTravelers": {
+                "type": "boolean",
+                "description": "If true, managed travelers can see this payment method when booking for themselves. If false, only the Travel Arranger can see it.",
+                "default": false
+              }
+            }
+          }
+        }
+      },
+      "Money": {
+        "type": "object",
+        "title": "Money",
+        "description": "Money object containing details such as the amount, the currency code, and the converted amount.\n",
+        "required": [
+          "amount",
+          "currencyCode"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "The numeric value for the amount of money.",
+            "example": 510
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "The 3-letter currency code for the money amount (defined using ISO 4217 standard).",
+            "example": "GBP"
+          },
+          "convertedAmount": {
+            "type": "number",
+            "format": "double",
+            "description": "The converted currency and amount that has been converted (if a currency conversion has been requested).\nFor example, if the call requests that money be sent in a specified currency (because the frontend requested\nthe backend to send money in the user's preferred currency).\n",
+            "example": 715.42
+          },
+          "convertedCurrency": {
+            "type": "string",
+            "description": "The 3-letter currency code for the converted currency (defined using ISO 4217 standard).",
+            "example": "USD"
+          },
+          "otherCoinage": {
+            "type": "array",
+            "title": "OtherCoinage",
+            "description": "List of the dollar amount in other coinage systems like reward points, cryptocurrency etc.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "coinageCode": {
+                  "$ref": "#/components/schemas/PaymentMethod",
+                  "description": "Payment method"
+                },
+                "amount": {
+                  "type": "number",
+                  "format": "double",
+                  "example": 1000
+                },
+                "conversionRate": {
+                  "type": "number",
+                  "format": "double",
+                  "description": "1 coin in this system equals to how many currency value",
+                  "example": 0.01
+                },
+                "preferredCurrencyConversionRate": {
+                  "type": "number",
+                  "format": "double",
+                  "description": "1 coin in this system equals to how many currency value",
+                  "example": 0.01
+                },
+                "otherCoinageMetadata": {
+                  "description": "Metadata to store additional information related to the payment method",
+                  "discriminator": {
+                    "propertyName": "metadataType",
+                    "mapping": {
+                      "FlightPassPaymentMetadata": "#/components/schemas/FlightPassPaymentMetadataWrapper"
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FlightPassPaymentMetadataWrapper"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "NoPrepaymentMetadata": {
+        "type": "object",
+        "title": "NoPrepaymentMetadata",
+        "required": [
+          "label"
+        ],
+        "description": "Metadata for No Prepayment payment source (car bookings on no-guarantee rates).",
+        "properties": {
+          "label": {
+            "type": "string",
+            "example": "No Prepayment",
+            "description": "Label for No Prepayment payment source."
+          }
+        }
+      },
+      "NonBillableReason": {
+        "type": "object",
+        "title": "NonBillableReason",
+        "description": "Reason for non-billable agent contact.",
+        "required": [
+          "reasonCode"
+        ],
+        "properties": {
+          "reasonCode": {
+            "$ref": "#/components/schemas/NonBillableReasonCode",
+            "description": "Reason code for non-billable agent contact.",
+            "example": "MINOR_REQUEST"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Notes for non-billable agent contact.",
+            "example": "Waived off"
+          }
+        }
+      },
+      "NonBillableReasonCode": {
+        "type": "string",
+        "title": "NonBillableReasonCode",
+        "description": "Reason code for non-billable agent contact.",
+        "enum": [
+          "PRODUCT_ISSUE",
+          "ALREADY_CHARGED",
+          "CUSTOMER_GOODWILL",
+          "MINOR_REQUEST",
+          "NON_BILLABLE_REASON_OTHER"
+        ]
+      },
+      "OffsetBasedPaginationResponseParams": {
+        "type": "object",
+        "title": "PaginationResponseParams",
+        "description": "Pagination parameters for response.",
+        "required": [
+          "totalNumResults"
+        ],
+        "properties": {
+          "totalNumResults": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Total number of results."
+          }
+        }
+      },
+      "OrganizationAgencyId": {
+        "type": "object",
+        "title": "OrganizationAgencyId",
+        "description": "Agency id for the organization.",
+        "deprecated": true,
+        "x-sunset": "2026-07-01",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "OrganizationId": {
+        "type": "object",
+        "title": "OrganizationId",
+        "description": "Organization id for traveler.",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "OtherFeeInfo": {
+        "type": "object",
+        "title": "OtherFeeInfo",
+        "description": "Other Fee Info",
+        "required": [
+          "bookingFeeType",
+          "otherFeeType"
+        ],
+        "properties": {
+          "bookingFeeType": {
+            "type": "string",
+            "description": "Type of the booking fee",
+            "example": "OTHER_FEE"
+          },
+          "calculatedAmount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "chargeProcessorInfo": {
+            "$ref": "#/components/schemas/ChargeProcessorInfo"
+          },
+          "otherFeeType": {
+            "$ref": "#/components/schemas/OtherFeeType"
+          },
+          "feeName": {
+            "type": "string",
+            "description": "Name of the fee to be charged.",
+            "example": "TMC Standard Fee"
+          }
+        }
+      },
+      "OtherFeeType": {
+        "type": "string",
+        "title": "OtherFeeType",
+        "description": "Other fee type",
+        "enum": [
+          "MERCHANT_FEE"
+        ],
+        "example": "MERCHANT_FEE"
+      },
+      "OwnershipLabel": {
+        "title": "OwnershipLabel",
+        "type": "string",
+        "description": "Ownership label of the card whether it is personal, corporate or central.",
+        "enum": [
+          "CORPORATE",
+          "PERSONAL",
+          "CENTRAL"
+        ]
+      },
+      "PaymentMetadata": {
+        "title": "PaymentMetadata",
+        "description": "Payment metadata related to form of payment",
+        "type": "object",
+        "properties": {
+          "customPaymentMethodMetadata": {
+            "type": "object",
+            "description": "Metadata related to custom payment method",
+            "properties": {
+              "brexBudgetMetadata": {
+                "type": "object",
+                "description": "Metadata for Brex Budget",
+                "properties": {
+                  "budgetName": {
+                    "type": "string",
+                    "description": "Name of the budget",
+                    "example": "Travel budget"
+                  },
+                  "paidByPersonalCard": {
+                    "type": "boolean",
+                    "description": "Whether it was paid by budget card or personal card",
+                    "example": false
+                  }
+                }
+              },
+              "noPrepaymentMetadata": {
+                "$ref": "#/components/schemas/NoPrepaymentMetadata"
+              }
+            }
+          },
+          "vendorProgramPaymentMetadata": {
+            "$ref": "#/components/schemas/VendorProgramPaymentMetadata2"
+          },
+          "virtualCardMetadata": {
+            "$ref": "#/components/schemas/VirtualCardPaymentMetadata"
+          },
+          "cardMetadata": {
+            "$ref": "#/components/schemas/CardMetadata2"
+          }
+        }
+      },
+      "PaymentMethod": {
+        "type": "string",
+        "description": "Payment method",
+        "enum": [
+          "PAYMENT_METHOD_UNKNOWN",
+          "CREDIT_CARD",
+          "BREX_POINTS",
+          "CASH",
+          "QANTAS_POINTS",
+          "VENDOR_PROGRAM_PAYMENT",
+          "DELAYED_INVOICING",
+          "FLIGHT_CREDITS",
+          "QANTAS_TRAVEL_FUND",
+          "CUSTOM_VIRTUAL_PAYMENT",
+          "FLIGHT_PASS",
+          "MISCELLANEOUS_CREDIT_ORDER",
+          "NO_PREPAYMENT"
+        ],
+        "x-ignoreBreakingChanges": [
+          "PaymentMethod->MISCELLANEOUS_CREDIT_ORDER",
+          "PaymentMethod->NO_PREPAYMENT"
+        ],
+        "example": "BREX_POINTS"
+      },
+      "PaymentSourceDetails": {
+        "type": "object",
+        "title": "PaymentSourceDetails",
+        "description": "Contains details about a payment source, including its type and specific attributes.",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "CARD": "#/components/schemas/CardPaymentSource"
+          }
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/CardPaymentSource"
+          }
+        ]
+      },
+      "PaymentSourceInfoV2": {
+        "type": "object",
+        "title": "PaymentSourceInfoV2",
+        "required": [
+          "paymentSource",
+          "filter"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier identifying the created payment source, if created.",
+            "readOnly": true
+          },
+          "paymentSource": {
+            "description": "Details of the payment source",
+            "$ref": "#/components/schemas/PaymentSourceDetails"
+          },
+          "filter": {
+            "description": "Applicable Filters i.e. access level, travel type information etc.",
+            "$ref": "#/components/schemas/UsagePaymentFilter"
+          },
+          "status": {
+            "readOnly": true,
+            "description": "Status of the payment source after creation. Only Active sources can be used for bookings.",
+            "$ref": "#/components/schemas/PaymentSourceStatus"
+          },
+          "externalId": {
+            "type": "string",
+            "description": "An identifier assigned by a partner system. Once attached to a payment source, it remains unique per user and cannot be reassigned to another payment source.",
+            "example": "bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40"
+          }
+        }
+      },
+      "PaymentSourceStatus": {
+        "type": "string",
+        "description": "Status of the Payment Source.",
+        "readOnly": true,
+        "enum": [
+          "ACTIVE",
+          "INCOMPLETE",
+          "TEMPORARY_READY",
+          "TEMPORARY_USED",
+          "TEMPORARY_EXPIRED",
+          "TEMPORARY_INCOMPLETE"
+        ],
+        "x-ignoreBreakingChanges": [
+          "PaymentSourceStatus->TEMPORARY_READY",
+          "PaymentSourceStatus->TEMPORARY_USED",
+          "PaymentSourceStatus->TEMPORARY_EXPIRED",
+          "PaymentSourceStatus->TEMPORARY_INCOMPLETE"
+        ]
+      },
+      "PaymentSourceType": {
+        "type": "string",
+        "description": "Type of Payment Source",
+        "enum": [
+          "CARD",
+          "VIRTUAL_CARD",
+          "REWARDS_PROGRAM",
+          "DELAYED_INVOICING",
+          "CUSTOM_PAYMENT_METHOD",
+          "VENDOR_PROGRAM_PAYMENT",
+          "UNUSED_CREDIT",
+          "CASH"
+        ]
+      },
+      "PaymentSourceUpdateDetails": {
+        "type": "object",
+        "title": "PaymentSourceUpdateDetails",
+        "description": "Specifies the details required to update an existing payment source.",
+        "discriminator": {
+          "propertyName": "paymentType",
+          "mapping": {
+            "CARD": "#/components/schemas/CardPaymentSourceUpdate"
+          }
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/CardPaymentSourceUpdate"
+          }
+        ]
+      },
+      "PaymentStatus": {
+        "type": "string",
+        "title": "PaymentStatus",
+        "description": "Payment status.",
+        "enum": [
+          "SUCCESS",
+          "DELAYED_INVOICE",
+          "MANUAL",
+          "NO_CHARGE",
+          "WAIVED_OFF"
+        ]
+      },
+      "PaymentTransaction": {
+        "type": "object",
+        "title": "PaymentTransaction",
+        "description": "Payment Transaction",
+        "properties": {
+          "gatewayIdentifier": {
+            "description": "Gateway Identifier",
+            "$ref": "#/components/schemas/GatewayIdentifier"
+          },
+          "paymentReference": {
+            "type": "string",
+            "description": "payment reference"
+          },
+          "networkTransactionId": {
+            "type": "string",
+            "description": "Network Transaction Id"
+          },
+          "gatewayInfo": {
+            "$ref": "#/components/schemas/GatewayInfo"
+          },
+          "failureReason": {
+            "$ref": "#/components/schemas/FailureReason"
+          }
+        }
+      },
+      "PersonalPaymentFilter": {
+        "type": "object",
+        "title": "PersonalPaymentFilter",
+        "description": "Defines filter specific to personal payment sources.",
+        "required": [
+          "type",
+          "travelTypes"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "PERSONAL"
+          },
+          "travelTypes": {
+            "type": "array",
+            "description": "Applicable payment source travel types",
+            "items": {
+              "$ref": "#/components/schemas/TravelType"
+            },
+            "minItems": 1,
+            "maxItems": 6
+          },
+          "managedTravelerAccess": {
+            "description": "Config for providing the access to Managed Travelers if any.",
+            "$ref": "#/components/schemas/ManagedTravelerPaymentAccess"
+          }
+        }
+      },
+      "PostalAddress": {
+        "title": "PostalAddress",
+        "description": "Postal Address Details",
+        "type": "object",
+        "required": [
+          "addressLines",
+          "regionCode"
+        ],
+        "properties": {
+          "addressLines": {
+            "description": "Address lines",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Golden Gate Bridge"
+            }
+          },
+          "administrativeArea": {
+            "type": "string",
+            "description": "Code of administrative area. For example: DL for Delhi, India.\nHighest administrative subdivision which is used for postal\naddresses of a country or region.\nFor example, this can be a state, a province, an oblast, or a prefecture.\nSpecifically, for Spain this is the province and not the autonomous\ncommunity (e.g. \"Barcelona\" and not \"Catalonia\").\nMany countries don't use an administrative area in postal addresses. E.g.\nin Switzerland this should be left unpopulated.\n",
+            "example": "CA"
+          },
+          "administrativeAreaName": {
+            "type": "string",
+            "description": "Name of administrative area. This is full name corresponding to administrativeArea. \nLike Delhi for DL area code. For some places, code and name maybe same as well like Tokyo.\n",
+            "example": "California"
+          },
+          "description": {
+            "description": "Address description",
+            "type": "string",
+            "example": "San Francisco Home"
+          },
+          "isDefault": {
+            "description": "Whether this address is default address in case multiple addresses are specified.",
+            "type": "boolean",
+            "example": true
+          },
+          "languageCode": {
+            "description": "BCP-47 language code of the contents of this address (if known). This is often the UI \nlanguage of the input form or is expected to match one of the languages used in the \naddress' country/region, or their transliterated equivalents.\nThis can affect formatting in certain countries, but is not critical to the correctness \nof the data and will never affect any validation or other non-formatting related operations.\nExamples: \"zh-Hant\", \"ja\", \"ja-Latn\", \"en\".\n",
+            "type": "string",
+            "example": "en"
+          },
+          "locality": {
+            "description": "Generally refers to the city/town portion of the address.",
+            "type": "string",
+            "example": "San Francisco"
+          },
+          "locationCode": {
+            "description": "IATA 3-letter location code. See https://www.iata.org/en/services/codes.",
+            "type": "string",
+            "example": "LAX"
+          },
+          "organization": {
+            "description": "The name of the organization at the address.",
+            "type": "string",
+            "example": "Spotnana"
+          },
+          "postalCode": {
+            "description": "Postal code of the address. This is a required field when setting for a user/legal entity/company etc.",
+            "type": "string",
+            "example": "94130"
+          },
+          "continentCode": {
+            "description": "2 letter continent code of the continent this address falls in.",
+            "type": "string",
+            "example": "AF"
+          },
+          "recipients": {
+            "description": "The recipient at the address.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "regionCode": {
+            "description": "Region code of the country/region of the address.",
+            "type": "string",
+            "example": "US"
+          },
+          "regionName": {
+            "description": "Region name of the country/region of the address.",
+            "type": "string",
+            "example": "America"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "sortingCode": {
+            "description": "Additional, country-specific, sorting code. This is not used\nin most regions. Where it is used, the value is either a string like\n\"CEDEX\", optionally followed by a number (e.g. \"CEDEX 7\"), or just a number\nalone, representing the \"sector code\" (Jamaica), \"delivery area indicator\"\n(Malawi) or \"post office indicator\" (e.g. Côte d'Ivoire).\n",
+            "type": "string",
+            "example": "Jamaica"
+          },
+          "sublocality": {
+            "description": "Sublocality of the address. This can be neighborhoods, boroughs, districts.",
+            "type": "string"
+          },
+          "timezone": {
+            "description": "Time zone of the address.",
+            "type": "string",
+            "example": "America/Los_Angeles"
+          },
+          "coordinates": {
+            "description": "Map coordinates of the address.",
+            "$ref": "#/components/schemas/Latlng"
+          }
+        }
+      },
+      "PrimaryServiceProviderTmc": {
+        "type": "object",
+        "title": "PrimaryServiceProviderTmc",
+        "description": "Primary service provider TMC info",
+        "required": [
+          "tmcId"
+        ],
+        "properties": {
+          "tmcId": {
+            "$ref": "#/components/schemas/CompanyId",
+            "description": "Id of the service provider TMC."
+          }
+        }
+      },
+      "RuleBasedInfo": {
+        "title": "RuleBasedInfo",
+        "type": "object",
+        "description": "Rule based processor info",
+        "required": [
+          "ruleName",
+          "chargeProcessorType"
+        ],
+        "properties": {
+          "ruleName": {
+            "type": "string",
+            "description": "Rule name",
+            "example": "Rule1"
+          },
+          "chargeProcessorType": {
+            "type": "string",
+            "description": "Charge processor type",
+            "example": "RULE_BASED_INFO"
+          }
+        }
+      },
+      "SecondaryServiceProviderTmc": {
+        "type": "object",
+        "title": "SecondaryServiceProviderTmc",
+        "description": "Secondary service provider TMC info",
+        "required": [
+          "tmcId",
+          "supplier",
+          "travelType"
+        ],
+        "properties": {
+          "tmcId": {
+            "$ref": "#/components/schemas/CompanyId",
+            "description": "Id of the service provider TMC."
+          },
+          "supplier": {
+            "$ref": "#/components/schemas/SupplierType",
+            "description": "Supplier for which this service provider should be used."
+          },
+          "travelType": {
+            "$ref": "#/components/schemas/TravelType",
+            "description": "Travel type for which this service provider should be used."
+          }
+        }
+      },
+      "ServiceCharge": {
+        "type": "object",
+        "title": "ServiceCharge",
+        "description": "Service charge.",
+        "required": [
+          "amount",
+          "taxes",
+          "totalAmount"
+        ],
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/Money",
+            "description": "Service charge amount."
+          },
+          "taxes": {
+            "type": "array",
+            "description": "Applicable taxes.",
+            "items": {
+              "$ref": "#/components/schemas/TaxAmount"
+            }
+          },
+          "totalAmount": {
+            "$ref": "#/components/schemas/Money",
+            "description": "Total amount (including taxes)."
+          },
+          "allowedFoP": {
+            "type": "array",
+            "deprecated": true,
+            "x-sunset": "2026-07-01",
+            "description": "List of allowed payment methods for this charge.",
+            "items": {
+              "$ref": "#/components/schemas/PaymentMethod"
+            }
+          },
+          "feeInfo": {
+            "$ref": "#/components/schemas/FeeInfo"
+          },
+          "waiveOffInfo": {
+            "$ref": "#/components/schemas/AppliedWaiveOffInfo"
+          }
+        }
+      },
+      "ServiceChargeEntity": {
+        "type": "object",
+        "title": "ServiceChargeEntity",
+        "description": "Entity for service charge.",
+        "required": [
+          "entityType",
+          "entityId"
+        ],
+        "properties": {
+          "entityType": {
+            "$ref": "#/components/schemas/ServiceChargeEntityType",
+            "description": "Entity type for service charge.",
+            "example": "TRIP"
+          },
+          "entityId": {
+            "type": "string",
+            "description": "Entity ID for service charge e.g, trip ID for entityType=TRIP.",
+            "example": "1234567890"
+          }
+        }
+      },
+      "ServiceChargeEntityType": {
+        "type": "string",
+        "title": "ServiceChargeEntityType",
+        "description": "Entity type for service charge.",
+        "enum": [
+          "TRIP",
+          "USER"
+        ]
+      },
+      "ServiceChargeRecord": {
+        "type": "object",
+        "title": "ServiceChargeRecord",
+        "description": "Service charge record.",
+        "required": [
+          "entity",
+          "serviceChargeType",
+          "serviceType",
+          "charge",
+          "transactionTime",
+          "paymentStatus"
+        ],
+        "properties": {
+          "entity": {
+            "$ref": "#/components/schemas/ServiceChargeEntity",
+            "description": "Entity for service charge."
+          },
+          "tripId": {
+            "type": "string",
+            "description": "Trip ID (if applicable).",
+            "example": "1234567890",
+            "deprecated": true,
+            "x-sunset": "2026-07-01"
+          },
+          "serviceChargeType": {
+            "$ref": "#/components/schemas/ServiceChargeType",
+            "description": "Type of service charge.",
+            "example": "TMC_CHARGE"
+          },
+          "serviceType": {
+            "$ref": "#/components/schemas/ServiceType",
+            "description": "Type of service.",
+            "example": "AGENT_CONTACT"
+          },
+          "agentContact": {
+            "$ref": "#/components/schemas/AgentContact",
+            "description": "Agent contact details if serviceType is AGENT_CONTACT."
+          },
+          "chargeId": {
+            "type": "string",
+            "description": "Charge Id to uniquely identify service charge.",
+            "example": "e2c04834-92eb-4b62-9faa-eb73a70051d3"
+          },
+          "charge": {
+            "$ref": "#/components/schemas/ServiceCharge",
+            "description": "Service charge."
+          },
+          "transactionTime": {
+            "$ref": "#/components/schemas/DateTimeOffset",
+            "description": "Transaction date and time."
+          },
+          "paymentStatus": {
+            "$ref": "#/components/schemas/PaymentStatus",
+            "description": "Payment status."
+          },
+          "userOrgId": {
+            "$ref": "#/components/schemas/UserOrgId",
+            "description": "User org details."
+          },
+          "legalEntityId": {
+            "$ref": "#/components/schemas/LegalEntityId",
+            "description": "The ID of the legal entity."
+          },
+          "bookingDetails": {
+            "$ref": "#/components/schemas/BookingDetails",
+            "description": "Booking details."
+          },
+          "fop": {
+            "$ref": "#/components/schemas/FormOfPayment",
+            "description": "Form of payment for the service charge."
+          },
+          "paymentTransaction": {
+            "$ref": "#/components/schemas/PaymentTransaction",
+            "description": "Payment transaction details."
+          },
+          "failureDetails": {
+            "$ref": "#/components/schemas/FailureDetails",
+            "description": "Failure details."
+          }
+        }
+      },
+      "ServiceChargeType": {
+        "type": "string",
+        "title": "ServiceChargeType",
+        "description": "Type of service charge. TMC_CHARGE: Service charge for a service charged by the TMC.\n",
+        "enum": [
+          "TMC_CHARGE"
+        ]
+      },
+      "ServiceFeeTransactionType": {
+        "type": "string",
+        "title": "ServiceFeeTransactionType",
+        "description": "Transaction type for service fee",
+        "enum": [
+          "TRANSACTION_TYPE_BOOKING",
+          "TRANSACTION_TYPE_MODIFICATION",
+          "TRANSACTION_TYPE_CANCELLATION",
+          "TRANSACTION_TYPE_AGENT_CONTACT"
+        ],
+        "x-ignoreBreakingChanges": [
+          "ServiceFeeTransactionType->TRANSACTION_TYPE_AGENT_CONTACT"
+        ]
+      },
+      "ServiceType": {
+        "type": "string",
+        "title": "ServiceType",
+        "description": "Type of service for service charge. ITINERARY_BOOKING: Service charge for travel booking. AGENT_CONTACT: Service charge for agent contact.\n",
+        "enum": [
+          "ITINERARY_BOOKING",
+          "AGENT_CONTACT"
+        ]
+      },
+      "StripeInfo": {
+        "title": "StripeInfo",
+        "type": "object",
+        "description": "Stripe payment gateway information",
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "description": "Stripe account id",
+            "example": "acct_1OAbc3AB5abcdDdA"
+          },
+          "accountDisplayName": {
+            "type": "string",
+            "description": "Stripe account display name as seen on the stripe dashboard",
+            "example": "Abc Travel"
+          },
+          "platformAccountGatewayId": {
+            "type": "string",
+            "description": "Gateway-id of platform account when this gateway is a connected account",
+            "example": "connect-platform:#",
+            "readOnly": true
+          },
+          "address": {
+            "description": "Address for the given account",
+            "$ref": "#/components/schemas/PostalAddress"
+          },
+          "taxId": {
+            "type": "string",
+            "description": "Tax id for account",
+            "example": "89-189390"
+          }
+        }
+      },
+      "StripeInfoWrapper": {
+        "type": "object",
+        "title": "StripeInfoWrapper",
+        "description": "Wrapper for StripeInfo",
+        "required": [
+          "stripeInfo"
+        ],
+        "properties": {
+          "stripeInfo": {
+            "$ref": "#/components/schemas/StripeInfo"
+          }
+        }
+      },
+      "SupplierType": {
+        "type": "string",
+        "description": "Supplier type like Sabre, TravelFusion etc.",
+        "enum": [
+          "SABRE",
+          "AMADEUS",
+          "TRAVEL_FUSION",
+          "FARELOGIX_NDC",
+          "ATPCO_NDC",
+          "TRAINLINE",
+          "AVIA",
+          "QBR",
+          "BCD",
+          "QANTAS_HOTELS",
+          "SOUTHWEST",
+          "EXPEDIA",
+          "HOTEL_HUB",
+          "NDC",
+          "MARRIOTT",
+          "CLEARTRIP",
+          "KYTE",
+          "GROUNDSPAN",
+          "SABRE_NDC",
+          "BOOKING_COM",
+          "CARTRAWLER",
+          "PREMIER_INN",
+          "TRAVELODGE",
+          "ENTERPRISE",
+          "HYATT",
+          "NATIONAL",
+          "ALAMO",
+          "HERTZ",
+          "DOLLAR",
+          "THRIFTY",
+          "FIREFLY",
+          "EUROSTAR",
+          "AVIS",
+          "BUDGET"
+        ],
+        "x-ignoreBreakingChanges": [
+          "SupplierType->PREMIER_INN"
+        ],
+        "example": "SABRE"
+      },
+      "TMCPaymentFilter": {
+        "type": "object",
+        "title": "TMCPaymentFilter",
+        "description": "Defines filter specific to tmc payment sources.",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "TMC"
+          }
+        }
+      },
+      "Tax": {
+        "type": "object",
+        "title": "Tax",
+        "description": "Tax details",
+        "required": [
+          "amount"
+        ],
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/Money",
+            "description": "Tax amount"
+          },
+          "taxCode": {
+            "type": "string",
+            "description": "Tax code",
+            "example": "VAT"
+          },
+          "percentage": {
+            "type": "number",
+            "format": "double",
+            "description": "Tax amount to total amount",
+            "example": 9
+          }
+        }
+      },
+      "TaxAmount": {
+        "type": "object",
+        "title": "Tax",
+        "description": "Tax",
+        "required": [
+          "amount",
+          "taxCode",
+          "description"
+        ],
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "taxCode": {
+            "type": "string",
+            "description": "Tax code",
+            "example": "VAT"
+          },
+          "description": {
+            "type": "string",
+            "description": "Tax code"
+          },
+          "percentage": {
+            "type": "number",
+            "format": "double",
+            "description": "Amount",
+            "example": 10
+          }
+        }
+      },
+      "TaxBreakdown": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Tax"
+        }
+      },
+      "ThirdPartySource": {
+        "type": "string",
+        "enum": [
+          "UNKNOWN_SOURCE",
+          "SABRE",
+          "TRAVEL_FUSION",
+          "AVIA",
+          "NDC",
+          "TRAINLINE",
+          "ATPCO_NDC",
+          "FARELOGIX_NDC",
+          "OFFLINE",
+          "CONNEXUS",
+          "ROUTEHAPPY",
+          "AMADEUS",
+          "GIATA",
+          "QBR",
+          "BCD",
+          "QANTAS_HOTELS",
+          "SOUTHWEST",
+          "EXPEDIA",
+          "HOTEL_HUB",
+          "MARRIOTT",
+          "CLEARTRIP",
+          "KYTE",
+          "GROUNDSPAN",
+          "SABRE_NDC",
+          "BOOKING_COM",
+          "CARTRAWLER",
+          "PREMIER_INN",
+          "TRAVELODGE",
+          "ENTERPRISE",
+          "HYATT",
+          "EUROSTAR",
+          "NATIONAL",
+          "ALAMO",
+          "AVIS",
+          "BUDGET",
+          "HERTZ",
+          "DOLLAR",
+          "THRIFTY",
+          "FIREFLY"
+        ],
+        "x-ignoreBreakingChanges": [
+          "ThirdPartySource->BOOKING_COM",
+          "ThirdPartySource->CARTRAWLER",
+          "ThirdPartySource->PREMIER_INN"
+        ],
+        "example": "SABRE"
+      },
+      "TmcBasicInfo": {
+        "type": "object",
+        "title": "TmcBasicInfo",
+        "description": "TMC related basic information.",
+        "required": [
+          "contractingTmc",
+          "bookingTmc"
+        ],
+        "properties": {
+          "contractingTmc": {
+            "$ref": "#/components/schemas/CompanyRef",
+            "description": "Contracting TMC is the TMC the user/organization contracted."
+          },
+          "bookingTmc": {
+            "$ref": "#/components/schemas/CompanyRef",
+            "description": "Booking TMC is the TMC used for the bookings for the user/organization."
+          }
+        }
+      },
+      "TmcCalculatorInfo": {
+        "title": "TmcCalculatorInfo",
+        "type": "object",
+        "description": "TMC calculator processor info",
+        "required": [
+          "chargeProcessorType",
+          "calculatorType"
+        ],
+        "properties": {
+          "calculatorType": {
+            "type": "string",
+            "description": "TMC service charge calculator type",
+            "example": "SPOTNANA"
+          },
+          "chargeProcessorType": {
+            "type": "string",
+            "description": "Charge processor type",
+            "example": "TMC_CALCULATOR_INFO"
+          }
+        }
+      },
+      "TmcInfo": {
+        "type": "object",
+        "title": "TmcInfo",
+        "description": "TMC config information.",
+        "required": [
+          "id",
+          "primaryServiceProviderTmc"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CompanyId",
+            "description": "TMC id."
+          },
+          "primaryServiceProviderTmc": {
+            "$ref": "#/components/schemas/PrimaryServiceProviderTmc",
+            "description": "Primary service provider TMC for the TMC."
+          },
+          "secondaryServiceProviderTmcs": {
+            "type": "array",
+            "description": "Secondary service provider TMCs for the TMC.",
+            "items": {
+              "$ref": "#/components/schemas/SecondaryServiceProviderTmc"
+            }
+          },
+          "partnerTmcId": {
+            "$ref": "#/components/schemas/CompanyId",
+            "description": "Useful to identify the clients onboarded by a PARTNER_TMC"
+          }
+        }
+      },
+      "TokenizedExpiry": {
+        "title": "TokenizedExpiry",
+        "type": "object",
+        "description": "Contains the tokenized expiry of a Card.",
+        "required": [
+          "expiryMonth",
+          "expiryYear"
+        ],
+        "properties": {
+          "expiryMonth": {
+            "type": "string",
+            "description": "Tokenized Expiry month",
+            "example": "KvAuPANQWCpjwRQxcC8EXg=="
+          },
+          "expiryYear": {
+            "type": "string",
+            "description": "Tokenized Expiry year",
+            "example": "fPBm0OWrKwPyIrCVcbg4cA=="
+          }
+        }
+      },
+      "TokenizedExpiryWrapper": {
+        "type": "object",
+        "title": "TokenizedExpiryWrapper",
+        "properties": {
+          "tokenizedExpiry": {
+            "$ref": "#/components/schemas/TokenizedExpiry"
+          }
+        }
+      },
+      "TransactionFeeInfo": {
+        "title": "Transaction Fee Info",
+        "type": "object",
+        "description": "Transaction Fee Info",
+        "required": [
+          "bookingFeeType"
+        ],
+        "properties": {
+          "bookingFeeType": {
+            "type": "string",
+            "example": "TRANSACTION_FEE"
+          },
+          "transactionFeeType": {
+            "$ref": "#/components/schemas/ServiceFeeTransactionType"
+          },
+          "calculatedAmount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "chargeProcessorInfo": {
+            "$ref": "#/components/schemas/ChargeProcessorInfo"
+          }
+        }
+      },
+      "TravelType": {
+        "type": "string",
+        "title": "TravelType",
+        "description": "Travel Type",
+        "enum": [
+          "AIR",
+          "HOTEL",
+          "CAR",
+          "RAIL",
+          "LIMO",
+          "MISC",
+          "ALL"
+        ],
+        "example": "AIR"
+      },
+      "TripFeeInfo": {
+        "title": "Trip Fee Info",
+        "type": "object",
+        "description": "Trip Fee Info",
+        "required": [
+          "bookingFeeType"
+        ],
+        "properties": {
+          "bookingFeeType": {
+            "type": "string",
+            "example": "TRIP_FEE"
+          },
+          "calculatedAmount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "chargeProcessorInfo": {
+            "$ref": "#/components/schemas/ChargeProcessorInfo"
+          }
+        }
+      },
+      "UAPassPlusMetadataExternal": {
+        "type": "object",
+        "title": "UAPassPlusMetadata",
+        "description": "Details for UAPassPlus Metadata.",
+        "properties": {
+          "uatpInfo": {
+            "type": "object",
+            "title": "uatpInfo",
+            "description": "UATP card information for UAPassPlus"
+          }
+        }
+      },
+      "UAPassPlusMetadataWrapperExternal": {
+        "type": "object",
+        "title": "UAPassPlusMetadataResponseWrapper",
+        "description": "Wrapper for UAPassPlus response metadata",
+        "required": [
+          "uaPassPlusMetadata"
+        ],
+        "properties": {
+          "uaPassPlusMetadata": {
+            "$ref": "#/components/schemas/UAPassPlusMetadataExternal"
+          }
+        }
+      },
+      "UpdatePersonalPaymentSourceRequest": {
+        "type": "object",
+        "title": "UpdatePersonalPaymentSourceRequest",
+        "description": "Request payload for updating an existing personal payment source.",
+        "required": [
+          "paymentSourceInfo"
+        ],
+        "properties": {
+          "paymentSourceInfo": {
+            "description": "Details of the payment source to be updated",
+            "$ref": "#/components/schemas/PaymentSourceUpdateDetails"
+          },
+          "filter": {
+            "description": "Applicable Filters i.e. access level, travel type information etc.",
+            "$ref": "#/components/schemas/UsagePaymentFilter"
+          }
+        }
+      },
+      "UsagePaymentFilter": {
+        "type": "object",
+        "title": "UsagePaymentFilter",
+        "description": "Defines usage restrictions or filters for a payment source.",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "PERSONAL": "#/components/schemas/PersonalPaymentFilter",
+            "TMC": "#/components/schemas/TMCPaymentFilter"
+          }
+        },
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PersonalPaymentFilter"
+          },
+          {
+            "$ref": "#/components/schemas/TMCPaymentFilter"
+          }
+        ],
+        "x-ignoreBreakingChanges": [
+          "UsagePaymentFilter->TMCPaymentFilter"
+        ]
+      },
+      "UserId": {
+        "type": "object",
+        "title": "UserId",
+        "description": "User identifier",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "UserOrgId": {
+        "type": "object",
+        "title": "UserOrgId",
+        "description": "User and user's organization information.",
+        "required": [
+          "userId",
+          "organizationId"
+        ],
+        "properties": {
+          "organizationAgencyId": {
+            "$ref": "#/components/schemas/OrganizationAgencyId"
+          },
+          "organizationId": {
+            "$ref": "#/components/schemas/OrganizationId"
+          },
+          "userId": {
+            "$ref": "#/components/schemas/UserId"
+          },
+          "tmcInfo": {
+            "$ref": "#/components/schemas/TmcInfo",
+            "deprecated": true,
+            "x-sunset": "2026-07-01"
+          },
+          "tmcBasicInfo": {
+            "$ref": "#/components/schemas/TmcBasicInfo"
+          }
+        }
+      },
+      "ValueAddedServiceFeeInfo": {
+        "type": "object",
+        "title": "ValueAddedServiceFeeInfo",
+        "description": "Value Added Service Fee Info",
+        "required": [
+          "bookingFeeType"
+        ],
+        "properties": {
+          "bookingFeeType": {
+            "type": "string",
+            "description": "Type of the booking fee",
+            "example": "VALUE_ADDED_SERVICE_FEE"
+          },
+          "calculatedAmount": {
+            "$ref": "#/components/schemas/Money"
+          },
+          "chargeProcessorInfo": {
+            "$ref": "#/components/schemas/ChargeProcessorInfo"
+          },
+          "valueAddedServiceFeeType": {
+            "$ref": "#/components/schemas/ValueAddedServiceFeeType"
+          },
+          "feeName": {
+            "type": "string",
+            "description": "Name of the fee to be charged.",
+            "example": "Payment Admin Fee"
+          }
+        }
+      },
+      "ValueAddedServiceFeeType": {
+        "type": "string",
+        "title": "ValueAddedServiceFeeType",
+        "description": "Value added service fee type",
+        "enum": [
+          "VIRTUAL_CARD_PAYMENT",
+          "PRICE_OPTIMIZATION",
+          "UNUSED_CREDIT_APPLICATION",
+          "MERCHANT_FEE"
+        ],
+        "example": "VIRTUAL_CARD_PAYMENT"
+      },
+      "VendorProgramPaymentMetadata2": {
+        "type": "object",
+        "title": "VendorProgramPaymentMetadata",
+        "description": "Metadata related to vendor program payment method",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DirectBillingWrapper2"
+          },
+          {
+            "$ref": "#/components/schemas/UAPassPlusMetadataWrapperExternal"
+          }
+        ]
+      },
+      "VirtualCardInfo": {
+        "type": "object",
+        "title": "VirtualCardInfo",
+        "description": "Virtual card information like maximum deployment amount, valid date range.",
+        "properties": {
+          "amount": {
+            "description": "Virtual card deployment amount. This amount will drive the maximum authorisation value permitted on the virtual card.",
+            "$ref": "#/components/schemas/Money"
+          },
+          "dateRange": {
+            "description": "Date range within which the virtual card can be charged.",
+            "$ref": "#/components/schemas/DateRange"
+          }
+        }
+      },
+      "VirtualCardPaymentMetadata": {
+        "title": "VirtualCardPaymentMetadata",
+        "type": "object",
+        "description": "Metadata for Virtual Card.",
+        "required": [
+          "vendorInfo"
+        ],
+        "properties": {
+          "vendorInfo": {
+            "$ref": "#/components/schemas/VirtualCardVendorInfo"
+          },
+          "cardInfo": {
+            "$ref": "#/components/schemas/VirtualCardInfo"
+          },
+          "paymentInstructionId": {
+            "type": "string",
+            "description": "Payment instruction id set during addition of virtual card payment source",
+            "example": "1eb8b778-f0a6-4037-865c-4580982fa36e"
+          },
+          "shouldReveal": {
+            "type": "boolean",
+            "description": "Identifier for when to reveal virtual cards as they are revealed to travellers only 24hrs before check-in.",
+            "example": false
+          }
+        }
+      },
+      "VirtualCardVendor": {
+        "type": "string",
+        "description": "Type of Virtual card vendor",
+        "enum": [
+          "CONFERMA"
+        ],
+        "example": "CONFERMA"
+      },
+      "VirtualCardVendorInfo": {
+        "type": "object",
+        "title": "VirtualCardVendorInfo",
+        "description": "Virtual card related information like vendor, cardId, card-pool id of vendor etc.",
+        "required": [
+          "vendorCardId",
+          "virtualCardVendorCardPoolId"
+        ],
+        "properties": {
+          "vendor": {
+            "$ref": "#/components/schemas/VirtualCardVendor"
+          },
+          "vendorCardId": {
+            "type": "string",
+            "description": "Virtual card id.",
+            "example": "68793680"
+          },
+          "virtualCardVendorCardPoolId": {
+            "type": "string",
+            "description": "Card pool id of virtual card vendor.",
+            "example": "51907"
+          },
+          "confermaInfo": {
+            "$ref": "#/components/schemas/ConfermaInfo"
+          }
+        }
+      },
+      "WaiveOffFeeReason": {
+        "type": "object",
+        "title": "WaiveOffFeeReason",
+        "description": "Fee waive off reason info.",
+        "properties": {
+          "reasonCode": {
+            "type": "string",
+            "description": "Fee waive off reason code.",
+            "example": "WA05"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Fee waive off reason description.",
+            "example": "Customer goodwill"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Payments",
+      "description": "APIs related to Cards, Payments and Fees."
+    }
+  ],
+  "paths": {
+    "/v2/service-charge/{entityType}/{entityId}/types/{type}/list": {
+      "parameters": [
+        {
+          "name": "entityType",
+          "in": "path",
+          "description": "Entity type for service charge",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/ServiceChargeEntityType",
+            "example": "TRIP"
+          }
+        },
+        {
+          "name": "entityId",
+          "in": "path",
+          "description": "Entity ID for service charge e.g. trip ID for entityType = TRIP",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "1234567890"
+          }
+        },
+        {
+          "name": "type",
+          "in": "path",
+          "description": "Service charge type.",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/ServiceChargeType",
+            "example": "TMC_CHARGE"
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Service Charge"
+        ],
+        "summary": "List service charges",
+        "description": "List service charges for a given entity",
+        "operationId": "listServiceCharges",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListServiceChargesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListServiceChargesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v2/payment/users/{userId}/payment-sources": {
+      "description": "API to Create Personal Payment Source\n",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "description": "Identifier for User Profile",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "4974a66b-7493-4f41-908c-58ba81093947"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Personal Payment Sources"
+        ],
+        "summary": "List personal payment sources for a User",
+        "operationId": "listUserPaymentSources",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Indicates from where in the list of Payment Sources the server should start.",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of results to be fetched for the query.",
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 0,
+              "maximum": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPaymentSourceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Personal Payment Sources"
+        ],
+        "summary": "Create Personal Payment Source.",
+        "operationId": "createPersonalPaymentSource",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentSourceRequestV2"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePaymentSourceResponseV2"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/v2/payment/users/{userId}/payment-sources/{paymentSourceId}": {
+      "description": "APIs to Read, Update and Delete Personal Payment Source\n",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "description": "Identifier for User Profile",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "4974a66b-7493-4f41-908c-58ba81093947"
+        },
+        {
+          "name": "paymentSourceId",
+          "in": "path",
+          "description": "Identifier for personal paymentSource.",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "4974a66b-7493-4f41-908c-58ba81093947"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Personal Payment Sources"
+        ],
+        "summary": "Fetch a personal payment source",
+        "operationId": "getPersonalPaymentSource",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPaymentSourceResponseV2"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Personal Payment Sources"
+        ],
+        "summary": "Delete a Personal Payment Source.",
+        "operationId": "deletePersonalPaymentSource",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Personal Payment Sources"
+        ],
+        "summary": "Update a Personal Payment Source.",
+        "operationId": "updatePersonalPaymentSource",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePersonalPaymentSourceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  }
+}

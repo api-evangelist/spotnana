@@ -1,0 +1,32 @@
+generated: '2026-07-21'
+method: searched
+status: published
+source: https://developer.spotnana.com/mcp
+notes: >-
+  Spotnana's developer portal (Redocly-hosted) exposes a live, publicly reachable
+  Streamable-HTTP MCP server over the API documentation. Verified by a JSON-RPC
+  initialize + tools/list handshake on 2026-07-21 (protocolVersion 2024-11-05).
+  The portal advertises "Open in ChatGPT / Open in Claude" and Cursor / VS Code
+  MCP install. These are documentation-navigation tools (they read the OpenAPI and
+  docs); they are not platform-operation tools that book travel. OAuth for the
+  server is advertised at /.well-known/oauth-authorization-server (issuer
+  auth.cloud.redocly.com), though initialize/tools-list responded without a token.
+server:
+  name: spotnana-developer-docs
+  transport: http
+  url: https://developer.spotnana.com/mcp
+  protocol_version: '2024-11-05'
+  server_info: MCP server
+tools:
+  - name: list-apis
+    description: Lists available APIs with their context and purpose.
+  - name: get-endpoints
+    description: Get all endpoints for a specific API.
+  - name: get-endpoint-info
+    description: Get comprehensive information about a specific endpoint including parameters, request and response schemas.
+  - name: get-security-schemes
+    description: Get the security schemes for a specific API.
+  - name: get-full-api-description
+    description: Get the complete OpenAPI description for an API.
+  - name: search
+    description: Search across the documentation to fetch relevant content for a given query.

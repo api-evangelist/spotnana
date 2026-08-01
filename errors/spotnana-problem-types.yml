@@ -1,0 +1,40 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/spotnana-*-openapi-original.json (11 specs)
+format: custom
+notes: >-
+  Spotnana does NOT use RFC 9457 application/problem+json. All error responses use
+  a custom JSON envelope (schema ErrorResponse) with a debugIdentifier and an
+  errorMessages[] array of { errorCode, message, errorParameters[] }. The HTTP
+  status codes below are those declared across the 211 operations; the per-error
+  errorCode taxonomy is returned at runtime in errorMessages[].errorCode.
+error_envelope:
+  schema: ErrorResponse
+  fields:
+    - "debugIdentifier: string (link to debug the error internally)"
+    - "errorMessages: array of { errorCode, message, errorParameters[ {name, value} ] }"
+problems:
+  - status: 400
+    title: Bad Request
+    description: Malformed request or invalid parameters; details in errorMessages[].
+    occurrences: 77
+  - status: 401
+    title: Unauthorized
+    description: Missing or invalid Bearer token.
+    occurrences: 210
+  - status: 403
+    title: Forbidden
+    description: Authenticated principal lacks permission for the operation (RBAC).
+    occurrences: 210
+  - status: 404
+    title: Not Found
+    description: Referenced resource (company, trip, PNR, user, event, etc.) does not exist.
+    occurrences: 147
+  - status: 409
+    title: Conflict
+    description: Request conflicts with current resource state.
+    occurrences: 1
+  - status: 429
+    title: Too Many Requests
+    description: Rate limit exceeded.
+    occurrences: 1

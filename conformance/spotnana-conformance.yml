@@ -1,0 +1,35 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/spotnana-*-openapi-original.json (11 specs)
+notes: >-
+  Cross-cutting standards conformance derived from the published OpenAPI. Spotnana
+  operates a trust center (https://trust.spotnana.com) but its certification set
+  could not be extracted programmatically, so no compliance-program conformance is
+  asserted here and no Compliance pointer is emitted (no fabrication).
+standards:
+  - id: openapi-3
+    conforms: true
+    evidence: 11 OpenAPI 3.x documents published (v2/v3 API surfaces).
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      POST /v2/auth/oauth2-token issues tokens via client_credentials and RFC 8693
+      token-exchange grants; access tokens carry scope.
+  - id: rfc8693-token-exchange
+    conforms: true
+    evidence: grant_type urn:ietf:params:oauth:grant-type:token-exchange supported on the token endpoint.
+  - id: bearer-token-rfc6750
+    conforms: true
+    evidence: securityScheme type http scheme bearer applied across all APIs.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Errors use a custom ErrorResponse envelope, not application/problem+json.
+  - id: pagination
+    conforms: true
+    evidence: offset/limit and pageNumber/pageSize paging across list endpoints.
+  - id: idempotency
+    conforms: false
+    evidence: No Idempotency-Key header/parameter declared in any spec.
+  - id: webhooks
+    conforms: true
+    evidence: Documented webhook surface (booking-lifecycle events); see asyncapi/spotnana-webhooks.yml.

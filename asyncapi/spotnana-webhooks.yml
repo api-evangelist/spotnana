@@ -1,0 +1,34 @@
+generated: '2026-07-21'
+method: searched
+type: Webhooks
+source: https://developer.spotnana.com/webhooks/webhook-main-intro
+docs: https://developer.spotnana.com/webhooks/webhook-main-intro
+spec_type: none
+notes: >-
+  Spotnana documents a real webhook surface for real-time platform events but does
+  NOT publish an AsyncAPI document, so this artifact captures the webhook catalog
+  (type: Webhooks) rather than an AsyncAPI spec. The status page tracks a dedicated
+  "Webhooks" component, confirming it is a first-class delivery service. Exact event
+  names are documented in the portal's webhook schema / subscription reference (not
+  enumerated verbatim here to avoid fabrication).
+webhooks:
+  delivery: HTTP callbacks (subscription-based)
+  security: signature verification via partner public keys (see Company API addPartnerPublicKey / listPartnerPublicKeys)
+  status_component: https://status.spotnana.com  (Webhooks)
+  documented_topics:
+    - webhook overview
+    - subscription models
+    - authentication
+    - webhook delivery
+    - integration steps
+    - logging and debugging
+    - booking lifecycle events
+    - integration patterns
+  event_domains:
+    - trips
+    - PNRs
+    - traveler / user profile changes
+  related_operations:
+    - openapi/spotnana-company-openapi-original.json#addPartnerPublicKey
+    - openapi/spotnana-company-openapi-original.json#listPartnerPublicKeys
+    - openapi/spotnana-company-openapi-original.json#revokePartnerPublicKey

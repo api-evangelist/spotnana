@@ -1,0 +1,43 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/spotnana-*-openapi-original.json (11 specs)
+docs: https://developer.spotnana.com/openapi/authapi
+oauth2:
+  token_endpoint: POST /v2/auth/oauth2-token
+  grant_types:
+    - client_credentials
+    - urn:ietf:params:oauth:grant-type:token-exchange
+  request_media_type: application/x-www-form-urlencoded
+  request_fields: [grant_type, client_id, client_secret, audience, subject_token, subject_token_type]
+  audience_example: https://apis.spotnana.com/v2
+  response_fields: [access_token, expires_in, token_type, refresh_token, scope]
+  api_user_management:
+    - createApiUser (POST /v2/api-users)
+    - getApiUsers (GET /v2/api-users)
+    - rotateClientSecret (POST /v2/api-users/rotate)
+    - deleteApiUser (POST /v2/api-users/revoke)
+  notes: >-
+    Every API is protected by an HTTP Bearer token. The token is minted by exchanging
+    an API user's client_id/client_secret at the OAuth2 token endpoint (client_credentials),
+    or by RFC 8693 token-exchange to act on behalf of a subject. Tokens are short-lived
+    (expires_in) and refreshable; client secrets can be rotated and revoked.
+summary:
+  types:
+  - http
+  - oauth2
+schemes:
+- name: Bearer
+  type: http
+  scheme: bearer
+  sources:
+  - openapi/spotnana-air-openapi-original.json
+  - openapi/spotnana-auth-openapi-original.json
+  - openapi/spotnana-company-openapi-original.json
+  - openapi/spotnana-document-openapi-original.json
+  - openapi/spotnana-event-openapi-original.json
+  - openapi/spotnana-hotel-openapi-original.json
+  - openapi/spotnana-payments-openapi-original.json
+  - openapi/spotnana-policy-openapi-original.json
+  - openapi/spotnana-template-openapi-original.json
+  - openapi/spotnana-trip-openapi-original.json
+  - openapi/spotnana-users-openapi-original.json

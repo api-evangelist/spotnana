@@ -1,0 +1,21 @@
+generated: '2026-07-21'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: spotnana.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 15 05:37:48 2026 GMT
+  hsts: null
+- host: api-ext-sboxmeta.partners.spotnana.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Jan 29 23:59:59 2027 GMT
+  hsts: null
+domains:
+- domain: spotnana.com
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine
