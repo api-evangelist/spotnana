@@ -1,0 +1,1689 @@
+{
+  "item": [
+    {
+      "id": "01aa3147-7682-4bd6-b107-f9ba08f1e990",
+      "name": "Legal Entities",
+      "description": {
+        "content": "APIs to create and manage company legal entities.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a4651126-98e7-4eca-ae16-0d5959d9192b",
+          "name": "Create legal entity",
+          "request": {
+            "name": "Create legal entity",
+            "description": {
+              "content": "This endpoint creates a legal entity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"billingCurrency\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"regionCode\": \"<string>\",\n    \"administrativeArea\": \"<string>\",\n    \"administrativeAreaName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"isDefault\": \"<boolean>\",\n    \"languageCode\": \"<string>\",\n    \"locality\": \"<string>\",\n    \"locationCode\": \"<string>\",\n    \"organization\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"continentCode\": \"<string>\",\n    \"recipients\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"regionName\": \"<string>\",\n    \"revision\": \"<integer>\",\n    \"sortingCode\": \"<string>\",\n    \"sublocality\": \"<string>\",\n    \"timezone\": \"<string>\",\n    \"coordinates\": {\n      \"latitude\": \"<double>\",\n      \"longitude\": \"<double>\"\n    }\n  },\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": \"<integer>\",\n      \"countryCodeSource\": \"<string>\",\n      \"extension\": \"<string>\",\n      \"isoCountryCode\": \"<string>\",\n      \"italianLeadingZero\": false,\n      \"nationalNumber\": \"<long>\",\n      \"numberOfLeadingZeros\": 0,\n      \"preferredDomesticCarrierCode\": \"<string>\",\n      \"rawInput\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"countryCode\": \"<integer>\",\n      \"countryCodeSource\": \"<string>\",\n      \"extension\": \"<string>\",\n      \"isoCountryCode\": \"<string>\",\n      \"italianLeadingZero\": false,\n      \"nationalNumber\": \"<long>\",\n      \"numberOfLeadingZeros\": 0,\n      \"preferredDomesticCarrierCode\": \"<string>\",\n      \"rawInput\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"ccEmailAddresses\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"bccEmailAddresses\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"externalId\": \"<string>\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"fieldName\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "460054de-9c38-49c3-a1ae-485199c0483f",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"billingCurrency\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"legal-entity-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a7338a36-e58d-44b2-8c74-67105df7db35",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"billingCurrency\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"legal-entity-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10f4e3c9-a9f7-45d7-bc76-805512dcfea4",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"billingCurrency\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"legal-entity-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "252756bb-47ed-4b30-aa12-e502505cf1cc",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"billingCurrency\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"legal-entity-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2d7cacc5-c746-4933-be2f-849511f4a765",
+          "name": "List legal entities",
+          "request": {
+            "name": "List legal entities",
+            "description": {
+              "content": "This endpoint lists legal entities of a company. If externalId is provided in the query param \nonly the legal entity having the provided externalId is returned.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageNumber",
+                  "value": "1",
+                  "description": "Page number to fetch for the query. Page number starts from 1."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "1000",
+                  "description": "Page size to be to fetch for the query."
+                },
+                {
+                  "disabled": false,
+                  "key": "externalId",
+                  "value": "<string>",
+                  "description": "External id of the entity."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8986204d-fef1-4a5a-bf84-d4fb3e45b4c8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "2"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "externalId",
+                      "value": "my-external-id"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"length\": 8126,\n  \"elements\": [\n    {\n      \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n      \"name\": \"Name\"\n    },\n    {\n      \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n      \"name\": \"Name\"\n    }\n  ],\n  \"totalNumResults\": 7461\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "52c7c47e-bcdd-43ab-9300-dbce11690d3a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "2"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "externalId",
+                      "value": "my-external-id"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f691d7f7-623d-48eb-ad98-caf71f2b4218",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "2"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "20"
+                    },
+                    {
+                      "key": "externalId",
+                      "value": "my-external-id"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7d398c1b-73bb-4e30-9a36-c5646c6613a1",
+          "name": "Get legal entity",
+          "request": {
+            "name": "Get legal entity",
+            "description": {
+              "content": "This endpoint gets a legal entity by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities",
+                ":legalEntityId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "legalEntityId",
+                  "description": "(Required) Identifier for legal-entity."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e51f5bf9-3d79-4128-bbad-6d848ce953b1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"60b0f581-ad02-3f84-7bf8-71ec53cfc11e\",\n  \"name\": \"string\",\n  \"registeredName\": \"string\",\n  \"registeredEmail\": \"string\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"billingCurrency\": \"string\",\n  \"dba\": \"string\",\n  \"ein\": \"string\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": true,\n  \"bookingTmcRef\": {\n    \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n    \"name\": \"Name\"\n  },\n  \"expensePartnerConfig\": {\n    \"partner\": \"EXPENSIFY\",\n    \"emailConfig\": {\n      \"expensePartnerEmail\": \"receipts@expensify.com\",\n      \"personalCardConfig\": {\n        \"sendToTraveler\": false,\n        \"personalCardExpenseEmail\": \"user@company.com\"\n      },\n      \"centralCardExpenseEmail\": \"finance+le@company.com\",\n      \"bccEmail\": \"docs@company.com\"\n    },\n    \"travelType\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"isExpensePartnerEnabled\": true,\n    \"reportCustomFields\": true,\n    \"personalCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"centralCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"partnerReferralId\": \"1234hgd\",\n    \"itineraryConfig\": {\n      \"skipModificationUpdate\": true,\n      \"skipCancellationUpdate\": true\n    }\n  },\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"my-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f36030d-7272-4124-a6cf-4c9298fc6185",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ac8fe76-7d2f-45fb-8a26-b4591e2aac73",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "219eaad0-394e-4d42-a55f-11d443f54f73",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e474d868-dd9d-4b52-9906-da5116036850",
+          "name": "Update legal entity",
+          "request": {
+            "name": "Update legal entity",
+            "description": {
+              "content": "This endpoint updates a legal entity by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities",
+                ":legalEntityId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "legalEntityId",
+                  "description": "(Required) Identifier for legal-entity."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"regionCode\": \"<string>\",\n    \"administrativeArea\": \"<string>\",\n    \"administrativeAreaName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"isDefault\": \"<boolean>\",\n    \"languageCode\": \"<string>\",\n    \"locality\": \"<string>\",\n    \"locationCode\": \"<string>\",\n    \"organization\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"continentCode\": \"<string>\",\n    \"recipients\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"regionName\": \"<string>\",\n    \"revision\": \"<integer>\",\n    \"sortingCode\": \"<string>\",\n    \"sublocality\": \"<string>\",\n    \"timezone\": \"<string>\",\n    \"coordinates\": {\n      \"latitude\": \"<double>\",\n      \"longitude\": \"<double>\"\n    }\n  },\n  \"billingCurrency\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": \"<integer>\",\n      \"countryCodeSource\": \"<string>\",\n      \"extension\": \"<string>\",\n      \"isoCountryCode\": \"<string>\",\n      \"italianLeadingZero\": false,\n      \"nationalNumber\": \"<long>\",\n      \"numberOfLeadingZeros\": 0,\n      \"preferredDomesticCarrierCode\": \"<string>\",\n      \"rawInput\": \"<string>\",\n      \"type\": \"<string>\"\n    },\n    {\n      \"countryCode\": \"<integer>\",\n      \"countryCodeSource\": \"<string>\",\n      \"extension\": \"<string>\",\n      \"isoCountryCode\": \"<string>\",\n      \"italianLeadingZero\": false,\n      \"nationalNumber\": \"<long>\",\n      \"numberOfLeadingZeros\": 0,\n      \"preferredDomesticCarrierCode\": \"<string>\",\n      \"rawInput\": \"<string>\",\n      \"type\": \"<string>\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"bookingTmcRef\": {\n    \"id\": \"<uuid>\",\n    \"name\": \"<string>\"\n  },\n  \"expensePartnerConfig\": {\n    \"partner\": \"<string>\",\n    \"emailConfig\": {\n      \"expensePartnerEmail\": \"<string>\",\n      \"personalCardConfig\": {\n        \"sendToTraveler\": \"<boolean>\",\n        \"personalCardExpenseEmail\": \"<string>\"\n      },\n      \"centralCardExpenseEmail\": \"<string>\",\n      \"bccEmail\": \"<string>\"\n    },\n    \"travelType\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"isExpensePartnerEnabled\": true,\n    \"reportCustomFields\": \"<boolean>\",\n    \"personalCardExpenseOwner\": {\n      \"traveler\": \"<boolean>\",\n      \"centralEmail\": \"<string>\"\n    },\n    \"centralCardExpenseOwner\": {\n      \"traveler\": \"<boolean>\",\n      \"centralEmail\": \"<string>\"\n    },\n    \"partnerReferralId\": \"<string>\",\n    \"itineraryConfig\": {\n      \"skipModificationUpdate\": false,\n      \"skipCancellationUpdate\": false\n    }\n  },\n  \"ccEmailAddresses\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"bccEmailAddresses\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"externalId\": \"<string>\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"fieldName\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c4d4d34e-ac90-4258-b46a-37c4fde19c04",
+              "name": "Updated Successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"billingCurrency\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"bookingTmcRef\": {\n    \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n    \"name\": \"Name\"\n  },\n  \"expensePartnerConfig\": {\n    \"partner\": \"EXPENSIFY\",\n    \"emailConfig\": {\n      \"expensePartnerEmail\": \"receipts@expensify.com\",\n      \"personalCardConfig\": {\n        \"sendToTraveler\": false,\n        \"personalCardExpenseEmail\": \"user@company.com\"\n      },\n      \"centralCardExpenseEmail\": \"finance+le@company.com\",\n      \"bccEmail\": \"docs@company.com\"\n    },\n    \"travelType\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"isExpensePartnerEnabled\": true,\n    \"reportCustomFields\": true,\n    \"personalCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"centralCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"partnerReferralId\": \"1234hgd\",\n    \"itineraryConfig\": {\n      \"skipModificationUpdate\": true,\n      \"skipCancellationUpdate\": true\n    }\n  },\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"my-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1050ed8b-30c1-4366-93f2-668e5d1b6aef",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"billingCurrency\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"bookingTmcRef\": {\n    \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n    \"name\": \"Name\"\n  },\n  \"expensePartnerConfig\": {\n    \"partner\": \"EXPENSIFY\",\n    \"emailConfig\": {\n      \"expensePartnerEmail\": \"receipts@expensify.com\",\n      \"personalCardConfig\": {\n        \"sendToTraveler\": false,\n        \"personalCardExpenseEmail\": \"user@company.com\"\n      },\n      \"centralCardExpenseEmail\": \"finance+le@company.com\",\n      \"bccEmail\": \"docs@company.com\"\n    },\n    \"travelType\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"isExpensePartnerEnabled\": true,\n    \"reportCustomFields\": true,\n    \"personalCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"centralCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"partnerReferralId\": \"1234hgd\",\n    \"itineraryConfig\": {\n      \"skipModificationUpdate\": true,\n      \"skipCancellationUpdate\": true\n    }\n  },\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"my-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88895027-fad4-4b4d-8f7f-d8eb6258c1dd",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"billingCurrency\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"bookingTmcRef\": {\n    \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n    \"name\": \"Name\"\n  },\n  \"expensePartnerConfig\": {\n    \"partner\": \"EXPENSIFY\",\n    \"emailConfig\": {\n      \"expensePartnerEmail\": \"receipts@expensify.com\",\n      \"personalCardConfig\": {\n        \"sendToTraveler\": false,\n        \"personalCardExpenseEmail\": \"user@company.com\"\n      },\n      \"centralCardExpenseEmail\": \"finance+le@company.com\",\n      \"bccEmail\": \"docs@company.com\"\n    },\n    \"travelType\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"isExpensePartnerEnabled\": true,\n    \"reportCustomFields\": true,\n    \"personalCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"centralCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"partnerReferralId\": \"1234hgd\",\n    \"itineraryConfig\": {\n      \"skipModificationUpdate\": true,\n      \"skipCancellationUpdate\": true\n    }\n  },\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"my-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c96f2bb4-2974-4a5f-a477-368a793e0251",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"billingCurrency\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"bookingTmcRef\": {\n    \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n    \"name\": \"Name\"\n  },\n  \"expensePartnerConfig\": {\n    \"partner\": \"EXPENSIFY\",\n    \"emailConfig\": {\n      \"expensePartnerEmail\": \"receipts@expensify.com\",\n      \"personalCardConfig\": {\n        \"sendToTraveler\": false,\n        \"personalCardExpenseEmail\": \"user@company.com\"\n      },\n      \"centralCardExpenseEmail\": \"finance+le@company.com\",\n      \"bccEmail\": \"docs@company.com\"\n    },\n    \"travelType\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"isExpensePartnerEnabled\": true,\n    \"reportCustomFields\": true,\n    \"personalCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"centralCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"partnerReferralId\": \"1234hgd\",\n    \"itineraryConfig\": {\n      \"skipModificationUpdate\": true,\n      \"skipCancellationUpdate\": true\n    }\n  },\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"my-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dd3185ec-28c0-439f-9c35-d443f137fceb",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"registeredName\": \"<string>\",\n  \"registeredEmail\": \"<string>\",\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"billingCurrency\": \"<string>\",\n  \"dba\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"phoneNumbers\": [\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    },\n    {\n      \"countryCode\": 91,\n      \"countryCodeSource\": \"FROM_NUMBER_WITH_PLUS_SIGN\",\n      \"extension\": \"222\",\n      \"isoCountryCode\": \"IN\",\n      \"italianLeadingZero\": true,\n      \"nationalNumber\": 8150,\n      \"numberOfLeadingZeros\": 1,\n      \"preferredDomesticCarrierCode\": \"7\",\n      \"rawInput\": \"77777\",\n      \"type\": \"MOBILE\"\n    }\n  ],\n  \"isDelayedInvoicingEnabled\": \"<boolean>\",\n  \"bookingTmcRef\": {\n    \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n    \"name\": \"Name\"\n  },\n  \"expensePartnerConfig\": {\n    \"partner\": \"EXPENSIFY\",\n    \"emailConfig\": {\n      \"expensePartnerEmail\": \"receipts@expensify.com\",\n      \"personalCardConfig\": {\n        \"sendToTraveler\": false,\n        \"personalCardExpenseEmail\": \"user@company.com\"\n      },\n      \"centralCardExpenseEmail\": \"finance+le@company.com\",\n      \"bccEmail\": \"docs@company.com\"\n    },\n    \"travelType\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"isExpensePartnerEnabled\": true,\n    \"reportCustomFields\": true,\n    \"personalCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"centralCardExpenseOwner\": {\n      \"traveler\": true,\n      \"centralEmail\": \"docs@company.com\"\n    },\n    \"partnerReferralId\": \"1234hgd\",\n    \"itineraryConfig\": {\n      \"skipModificationUpdate\": true,\n      \"skipCancellationUpdate\": true\n    }\n  },\n  \"ccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"bccEmailAddresses\": [\n    \"example@gmail.com\",\n    \"example@gmail.com\"\n  ],\n  \"externalId\": \"my-external-id\",\n  \"companySpecifiedAttributes\": [\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    },\n    {\n      \"fieldName\": \"businessId\",\n      \"value\": \"ABCD\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8011e19e-357c-4745-aba7-2a66cc208d4d",
+          "name": "Delete legal entity",
+          "request": {
+            "name": "Delete legal entity",
+            "description": {
+              "content": "This endpoint deletes a legal entity by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities",
+                ":legalEntityId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "legalEntityId",
+                  "description": "(Required) Identifier for legal-entity."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0f2761c1-121a-4d10-bc11-e6d7d6f82543",
+              "name": "Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e9810ece-2a2c-45ed-bcde-75eadf1baafc",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79d91445-e805-4833-8283-1f93e06fbb08",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c8688b9-8cfa-4c08-85f6-8f3630413b0b",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f626a49e-486b-470d-b13f-9c86ea298c30",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "008f5129-3153-4d23-a25a-6932a012aa87",
+    "name": "Air Legal Entities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

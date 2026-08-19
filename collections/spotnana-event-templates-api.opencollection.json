@@ -1,0 +1,220 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Event Templates API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Event Templates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an event template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates an event template."
+        },
+        {
+          "info": {
+            "name": "Get hidden template status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates/hidden",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "query",
+                "description": "Company ID"
+              }
+            ]
+          },
+          "docs": "Check if hidden template is enabled for an organization."
+        },
+        {
+          "info": {
+            "name": "Toggle hidden template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates/hidden",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enable or disable hidden template for an organization. When enabled, creates or unarchives a hidden template. When disabled, archives it."
+        },
+        {
+          "info": {
+            "name": "Get event template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template ID"
+              }
+            ]
+          },
+          "docs": "This endpoint gets event template details for a given template ID."
+        },
+        {
+          "info": {
+            "name": "Delete an event template",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template ID"
+              }
+            ]
+          },
+          "docs": "This endpoint archives an event template."
+        },
+        {
+          "info": {
+            "name": "Update template's basic information",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates/:templateId/edit-basic-info",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint allows updating basic template information."
+        },
+        {
+          "info": {
+            "name": "Update template booking guidelines",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates/:templateId/edit-booking-guidelines",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates the booking guidelines for a template."
+        },
+        {
+          "info": {
+            "name": "Update template's custom field responses.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates/:templateId/custom-field-responses",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "",
+                "type": "path",
+                "description": "Template ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates the template's custom field responses."
+        },
+        {
+          "info": {
+            "name": "List event templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint lists event templates."
+        },
+        {
+          "info": {
+            "name": "Get template by external ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/event-templates/read-by-external-id",
+            "params": [
+              {
+                "name": "externalId",
+                "value": "",
+                "type": "query",
+                "description": "External ID"
+              },
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "query",
+                "description": "Company ID"
+              }
+            ]
+          },
+          "docs": "Get template details using the template's `externalId`. External IDs are unique identifiers which can be set based on the company's preference.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1319 @@
+{
+  "item": [
+    {
+      "id": "4fb72fbf-b23f-405c-b528-1cfd6ee8ff62",
+      "name": "Air Credits",
+      "description": {
+        "content": "Manage airline credits including company credit pools, credit transfers, and credit redemptions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "342f9eff-5f2c-4ab2-9686-bf432166b848",
+          "name": "Get unused credits for a traveler",
+          "request": {
+            "name": "Get unused credits for a traveler",
+            "description": {
+              "content": "Returns a list of unused credits associated with a traveler \nalong with details such as the PNR ID, trip ID, airline details, credit expiry date, and the source of booking (e.g., NDC). \nTravelers can redeem unused credit for future bookings with the same airline where the credit was earned.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "air",
+                "fetch-traveler-unused-credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"travelerInfo\": {\n    \"userId\": {\n      \"id\": \"<uuid>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b412e5f8-ce71-49c0-8700-3112354711d3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "fetch-traveler-unused-credits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"travelerInfo\": {\n    \"userId\": {\n      \"id\": \"07ac3c87-3d02-9ce5-75cf-f8cb60bce1fe\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"unusedCreditInfo\": [\n    {\n      \"sourcePnr\": \"MC5ONS\",\n      \"spotnanaPnr\": \"2345678\",\n      \"ticketNumber\": \"5267779139217\",\n      \"airlineCode\": \"AA\",\n      \"airlineInfo\": {\n        \"airlineCode\": \"AA\",\n        \"airlineName\": \"American Airlines\"\n      },\n      \"totalFare\": {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"issueDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"expiryDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"usedDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"departureDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"segmentsAvailable\": \"OTHER\",\n      \"passengerName\": {\n        \"given\": \"Vichitr\",\n        \"family1\": \"Gandas\",\n        \"family2\": \"FamilyTwo\",\n        \"middle\": \"Kumar\",\n        \"suffix\": \"SR\",\n        \"preferred\": \"Don\"\n      },\n      \"departureCountry\": \"USA\",\n      \"arrivalCountry\": \"USA\",\n      \"ticketType\": \"ETICKET\",\n      \"pcc\": \"string\",\n      \"status\": \"USED\",\n      \"source\": \"SABRE\",\n      \"tripId\": \"1234567\",\n      \"redeemVia\": \"REDEEM_VIA_OBT\",\n      \"sourceOfTruth\": \"SPOTNANA\",\n      \"owningPcc\": \"string\",\n      \"paymentSourceId\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\",\n      \"creditUsageType\": \"COMPANY\",\n      \"email\": \"string\",\n      \"fopInfo\": {\n        \"paymentMethod\": \"BREX_POINTS\",\n        \"paymentSourceType\": \"VIRTUAL_CARD\",\n        \"card\": {\n          \"number\": \"4111111111111111\",\n          \"id\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"type\": \"CREDIT\",\n          \"company\": \"VISA\",\n          \"name\": \"Harrison Schwartz\",\n          \"address\": {\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeArea\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeAreaName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isDefault\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"languageCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locationCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"organization\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"continentCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"recipients\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"revision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sortingCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sublocality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timezone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"coordinates\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"expiryMonth\": 1,\n          \"expiryYear\": 2010,\n          \"cvv\": \"012\",\n          \"label\": \"Label amex\",\n          \"currency\": \"USD\",\n          \"externalId\": \"bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40\",\n          \"vaultId\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"expiry\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"ownershipLabel\": \"PERSONAL\"\n        }\n      },\n      \"fopLabel\": \"string\",\n      \"exchangeInfo\": {\n        \"previousTicket\": \"string\"\n      },\n      \"fopCardAccessType\": \"CARD_ACCESS_CENTRAL\",\n      \"legalEntityName\": \"string\"\n    },\n    {\n      \"sourcePnr\": \"MC5ONS\",\n      \"spotnanaPnr\": \"2345678\",\n      \"ticketNumber\": \"5267779139217\",\n      \"airlineCode\": \"AA\",\n      \"airlineInfo\": {\n        \"airlineCode\": \"AA\",\n        \"airlineName\": \"American Airlines\"\n      },\n      \"totalFare\": {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"issueDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"expiryDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"usedDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"departureDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"segmentsAvailable\": \"PARTIAL\",\n      \"passengerName\": {\n        \"given\": \"Vichitr\",\n        \"family1\": \"Gandas\",\n        \"family2\": \"FamilyTwo\",\n        \"middle\": \"Kumar\",\n        \"suffix\": \"SR\",\n        \"preferred\": \"Don\"\n      },\n      \"departureCountry\": \"USA\",\n      \"arrivalCountry\": \"USA\",\n      \"ticketType\": \"TICKET_TYPE_UNKNOWN\",\n      \"pcc\": \"string\",\n      \"status\": \"RESERVED\",\n      \"source\": \"SABRE\",\n      \"tripId\": \"1234567\",\n      \"redeemVia\": \"REDEEM_VIA_OBT\",\n      \"sourceOfTruth\": \"SPOTNANA\",\n      \"owningPcc\": \"string\",\n      \"paymentSourceId\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\",\n      \"creditUsageType\": \"COMPANY\",\n      \"email\": \"string\",\n      \"fopInfo\": {\n        \"paymentMethod\": \"BREX_POINTS\",\n        \"paymentSourceType\": \"CARD\",\n        \"card\": {\n          \"number\": \"4111111111111111\",\n          \"id\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"type\": \"CREDIT\",\n          \"company\": \"VISA\",\n          \"name\": \"Harrison Schwartz\",\n          \"address\": {\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeArea\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeAreaName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isDefault\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"languageCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locationCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"organization\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"continentCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"recipients\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"revision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sortingCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sublocality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timezone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"coordinates\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"expiryMonth\": 1,\n          \"expiryYear\": 2010,\n          \"cvv\": \"012\",\n          \"label\": \"Label amex\",\n          \"currency\": \"USD\",\n          \"externalId\": \"bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40\",\n          \"vaultId\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"expiry\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"ownershipLabel\": \"PERSONAL\"\n        }\n      },\n      \"fopLabel\": \"string\",\n      \"exchangeInfo\": {\n        \"previousTicket\": \"string\"\n      },\n      \"fopCardAccessType\": \"CARD_ACCESS_PERSONAL\",\n      \"legalEntityName\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e221d8e9-32dd-42a9-ad2b-fc2de1c01dde",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "fetch-traveler-unused-credits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"travelerInfo\": {\n    \"userId\": {\n      \"id\": \"07ac3c87-3d02-9ce5-75cf-f8cb60bce1fe\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "927b3a92-4795-4f5b-a900-f3e98d1d5789",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "fetch-traveler-unused-credits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"travelerInfo\": {\n    \"userId\": {\n      \"id\": \"07ac3c87-3d02-9ce5-75cf-f8cb60bce1fe\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa6d3d29-cb4d-4fdf-9e27-d11d7da9eec9",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "fetch-traveler-unused-credits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"travelerInfo\": {\n    \"userId\": {\n      \"id\": \"07ac3c87-3d02-9ce5-75cf-f8cb60bce1fe\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d4193af-b594-4510-96d4-79efc339763f",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "fetch-traveler-unused-credits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"travelerInfo\": {\n    \"userId\": {\n      \"id\": \"07ac3c87-3d02-9ce5-75cf-f8cb60bce1fe\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "46375c33-3049-4490-981a-00524b7e4aed",
+          "name": "Get unused credits for a company",
+          "request": {
+            "name": "Get unused credits for a company",
+            "description": {
+              "content": "Returns the list of company unused credits which can be used by any employees of the company.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "air",
+                "company-unused-credits",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": {\n    \"id\": \"<uuid>\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"<string>\",\n    \"selectedAirlines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"<string>\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"<string>\"\n      }\n    },\n    \"fopLabel\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"pcc\": \"<string>\",\n    \"pccs\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"fopCardAccessType\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"legalEntityNames\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"offset\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ed4df50d-bbf3-498f-979b-9e7e2cb2fb86",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_PERSONAL\",\n      \"CARD_ACCESS_CENTRAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"unusedCreditInfos\": [\n    {\n      \"sourcePnr\": \"MC5ONS\",\n      \"spotnanaPnr\": \"2345678\",\n      \"ticketNumber\": \"5267779139217\",\n      \"airlineCode\": \"AA\",\n      \"airlineInfo\": {\n        \"airlineCode\": \"AA\",\n        \"airlineName\": \"American Airlines\"\n      },\n      \"totalFare\": {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"issueDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"expiryDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"usedDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"departureDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"segmentsAvailable\": \"OTHER\",\n      \"passengerName\": {\n        \"given\": \"Vichitr\",\n        \"family1\": \"Gandas\",\n        \"family2\": \"FamilyTwo\",\n        \"middle\": \"Kumar\",\n        \"suffix\": \"SR\",\n        \"preferred\": \"Don\"\n      },\n      \"departureCountry\": \"USA\",\n      \"arrivalCountry\": \"USA\",\n      \"ticketType\": \"MCO\",\n      \"pcc\": \"string\",\n      \"status\": \"RESERVED\",\n      \"source\": \"SABRE\",\n      \"tripId\": \"1234567\",\n      \"redeemVia\": \"REDEEM_VIA_OBT\",\n      \"sourceOfTruth\": \"SPOTNANA\",\n      \"owningPcc\": \"string\",\n      \"paymentSourceId\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\",\n      \"creditUsageType\": \"CREDIT_USAGE_TYPE_UNKNOWN\",\n      \"email\": \"string\",\n      \"fopInfo\": {\n        \"paymentMethod\": \"BREX_POINTS\",\n        \"paymentSourceType\": \"VENDOR_PROGRAM_PAYMENT\",\n        \"card\": {\n          \"number\": \"4111111111111111\",\n          \"id\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"type\": \"CREDIT\",\n          \"company\": \"VISA\",\n          \"name\": \"Harrison Schwartz\",\n          \"address\": {\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeArea\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeAreaName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isDefault\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"languageCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locationCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"organization\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"continentCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"recipients\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"revision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sortingCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sublocality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timezone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"coordinates\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"expiryMonth\": 1,\n          \"expiryYear\": 2010,\n          \"cvv\": \"012\",\n          \"label\": \"Label amex\",\n          \"currency\": \"USD\",\n          \"externalId\": \"bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40\",\n          \"vaultId\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"expiry\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"ownershipLabel\": \"PERSONAL\"\n        }\n      },\n      \"fopLabel\": \"string\",\n      \"exchangeInfo\": {\n        \"previousTicket\": \"string\"\n      },\n      \"fopCardAccessType\": \"CARD_ACCESS_CENTRAL\",\n      \"legalEntityName\": \"string\"\n    },\n    {\n      \"sourcePnr\": \"MC5ONS\",\n      \"spotnanaPnr\": \"2345678\",\n      \"ticketNumber\": \"5267779139217\",\n      \"airlineCode\": \"AA\",\n      \"airlineInfo\": {\n        \"airlineCode\": \"AA\",\n        \"airlineName\": \"American Airlines\"\n      },\n      \"totalFare\": {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"issueDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"expiryDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"usedDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"departureDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"segmentsAvailable\": \"OTHER\",\n      \"passengerName\": {\n        \"given\": \"Vichitr\",\n        \"family1\": \"Gandas\",\n        \"family2\": \"FamilyTwo\",\n        \"middle\": \"Kumar\",\n        \"suffix\": \"SR\",\n        \"preferred\": \"Don\"\n      },\n      \"departureCountry\": \"USA\",\n      \"arrivalCountry\": \"USA\",\n      \"ticketType\": \"NON_GDS\",\n      \"pcc\": \"string\",\n      \"status\": \"OPEN\",\n      \"source\": \"SABRE\",\n      \"tripId\": \"1234567\",\n      \"redeemVia\": \"REDEEM_VIA_OBT\",\n      \"sourceOfTruth\": \"SPOTNANA\",\n      \"owningPcc\": \"string\",\n      \"paymentSourceId\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\",\n      \"creditUsageType\": \"COMPANY\",\n      \"email\": \"string\",\n      \"fopInfo\": {\n        \"paymentMethod\": \"BREX_POINTS\",\n        \"paymentSourceType\": \"CARD\",\n        \"card\": {\n          \"number\": \"4111111111111111\",\n          \"id\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"type\": \"CREDIT\",\n          \"company\": \"VISA\",\n          \"name\": \"Harrison Schwartz\",\n          \"address\": {\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeArea\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeAreaName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isDefault\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"languageCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locationCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"organization\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"continentCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"recipients\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"revision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sortingCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sublocality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timezone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"coordinates\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"expiryMonth\": 1,\n          \"expiryYear\": 2010,\n          \"cvv\": \"012\",\n          \"label\": \"Label amex\",\n          \"currency\": \"USD\",\n          \"externalId\": \"bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40\",\n          \"vaultId\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"expiry\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"ownershipLabel\": \"PERSONAL\"\n        }\n      },\n      \"fopLabel\": \"string\",\n      \"exchangeInfo\": {\n        \"previousTicket\": \"string\"\n      },\n      \"fopCardAccessType\": \"CARD_ACCESS_CORPORATE\",\n      \"legalEntityName\": \"string\"\n    }\n  ],\n  \"paginationParams\": {\n    \"offset\": 0,\n    \"totalRecords\": 100\n  },\n  \"companyFopLabels\": [\n    \"Company Central Card\",\n    \"Corporate Amex\"\n  ],\n  \"companyPccs\": [\n    \"AK5L\",\n    \"BE6C\"\n  ],\n  \"companyLegalEntityNames\": [\n    \"string\",\n    \"string\"\n  ],\n  \"supportedAirlines\": [\n    {\n      \"airlineCode\": \"AA\",\n      \"airlineName\": \"American Airlines\"\n    },\n    {\n      \"airlineCode\": \"AA\",\n      \"airlineName\": \"American Airlines\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4375241a-1ee8-4414-b690-33ed41a8f231",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_PERSONAL\",\n      \"CARD_ACCESS_CENTRAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d605168b-2fea-4d63-ac3e-9cbe9f1746ea",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_PERSONAL\",\n      \"CARD_ACCESS_CENTRAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "523b4357-ad8c-47f1-a1a5-4a00963ecb27",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_PERSONAL\",\n      \"CARD_ACCESS_CENTRAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb8ee2da-9455-4337-9123-d33b615bb7cf",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_PERSONAL\",\n      \"CARD_ACCESS_CENTRAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ce60f7de-6780-4a28-8022-69476d1083e6",
+          "name": "Get transferable unused credits for a company",
+          "request": {
+            "name": "Get transferable unused credits for a company",
+            "description": {
+              "content": "Returns the list of transferable company unused credits which can be used by any employees of the company.\nThe unused credits can be transferred to another traveler.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "air",
+                "company-transferable-unused-credits",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": {\n    \"id\": \"<uuid>\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"<string>\",\n    \"selectedAirlines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"<string>\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"<string>\"\n      }\n    },\n    \"fopLabel\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"pcc\": \"<string>\",\n    \"pccs\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"fopCardAccessType\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"legalEntityNames\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"offset\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "92feec47-4220-4a19-a725-c9e8a66ea702",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-transferable-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_CORPORATE\",\n      \"CARD_ACCESS_PERSONAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"unusedCreditInfos\": [\n    {\n      \"sourcePnr\": \"MC5ONS\",\n      \"spotnanaPnr\": \"2345678\",\n      \"ticketNumber\": \"5267779139217\",\n      \"airlineCode\": \"AA\",\n      \"airlineInfo\": {\n        \"airlineCode\": \"AA\",\n        \"airlineName\": \"American Airlines\"\n      },\n      \"totalFare\": {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"issueDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"expiryDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"usedDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"departureDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"segmentsAvailable\": \"UNKNOWN\",\n      \"passengerName\": {\n        \"given\": \"Vichitr\",\n        \"family1\": \"Gandas\",\n        \"family2\": \"FamilyTwo\",\n        \"middle\": \"Kumar\",\n        \"suffix\": \"SR\",\n        \"preferred\": \"Don\"\n      },\n      \"departureCountry\": \"USA\",\n      \"arrivalCountry\": \"USA\",\n      \"ticketType\": \"ETICKET\",\n      \"pcc\": \"string\",\n      \"status\": \"STATUS_UNKNOWN\",\n      \"source\": \"SABRE\",\n      \"tripId\": \"1234567\",\n      \"redeemVia\": \"REDEEM_VIA_OBT\",\n      \"sourceOfTruth\": \"SPOTNANA\",\n      \"owningPcc\": \"string\",\n      \"paymentSourceId\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\",\n      \"creditUsageType\": \"PERSONAL\",\n      \"email\": \"string\",\n      \"fopInfo\": {\n        \"paymentMethod\": \"BREX_POINTS\",\n        \"paymentSourceType\": \"CARD\",\n        \"card\": {\n          \"number\": \"4111111111111111\",\n          \"id\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"type\": \"CREDIT\",\n          \"company\": \"VISA\",\n          \"name\": \"Harrison Schwartz\",\n          \"address\": {\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeArea\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeAreaName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isDefault\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"languageCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locationCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"organization\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"continentCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"recipients\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"revision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sortingCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sublocality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timezone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"coordinates\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"expiryMonth\": 1,\n          \"expiryYear\": 2010,\n          \"cvv\": \"012\",\n          \"label\": \"Label amex\",\n          \"currency\": \"USD\",\n          \"externalId\": \"bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40\",\n          \"vaultId\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"expiry\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"ownershipLabel\": \"PERSONAL\"\n        }\n      },\n      \"fopLabel\": \"string\",\n      \"exchangeInfo\": {\n        \"previousTicket\": \"string\"\n      },\n      \"fopCardAccessType\": \"CARD_ACCESS_CENTRAL\",\n      \"legalEntityName\": \"string\"\n    },\n    {\n      \"sourcePnr\": \"MC5ONS\",\n      \"spotnanaPnr\": \"2345678\",\n      \"ticketNumber\": \"5267779139217\",\n      \"airlineCode\": \"AA\",\n      \"airlineInfo\": {\n        \"airlineCode\": \"AA\",\n        \"airlineName\": \"American Airlines\"\n      },\n      \"totalFare\": {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"issueDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"expiryDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"usedDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"departureDate\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"segmentsAvailable\": \"PARTIAL\",\n      \"passengerName\": {\n        \"given\": \"Vichitr\",\n        \"family1\": \"Gandas\",\n        \"family2\": \"FamilyTwo\",\n        \"middle\": \"Kumar\",\n        \"suffix\": \"SR\",\n        \"preferred\": \"Don\"\n      },\n      \"departureCountry\": \"USA\",\n      \"arrivalCountry\": \"USA\",\n      \"ticketType\": \"ETICKET\",\n      \"pcc\": \"string\",\n      \"status\": \"USED\",\n      \"source\": \"SABRE\",\n      \"tripId\": \"1234567\",\n      \"redeemVia\": \"REDEEM_VIA_OBT\",\n      \"sourceOfTruth\": \"SPOTNANA\",\n      \"owningPcc\": \"string\",\n      \"paymentSourceId\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\",\n      \"creditUsageType\": \"PERSONAL\",\n      \"email\": \"string\",\n      \"fopInfo\": {\n        \"paymentMethod\": \"BREX_POINTS\",\n        \"paymentSourceType\": \"CASH\",\n        \"card\": {\n          \"number\": \"4111111111111111\",\n          \"id\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"type\": \"CREDIT\",\n          \"company\": \"VISA\",\n          \"name\": \"Harrison Schwartz\",\n          \"address\": {\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeArea\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeAreaName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isDefault\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"languageCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locationCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"organization\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"continentCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"recipients\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"revision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sortingCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sublocality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timezone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"coordinates\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"expiryMonth\": 1,\n          \"expiryYear\": 2010,\n          \"cvv\": \"012\",\n          \"label\": \"Label amex\",\n          \"currency\": \"USD\",\n          \"externalId\": \"bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40\",\n          \"vaultId\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"expiry\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"ownershipLabel\": \"PERSONAL\"\n        }\n      },\n      \"fopLabel\": \"string\",\n      \"exchangeInfo\": {\n        \"previousTicket\": \"string\"\n      },\n      \"fopCardAccessType\": \"CARD_ACCESS_CENTRAL\",\n      \"legalEntityName\": \"string\"\n    }\n  ],\n  \"paginationParams\": {\n    \"offset\": 0,\n    \"totalRecords\": 100\n  },\n  \"companyTransferableFopLabels\": [\n    \"Personal Visa\",\n    \"Personal Mastercard\"\n  ],\n  \"companyTransferablePccs\": [\n    \"AK5L\",\n    \"BE6C\"\n  ],\n  \"companyTransferableLegalEntityNames\": [\n    \"string\",\n    \"string\"\n  ],\n  \"supportedAirlines\": [\n    {\n      \"airlineCode\": \"AA\",\n      \"airlineName\": \"American Airlines\"\n    },\n    {\n      \"airlineCode\": \"AA\",\n      \"airlineName\": \"American Airlines\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c085266-e4d5-4537-967c-eace905c4971",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-transferable-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_CORPORATE\",\n      \"CARD_ACCESS_PERSONAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cfd435e0-8e61-476c-865a-5814b3e89d61",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-transferable-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_CORPORATE\",\n      \"CARD_ACCESS_PERSONAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2f1ce759-f4cd-484d-8e02-1b2a4eab1137",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-transferable-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_CORPORATE\",\n      \"CARD_ACCESS_PERSONAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3481d19c-4f42-466a-8577-87fca6215486",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-transferable-unused-credits",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"companyId\": {\n    \"id\": \"edd5b835-8001-430c-98f8-fedeccebe4cf\"\n  },\n  \"companyCreditFilter\": {\n    \"supplier\": \"SABRE\",\n    \"selectedAirlines\": [\n      \"AA\",\n      \"AA\"\n    ],\n    \"expiryDateRange\": {\n      \"expiryDateStart\": {\n        \"iso8601\": \"2017-07-21\"\n      },\n      \"expiryDateEnd\": {\n        \"iso8601\": \"2017-07-21\"\n      }\n    },\n    \"fopLabel\": [\n      \"Company Central Card\",\n      \"Personal Card\"\n    ],\n    \"pcc\": \"LA5K\",\n    \"pccs\": [\n      \"AK5L\",\n      \"BE6C\"\n    ],\n    \"fopCardAccessType\": [\n      \"CARD_ACCESS_CORPORATE\",\n      \"CARD_ACCESS_PERSONAL\"\n    ],\n    \"legalEntityNames\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"offset\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ec0105d1-6c2d-4947-aa12-ca7916584d37",
+          "name": "Migrate Unused Credits of a traveler to and fro Company Credits",
+          "request": {
+            "name": "Migrate Unused Credits of a traveler to and fro Company Credits",
+            "description": {
+              "content": "This API will be migrate unused credits from individual credits to company credits and vice versa.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "air",
+                "company-credits",
+                "migrations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentSourceIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"updateCreditUsageTypeTo\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a3be18a0-2fc4-4d95-b51c-47415424ecf1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-credits",
+                    "migrations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentSourceIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"updateCreditUsageTypeTo\": \"CREDIT_USAGE_TYPE_UNKNOWN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"migrationStatus\": [\n    {\n      \"paymentSourceId\": \"d059044a-cacd-4b53-883d-7355530f54e7\",\n      \"status\": \"FAILED\"\n    },\n    {\n      \"paymentSourceId\": \"d059044a-cacd-4b53-883d-7355530f54e7\",\n      \"status\": \"STATUS_UNKNOWN\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "854dc0ad-4a49-48ab-930f-a49a2b6a42dd",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-credits",
+                    "migrations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentSourceIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"updateCreditUsageTypeTo\": \"CREDIT_USAGE_TYPE_UNKNOWN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "998c651e-6703-47c1-8840-c1e227f3c97d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-credits",
+                    "migrations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentSourceIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"updateCreditUsageTypeTo\": \"CREDIT_USAGE_TYPE_UNKNOWN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f35786c9-65e2-4906-8b88-62043c11fdac",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-credits",
+                    "migrations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentSourceIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"updateCreditUsageTypeTo\": \"CREDIT_USAGE_TYPE_UNKNOWN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fb93bae7-fbdd-4b41-9f14-0a4492f48053",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "air",
+                    "company-credits",
+                    "migrations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentSourceIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"updateCreditUsageTypeTo\": \"CREDIT_USAGE_TYPE_UNKNOWN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8e649a28-1950-4b74-ae85-471b7a9729e3",
+    "name": "Air Air Credits API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

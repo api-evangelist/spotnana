@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Invoicing API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Invoicing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Invoice Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/invoicing/invoice-data",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint gets the invoice data for given invoice numbers"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

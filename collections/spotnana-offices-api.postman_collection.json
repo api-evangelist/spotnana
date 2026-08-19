@@ -1,0 +1,2147 @@
+{
+  "item": [
+    {
+      "id": "b9050497-e937-4939-a3e2-bf4e50cf5f2d",
+      "name": "Offices",
+      "description": {
+        "content": "APIs to create and manage company offices.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f74c124b-412b-4d16-abaa-06323f36dc83",
+          "name": "Create office",
+          "request": {
+            "name": "Create office",
+            "description": {
+              "content": "This endpoint creates an office.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities",
+                ":legalEntityId",
+                "offices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "legalEntityId",
+                  "description": "(Required) Identifier for legal-entity."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"regionCode\": \"<string>\",\n    \"administrativeArea\": \"<string>\",\n    \"administrativeAreaName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"isDefault\": \"<boolean>\",\n    \"languageCode\": \"<string>\",\n    \"locality\": \"<string>\",\n    \"locationCode\": \"<string>\",\n    \"organization\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"continentCode\": \"<string>\",\n    \"recipients\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"regionName\": \"<string>\",\n    \"revision\": \"<integer>\",\n    \"sortingCode\": \"<string>\",\n    \"sublocality\": \"<string>\",\n    \"timezone\": \"<string>\",\n    \"coordinates\": {\n      \"latitude\": \"<double>\",\n      \"longitude\": \"<double>\"\n    }\n  },\n  \"name\": \"<string>\",\n  \"latlng\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"externalId\": \"<string>\",\n  \"taxId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "88bf55e4-53b0-444d-8b95-543bfe76d945",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"name\": \"Office name\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1902d3dc-e231-44ef-8c91-eb1bcf9437d9",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"name\": \"Office name\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6014184d-180e-4044-8d2c-9dde4e1ebfe9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"name\": \"Office name\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5ecafb0-283b-4337-939d-a124c6176cfd",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"name\": \"Office name\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "88017c52-978c-4307-a75b-b7b710345d54",
+          "name": "List offices of the legal entity",
+          "request": {
+            "name": "List offices of the legal entity",
+            "description": {
+              "content": "This endpoint list offices of given legal entity. If externalId is provided in query param, the office \nhaving the externalId is fetched.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities",
+                ":legalEntityId",
+                "offices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "externalId",
+                  "value": "<string>",
+                  "description": "External id of the entity."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "legalEntityId",
+                  "description": "(Required) Identifier for legal-entity."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a8ff5d22-a783-471e-9c2c-66369d77dd97",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "externalId",
+                      "value": "office-external-id"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"length\": 8295,\n  \"elements\": [\n    {\n      \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n      \"name\": \"Name\"\n    },\n    {\n      \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n      \"name\": \"Name\"\n    }\n  ],\n  \"totalNumResults\": 3681\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c0734b1-5f4f-4d4d-9b44-90f145a05f8a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "externalId",
+                      "value": "office-external-id"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88bbddca-50d5-4553-9883-90182cad8c08",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "externalId",
+                      "value": "office-external-id"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0fb8c259-e59b-49fc-aac0-3eecedb23c83",
+          "name": "List company offices",
+          "request": {
+            "name": "List company offices",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "office-list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paginationParams\": {\n    \"offset\": 0,\n    \"limit\": 100\n  },\n  \"searchText\": \"<string>\",\n  \"sortParams\": {\n    \"sortBy\": \"<string>\",\n    \"sortOrder\": \"ASC\"\n  },\n  \"filters\": [\n    {\n      \"countries\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"officeIds\": [\n        \"<uuid>\",\n        \"<uuid>\"\n      ],\n      \"externalIds\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"legalEntityIds\": [\n        \"<uuid>\",\n        \"<uuid>\"\n      ]\n    },\n    {\n      \"countries\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"officeIds\": [\n        \"<uuid>\",\n        \"<uuid>\"\n      ],\n      \"externalIds\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"legalEntityIds\": [\n        \"<uuid>\",\n        \"<uuid>\"\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "68180993-579b-483e-8f61-206e40aa9b98",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "office-list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paginationParams\": {\n    \"offset\": 0,\n    \"limit\": 100\n  },\n  \"searchText\": \"<string>\",\n  \"sortParams\": {\n    \"sortBy\": \"LEGAL_ENTITY_NAME\",\n    \"sortOrder\": \"DESC\"\n  },\n  \"filters\": [\n    {\n      \"countries\": [\n        \"US\",\n        \"IN\"\n      ],\n      \"officeIds\": [\n        \"b71480e4-1750-d6c4-50ac-220144a9944d\",\n        \"8b678fd6-7ae6-1466-dadb-d22b0895b410\"\n      ],\n      \"externalIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntityIds\": [\n        \"a4339aaa-59cb-ddc8-9e14-e6cd4cac4ebb\",\n        \"ab7d9940-08d4-5493-1079-c0a66e4074ae\"\n      ]\n    },\n    {\n      \"countries\": [\n        \"US\",\n        \"IN\"\n      ],\n      \"officeIds\": [\n        \"aa616eeb-9d17-c098-499b-f4b948797a45\",\n        \"d3e8be58-4ae5-1dec-157f-80bb58000dd6\"\n      ],\n      \"externalIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntityIds\": [\n        \"3ca2ccca-de80-b03c-ea94-b34ff01266c2\",\n        \"61a07e50-cf07-904e-2ead-6c7eef993a75\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"offices\": [\n    {\n      \"legalEntityRef\": {\n        \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n        \"name\": \"Name\"\n      },\n      \"office\": {\n        \"address\": {\n          \"addressLines\": [\n            \"Golden Gate Bridge\",\n            \"Golden Gate Bridge\"\n          ],\n          \"regionCode\": \"US\",\n          \"administrativeArea\": \"CA\",\n          \"administrativeAreaName\": \"California\",\n          \"description\": \"San Francisco Home\",\n          \"isDefault\": true,\n          \"languageCode\": \"en\",\n          \"locality\": \"San Francisco\",\n          \"locationCode\": \"LAX\",\n          \"organization\": \"Spotnana\",\n          \"postalCode\": \"94130\",\n          \"continentCode\": \"AF\",\n          \"recipients\": [\n            \"string\",\n            \"string\"\n          ],\n          \"regionName\": \"America\",\n          \"revision\": 1,\n          \"sortingCode\": \"Jamaica\",\n          \"sublocality\": \"string\",\n          \"timezone\": \"America/Los_Angeles\",\n          \"coordinates\": {\n            \"latitude\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"longitude\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"id\": \"2c41dda1-2146-06bb-7686-e18262845a1d\",\n        \"name\": \"Office\",\n        \"latlng\": {\n          \"latitude\": 77.1025,\n          \"longitude\": 28.7041\n        },\n        \"externalId\": \"external-id\",\n        \"taxId\": \"123232\"\n      }\n    },\n    {\n      \"legalEntityRef\": {\n        \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n        \"name\": \"Name\"\n      },\n      \"office\": {\n        \"address\": {\n          \"addressLines\": [\n            \"Golden Gate Bridge\",\n            \"Golden Gate Bridge\"\n          ],\n          \"regionCode\": \"US\",\n          \"administrativeArea\": \"CA\",\n          \"administrativeAreaName\": \"California\",\n          \"description\": \"San Francisco Home\",\n          \"isDefault\": true,\n          \"languageCode\": \"en\",\n          \"locality\": \"San Francisco\",\n          \"locationCode\": \"LAX\",\n          \"organization\": \"Spotnana\",\n          \"postalCode\": \"94130\",\n          \"continentCode\": \"AF\",\n          \"recipients\": [\n            \"string\",\n            \"string\"\n          ],\n          \"regionName\": \"America\",\n          \"revision\": 1,\n          \"sortingCode\": \"Jamaica\",\n          \"sublocality\": \"string\",\n          \"timezone\": \"America/Los_Angeles\",\n          \"coordinates\": {\n            \"latitude\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"longitude\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"id\": \"41fc8524-d387-d417-2939-33ced54fcd1f\",\n        \"name\": \"Office\",\n        \"latlng\": {\n          \"latitude\": 77.1025,\n          \"longitude\": 28.7041\n        },\n        \"externalId\": \"external-id\",\n        \"taxId\": \"123232\"\n      }\n    }\n  ],\n  \"paginationParams\": {\n    \"totalNumResults\": 3511\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c0656ac-9e71-4051-accf-00bde06a3538",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "office-list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paginationParams\": {\n    \"offset\": 0,\n    \"limit\": 100\n  },\n  \"searchText\": \"<string>\",\n  \"sortParams\": {\n    \"sortBy\": \"LEGAL_ENTITY_NAME\",\n    \"sortOrder\": \"DESC\"\n  },\n  \"filters\": [\n    {\n      \"countries\": [\n        \"US\",\n        \"IN\"\n      ],\n      \"officeIds\": [\n        \"b71480e4-1750-d6c4-50ac-220144a9944d\",\n        \"8b678fd6-7ae6-1466-dadb-d22b0895b410\"\n      ],\n      \"externalIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntityIds\": [\n        \"a4339aaa-59cb-ddc8-9e14-e6cd4cac4ebb\",\n        \"ab7d9940-08d4-5493-1079-c0a66e4074ae\"\n      ]\n    },\n    {\n      \"countries\": [\n        \"US\",\n        \"IN\"\n      ],\n      \"officeIds\": [\n        \"aa616eeb-9d17-c098-499b-f4b948797a45\",\n        \"d3e8be58-4ae5-1dec-157f-80bb58000dd6\"\n      ],\n      \"externalIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntityIds\": [\n        \"3ca2ccca-de80-b03c-ea94-b34ff01266c2\",\n        \"61a07e50-cf07-904e-2ead-6c7eef993a75\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0695ac08-ee39-4c59-9237-e7d49ed1fa53",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "office-list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paginationParams\": {\n    \"offset\": 0,\n    \"limit\": 100\n  },\n  \"searchText\": \"<string>\",\n  \"sortParams\": {\n    \"sortBy\": \"LEGAL_ENTITY_NAME\",\n    \"sortOrder\": \"DESC\"\n  },\n  \"filters\": [\n    {\n      \"countries\": [\n        \"US\",\n        \"IN\"\n      ],\n      \"officeIds\": [\n        \"b71480e4-1750-d6c4-50ac-220144a9944d\",\n        \"8b678fd6-7ae6-1466-dadb-d22b0895b410\"\n      ],\n      \"externalIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntityIds\": [\n        \"a4339aaa-59cb-ddc8-9e14-e6cd4cac4ebb\",\n        \"ab7d9940-08d4-5493-1079-c0a66e4074ae\"\n      ]\n    },\n    {\n      \"countries\": [\n        \"US\",\n        \"IN\"\n      ],\n      \"officeIds\": [\n        \"aa616eeb-9d17-c098-499b-f4b948797a45\",\n        \"d3e8be58-4ae5-1dec-157f-80bb58000dd6\"\n      ],\n      \"externalIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntityIds\": [\n        \"3ca2ccca-de80-b03c-ea94-b34ff01266c2\",\n        \"61a07e50-cf07-904e-2ead-6c7eef993a75\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "172c8859-c0bb-48e1-b41f-faff8b57a113",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "office-list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paginationParams\": {\n    \"offset\": 0,\n    \"limit\": 100\n  },\n  \"searchText\": \"<string>\",\n  \"sortParams\": {\n    \"sortBy\": \"LEGAL_ENTITY_NAME\",\n    \"sortOrder\": \"DESC\"\n  },\n  \"filters\": [\n    {\n      \"countries\": [\n        \"US\",\n        \"IN\"\n      ],\n      \"officeIds\": [\n        \"b71480e4-1750-d6c4-50ac-220144a9944d\",\n        \"8b678fd6-7ae6-1466-dadb-d22b0895b410\"\n      ],\n      \"externalIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntityIds\": [\n        \"a4339aaa-59cb-ddc8-9e14-e6cd4cac4ebb\",\n        \"ab7d9940-08d4-5493-1079-c0a66e4074ae\"\n      ]\n    },\n    {\n      \"countries\": [\n        \"US\",\n        \"IN\"\n      ],\n      \"officeIds\": [\n        \"aa616eeb-9d17-c098-499b-f4b948797a45\",\n        \"d3e8be58-4ae5-1dec-157f-80bb58000dd6\"\n      ],\n      \"externalIds\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntityIds\": [\n        \"3ca2ccca-de80-b03c-ea94-b34ff01266c2\",\n        \"61a07e50-cf07-904e-2ead-6c7eef993a75\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "46bdc955-9e64-4754-90b6-51b2033d6957",
+          "name": "Get office",
+          "request": {
+            "name": "Get office",
+            "description": {
+              "content": "This endpoint gets an office by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities",
+                ":legalEntityId",
+                "offices",
+                ":officeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "legalEntityId",
+                  "description": "(Required) Identifier for legal-entity."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "officeId",
+                  "description": "(Required) Identifier for office."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "18194e8b-c235-440b-b84b-c7c7fb7c3356",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"id\": \"74d51c9b-d7b6-ef8d-a3b7-e0640b285213\",\n  \"name\": \"Office\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06a5e644-c8f3-4ee1-8638-cc5c98ebf5b1",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7823316-f967-495c-99c0-68143e8683b9",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2da71ff3-3af4-409a-936b-b8b610e5f887",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d58b0fef-c37b-4ab2-b695-96e5d2f1d944",
+          "name": "Update office",
+          "request": {
+            "name": "Update office",
+            "description": {
+              "content": "This endpoing updates office by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities",
+                ":legalEntityId",
+                "offices",
+                ":officeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "legalEntityId",
+                  "description": "(Required) Identifier for legal-entity."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "officeId",
+                  "description": "(Required) Identifier for office."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"regionCode\": \"<string>\",\n    \"administrativeArea\": \"<string>\",\n    \"administrativeAreaName\": \"<string>\",\n    \"description\": \"<string>\",\n    \"isDefault\": \"<boolean>\",\n    \"languageCode\": \"<string>\",\n    \"locality\": \"<string>\",\n    \"locationCode\": \"<string>\",\n    \"organization\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"continentCode\": \"<string>\",\n    \"recipients\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"regionName\": \"<string>\",\n    \"revision\": \"<integer>\",\n    \"sortingCode\": \"<string>\",\n    \"sublocality\": \"<string>\",\n    \"timezone\": \"<string>\",\n    \"coordinates\": {\n      \"latitude\": \"<double>\",\n      \"longitude\": \"<double>\"\n    }\n  },\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"latlng\": {\n    \"latitude\": \"<double>\",\n    \"longitude\": \"<double>\"\n  },\n  \"externalId\": \"<string>\",\n  \"taxId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "88eb9c76-9612-4e79-a9e7-367e3b711804",
+              "name": "Updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"id\": \"<uuid>\",\n  \"name\": \"Office\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "290e5a36-454f-4006-ad95-d5ed50db515a",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"id\": \"<uuid>\",\n  \"name\": \"Office\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0b25489-0d1d-45d5-a6b2-c3a03c6a6a64",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"id\": \"<uuid>\",\n  \"name\": \"Office\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "968266c3-9209-4469-9d68-807a06b86007",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"id\": \"<uuid>\",\n  \"name\": \"Office\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf46e61a-a24e-45a3-b97c-0222b4bd656b",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": {\n    \"addressLines\": [\n      \"Golden Gate Bridge\",\n      \"Golden Gate Bridge\"\n    ],\n    \"regionCode\": \"US\",\n    \"administrativeArea\": \"CA\",\n    \"administrativeAreaName\": \"California\",\n    \"description\": \"San Francisco Home\",\n    \"isDefault\": true,\n    \"languageCode\": \"en\",\n    \"locality\": \"San Francisco\",\n    \"locationCode\": \"LAX\",\n    \"organization\": \"Spotnana\",\n    \"postalCode\": \"94130\",\n    \"continentCode\": \"AF\",\n    \"recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"regionName\": \"America\",\n    \"revision\": 1,\n    \"sortingCode\": \"Jamaica\",\n    \"sublocality\": \"string\",\n    \"timezone\": \"America/Los_Angeles\",\n    \"coordinates\": {\n      \"latitude\": 77.1025,\n      \"longitude\": 28.7041\n    }\n  },\n  \"id\": \"<uuid>\",\n  \"name\": \"Office\",\n  \"latlng\": {\n    \"latitude\": 77.1025,\n    \"longitude\": 28.7041\n  },\n  \"externalId\": \"external-id\",\n  \"taxId\": \"123232\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f48460a2-d738-4bf6-ae3e-aa1d976bc2b5",
+          "name": "Delete office",
+          "request": {
+            "name": "Delete office",
+            "description": {
+              "content": "This endpoint deletes office by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "legal-entities",
+                ":legalEntityId",
+                "offices",
+                ":officeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "detachUsers",
+                  "value": "false",
+                  "description": "Whether to remove this entity's reference from associated user entities."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "legalEntityId",
+                  "description": "(Required) Identifier for legal-entity."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "officeId",
+                  "description": "(Required) Identifier for office."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9e394c93-2512-4397-a0f7-4a0e5e8da5ef",
+              "name": "Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "detachUsers",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fc2ae4bf-78b0-4a73-9f85-40ebf71f29b1",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "detachUsers",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b80ad7da-8ca5-4568-8410-1e3a96381c13",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "detachUsers",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da7f308e-7277-48f4-99c2-228a1631f69a",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "legal-entities",
+                    ":legalEntityId",
+                    "offices",
+                    ":officeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "detachUsers",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "legalEntityId",
+                      "description": "(Required) Identifier for legal-entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "officeId",
+                      "description": "(Required) Identifier for office."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8ed5368f-7b77-4510-a092-d0270bcc9853",
+    "name": "Air Offices API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

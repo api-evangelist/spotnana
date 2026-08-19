@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Authentication API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get oauth2 token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/auth/oauth2-token",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Get oauth2 token using the client credentials.\n{% admonition type=\"warning\" %}\n**Note:** API calls to the `/v2/auth/oauth2-token` and `/get-auth-token` (legacy) endpoints are rate limited.\nWe recommend reusing the existing tokens until they expire.\n{% /admonition %}\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

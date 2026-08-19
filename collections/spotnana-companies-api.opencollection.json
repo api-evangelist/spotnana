@@ -1,0 +1,561 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Companies API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Companies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List companies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies",
+            "params": [
+              {
+                "name": "externalId",
+                "value": "my-external-id",
+                "type": "query",
+                "description": "External id of the entity."
+              },
+              {
+                "name": "companyRole",
+                "value": "ORG",
+                "type": "query",
+                "description": "Filter by a particular role"
+              },
+              {
+                "name": "companyIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter by a list of companies"
+              },
+              {
+                "name": "contractingTmcIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter by contracting TMCs"
+              },
+              {
+                "name": "bookingTmcIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter by booking TMCs"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Indicates the start index to read companies from the server."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to be fetched."
+              }
+            ]
+          },
+          "docs": "This endpoint lists companies. If externalId is provided in query param, only the company having \nthe specified external ID is returned.\n"
+        },
+        {
+          "info": {
+            "name": "Create company",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a company. This is allowed only by TMC_ADMIN and above roles."
+        },
+        {
+          "info": {
+            "name": "Get company",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId",
+            "headers": [
+              {
+                "name": "x-application-id",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947"
+              }
+            ],
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company. External id can be supplied in `X` prefixed form. For instance, if external_id = abc, then Xabc, has to be passed."
+              }
+            ]
+          },
+          "docs": "This endpoint gets a company by ID."
+        },
+        {
+          "info": {
+            "name": "Update company",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates a company by ID."
+        },
+        {
+          "info": {
+            "name": "Delete company",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ]
+          },
+          "docs": "This endpoint deletes a company by ID."
+        },
+        {
+          "info": {
+            "name": "Get company features",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/features",
+            "headers": [
+              {
+                "name": "X-Application-Id",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947"
+              }
+            ],
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "TMC",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get company features"
+        },
+        {
+          "info": {
+            "name": "Update Company Features",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/features",
+            "headers": [
+              {
+                "name": "X-Application-Id",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947"
+              }
+            ],
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "TMC",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update Company Features"
+        },
+        {
+          "info": {
+            "name": "Get company travel content config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/travel-content-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ]
+          },
+          "docs": "Get company travel content config"
+        },
+        {
+          "info": {
+            "name": "Update company travel content config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/travel-content-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update company travel content config"
+        },
+        {
+          "info": {
+            "name": "Delete company travel content config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/travel-content-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ]
+          },
+          "docs": "Delete company travel content config"
+        },
+        {
+          "info": {
+            "name": "Get white label config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/white-label-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "ORG",
+                "type": "query"
+              },
+              {
+                "name": "applicationId",
+                "value": "1234a66b-7493-4f41-908c-58ba81055667",
+                "type": "query",
+                "description": "Application context to get white label config."
+              }
+            ]
+          },
+          "docs": "This endpoint fetches the white label config for the company."
+        },
+        {
+          "info": {
+            "name": "Updates white label config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/white-label-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "ORG",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint stores white label config for the company at different entity levels."
+        },
+        {
+          "info": {
+            "name": "Delete white label config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/white-label-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "ORG",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This endpoint deletes the white label config for the company."
+        },
+        {
+          "info": {
+            "name": "Get company managers config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/managers-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "ORG",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This endpoint fetches the company managers config for the company."
+        },
+        {
+          "info": {
+            "name": "Updates company managers config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/managers-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "ORG",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint stores company managers config (account managers and customer success managers) for the company at different entity levels."
+        },
+        {
+          "info": {
+            "name": "Delete company managers config",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/managers-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "ORG",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This endpoint deletes the company managers config for the company."
+        },
+        {
+          "info": {
+            "name": "Get color config",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/color-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "TMC",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This endpoint fetches the color config for the given entity."
+        },
+        {
+          "info": {
+            "name": "Updates Color config",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/color-config",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "companyRole",
+                "value": "TMC",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint stores Color config for the company at some entity level."
+        },
+        {
+          "info": {
+            "name": "Upload company vendor preferences csv file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/vendor-preferences",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Upload company vendor preferences csv file"
+        },
+        {
+          "info": {
+            "name": "Read company preference tiers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/preference-tiers",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ]
+          },
+          "docs": "Read all preference tiers with respective label for a company."
+        },
+        {
+          "info": {
+            "name": "Store tier levels with labels",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/preference-tiers",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint store the tiers with respective label for a company."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

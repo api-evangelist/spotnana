@@ -1,0 +1,97 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Partner Public Keys API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Partner Public Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List partner public keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/partner-public-keys",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Organization identifier."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter keys by status. Defaults to ACTIVE."
+              }
+            ]
+          },
+          "docs": "Lists partner public keys for a TMC. Accessible to TMC, company, and global admins.\n"
+        },
+        {
+          "info": {
+            "name": "Add partner public key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/partner-public-keys",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Organization identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds one or more public keys for a partner organization to use for token exchange authentication. Accessible to TMC, company, and global admins.\n"
+        },
+        {
+          "info": {
+            "name": "Revoke partner public key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/partner-public-keys/:kid",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Organization identifier."
+              },
+              {
+                "name": "kid",
+                "value": "my-key-1",
+                "type": "path",
+                "description": "Key ID (kid field from the JWK)."
+              }
+            ]
+          },
+          "docs": "Revokes a partner public key identified by kid. Accessible to TMC, company, and global admins.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,94 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air API User API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API User",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get API users for a TMC",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/api-users",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination"
+              }
+            ]
+          },
+          "docs": "Retrieves the list of all active API users associated with the caller's TMC.\n\n**Use this endpoint to:**\n- Audit existing API users and their `clientIds` under a TMC.\n- Look up the `clientId` for a specific API user before rotating its client secret or revoking access.\n\n**Notes:**\n- This endpoint supports pagination using `limit` and `offset` query parameters.\n- The response includes only the `clientId` for each user. The `clientSecret` is never returned.\n- Returns only the API users belonging to"
+        },
+        {
+          "info": {
+            "name": "Create a new API user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/api-users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API user (also known as a machine user) that your application\ncan use to authenticate with Spotnana APIs. Each API user is scoped to a specific TMC and role,\ngiving you control over what level of access the credentials grant.\n\n**Use this endpoint to:**\n- Generate a dedicated `clientId` and `clientSecret` pair that your backend services can use to obtain access tokens.\n- Assign either a TMC admin or a company admin role to scope what the API user can do across your organization.\n- C"
+        },
+        {
+          "info": {
+            "name": "Delete an API user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/api-users/revoke",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Permanently deletes an API user and revokes its access to the Spotnana platform. This immediately \ninvalidates all existing access tokens and removes the API user's ability to authenticate.\n\n**Use this endpoint to:**\n- Revoke access for an API user that is no longer needed.\n- Decommission an integration or clean up unused API users.\n- Free up a slot in your TMC's API user quota (default up to 5 API users per TMC).\n\n**Best practice:**\n\nBefore revoking, ensure no active integrations are using this"
+        },
+        {
+          "info": {
+            "name": "Rotate client secret for an API user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/api-users/rotate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a new `clientSecret` for an existing API user. The old `clientSecret` is \nimmediately invalidated and all existing access tokens for the API user will be expired.\n\n**Use this endpoint to:**\n- Rotate credentials as part of a regular security hygiene practice.\n- Replace a `clientSecret` without deleting the API user.\n- Generate a new `clientSecret` if the old secret was lost or not stored.\n\n**Best practice:**\n- Update your integrations with the new `clientSecret` immediately after rotati"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,273 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Trips API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Trips",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create trip",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/trips",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a trip object. A trip is a container object for all related PNRs associated \nwith a trip.\n"
+        },
+        {
+          "info": {
+            "name": "Get trip",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/trips/:tripId",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "2398199412",
+                "type": "path",
+                "description": "Identifier for trip."
+              }
+            ]
+          },
+          "docs": "Retrieves trip info by ID.\n{% admonition type=\"warning\" name=\"Deprecation notice\" %}\nThe **Get Trip** `/v2/trips/{tripId}` endpoint has been deprecated.\nUse the new **Get trip details** `/v3/trips/{tripId}/detail` endpoint instead.\n{% /admonition %}\n"
+        },
+        {
+          "info": {
+            "name": "Update trip",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/trips/:tripId",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "2398199412",
+                "type": "path",
+                "description": "Identifier for trip."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates trip by ID."
+        },
+        {
+          "info": {
+            "name": "Get trip details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId/detail",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip ID"
+              },
+              {
+                "name": "refreshType",
+                "value": "",
+                "type": "query",
+                "description": "Refresh Type"
+              },
+              {
+                "name": "fetchMappedData",
+                "value": "",
+                "type": "query",
+                "description": "If true, fetch PNRs from already mapped data present in DB"
+              }
+            ]
+          },
+          "docs": "This endpoint gets trip details for a given trip ID.\n{% admonition type=\"info\" %}\n**Note:** For air bookings made via Travelfusion (i.e., `pnrs.data.sourceInfo.bookingSource: TRAVEL_FUSION`)\nthe `refundPolicy` and `exchangePolicy` fields will be empty.\n{% /admonition %}\n"
+        },
+        {
+          "info": {
+            "name": "Update trip details for trip Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update trip details for trip Id"
+        },
+        {
+          "info": {
+            "name": "Delete trip",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint deletes a trip by ID."
+        },
+        {
+          "info": {
+            "name": "List trip summaries for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/users/:userId/list",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier for the user whose trip summaries are requested."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves the list of trip summaries associated with a user."
+        },
+        {
+          "info": {
+            "name": "List trip summaries for a company",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/companies/:companyId/list",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier for the company whose trip summaries are requested."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves the list of trip summaries associated with a company."
+        },
+        {
+          "info": {
+            "name": "List trips",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/list-organisation-trips",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves the list of trips associated with an organization.\n{% admonition type=\"warning\" name=\"Deprecation notice\" %}\nThe **List Trips** `/v2/list-organisation-trips` endpoint has been deprecated.\nUse the new **List trip summaries for a company** `/v3/trips/companies/{companyId}/list` endpoint instead.\n{% /admonition %}\n"
+        },
+        {
+          "info": {
+            "name": "List trip summaries for travelers managed by an arranger",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/arrangers/:arrangerId/list",
+            "params": [
+              {
+                "name": "arrangerId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier for the arranger whose managed travelers trip summaries are requested."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves the list of trip summaries for all travelers managed by a specific arranger.\nThis endpoint can be used for arrangers whose role types are `COMPANY_TRAVEL_ARRANGER` or `TRAVEL_ARRANGER`.\n"
+        },
+        {
+          "info": {
+            "name": "Get trip partner info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/trips/:tripId/booker-email/:bookerEmailId/partner-info",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "2398199412",
+                "type": "path",
+                "description": "Identifier for trip."
+              },
+              {
+                "name": "bookerEmailId",
+                "value": "akanksha@spotnana.com",
+                "type": "path",
+                "description": "Booker Email Id for whom budget info will be fetched."
+              },
+              {
+                "name": "revealReason",
+                "value": "Purchase a Flight",
+                "type": "query",
+                "description": "Reason for revealing the budget card information."
+              }
+            ]
+          },
+          "docs": "This endpoint provides info related to partner for the trip."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

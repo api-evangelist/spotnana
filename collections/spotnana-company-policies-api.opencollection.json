@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Company Policies API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Company Policies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List company policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/policies",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "categories",
+                "value": "",
+                "type": "query",
+                "description": "Filter policies by categories. Defaults to EMPLOYEE if not provided."
+              }
+            ]
+          },
+          "docs": "This endpoint list company policies."
+        },
+        {
+          "info": {
+            "name": "Create policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/policies",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a policy."
+        },
+        {
+          "info": {
+            "name": "Get policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/policies/:policyId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "policyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for policy."
+              }
+            ]
+          },
+          "docs": "This endpoint gets a policy by ID."
+        },
+        {
+          "info": {
+            "name": "Update policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/policies/:policyId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "policyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for policy."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates a policy by ID."
+        },
+        {
+          "info": {
+            "name": "Delete policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/policies/:policyId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "policyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for policy."
+              }
+            ]
+          },
+          "docs": "This endpoint deletes a policy by ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

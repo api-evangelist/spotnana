@@ -1,0 +1,303 @@
+{
+  "item": [
+    {
+      "id": "a5595aad-29b6-4bcc-8c40-8b1a0f8fe30b",
+      "name": "Invoicing",
+      "description": {
+        "content": "APIs to manage invoicing.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "17e97b79-87ee-4dfc-a1af-d5c9b6b9ddbb",
+          "name": "Get Invoice Data",
+          "request": {
+            "name": "Get Invoice Data",
+            "description": {
+              "content": "This endpoint gets the invoice data for given invoice numbers",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "invoicing",
+                "invoice-data"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tmcId\": \"<string>\",\n  \"invoiceNumbers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"invoiceIds\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "02eb5277-c18b-4930-a4be-ff213a6bcda4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "invoicing",
+                    "invoice-data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tmcId\": \"15c94ac1-f540-4916-9243-306a75fbd8a9\",\n  \"invoiceNumbers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"invoiceIds\": [\n    \"15c94ac1-f540-4916-9243-306a75fbd8a9\",\n    \"15c94ac1-f540-4916-9243-306a75fbd8a9\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"invoices\": [\n    {\n      \"invoiceNumber\": \"SPOT-0001232\",\n      \"invoiceId\": \"d694cf94-534e-410e-b66b-11ef970622bc\",\n      \"data\": {\n        \"issuedDate\": {\n          \"iso8601\": \"2017-07-21\"\n        },\n        \"seller\": {\n          \"name\": \"Spotnana India Pvt. Ltd.\",\n          \"address\": \"115 Broadway Suite 04-101,\\nNew York, NY 10006\",\n          \"taxId\": \"TXG239023092\",\n          \"idInfo\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"buyer\": {\n          \"name\": \"John Doe\",\n          \"address\": \"115 Broadway Suite 04-101,\\nNew York, NY 10006\",\n          \"taxId\": \"TXG239023092\",\n          \"idInfo\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"items\": [\n          {\n            \"name\": \"Air Ticket SFO-EWR\",\n            \"identifier\": \"string\",\n            \"type\": \"PURCHASE\",\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"travelerName\": \"John Doe\",\n            \"purchaseType\": \"TRIP_FEE\",\n            \"taxBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"itemNameMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": \"Air Ticket SFO-EWR\",\n            \"identifier\": \"string\",\n            \"type\": \"PURCHASE\",\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"travelerName\": \"John Doe\",\n            \"purchaseType\": \"TRIP_FEE\",\n            \"taxBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"itemNameMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"payments\": [\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"paymentMode\": \"CREDIT_CARD\",\n            \"paymentInstrumentIdentifier\": \"**2343\",\n            \"id\": \"sdkljhafisudlls\",\n            \"transactionTime\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"actualPayment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"exchangePayment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"paymentMode\": \"CREDIT_CARD\",\n            \"paymentInstrumentIdentifier\": \"**2343\",\n            \"id\": \"sdkljhafisudlls\",\n            \"transactionTime\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"actualPayment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"exchangePayment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"productId\": \"123243223\",\n        \"productType\": \"PNR\",\n        \"referenceIds\": [\n          {\n            \"label\": \"AGENCY_REFERENCE\",\n            \"value\": \"122332432\"\n          },\n          {\n            \"label\": \"AGENCY_REFERENCE\",\n            \"value\": \"122332432\"\n          }\n        ],\n        \"invoiceAmount\": {\n          \"base\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currencyCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"convertedAmount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"convertedCurrency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"otherCoinage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"tax\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currencyCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"convertedAmount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"convertedCurrency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"otherCoinage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"taxBreakdown\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"taxBreakdown\": [\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"percentage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"percentage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"regionCode\": \"US\",\n        \"documentType\": \"INVOICE\",\n        \"footerText\": \"This document is proof of payment. If you require a tax invoice, please request one from the travel provider.\",\n        \"supplierType\": \"SABRE\"\n      }\n    },\n    {\n      \"invoiceNumber\": \"SPOT-0001232\",\n      \"invoiceId\": \"d694cf94-534e-410e-b66b-11ef970622bc\",\n      \"data\": {\n        \"issuedDate\": {\n          \"iso8601\": \"2017-07-21\"\n        },\n        \"seller\": {\n          \"name\": \"Spotnana India Pvt. Ltd.\",\n          \"address\": \"115 Broadway Suite 04-101,\\nNew York, NY 10006\",\n          \"taxId\": \"TXG239023092\",\n          \"idInfo\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"buyer\": {\n          \"name\": \"John Doe\",\n          \"address\": \"115 Broadway Suite 04-101,\\nNew York, NY 10006\",\n          \"taxId\": \"TXG239023092\",\n          \"idInfo\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"items\": [\n          {\n            \"name\": \"Air Ticket SFO-EWR\",\n            \"identifier\": \"string\",\n            \"type\": \"PURCHASE\",\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"travelerName\": \"John Doe\",\n            \"purchaseType\": \"TRIP_FEE\",\n            \"taxBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"itemNameMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"name\": \"Air Ticket SFO-EWR\",\n            \"identifier\": \"string\",\n            \"type\": \"PURCHASE\",\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"travelerName\": \"John Doe\",\n            \"purchaseType\": \"TRIP_FEE\",\n            \"taxBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"itemNameMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"payments\": [\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"paymentMode\": \"CREDIT_CARD\",\n            \"paymentInstrumentIdentifier\": \"**2343\",\n            \"id\": \"sdkljhafisudlls\",\n            \"transactionTime\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"actualPayment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"exchangePayment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"paymentMode\": \"CREDIT_CARD\",\n            \"paymentInstrumentIdentifier\": \"**2343\",\n            \"id\": \"sdkljhafisudlls\",\n            \"transactionTime\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"actualPayment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"exchangePayment\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"productId\": \"123243223\",\n        \"productType\": \"PNR\",\n        \"referenceIds\": [\n          {\n            \"label\": \"AGENCY_REFERENCE\",\n            \"value\": \"122332432\"\n          },\n          {\n            \"label\": \"AGENCY_REFERENCE\",\n            \"value\": \"122332432\"\n          }\n        ],\n        \"invoiceAmount\": {\n          \"base\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currencyCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"convertedAmount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"convertedCurrency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"otherCoinage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"tax\": {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"currencyCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"convertedAmount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"convertedCurrency\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"otherCoinage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"taxBreakdown\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"taxBreakdown\": [\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"percentage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"percentage\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"regionCode\": \"US\",\n        \"documentType\": \"INVOICE\",\n        \"footerText\": \"This document is proof of payment. If you require a tax invoice, please request one from the travel provider.\",\n        \"supplierType\": \"SABRE\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7111f46-5e6e-407d-ae3a-499cab9ecade",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "invoicing",
+                    "invoice-data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tmcId\": \"15c94ac1-f540-4916-9243-306a75fbd8a9\",\n  \"invoiceNumbers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"invoiceIds\": [\n    \"15c94ac1-f540-4916-9243-306a75fbd8a9\",\n    \"15c94ac1-f540-4916-9243-306a75fbd8a9\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "398e2c2f-9b4c-4376-8654-a1f3ea5a562e",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "invoicing",
+                    "invoice-data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tmcId\": \"15c94ac1-f540-4916-9243-306a75fbd8a9\",\n  \"invoiceNumbers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"invoiceIds\": [\n    \"15c94ac1-f540-4916-9243-306a75fbd8a9\",\n    \"15c94ac1-f540-4916-9243-306a75fbd8a9\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2eff2fa9-20cc-4933-a453-376eb13e216b",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "invoicing",
+                    "invoice-data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tmcId\": \"15c94ac1-f540-4916-9243-306a75fbd8a9\",\n  \"invoiceNumbers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"invoiceIds\": [\n    \"15c94ac1-f540-4916-9243-306a75fbd8a9\",\n    \"15c94ac1-f540-4916-9243-306a75fbd8a9\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7662be92-4cfe-47aa-8fff-0d8e5a43fc1a",
+    "name": "Air Invoicing API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

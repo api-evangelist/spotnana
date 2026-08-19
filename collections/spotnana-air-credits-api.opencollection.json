@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Air Credits API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Air Credits",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get unused credits for a traveler",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/air/fetch-traveler-unused-credits",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns a list of unused credits associated with a traveler \nalong with details such as the PNR ID, trip ID, airline details, credit expiry date, and the source of booking (e.g., NDC). \nTravelers can redeem unused credit for future bookings with the same airline where the credit was earned.\n"
+        },
+        {
+          "info": {
+            "name": "Get unused credits for a company",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/air/company-unused-credits/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the list of company unused credits which can be used by any employees of the company.\n"
+        },
+        {
+          "info": {
+            "name": "Get transferable unused credits for a company",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/air/company-transferable-unused-credits/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the list of transferable company unused credits which can be used by any employees of the company.\nThe unused credits can be transferred to another traveler.\n"
+        },
+        {
+          "info": {
+            "name": "Migrate Unused Credits of a traveler to and fro Company Credits",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/air/company-credits/migrations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This API will be migrate unused credits from individual credits to company credits and vice versa."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

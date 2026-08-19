@@ -1,0 +1,210 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Offices API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Offices",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List offices of the legal entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/legal-entities/:legalEntityId/offices",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "legalEntityId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093946",
+                "type": "path",
+                "description": "Identifier for legal-entity."
+              },
+              {
+                "name": "externalId",
+                "value": "office-external-id",
+                "type": "query",
+                "description": "External id of the entity."
+              }
+            ]
+          },
+          "docs": "This endpoint list offices of given legal entity. If externalId is provided in query param, the office \nhaving the externalId is fetched.\n"
+        },
+        {
+          "info": {
+            "name": "Create office",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/legal-entities/:legalEntityId/offices",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "legalEntityId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093946",
+                "type": "path",
+                "description": "Identifier for legal-entity."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates an office."
+        },
+        {
+          "info": {
+            "name": "List company offices",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/office-list",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "List company offices"
+        },
+        {
+          "info": {
+            "name": "Get office",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/legal-entities/:legalEntityId/offices/:officeId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "legalEntityId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for legal-entity."
+              },
+              {
+                "name": "officeId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for office."
+              }
+            ]
+          },
+          "docs": "This endpoint gets an office by ID."
+        },
+        {
+          "info": {
+            "name": "Update office",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/legal-entities/:legalEntityId/offices/:officeId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "legalEntityId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for legal-entity."
+              },
+              {
+                "name": "officeId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for office."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoing updates office by ID."
+        },
+        {
+          "info": {
+            "name": "Delete office",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/companies/:companyId/legal-entities/:legalEntityId/offices/:officeId",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for company."
+              },
+              {
+                "name": "legalEntityId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for legal-entity."
+              },
+              {
+                "name": "officeId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for office."
+              },
+              {
+                "name": "detachUsers",
+                "value": "",
+                "type": "query",
+                "description": "Whether to remove this entity's reference from associated user entities."
+              }
+            ]
+          },
+          "docs": "This endpoint deletes office by ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

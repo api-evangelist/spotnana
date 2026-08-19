@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Autocomplete API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Autocomplete",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "airAutocomplete",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air-autocomplete",
+            "params": [
+              {
+                "name": "query",
+                "value": "LHR",
+                "type": "query",
+                "description": "Query to get autocomplete response"
+              }
+            ]
+          },
+          "docs": "airAutocomplete"
+        },
+        {
+          "info": {
+            "name": "Hotel Supplier Autocomplete",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel-supplier-autocomplete",
+            "params": [
+              {
+                "name": "query",
+                "value": "New York Marquis",
+                "type": "query",
+                "description": "Query to get autocomplete response"
+              }
+            ]
+          },
+          "docs": "This endpoint provides autocomplete suggestions for hotels based on the query provided."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

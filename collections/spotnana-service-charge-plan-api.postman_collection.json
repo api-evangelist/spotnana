@@ -1,0 +1,626 @@
+{
+  "item": [
+    {
+      "id": "aa136352-077c-4462-a120-30e59cc42215",
+      "name": "Service Charge Plan",
+      "description": {
+        "content": "APIs to manage service charge plans.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0e88a2fa-4e21-4ff2-82bd-88cab663ba8e",
+          "name": "Get per-trip service charge configuration",
+          "request": {
+            "name": "Get per-trip service charge configuration",
+            "description": {
+              "content": "Get per-trip service charge configuration for company",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "license",
+                "company",
+                ":companyId",
+                "service-charge",
+                "per-trip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Company ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "983314eb-4344-4aba-945e-106c295be42c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "license",
+                    "company",
+                    ":companyId",
+                    "service-charge",
+                    "per-trip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Company ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"config\": {\n    \"charges\": [\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"defaultCurrencyCode\": \"GBP\",\n    \"tierCharges\": [\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  },\n  \"enabled\": true,\n  \"enableDisableOpSupported\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24a2f220-2dd0-46f9-8ec5-edbd483a3198",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "license",
+                    "company",
+                    ":companyId",
+                    "service-charge",
+                    "per-trip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Company ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "301c563f-4d5b-4f95-906e-5c44f9782646",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "license",
+                    "company",
+                    ":companyId",
+                    "service-charge",
+                    "per-trip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Company ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31403974-e1c6-4947-9cbc-03257a0e1450",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "license",
+                    "company",
+                    ":companyId",
+                    "service-charge",
+                    "per-trip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Company ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cbe2fa85-0f6d-4deb-9108-ff724807a07c",
+          "name": "Set per-trip service charge configuration",
+          "request": {
+            "name": "Set per-trip service charge configuration",
+            "description": {
+              "content": "Set per-trip service charge configuration for company",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "license",
+                "company",
+                ":companyId",
+                "service-charge",
+                "per-trip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Company ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"charges\": [\n      {\n        \"amount\": \"<double>\",\n        \"currencyCode\": \"<string>\",\n        \"convertedAmount\": \"<double>\",\n        \"convertedCurrency\": \"<string>\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"<string>\",\n            \"amount\": \"<double>\",\n            \"conversionRate\": \"<double>\",\n            \"preferredCurrencyConversionRate\": \"<double>\",\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"<string>\",\n            \"amount\": \"<double>\",\n            \"conversionRate\": \"<double>\",\n            \"preferredCurrencyConversionRate\": \"<double>\",\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"amount\": \"<double>\",\n        \"currencyCode\": \"<string>\",\n        \"convertedAmount\": \"<double>\",\n        \"convertedCurrency\": \"<string>\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"<string>\",\n            \"amount\": \"<double>\",\n            \"conversionRate\": \"<double>\",\n            \"preferredCurrencyConversionRate\": \"<double>\",\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"<string>\",\n            \"amount\": \"<double>\",\n            \"conversionRate\": \"<double>\",\n            \"preferredCurrencyConversionRate\": \"<double>\",\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"defaultCurrencyCode\": \"<string>\",\n    \"tierCharges\": [\n      {\n        \"tier\": \"BASIC\",\n        \"charges\": [\n          {\n            \"amount\": \"<double>\",\n            \"currencyCode\": \"<string>\",\n            \"convertedAmount\": \"<double>\",\n            \"convertedCurrency\": \"<string>\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": \"<double>\",\n            \"currencyCode\": \"<string>\",\n            \"convertedAmount\": \"<double>\",\n            \"convertedCurrency\": \"<string>\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"tier\": \"BASIC\",\n        \"charges\": [\n          {\n            \"amount\": \"<double>\",\n            \"currencyCode\": \"<string>\",\n            \"convertedAmount\": \"<double>\",\n            \"convertedCurrency\": \"<string>\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": \"<double>\",\n            \"currencyCode\": \"<string>\",\n            \"convertedAmount\": \"<double>\",\n            \"convertedCurrency\": \"<string>\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "61ee8666-4b99-461d-a223-bc9f3df89e9a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "license",
+                    "company",
+                    ":companyId",
+                    "service-charge",
+                    "per-trip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Company ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"charges\": [\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"defaultCurrencyCode\": \"GBP\",\n    \"tierCharges\": [\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6552c84f-5a8e-4420-aad1-f001419b70ea",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "license",
+                    "company",
+                    ":companyId",
+                    "service-charge",
+                    "per-trip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Company ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"charges\": [\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"defaultCurrencyCode\": \"GBP\",\n    \"tierCharges\": [\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80538bfc-704b-4735-81b8-64a7878a7dc9",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "license",
+                    "company",
+                    ":companyId",
+                    "service-charge",
+                    "per-trip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Company ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"charges\": [\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"defaultCurrencyCode\": \"GBP\",\n    \"tierCharges\": [\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a44fcebc-da0a-4e1e-a98d-0b30a8543810",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "license",
+                    "company",
+                    ":companyId",
+                    "service-charge",
+                    "per-trip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Company ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"config\": {\n    \"charges\": [\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"amount\": 510,\n        \"currencyCode\": \"GBP\",\n        \"convertedAmount\": 715.42,\n        \"convertedCurrency\": \"USD\",\n        \"otherCoinage\": [\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"coinageCode\": \"BREX_POINTS\",\n            \"amount\": 1000,\n            \"conversionRate\": 0.01,\n            \"preferredCurrencyConversionRate\": 0.01,\n            \"otherCoinageMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    \"defaultCurrencyCode\": \"GBP\",\n    \"tierCharges\": [\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      },\n      {\n        \"tier\": \"SEAT1A\",\n        \"charges\": [\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"amount\": 510,\n            \"currencyCode\": \"GBP\",\n            \"convertedAmount\": 715.42,\n            \"convertedCurrency\": \"USD\",\n            \"otherCoinage\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4b7c4d3f-8e67-40cc-aa4d-b0f2567af5fd",
+    "name": "Air Service Charge Plan API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

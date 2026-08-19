@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Roles API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Roles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get RBAC info for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/users/:userId/rbac-info",
+            "params": [
+              {
+                "name": "userId",
+                "value": "1234a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier of the user."
+              }
+            ]
+          },
+          "docs": "Returns RBAC information for a user indicating what permissions the user has."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

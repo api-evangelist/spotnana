@@ -1,0 +1,636 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Users API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "query",
+                "description": "Identifier for company to search user for. Please specify one of the companyId or tmcId."
+              },
+              {
+                "name": "tmcId",
+                "value": "b83e9704-2e8e-4256-90bf-2e59c1bcf9f2",
+                "type": "query",
+                "description": "Identifier for TMC to search user for. Please specify one of the companyId or tmcId."
+              },
+              {
+                "name": "email",
+                "value": "user@example.com",
+                "type": "query",
+                "description": "Email ID of the user."
+              },
+              {
+                "name": "externalId",
+                "value": "123456",
+                "type": "query",
+                "description": "The partner-assigned user identifier."
+              },
+              {
+                "name": "employeeId",
+                "value": "EMP123456",
+                "type": "query",
+                "description": "Employee ID of the user."
+              },
+              {
+                "name": "includeInactive",
+                "value": "true",
+                "type": "query",
+                "description": "If true, include inactive users in the response."
+              }
+            ]
+          },
+          "docs": "This endpoint queries user of given company based on given identifier like email or external ID.\nIn case includeInactive is true, inactive users are also included in the response."
+        },
+        {
+          "info": {
+            "name": "Create user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint is used to create user profiles in Spotnana. This is typically used by\npartner companies to onboard user profiles of their customer organizations.\n"
+        },
+        {
+          "info": {
+            "name": "List users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/users/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "List users of a specific TMC or a company."
+        },
+        {
+          "info": {
+            "name": "Get user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              },
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "Include inactive users in the response."
+              }
+            ]
+          },
+          "docs": "This endpoint gets user details for user ID."
+        },
+        {
+          "info": {
+            "name": "Update user",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update user"
+        },
+        {
+          "info": {
+            "name": "Delete user",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ]
+          },
+          "docs": "This endpoint deletes a user by user ID."
+        },
+        {
+          "info": {
+            "name": "Get user business info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/business-info",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              },
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "Include inactive users."
+              }
+            ]
+          },
+          "docs": "This endpoint gets user business info by user ID."
+        },
+        {
+          "info": {
+            "name": "Update user business info",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/business-info",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              },
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "Include inactive users."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates user business info by user ID."
+        },
+        {
+          "info": {
+            "name": "Get user personal info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/personal-info",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              },
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "Include inactive users."
+              }
+            ]
+          },
+          "docs": "This endpoint gets user personal info by user ID."
+        },
+        {
+          "info": {
+            "name": "Update user personal info",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/personal-info",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              },
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "Include inactive users."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates user personal info by user ID."
+        },
+        {
+          "info": {
+            "name": "Get user travel preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/travel-preferences",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ]
+          },
+          "docs": "Get user travel preferences"
+        },
+        {
+          "info": {
+            "name": "Update user travel preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/travel-preferences",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update user travel preferences"
+        },
+        {
+          "info": {
+            "name": "Get user membership info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/membership-info",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ]
+          },
+          "docs": "Get user membership info"
+        },
+        {
+          "info": {
+            "name": "Update user membership info",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/membership-info",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update user membership info"
+        },
+        {
+          "info": {
+            "name": "Get user roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/roles",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ]
+          },
+          "docs": "This endpoint gets user roles."
+        },
+        {
+          "info": {
+            "name": "Update user roles",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/roles",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates user roles."
+        },
+        {
+          "info": {
+            "name": "Get notification preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/notification-preferences",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ]
+          },
+          "docs": "This endpoint gets notification preferences for a user."
+        },
+        {
+          "info": {
+            "name": "Update notification preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/notification-preferences",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates notification preferences for a user."
+        },
+        {
+          "info": {
+            "name": "Get user travel arrangers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/travel-arrangers",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ]
+          },
+          "docs": "Get user travel arrangers"
+        },
+        {
+          "info": {
+            "name": "Get user's external ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/external-id",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              },
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "Include inactive users."
+              }
+            ]
+          },
+          "docs": "This endpoint gets user's external ID by user ID."
+        },
+        {
+          "info": {
+            "name": "Update user's external ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/external-id",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              },
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "Include inactive users."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates user's external ID by user ID."
+        },
+        {
+          "info": {
+            "name": "Activate a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/activate",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ]
+          },
+          "docs": "This endpoint activates a deactivated user."
+        },
+        {
+          "info": {
+            "name": "List favorites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/favorites",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "Filter by favorite types. If empty, returns all types."
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search query to filter favorites by display name."
+              }
+            ]
+          },
+          "docs": "List favorite items for a user, optionally filtered by type and search query."
+        },
+        {
+          "info": {
+            "name": "Add favorite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/favorites",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a favorite item for a user."
+        },
+        {
+          "info": {
+            "name": "Remove favorite",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/favorites/:favoriteId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              },
+              {
+                "name": "favoriteId",
+                "value": "",
+                "type": "path",
+                "description": "Identifier for the favorite item."
+              }
+            ]
+          },
+          "docs": "Remove a favorite item for a user."
+        },
+        {
+          "info": {
+            "name": "Get user policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/users/:userId/applicable-policies",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for user."
+              }
+            ]
+          },
+          "docs": "Get user policies"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,61 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Loyalty Programs API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Loyalty Programs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Loyalty Programs (Air)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/loyalty-programs",
+            "params": [
+              {
+                "name": "marketingAirline",
+                "value": "AA",
+                "type": "query",
+                "description": "IATA code of the marketing airline for which the loyalty programs need to be fetched."
+              },
+              {
+                "name": "operatingAirline",
+                "value": "BA",
+                "type": "query",
+                "description": "IATA code of the operating airline for which the loyalty programs need to be fetched."
+              },
+              {
+                "name": "travelerId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "query",
+                "description": "User ID of the traveler."
+              },
+              {
+                "name": "travelArrangerId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "query",
+                "description": "User ID of the travel arranger."
+              }
+            ]
+          },
+          "docs": "Returns all the active loyalty programs for the requested marketing and/or operating airlines."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

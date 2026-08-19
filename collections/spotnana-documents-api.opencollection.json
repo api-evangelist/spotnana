@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Documents API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/documents",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "query",
+                "description": "Entity type against which document is associated."
+              },
+              {
+                "name": "entityId",
+                "value": "123124",
+                "type": "query",
+                "description": "Entity Id for the given entity type."
+              }
+            ]
+          },
+          "docs": "List all the uploaded documents for a specific entity ID and type."
+        },
+        {
+          "info": {
+            "name": "Upload a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/documents",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Upload a document for a specific entity type (e.g., a PNR)."
+        },
+        {
+          "info": {
+            "name": "Get document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/documents/:documentId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "f49d00fe-1eda-4304-ba79-a980f565281d",
+                "type": "path",
+                "description": "Document Id"
+              }
+            ]
+          },
+          "docs": "Retrieve a document."
+        },
+        {
+          "info": {
+            "name": "Delete document",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/documents/:documentId",
+            "params": [
+              {
+                "name": "documentId",
+                "value": "f49d00fe-1eda-4304-ba79-a980f565281d",
+                "type": "path",
+                "description": "Document Id"
+              }
+            ]
+          },
+          "docs": "Delete a document."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,351 @@
+{
+  "item": [
+    {
+      "id": "c4434f21-d9a6-4173-a3cd-d4a32988d086",
+      "name": "Loyalty Programs",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "41290b33-36ae-463f-b7ec-42ae45e10fe5",
+          "name": "Get Loyalty Programs (Air)",
+          "request": {
+            "name": "Get Loyalty Programs (Air)",
+            "description": {
+              "content": "Returns all the active loyalty programs for the requested marketing and/or operating airlines.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "air",
+                "loyalty-programs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "marketingAirline",
+                  "value": "<string>",
+                  "description": "IATA code of the marketing airline for which the loyalty programs need to be fetched."
+                },
+                {
+                  "disabled": false,
+                  "key": "operatingAirline",
+                  "value": "<string>",
+                  "description": "IATA code of the operating airline for which the loyalty programs need to be fetched."
+                },
+                {
+                  "disabled": false,
+                  "key": "travelerId",
+                  "value": "<string>",
+                  "description": "User ID of the traveler."
+                },
+                {
+                  "disabled": false,
+                  "key": "travelArrangerId",
+                  "value": "<string>",
+                  "description": "User ID of the travel arranger."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d86bec1b-e3ec-416d-afea-2ae660fca7a1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "air",
+                    "loyalty-programs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "marketingAirline",
+                      "value": "AA"
+                    },
+                    {
+                      "key": "operatingAirline",
+                      "value": "BA"
+                    },
+                    {
+                      "key": "travelerId",
+                      "value": "4974a66b-7493-4f41-908c-58ba81093947"
+                    },
+                    {
+                      "key": "travelArrangerId",
+                      "value": "4974a66b-7493-4f41-908c-58ba81093947"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"loyaltyPrograms\": [\n    {\n      \"programName\": \"AA Advantage\",\n      \"airlineCode\": \"AA\",\n      \"airlineName\": \"American Airlines\",\n      \"loyaltyType\": \"OWN\"\n    },\n    {\n      \"programName\": \"AA Advantage\",\n      \"airlineCode\": \"AA\",\n      \"airlineName\": \"American Airlines\",\n      \"loyaltyType\": \"OWN\"\n    }\n  ],\n  \"applicableLoyalties\": [\n    {\n      \"id\": \"firstId\",\n      \"type\": \"AIR\",\n      \"issuedBy\": \"firstIssuedBy\",\n      \"appliedTo\": [\n        \"TAJ\",\n        \"TAJ\"\n      ],\n      \"linked\": false,\n      \"tier\": \"GOLD\"\n    },\n    {\n      \"id\": \"firstId\",\n      \"type\": \"AIR\",\n      \"issuedBy\": \"firstIssuedBy\",\n      \"appliedTo\": [\n        \"TAJ\",\n        \"TAJ\"\n      ],\n      \"linked\": false,\n      \"tier\": \"GOLD\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a5da6c8-205b-4b0a-9a95-771b1e9ddb7c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "air",
+                    "loyalty-programs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "marketingAirline",
+                      "value": "AA"
+                    },
+                    {
+                      "key": "operatingAirline",
+                      "value": "BA"
+                    },
+                    {
+                      "key": "travelerId",
+                      "value": "4974a66b-7493-4f41-908c-58ba81093947"
+                    },
+                    {
+                      "key": "travelArrangerId",
+                      "value": "4974a66b-7493-4f41-908c-58ba81093947"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4dbf85c-b2ac-4997-98a1-e51ad9072633",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "air",
+                    "loyalty-programs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "marketingAirline",
+                      "value": "AA"
+                    },
+                    {
+                      "key": "operatingAirline",
+                      "value": "BA"
+                    },
+                    {
+                      "key": "travelerId",
+                      "value": "4974a66b-7493-4f41-908c-58ba81093947"
+                    },
+                    {
+                      "key": "travelArrangerId",
+                      "value": "4974a66b-7493-4f41-908c-58ba81093947"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a927c82c-5827-4b4e-a361-6982c2b73e11",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "air",
+                    "loyalty-programs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "marketingAirline",
+                      "value": "AA"
+                    },
+                    {
+                      "key": "operatingAirline",
+                      "value": "BA"
+                    },
+                    {
+                      "key": "travelerId",
+                      "value": "4974a66b-7493-4f41-908c-58ba81093947"
+                    },
+                    {
+                      "key": "travelArrangerId",
+                      "value": "4974a66b-7493-4f41-908c-58ba81093947"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8e0a93da-1202-48f7-a70c-2ec75b2ed99c",
+    "name": "Air Loyalty Programs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

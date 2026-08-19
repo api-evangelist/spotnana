@@ -1,0 +1,334 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Trip PNRs API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Trip PNRs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create PNR",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId/pnrs",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new Passenger Name Record (PNR). A PNR represents a booking (air, hotel, rail, or car) made on the Spotnana platform.\nYou can also use this endpoint to import bookings made from external sources into the Spotnana platform.\n"
+        },
+        {
+          "info": {
+            "name": "Get PNR",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId/pnrs/:pnrId",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip ID"
+              },
+              {
+                "name": "pnrId",
+                "value": "",
+                "type": "path",
+                "description": "Pnr Id"
+              }
+            ]
+          },
+          "docs": "This endpoint gets PNR for a given trip ID and PNR ID."
+        },
+        {
+          "info": {
+            "name": "Update PNR",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId/pnrs/:pnrId",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip ID"
+              },
+              {
+                "name": "pnrId",
+                "value": "",
+                "type": "path",
+                "description": "Pnr Id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates PNR by ID."
+        },
+        {
+          "info": {
+            "name": "Add Remark",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId/pnrs/:pnrId/remarks",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip ID"
+              },
+              {
+                "name": "pnrId",
+                "value": "",
+                "type": "path",
+                "description": "PNR ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint provided adding third party remarks to the given PNR."
+        },
+        {
+          "info": {
+            "name": "Finalize the given pnr.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId/pnrs/:pnrId/finalize",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip Id"
+              },
+              {
+                "name": "pnrId",
+                "value": "",
+                "type": "path",
+                "description": "Pnr Id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint changes the metadata of PNR to finalized and triggers supplier actions if required."
+        },
+        {
+          "info": {
+            "name": "Suspend the given pnr.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId/pnrs/:pnrId/suspend",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip Id"
+              },
+              {
+                "name": "pnrId",
+                "value": "",
+                "type": "path",
+                "description": "Pnr Id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint suspends the PNR, transitioning it into a read-only state.\nOnce suspended, updates via OBT will be restricted.\nThis API serves various use cases, such as price optimization and rebooking.\n"
+        },
+        {
+          "info": {
+            "name": "Cancel PNR",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/trips/:tripId/pnrs/:pnrId/cancel",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip ID"
+              },
+              {
+                "name": "pnrId",
+                "value": "",
+                "type": "path",
+                "description": "PNR ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint cancels PNR or part of PNR object.In case of partial PNR cancel we can cancel journey/ticket."
+        },
+        {
+          "info": {
+            "name": "Get cancellation details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/trips/:tripId/pnrs/:pnrId/cancellation-details",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip ID."
+              },
+              {
+                "name": "pnrId",
+                "value": "",
+                "type": "path",
+                "description": "PNR ID."
+              }
+            ]
+          },
+          "docs": "This endpoint gets cancellation details for a given trip ID and PNR ID."
+        },
+        {
+          "info": {
+            "name": "Download PNR invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/trips/:tripId/pnrs/:pnrId/download-invoice",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip Id"
+              },
+              {
+                "name": "pnrId",
+                "value": "",
+                "type": "path",
+                "description": "Pnr Id"
+              }
+            ]
+          },
+          "docs": "This endpoint downloads invoice on demand for a given trip ID and PNR ID."
+        },
+        {
+          "info": {
+            "name": "Process the PNR approval",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/pnrs/:pnrId/process-approval",
+            "params": [
+              {
+                "name": "pnrId",
+                "value": "6926658168",
+                "type": "path",
+                "description": "Pnr Id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Approve or decline a PNR."
+        },
+        {
+          "info": {
+            "name": "Get PNR by external Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/pnrs",
+            "params": [
+              {
+                "name": "externalId",
+                "value": "external-pnr-id",
+                "type": "query",
+                "description": "External ID"
+              }
+            ]
+          },
+          "docs": "This endpoint gets PNR Id and Trip Id for a given external Id."
+        },
+        {
+          "info": {
+            "name": "Find Pnr details like BookingId and TripId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/pnrs/search",
+            "params": [
+              {
+                "name": "searchText",
+                "value": "",
+                "type": "query",
+                "description": "The Source Pnr or Ticket Number or Vendor Confirmation to be searched"
+              },
+              {
+                "name": "inputType",
+                "value": "",
+                "type": "query",
+                "description": "The type of Search text,i.e, SOURCE_PNR or TICKET_NUMBER or VENDOR_CONFIRMATION"
+              }
+            ]
+          },
+          "docs": "This API gets Pnr details for a given Source Pnr/ Ticket Number/ Vendor Confirmation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,157 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Personal Payment Sources API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Personal Payment Sources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List personal payment sources for a User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/payment/users/:userId/payment-sources",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for User Profile"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Indicates from where in the list of Payment Sources the server should start."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to be fetched for the query."
+              }
+            ]
+          },
+          "docs": "List personal payment sources for a User"
+        },
+        {
+          "info": {
+            "name": "Create Personal Payment Source.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/payment/users/:userId/payment-sources",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for User Profile"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create Personal Payment Source."
+        },
+        {
+          "info": {
+            "name": "Fetch a personal payment source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/payment/users/:userId/payment-sources/:paymentSourceId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for User Profile"
+              },
+              {
+                "name": "paymentSourceId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for personal paymentSource."
+              }
+            ]
+          },
+          "docs": "Fetch a personal payment source"
+        },
+        {
+          "info": {
+            "name": "Update a Personal Payment Source.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/payment/users/:userId/payment-sources/:paymentSourceId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for User Profile"
+              },
+              {
+                "name": "paymentSourceId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for personal paymentSource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a Personal Payment Source."
+        },
+        {
+          "info": {
+            "name": "Delete a Personal Payment Source.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/payment/users/:userId/payment-sources/:paymentSourceId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for User Profile"
+              },
+              {
+                "name": "paymentSourceId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Identifier for personal paymentSource."
+              }
+            ]
+          },
+          "docs": "Delete a Personal Payment Source."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

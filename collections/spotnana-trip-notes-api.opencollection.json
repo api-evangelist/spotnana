@@ -1,0 +1,91 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Trip Notes API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Trip Notes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Read all agent notes for a trip",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/trips/:tripId/agent-notes",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip Id"
+              }
+            ]
+          },
+          "docs": "Retrieves all agent notes associated with a specific trip. \nEach note in the response includes the message, the sender's basic information, \nand timestamps.\n\nUse this endpoint to:\n- Review the full history of agent notes added to a trip.\n- Identify who created each note and when, using the `senderInfo`, `createdAt`, and `updatedAt` fields.\n\n**Note:** The response may contain a `pnrId` if it was added during the note creation. Otherwise, the `pnrId` field is omitted in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Create a note for agents",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/trips/:tripId/agent-notes",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip Id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a note addressed to the agents assigned for a specific trip. \nAgent notes are used to communicate trip-related information to agents handling the trip, \nsuch as special instructions, updates made on the booking, or any unresolved issues reported by the traveler.\n\nUse this endpoint to:\n- Add a note to a trip so the agents working on it will have all the latest information about the trip.\n- Use the optional `pnrId` field in the request body to link a note to a specific PNR within a trip.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an agent note",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/trips/:tripId/agent-notes/:noteId",
+            "params": [
+              {
+                "name": "tripId",
+                "value": "",
+                "type": "path",
+                "description": "Trip Id"
+              },
+              {
+                "name": "noteId",
+                "value": "",
+                "type": "path",
+                "description": "Note Id"
+              }
+            ]
+          },
+          "docs": "Deletes an existing agent note from a trip. \nOnce deleted, the note cannot be retrieved later.\n\nUse this endpoint to:\n- Remove an agent note that is no longer relevant or was added by mistake.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

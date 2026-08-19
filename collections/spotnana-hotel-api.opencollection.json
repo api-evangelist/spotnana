@@ -1,0 +1,183 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Hotel API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Hotel",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get hotel search results",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get all available hotels for the requested search parameters."
+        },
+        {
+          "info": {
+            "name": "Get hotel details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel/details",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get details for a specific hotel."
+        },
+        {
+          "info": {
+            "name": "Verify hotel price",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel/price-check",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Checks if the previously selected hotel price has been modified. To indicate the change in hotel price, the `priceChange` field in the response will be set to `true` and the `price`  object will contain the latest hotel price. If the price remains unchanged, the `priceChange` field will be set as `false` and the `price` object will contain the original price.\n"
+        },
+        {
+          "info": {
+            "name": "Validate rebooking for price optimization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel/validate-rebooking",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates if a hotel rebooking can be performed for price optimization purpose.\nThe Source PNR ID provided in the request will be checked if it's eligible for rebooking. \nIn the response, if `isValid` is `true` then users can proceed to checkout flow, which cancels the existing Source PNR \nand creates a new PNR to save booking cost.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new hotel booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel/create-pnr",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new hotel booking for the given request parameters."
+        },
+        {
+          "info": {
+            "name": "Cancel hotel pnr",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel/pnrs/:pnrId/cancel-pnr",
+            "params": [
+              {
+                "name": "pnrId",
+                "value": "4974a66b",
+                "type": "path",
+                "description": "Pnr Id of the Pnr to be cancelled."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint deletes a pnr by pnrID."
+        },
+        {
+          "info": {
+            "name": "Modify hotel details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel/pnrs/:pnrId/modify-details",
+            "params": [
+              {
+                "name": "pnrId",
+                "value": "4974a66b",
+                "type": "path",
+                "description": "PNR ID of the hotel booking for which the details need to be modified."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Modify the details of an existing hotel booking. \nThis API displays the list of modifications available for the same hotel. \nCurrently, the details such as occupancy date and room type can be modified. \nTo confirm the selected changes, use the **Modify hotel booking** API.\n"
+        },
+        {
+          "info": {
+            "name": "Modify hotel booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel/pnrs/:pnrId/modify-book",
+            "params": [
+              {
+                "name": "pnrId",
+                "value": "4974a66b",
+                "type": "path",
+                "description": "PNR ID of the hotel booking that needs to be modified."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Modify an existing hotel booking based on the request parameters.\nThis API is used to confirm the requested changes for the booking.\n"
+        },
+        {
+          "info": {
+            "name": "Get hotel ancillaries",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/hotel/ancillaries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves available ancillaries (add-ons, extras, services) for a selected hotel booking. Ancillaries may include breakfast, parking, early check-in, late checkout, spa services, and other optional services.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

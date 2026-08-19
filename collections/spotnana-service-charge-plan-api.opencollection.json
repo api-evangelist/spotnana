@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Service Charge Plan API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Service Charge Plan",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get per-trip service charge configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/license/company/:companyId/service-charge/per-trip",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "path",
+                "description": "Company ID"
+              }
+            ]
+          },
+          "docs": "Get per-trip service charge configuration for company"
+        },
+        {
+          "info": {
+            "name": "Set per-trip service charge configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/license/company/:companyId/service-charge/per-trip",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "path",
+                "description": "Company ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set per-trip service charge configuration for company"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

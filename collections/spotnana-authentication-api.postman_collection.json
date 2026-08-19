@@ -1,0 +1,353 @@
+{
+  "item": [
+    {
+      "id": "23d26203-6214-4f6f-a069-6fdbc83f5cba",
+      "name": "Authentication",
+      "description": {
+        "content": "Authentication APIs for user login, logout, and token management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2bafccb4-8d4f-41fe-aa6f-56fc86e78162",
+          "name": "Get oauth2 token",
+          "request": {
+            "name": "Get oauth2 token",
+            "description": {
+              "content": "Get oauth2 token using the client credentials.\n{% admonition type=\"warning\" %}\n**Note:** API calls to the `/v2/auth/oauth2-token` and `/get-auth-token` (legacy) endpoints are rate limited.\nWe recommend reusing the existing tokens until they expire.\n{% /admonition %}\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "auth",
+                "oauth2-token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "grant_type",
+                  "value": "<string>",
+                  "description": "(Required) Supported values are `client_credentials` and `urn:ietf:params:oauth:grant-type:token-exchange`."
+                },
+                {
+                  "disabled": false,
+                  "key": "client_id",
+                  "value": "<string>",
+                  "description": "(Required) Identifier for the API user."
+                },
+                {
+                  "disabled": false,
+                  "key": "client_secret",
+                  "value": "<string>",
+                  "description": "(Required) Password"
+                },
+                {
+                  "disabled": false,
+                  "key": "audience",
+                  "value": "<string>",
+                  "description": "Identifies the API being accessed in Spotnana."
+                },
+                {
+                  "disabled": false,
+                  "key": "subject_token",
+                  "value": "<string>",
+                  "description": "A security token that represents the identity of the entity on whose behalf the request \nis being made.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "subject_token_type",
+                  "value": "<string>",
+                  "description": "Indicates the type of the `subject_token` used for token exchange. \nThis field supports the valid types as per the OAUTH 2.0 security framework.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "scope",
+                  "value": "<string>",
+                  "description": "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \nRFC6749 OAuth 2.0 framework, that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4c334ca5-1906-48bd-ba23-ad8d1b9f539d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "auth",
+                    "oauth2-token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Supported values are `client_credentials` and `urn:ietf:params:oauth:grant-type:token-exchange`.",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Identifier for the API user.",
+                        "type": "text/plain"
+                      },
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Password",
+                        "type": "text/plain"
+                      },
+                      "key": "client_secret",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Identifies the API being accessed in Spotnana.",
+                        "type": "text/plain"
+                      },
+                      "key": "audience",
+                      "value": "https://apis.spotnana.com/v2"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "A security token that represents the identity of the entity on whose behalf the request \nis being made.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "subject_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Indicates the type of the `subject_token` used for token exchange. \nThis field supports the valid types as per the OAUTH 2.0 security framework.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "subject_token_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \nRFC6749 OAuth 2.0 framework, that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "scope",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"access_token\": \"string\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 6337,\n  \"refresh_token\": \"string\",\n  \"scope\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4c0f9ac5-c416-41ca-b740-120c7b41a7b1",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "auth",
+                    "oauth2-token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Supported values are `client_credentials` and `urn:ietf:params:oauth:grant-type:token-exchange`.",
+                        "type": "text/plain"
+                      },
+                      "key": "grant_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Identifier for the API user.",
+                        "type": "text/plain"
+                      },
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Password",
+                        "type": "text/plain"
+                      },
+                      "key": "client_secret",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Identifies the API being accessed in Spotnana.",
+                        "type": "text/plain"
+                      },
+                      "key": "audience",
+                      "value": "https://apis.spotnana.com/v2"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "A security token that represents the identity of the entity on whose behalf the request \nis being made.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "subject_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Indicates the type of the `subject_token` used for token exchange. \nThis field supports the valid types as per the OAUTH 2.0 security framework.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "subject_token_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \nRFC6749 OAuth 2.0 framework, that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "scope",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f958bbff-4ed3-46a9-8530-744bf9b0bb70",
+    "name": "Air Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Tenant Encryption API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tenant Encryption",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create or rotate tenant CMK",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v3/tenant-encryption/:companyId/key",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "4974a66b-7493-4f41-908c-58ba81093947",
+                "type": "path",
+                "description": "Tenant (company) identifier"
+              }
+            ]
+          },
+          "docs": "First call provisions a Spotnana-managed CMK and DEK.\nSubsequent calls rotate the CMK and re-wrap the existing DEK.\nReturns 429 if called within the one-hour cooldown window.\nRequires the COMPANY_MANAGEMENT WRITE permission on the company.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

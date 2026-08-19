@@ -1,0 +1,510 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Events API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a draft event. Optionally pass newTraveler to create a new traveler and add them to the event. If the traveler already exists, the request fails — use the travellers field with the existing userId.\n"
+        },
+        {
+          "info": {
+            "name": "Get event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "EventType of the event."
+              }
+            ]
+          },
+          "docs": "Get event details for the specified event ID."
+        },
+        {
+          "info": {
+            "name": "Delete a draft event",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ]
+          },
+          "docs": "Delete a draft (i.e., unpublished) event. A deleted event cannot be accessed or viewed again."
+        },
+        {
+          "info": {
+            "name": "Get event by external ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/read-by-external-id",
+            "params": [
+              {
+                "name": "externalId",
+                "value": "",
+                "type": "query",
+                "description": "External ID"
+              },
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "query",
+                "description": "Company ID"
+              }
+            ]
+          },
+          "docs": "Get event details using the event's `externalId`. External IDs are unique identifiers which can be set based on the company's preference.\n"
+        },
+        {
+          "info": {
+            "name": "Add travelers to an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/travelers/add",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add the list of travelers to be invited to the event."
+        },
+        {
+          "info": {
+            "name": "Remove travelers from an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/travelers/remove",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Remove travelers from an event. This endpoint allows you to remove up to 10 travelers per API call."
+        },
+        {
+          "info": {
+            "name": "List events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/list",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "List all the events that match the specified criteria in the request."
+        },
+        {
+          "info": {
+            "name": "Publish event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/publish",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ]
+          },
+          "docs": "Publish a draft event."
+        },
+        {
+          "info": {
+            "name": "Edit basic details of an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/edit-basic-info",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit the basic information of an event such as the event name, description, date and time, location, and contacts."
+        },
+        {
+          "info": {
+            "name": "Update event booking guidelines",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/edit-booking-guidelines",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the booking guidelines for an event.\nYou can update booking guidelines such as maximum number of guests allowed to accompany a traveler, \narrival and departure window for the event, payment methods, and allowed travel types.\n"
+        },
+        {
+          "info": {
+            "name": "Get traveler RSVP",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/travelers/:travelerId/rsvp",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              },
+              {
+                "name": "travelerId",
+                "value": "",
+                "type": "path",
+                "description": "Traveler User ID"
+              }
+            ]
+          },
+          "docs": "Get the RSVP status and the RSVP response for a traveler."
+        },
+        {
+          "info": {
+            "name": "Set traveler RSVP",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/travelers/:travelerId/rsvp",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              },
+              {
+                "name": "travelerId",
+                "value": "",
+                "type": "path",
+                "description": "Traveler User ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the RSVP status and the RSVP response for a traveler."
+        },
+        {
+          "info": {
+            "name": "Send invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/invite/send",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send event invites to the travelers via email. \nThe invites can be sent to all travelers using a single API call, or you can send invites to specific travelers.\n"
+        },
+        {
+          "info": {
+            "name": "Send a test invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/invite/test",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ]
+          },
+          "docs": "Send a test event invite to the API caller. This endpoint can be used to preview the invite before sending it to the travelers."
+        },
+        {
+          "info": {
+            "name": "Get event summaries",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/summaries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "View summaries of specific events. This endpoint retrieves a list of traveler event summaries based on specified `userId`, `companyId`, and `tripIds`."
+        },
+        {
+          "info": {
+            "name": "Get allowed payment sources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/payment-sources",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the event coordinator"
+              }
+            ]
+          },
+          "docs": "Get the payment sources that are associated with the `userId` of the event coordinator."
+        },
+        {
+          "info": {
+            "name": "Cancel event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/cancel",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "EventType of the event.\n"
+              }
+            ]
+          },
+          "docs": "Cancel a published event. \nAfter you've canceled the event, it's recommended that you cancel the bookings using the Cancel PNR API.\n"
+        },
+        {
+          "info": {
+            "name": "Get travelers list",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/travelers-list",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get a paginated list of travelers for an event, including each traveler's RSVP status, RSVP response, and `tripId`.\n"
+        },
+        {
+          "info": {
+            "name": "Update event custom field responses",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/:eventId/custom-field-responses",
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "Event ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the response to a custom field question."
+        },
+        {
+          "info": {
+            "name": "Bulk publish events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/bulk-publish",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "API to bulk publish events and has a support for sending invite to selective users"
+        },
+        {
+          "info": {
+            "name": "Bulk edit/modify events.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/bulk-edit",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit the basic info and booking guidelines in bulk for events."
+        },
+        {
+          "info": {
+            "name": "Bulk delete draft events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/bulk-delete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "API to bulk delete draft events."
+        },
+        {
+          "info": {
+            "name": "Bulk cancel events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/bulk-cancel",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "API to bulk cancel events."
+        },
+        {
+          "info": {
+            "name": "Get current details of an async event job.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/events/jobs/status",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get current details of an async event job"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

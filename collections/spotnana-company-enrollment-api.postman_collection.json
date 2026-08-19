@@ -1,0 +1,668 @@
+{
+  "item": [
+    {
+      "id": "742b50c0-1193-464a-818b-f93ac31d4e27",
+      "name": "Company Enrollment",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "74e221c7-02c1-40fa-b73c-3bc298cadb59",
+          "name": "Updates Enrollment config",
+          "request": {
+            "name": "Updates Enrollment config",
+            "description": {
+              "content": "This endpoint stores Enrollment config for the company at TMC level.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "enrollment-config"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"termsAndConditions\": \"<string>\",\n  \"termsAndConditionsList\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"templateSettings\": {\n    \"applicationReceivedTemplate\": \"<string>\",\n    \"applicationRejectedTemplate\": \"<string>\",\n    \"applicationApprovedTemplate\": \"<string>\"\n  },\n  \"industryDropdownOptions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skipOfacComplianceCheck\": \"<boolean>\",\n  \"registrarLoginActions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companySpecifiedAttributeConfigs\": [\n    {\n      \"name\": \"<string>\",\n      \"isHidden\": false\n    },\n    {\n      \"name\": \"<string>\",\n      \"isHidden\": false\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3fa919ee-f2ad-4ff0-833f-c78e128851e1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "enrollment-config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"termsAndConditions\": \"https://www.spotnana.com/terms/\",\n  \"termsAndConditionsList\": [\n    \"I agree to the <a href=\\\"https://www.spotnana.com/terms/\\\">Terms of Service</a>\",\n    \"I agree to the <a href=\\\"https://www.spotnana.com/privacy/\\\">Privacy Policy</a>\"\n  ],\n  \"templateSettings\": {\n    \"applicationReceivedTemplate\": \"string\",\n    \"applicationRejectedTemplate\": \"string\",\n    \"applicationApprovedTemplate\": \"string\"\n  },\n  \"industryDropdownOptions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skipOfacComplianceCheck\": \"<boolean>\",\n  \"registrarLoginActions\": [\n    \"HYATT_LOYALTY_VALIDATION\",\n    \"PRIVACY_CONSENT_ACTION\"\n  ],\n  \"companySpecifiedAttributeConfigs\": [\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    },\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3929a217-66bb-405a-9cf2-743ef6816536",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "enrollment-config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"termsAndConditions\": \"https://www.spotnana.com/terms/\",\n  \"termsAndConditionsList\": [\n    \"I agree to the <a href=\\\"https://www.spotnana.com/terms/\\\">Terms of Service</a>\",\n    \"I agree to the <a href=\\\"https://www.spotnana.com/privacy/\\\">Privacy Policy</a>\"\n  ],\n  \"templateSettings\": {\n    \"applicationReceivedTemplate\": \"string\",\n    \"applicationRejectedTemplate\": \"string\",\n    \"applicationApprovedTemplate\": \"string\"\n  },\n  \"industryDropdownOptions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skipOfacComplianceCheck\": \"<boolean>\",\n  \"registrarLoginActions\": [\n    \"HYATT_LOYALTY_VALIDATION\",\n    \"PRIVACY_CONSENT_ACTION\"\n  ],\n  \"companySpecifiedAttributeConfigs\": [\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    },\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3f930aaf-c99c-40e2-bdd2-23feb7b15e8a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "enrollment-config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"termsAndConditions\": \"https://www.spotnana.com/terms/\",\n  \"termsAndConditionsList\": [\n    \"I agree to the <a href=\\\"https://www.spotnana.com/terms/\\\">Terms of Service</a>\",\n    \"I agree to the <a href=\\\"https://www.spotnana.com/privacy/\\\">Privacy Policy</a>\"\n  ],\n  \"templateSettings\": {\n    \"applicationReceivedTemplate\": \"string\",\n    \"applicationRejectedTemplate\": \"string\",\n    \"applicationApprovedTemplate\": \"string\"\n  },\n  \"industryDropdownOptions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skipOfacComplianceCheck\": \"<boolean>\",\n  \"registrarLoginActions\": [\n    \"HYATT_LOYALTY_VALIDATION\",\n    \"PRIVACY_CONSENT_ACTION\"\n  ],\n  \"companySpecifiedAttributeConfigs\": [\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    },\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d79d9a70-a84b-44ba-a6ee-483c27f390e4",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "enrollment-config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"termsAndConditions\": \"https://www.spotnana.com/terms/\",\n  \"termsAndConditionsList\": [\n    \"I agree to the <a href=\\\"https://www.spotnana.com/terms/\\\">Terms of Service</a>\",\n    \"I agree to the <a href=\\\"https://www.spotnana.com/privacy/\\\">Privacy Policy</a>\"\n  ],\n  \"templateSettings\": {\n    \"applicationReceivedTemplate\": \"string\",\n    \"applicationRejectedTemplate\": \"string\",\n    \"applicationApprovedTemplate\": \"string\"\n  },\n  \"industryDropdownOptions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skipOfacComplianceCheck\": \"<boolean>\",\n  \"registrarLoginActions\": [\n    \"HYATT_LOYALTY_VALIDATION\",\n    \"PRIVACY_CONSENT_ACTION\"\n  ],\n  \"companySpecifiedAttributeConfigs\": [\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    },\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aaa8a0f1-441c-451f-b169-e60ef76fccbb",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "enrollment-config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"termsAndConditions\": \"https://www.spotnana.com/terms/\",\n  \"termsAndConditionsList\": [\n    \"I agree to the <a href=\\\"https://www.spotnana.com/terms/\\\">Terms of Service</a>\",\n    \"I agree to the <a href=\\\"https://www.spotnana.com/privacy/\\\">Privacy Policy</a>\"\n  ],\n  \"templateSettings\": {\n    \"applicationReceivedTemplate\": \"string\",\n    \"applicationRejectedTemplate\": \"string\",\n    \"applicationApprovedTemplate\": \"string\"\n  },\n  \"industryDropdownOptions\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"skipOfacComplianceCheck\": \"<boolean>\",\n  \"registrarLoginActions\": [\n    \"HYATT_LOYALTY_VALIDATION\",\n    \"PRIVACY_CONSENT_ACTION\"\n  ],\n  \"companySpecifiedAttributeConfigs\": [\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    },\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "68f8833c-283d-49df-88f5-4fbf4c01725a",
+          "name": "Get enrollment config",
+          "request": {
+            "name": "Get enrollment config",
+            "description": {
+              "content": "This endpoint fetches the enrollment config for the company.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "enrollment-config"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "85bae005-8232-460a-8521-24c2dde1ad9f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "enrollment-config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"termsAndConditions\": \"https://www.spotnana.com/terms/\",\n  \"termsAndConditionsList\": [\n    \"I agree to the <a href=\\\"https://www.spotnana.com/terms/\\\">Terms of Service</a>\",\n    \"I agree to the <a href=\\\"https://www.spotnana.com/privacy/\\\">Privacy Policy</a>\"\n  ],\n  \"templateSettings\": {\n    \"applicationReceivedTemplate\": \"string\",\n    \"applicationRejectedTemplate\": \"string\",\n    \"applicationApprovedTemplate\": \"string\"\n  },\n  \"industryDropdownOptions\": [\n    \"string\",\n    \"string\"\n  ],\n  \"skipOfacComplianceCheck\": false,\n  \"registrarLoginActions\": [\n    \"HYATT_LOYALTY_VALIDATION\",\n    \"ONBOARDING_ACTION\"\n  ],\n  \"companySpecifiedAttributeConfigs\": [\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    },\n    {\n      \"name\": \"string\",\n      \"isHidden\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d35b6ca2-fe9c-4290-9cea-8d88cc6ecd3e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "enrollment-config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e2f4965d-f45a-4603-b4bc-30ba451e8ebf",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "enrollment-config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c5cb237-0208-4336-bcb9-103cec71fea2",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "enrollment-config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3254babb-b1c2-4dd7-bf88-13740212a613",
+    "name": "Air Company Enrollment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

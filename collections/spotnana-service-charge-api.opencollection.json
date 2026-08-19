@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air Service Charge API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Service Charge",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List service charges",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/service-charge/:entityType/:entityId/types/:type/list",
+            "params": [
+              {
+                "name": "entityType",
+                "value": "",
+                "type": "path",
+                "description": "Entity type for service charge"
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Entity ID for service charge e.g. trip ID for entityType = TRIP"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Service charge type."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "List service charges for a given entity"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1484 @@
+{
+  "item": [
+    {
+      "id": "130cc65d-dd99-4d3c-80c3-e9e39cf18321",
+      "name": "Custom Fields",
+      "description": {
+        "content": "APIs to manage company custom fields.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bdd78d82-fd38-4e19-8cce-c2d1e399242c",
+          "name": "Get company questions",
+          "request": {
+            "name": "Get company questions",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "questions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "21acab65-43f7-4ad8-aafc-0bb7a3648fbf",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"length\": 1132,\n  \"elements\": [\n    {\n      \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n      \"name\": \"Name\"\n    },\n    {\n      \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n      \"name\": \"Name\"\n    }\n  ],\n  \"totalNumResults\": 4814\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "52d6f090-bca0-4af5-b2d1-e22180b5e608",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "32c4ad0d-404d-44da-b7ef-7bbfeb4efa5f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6b739bf3-ac6b-4c9f-aaf5-7d81e16961e8",
+          "name": "Create company question",
+          "request": {
+            "name": "Create company question",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "questions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"questionFormat\": \"<string>\",\n  \"isRequired\": false,\n  \"isDisabled\": true,\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": \"<integer>\",\n    \"options\": [\n      {\n        \"displayCode\": \"<string>\",\n        \"displayValue\": \"<string>\"\n      },\n      {\n        \"displayCode\": \"<string>\",\n        \"displayValue\": \"<string>\"\n      }\n    ]\n  },\n  \"includeInItinerary\": false,\n  \"customFieldLocations\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"countries\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"travelRegionTypes\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"tripUsageTypes\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a70cadd0-54a2-4130-85ed-668d3805d4a7",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"questionFormat\": \"CHECKBOX\",\n  \"isRequired\": true,\n  \"isDisabled\": false,\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": 8567,\n    \"options\": [\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      },\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      }\n    ]\n  },\n  \"includeInItinerary\": true,\n  \"customFieldLocations\": [\n    \"POLICY_APPROVAL_EMAIL\",\n    \"POLICY_APPROVAL_EMAIL\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"EMPLOYEE\",\n        \"EMPLOYEE\"\n      ],\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"travelRegionTypes\": [\n      \"DOMESTIC\",\n      \"DOMESTIC\"\n    ],\n    \"tripUsageTypes\": [\n      \"EVENT\",\n      \"EVENT\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cbae4f9f-048f-445b-a3a3-ffe3c5ae7b85",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"questionFormat\": \"CHECKBOX\",\n  \"isRequired\": true,\n  \"isDisabled\": false,\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": 8567,\n    \"options\": [\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      },\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      }\n    ]\n  },\n  \"includeInItinerary\": true,\n  \"customFieldLocations\": [\n    \"POLICY_APPROVAL_EMAIL\",\n    \"POLICY_APPROVAL_EMAIL\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"EMPLOYEE\",\n        \"EMPLOYEE\"\n      ],\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"travelRegionTypes\": [\n      \"DOMESTIC\",\n      \"DOMESTIC\"\n    ],\n    \"tripUsageTypes\": [\n      \"EVENT\",\n      \"EVENT\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5761341-c0a9-496e-bde8-d70675806ae7",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"questionFormat\": \"CHECKBOX\",\n  \"isRequired\": true,\n  \"isDisabled\": false,\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": 8567,\n    \"options\": [\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      },\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      }\n    ]\n  },\n  \"includeInItinerary\": true,\n  \"customFieldLocations\": [\n    \"POLICY_APPROVAL_EMAIL\",\n    \"POLICY_APPROVAL_EMAIL\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"EMPLOYEE\",\n        \"EMPLOYEE\"\n      ],\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"travelRegionTypes\": [\n      \"DOMESTIC\",\n      \"DOMESTIC\"\n    ],\n    \"tripUsageTypes\": [\n      \"EVENT\",\n      \"EVENT\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "34f4adbc-1e94-4dd9-9faa-b1c4d119539c",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"questionFormat\": \"CHECKBOX\",\n  \"isRequired\": true,\n  \"isDisabled\": false,\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": 8567,\n    \"options\": [\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      },\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      }\n    ]\n  },\n  \"includeInItinerary\": true,\n  \"customFieldLocations\": [\n    \"POLICY_APPROVAL_EMAIL\",\n    \"POLICY_APPROVAL_EMAIL\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"EMPLOYEE\",\n        \"EMPLOYEE\"\n      ],\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"travelRegionTypes\": [\n      \"DOMESTIC\",\n      \"DOMESTIC\"\n    ],\n    \"tripUsageTypes\": [\n      \"EVENT\",\n      \"EVENT\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a35a33be-28f4-4862-9c9c-dacb3e96a334",
+          "name": "Get company question",
+          "request": {
+            "name": "Get company question",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "questions",
+                ":questionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "questionId",
+                  "description": "(Required) Identifier for question."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dcd7db76-130d-4812-8731-8c3031737085",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"40ea3395-0ee7-2c55-20f6-18ee8b93a15a\",\n  \"name\": \"string\",\n  \"isRequired\": true,\n  \"isDisabled\": true,\n  \"questionFormat\": \"CHECKBOX\",\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": 6505,\n    \"options\": [\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      },\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      }\n    ]\n  },\n  \"includeInItinerary\": true,\n  \"customFieldLocations\": [\n    \"POLICY_APPROVAL_EMAIL\",\n    \"POLICY_APPROVAL_EMAIL\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"EMPLOYEE\",\n        \"EMPLOYEE\"\n      ],\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"travelRegionTypes\": [\n      \"DOMESTIC\",\n      \"DOMESTIC\"\n    ],\n    \"tripUsageTypes\": [\n      \"STANDARD\",\n      \"STANDARD\"\n    ]\n  },\n  \"questionType\": {\n    \"preSearchQuestionType\": \"PURPOSE_OF_TRIP\",\n    \"preCheckoutQuestionType\": \"OOP_REASON_CODE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe301b47-658f-496b-8d0d-ff70b63d10a7",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "566b1305-1db5-4faf-963c-b48a13777311",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "91924782-3e95-4672-854f-325e03460c46",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "48b6767e-9e60-4451-8730-07c7136aee74",
+          "name": "Update company question",
+          "request": {
+            "name": "Update company question",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "questions",
+                ":questionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "questionId",
+                  "description": "(Required) Identifier for question."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"isRequired\": false,\n  \"isDisabled\": true,\n  \"questionFormat\": \"<string>\",\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": \"<integer>\",\n    \"options\": [\n      {\n        \"displayCode\": \"<string>\",\n        \"displayValue\": \"<string>\"\n      },\n      {\n        \"displayCode\": \"<string>\",\n        \"displayValue\": \"<string>\"\n      }\n    ]\n  },\n  \"includeInItinerary\": false,\n  \"customFieldLocations\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"countries\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        },\n        {\n          \"id\": \"<uuid>\",\n          \"name\": \"<string>\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"travelRegionTypes\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"tripUsageTypes\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"questionType\": {\n    \"preSearchQuestionType\": \"<string>\",\n    \"preCheckoutQuestionType\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "654d1b7c-f172-45fb-82d4-d6d1fdc32e53",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"isRequired\": true,\n  \"isDisabled\": true,\n  \"questionFormat\": \"CHECKBOX\",\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": 4652,\n    \"options\": [\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      },\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      }\n    ]\n  },\n  \"includeInItinerary\": true,\n  \"customFieldLocations\": [\n    \"POLICY_APPROVAL_EMAIL\",\n    \"POLICY_APPROVAL_EMAIL\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"EMPLOYEE\",\n        \"EMPLOYEE\"\n      ],\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"travelRegionTypes\": [\n      \"DOMESTIC\",\n      \"DOMESTIC\"\n    ],\n    \"tripUsageTypes\": [\n      \"STANDARD\",\n      \"STANDARD\"\n    ]\n  },\n  \"questionType\": {\n    \"preSearchQuestionType\": \"PURPOSE_OF_TRIP\",\n    \"preCheckoutQuestionType\": \"OOP_REASON_CODE\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ec55d645-8fdb-4dc2-af04-4e1a75441b68",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"isRequired\": true,\n  \"isDisabled\": true,\n  \"questionFormat\": \"CHECKBOX\",\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": 4652,\n    \"options\": [\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      },\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      }\n    ]\n  },\n  \"includeInItinerary\": true,\n  \"customFieldLocations\": [\n    \"POLICY_APPROVAL_EMAIL\",\n    \"POLICY_APPROVAL_EMAIL\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"EMPLOYEE\",\n        \"EMPLOYEE\"\n      ],\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"travelRegionTypes\": [\n      \"DOMESTIC\",\n      \"DOMESTIC\"\n    ],\n    \"tripUsageTypes\": [\n      \"STANDARD\",\n      \"STANDARD\"\n    ]\n  },\n  \"questionType\": {\n    \"preSearchQuestionType\": \"PURPOSE_OF_TRIP\",\n    \"preCheckoutQuestionType\": \"OOP_REASON_CODE\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f4f6f949-4324-48df-8a8c-8ce4b5d1c0dc",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"isRequired\": true,\n  \"isDisabled\": true,\n  \"questionFormat\": \"CHECKBOX\",\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": 4652,\n    \"options\": [\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      },\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      }\n    ]\n  },\n  \"includeInItinerary\": true,\n  \"customFieldLocations\": [\n    \"POLICY_APPROVAL_EMAIL\",\n    \"POLICY_APPROVAL_EMAIL\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"EMPLOYEE\",\n        \"EMPLOYEE\"\n      ],\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"travelRegionTypes\": [\n      \"DOMESTIC\",\n      \"DOMESTIC\"\n    ],\n    \"tripUsageTypes\": [\n      \"STANDARD\",\n      \"STANDARD\"\n    ]\n  },\n  \"questionType\": {\n    \"preSearchQuestionType\": \"PURPOSE_OF_TRIP\",\n    \"preCheckoutQuestionType\": \"OOP_REASON_CODE\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5f4899c5-b66d-44f4-aa7a-06d6ccbc56a7",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"isRequired\": true,\n  \"isDisabled\": true,\n  \"questionFormat\": \"CHECKBOX\",\n  \"optionInfo\": {\n    \"source\": \"MANUAL\",\n    \"sourceMetadata\": {\n      \"companyConfig\": {\n        \"optionsParam\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"totalNumOptions\": 4652,\n    \"options\": [\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      },\n      {\n        \"displayCode\": \"string\",\n        \"displayValue\": \"string\"\n      }\n    ]\n  },\n  \"includeInItinerary\": true,\n  \"customFieldLocations\": [\n    \"POLICY_APPROVAL_EMAIL\",\n    \"POLICY_APPROVAL_EMAIL\"\n  ],\n  \"matchConditions\": {\n    \"travelerConditions\": {\n      \"workerTypes\": [\n        \"EMPLOYEE\",\n        \"EMPLOYEE\"\n      ],\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"legalEntities\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"departments\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"costCenters\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ],\n      \"offices\": [\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        },\n        {\n          \"id\": \"b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3\",\n          \"name\": \"Name\"\n        }\n      ]\n    },\n    \"travelTypes\": [\n      \"AIR\",\n      \"AIR\"\n    ],\n    \"travelRegionTypes\": [\n      \"DOMESTIC\",\n      \"DOMESTIC\"\n    ],\n    \"tripUsageTypes\": [\n      \"STANDARD\",\n      \"STANDARD\"\n    ]\n  },\n  \"questionType\": {\n    \"preSearchQuestionType\": \"PURPOSE_OF_TRIP\",\n    \"preCheckoutQuestionType\": \"OOP_REASON_CODE\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "97511343-7858-4739-aee8-e33b13a7ff9d",
+          "name": "Delete company question",
+          "request": {
+            "name": "Delete company question",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":companyId",
+                "questions",
+                ":questionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "companyId",
+                  "description": "(Required) Identifier for company."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "questionId",
+                  "description": "(Required) Identifier for question."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "12e7cc74-5db2-44ee-bc0b-eb33427a2416",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ed325a69-c8b9-48bc-8a23-6ee2d117731e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39ddbbff-cce1-4b85-8b32-a8946c39399f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ed679192-deca-4800-ac87-90a34bb97fc9",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":companyId",
+                    "questions",
+                    ":questionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "companyId",
+                      "description": "(Required) Identifier for company."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "questionId",
+                      "description": "(Required) Identifier for question."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "bd8e44f7-c075-47b1-994c-bfd9273a7390",
+    "name": "Air Custom Fields API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

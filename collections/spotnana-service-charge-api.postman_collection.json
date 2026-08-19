@@ -1,0 +1,433 @@
+{
+  "item": [
+    {
+      "id": "1d22c501-064d-49e4-a7f8-67ed0a7fc787",
+      "name": "Service Charge",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "040dbbe7-de09-4e03-84f7-872e86c7b944",
+          "name": "List service charges",
+          "request": {
+            "name": "List service charges",
+            "description": {
+              "content": "List service charges for a given entity",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "service-charge",
+                ":entityType",
+                ":entityId",
+                "types",
+                ":type",
+                "list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityType",
+                  "description": "(Required) Entity type for service charge"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityId",
+                  "description": "(Required) Entity ID for service charge e.g. trip ID for entityType = TRIP"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "type",
+                  "description": "(Required) Service charge type."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serviceType\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "866f713c-a62d-4bf5-a399-671fd45e02f9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "service-charge",
+                    ":entityType",
+                    ":entityId",
+                    "types",
+                    ":type",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type for service charge"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Entity ID for service charge e.g. trip ID for entityType = TRIP"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type",
+                      "description": "(Required) Service charge type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceType\": \"ITINERARY_BOOKING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"serviceCharges\": [\n    {\n      \"entity\": {\n        \"entityType\": \"TRIP\",\n        \"entityId\": \"1234567890\"\n      },\n      \"serviceChargeType\": \"TMC_CHARGE\",\n      \"serviceType\": \"AGENT_CONTACT\",\n      \"charge\": {\n        \"amount\": {\n          \"amount\": 510,\n          \"currencyCode\": \"GBP\",\n          \"convertedAmount\": 715.42,\n          \"convertedCurrency\": \"USD\",\n          \"otherCoinage\": [\n            {\n              \"coinageCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"amount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"conversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"preferredCurrencyConversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"otherCoinageMetadata\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"coinageCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"amount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"conversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"preferredCurrencyConversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"otherCoinageMetadata\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"taxes\": [\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxCode\": \"VAT\",\n            \"description\": \"string\",\n            \"percentage\": 10\n          },\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxCode\": \"VAT\",\n            \"description\": \"string\",\n            \"percentage\": 10\n          }\n        ],\n        \"totalAmount\": {\n          \"amount\": 510,\n          \"currencyCode\": \"GBP\",\n          \"convertedAmount\": 715.42,\n          \"convertedCurrency\": \"USD\",\n          \"otherCoinage\": [\n            {\n              \"coinageCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"amount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"conversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"preferredCurrencyConversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"otherCoinageMetadata\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"coinageCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"amount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"conversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"preferredCurrencyConversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"otherCoinageMetadata\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"allowedFoP\": [\n          \"BREX_POINTS\",\n          \"BREX_POINTS\"\n        ],\n        \"feeInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"waiveOffInfo\": {\n          \"waiveOffAmount\": {\n            \"base\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"tax\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"waiveOffReason\": {\n            \"reasonCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"reason\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"transactionTime\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"paymentStatus\": \"WAIVED_OFF\",\n      \"tripId\": \"1234567890\",\n      \"agentContact\": {\n        \"contactType\": \"PHONE\",\n        \"contactId\": \"1234567890\",\n        \"contactOp\": \"AGENT_BOOKING\",\n        \"billable\": true,\n        \"agentId\": {\n          \"id\": \"de4f281e-6307-7914-a157-fe467140ad85\"\n        },\n        \"pnrId\": \"1234567890\",\n        \"travelType\": \"AIR\",\n        \"notes\": \"Requested by customer\",\n        \"nonBillableReason\": {\n          \"reasonCode\": \"MINOR_REQUEST\",\n          \"notes\": \"Waived off\"\n        }\n      },\n      \"chargeId\": \"e2c04834-92eb-4b62-9faa-eb73a70051d3\",\n      \"userOrgId\": {\n        \"userId\": {\n          \"id\": \"4b1f1705-d04f-b9ec-5d43-48cd4a695e7e\"\n        },\n        \"organizationId\": {\n          \"id\": \"string\"\n        },\n        \"organizationAgencyId\": {\n          \"id\": \"string\"\n        },\n        \"tmcInfo\": {\n          \"id\": {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"primaryServiceProviderTmc\": {\n            \"tmcId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"secondaryServiceProviderTmcs\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"partnerTmcId\": {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"tmcBasicInfo\": {\n          \"contractingTmc\": {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"logo\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"bookingTmc\": {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"logo\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"legalEntityId\": {\n        \"id\": \"fc1ccbce-8413-4fe9-b233-a324dfbe7421\"\n      },\n      \"bookingDetails\": {\n        \"pnrId\": \"string\",\n        \"pnrVersion\": 199,\n        \"tripUsageType\": \"EVENT\",\n        \"source\": \"SABRE\",\n        \"sourcePnrId\": \"string\"\n      },\n      \"fop\": {\n        \"type\": \"CARD\",\n        \"card\": {\n          \"number\": \"4111111111111111\",\n          \"id\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"type\": \"CREDIT\",\n          \"company\": \"VISA\",\n          \"name\": \"Harrison Schwartz\",\n          \"address\": {\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeArea\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeAreaName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isDefault\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"languageCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locationCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"organization\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"continentCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"recipients\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"revision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sortingCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sublocality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timezone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"coordinates\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"expiryMonth\": 1,\n          \"expiryYear\": 2010,\n          \"cvv\": \"012\",\n          \"label\": \"Label amex\",\n          \"currency\": \"USD\",\n          \"externalId\": \"bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40\",\n          \"vaultId\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"expiry\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"ownershipLabel\": \"PERSONAL\"\n        },\n        \"additionalInfo\": \"string\",\n        \"accessType\": {\n          \"accessType\": \"TMC\",\n          \"entityIds\": [\n            \"string\",\n            \"string\"\n          ],\n          \"entities\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"paymentMethod\": \"BREX_POINTS\",\n        \"paymentMetadata\": {\n          \"customPaymentMethodMetadata\": {\n            \"brexBudgetMetadata\": {\n              \"budgetName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"paidByPersonalCard\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"noPrepaymentMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"vendorProgramPaymentMetadata\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"virtualCardMetadata\": {\n            \"vendorInfo\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"cardInfo\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"paymentInstructionId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"shouldReveal\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cardMetadata\": {\n            \"card\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"accessType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isLodgeCard\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"bta\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"paymentSourceType\": \"UNUSED_CREDIT\"\n      },\n      \"paymentTransaction\": {\n        \"gatewayIdentifier\": {\n          \"gatewayId\": \"string\",\n          \"gatewayType\": \"RAZORPAY\"\n        },\n        \"paymentReference\": \"string\",\n        \"networkTransactionId\": \"string\",\n        \"gatewayInfo\": {\n          \"stripeInfo\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"failureReason\": {\n          \"reasonCode\": \"PAYMENT_METHOD_MISSING\"\n        }\n      },\n      \"failureDetails\": {\n        \"failureCode\": \"PAYMENT_METHOD_MISSING\",\n        \"failureMessage\": \"string\"\n      }\n    },\n    {\n      \"entity\": {\n        \"entityType\": \"TRIP\",\n        \"entityId\": \"1234567890\"\n      },\n      \"serviceChargeType\": \"TMC_CHARGE\",\n      \"serviceType\": \"AGENT_CONTACT\",\n      \"charge\": {\n        \"amount\": {\n          \"amount\": 510,\n          \"currencyCode\": \"GBP\",\n          \"convertedAmount\": 715.42,\n          \"convertedCurrency\": \"USD\",\n          \"otherCoinage\": [\n            {\n              \"coinageCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"amount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"conversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"preferredCurrencyConversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"otherCoinageMetadata\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"coinageCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"amount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"conversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"preferredCurrencyConversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"otherCoinageMetadata\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"taxes\": [\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxCode\": \"VAT\",\n            \"description\": \"string\",\n            \"percentage\": 10\n          },\n          {\n            \"amount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxCode\": \"VAT\",\n            \"description\": \"string\",\n            \"percentage\": 10\n          }\n        ],\n        \"totalAmount\": {\n          \"amount\": 510,\n          \"currencyCode\": \"GBP\",\n          \"convertedAmount\": 715.42,\n          \"convertedCurrency\": \"USD\",\n          \"otherCoinage\": [\n            {\n              \"coinageCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"amount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"conversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"preferredCurrencyConversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"otherCoinageMetadata\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"coinageCode\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"amount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"conversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"preferredCurrencyConversionRate\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"otherCoinageMetadata\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        \"allowedFoP\": [\n          \"BREX_POINTS\",\n          \"BREX_POINTS\"\n        ],\n        \"feeInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"waiveOffInfo\": {\n          \"waiveOffAmount\": {\n            \"base\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"tax\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"taxBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"waiveOffReason\": {\n            \"reasonCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"reason\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"transactionTime\": {\n        \"iso8601\": \"2017-07-21T17:32Z\"\n      },\n      \"paymentStatus\": \"WAIVED_OFF\",\n      \"tripId\": \"1234567890\",\n      \"agentContact\": {\n        \"contactType\": \"PHONE\",\n        \"contactId\": \"1234567890\",\n        \"contactOp\": \"AGENT_BOOKING\",\n        \"billable\": true,\n        \"agentId\": {\n          \"id\": \"2c2543bc-6ad1-576a-8976-1804ee7b4710\"\n        },\n        \"pnrId\": \"1234567890\",\n        \"travelType\": \"AIR\",\n        \"notes\": \"Requested by customer\",\n        \"nonBillableReason\": {\n          \"reasonCode\": \"MINOR_REQUEST\",\n          \"notes\": \"Waived off\"\n        }\n      },\n      \"chargeId\": \"e2c04834-92eb-4b62-9faa-eb73a70051d3\",\n      \"userOrgId\": {\n        \"userId\": {\n          \"id\": \"cba2c8d9-90b1-481f-6df8-ab738b298bde\"\n        },\n        \"organizationId\": {\n          \"id\": \"string\"\n        },\n        \"organizationAgencyId\": {\n          \"id\": \"string\"\n        },\n        \"tmcInfo\": {\n          \"id\": {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"primaryServiceProviderTmc\": {\n            \"tmcId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"secondaryServiceProviderTmcs\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"partnerTmcId\": {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"tmcBasicInfo\": {\n          \"contractingTmc\": {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"logo\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"bookingTmc\": {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"logo\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"legalEntityId\": {\n        \"id\": \"fc1ccbce-8413-4fe9-b233-a324dfbe7421\"\n      },\n      \"bookingDetails\": {\n        \"pnrId\": \"string\",\n        \"pnrVersion\": 1003,\n        \"tripUsageType\": \"STANDARD\",\n        \"source\": \"SABRE\",\n        \"sourcePnrId\": \"string\"\n      },\n      \"fop\": {\n        \"type\": \"CARD\",\n        \"card\": {\n          \"number\": \"4111111111111111\",\n          \"id\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"type\": \"CREDIT\",\n          \"company\": \"VISA\",\n          \"name\": \"Harrison Schwartz\",\n          \"address\": {\n            \"addressLines\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeArea\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"administrativeAreaName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isDefault\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"languageCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"locationCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"organization\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"postalCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"continentCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"recipients\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"regionName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"revision\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sortingCode\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"sublocality\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timezone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"coordinates\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"expiryMonth\": 1,\n          \"expiryYear\": 2010,\n          \"cvv\": \"012\",\n          \"label\": \"Label amex\",\n          \"currency\": \"USD\",\n          \"externalId\": \"bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40\",\n          \"vaultId\": \"34d536b6-f8ff-11eb-9a61-0242ac180002\",\n          \"expiry\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"ownershipLabel\": \"PERSONAL\"\n        },\n        \"additionalInfo\": \"string\",\n        \"accessType\": {\n          \"accessType\": \"APPLICATION\",\n          \"entityIds\": [\n            \"string\",\n            \"string\"\n          ],\n          \"entities\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"paymentMethod\": \"BREX_POINTS\",\n        \"paymentMetadata\": {\n          \"customPaymentMethodMetadata\": {\n            \"brexBudgetMetadata\": {\n              \"budgetName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"paidByPersonalCard\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"noPrepaymentMetadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"vendorProgramPaymentMetadata\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"virtualCardMetadata\": {\n            \"vendorInfo\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"cardInfo\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"paymentInstructionId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"shouldReveal\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"cardMetadata\": {\n            \"card\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"accessType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"isLodgeCard\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"bta\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"paymentSourceType\": \"DELAYED_INVOICING\"\n      },\n      \"paymentTransaction\": {\n        \"gatewayIdentifier\": {\n          \"gatewayId\": \"string\",\n          \"gatewayType\": \"RAZORPAY\"\n        },\n        \"paymentReference\": \"string\",\n        \"networkTransactionId\": \"string\",\n        \"gatewayInfo\": {\n          \"stripeInfo\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"failureReason\": {\n          \"reasonCode\": \"PAYMENT_METHOD_MISSING\"\n        }\n      },\n      \"failureDetails\": {\n        \"failureCode\": \"PAYMENT_GATEWAY_FAILURE\",\n        \"failureMessage\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7da33a18-13c2-4c27-8472-35ecf56afc90",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "service-charge",
+                    ":entityType",
+                    ":entityId",
+                    "types",
+                    ":type",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type for service charge"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Entity ID for service charge e.g. trip ID for entityType = TRIP"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type",
+                      "description": "(Required) Service charge type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceType\": \"ITINERARY_BOOKING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf536ae5-217e-4ccd-873b-7b7399816d7b",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "service-charge",
+                    ":entityType",
+                    ":entityId",
+                    "types",
+                    ":type",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type for service charge"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Entity ID for service charge e.g. trip ID for entityType = TRIP"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type",
+                      "description": "(Required) Service charge type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceType\": \"ITINERARY_BOOKING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7bf4134-aae0-42f0-b9f6-4ebbae378652",
+              "name": "The specified resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "service-charge",
+                    ":entityType",
+                    ":entityId",
+                    "types",
+                    ":type",
+                    "list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityType",
+                      "description": "(Required) Entity type for service charge"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Entity ID for service charge e.g. trip ID for entityType = TRIP"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type",
+                      "description": "(Required) Service charge type."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceType\": \"ITINERARY_BOOKING\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"debugIdentifier\": \"string\",\n  \"errorMessages\": [\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    },\n    {\n      \"errorCode\": \"string\",\n      \"message\": \"string\",\n      \"errorParameters\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"errorDetail\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-ext-sboxmeta.partners.spotnana.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e5cdbd59-e8f4-4516-8b96-62bb53afcee9",
+    "name": "Air Service Charge API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "APIs to perform search, checkout and book an air pnr",
+      "type": "text/plain"
+    }
+  }
+}

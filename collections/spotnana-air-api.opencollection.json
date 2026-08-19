@@ -1,0 +1,310 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Air API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Air",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get air itineraries",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/search-flights",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get Air Itineraries available for the given search parameters"
+        },
+        {
+          "info": {
+            "name": "Get flight attributes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/flight-attributes",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get Flight attributes, amenities and fare rules for the given search response id. \nReturns the full air search response along with attribute details.\n"
+        },
+        {
+          "info": {
+            "name": "Get selected itinerary",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/selected-itinerary",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get the selected itinerary for the traveler in the search and checkout flow."
+        },
+        {
+          "info": {
+            "name": "Get Airlines Information (Air)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/airlines-info",
+            "params": [
+              {
+                "name": "includeInactive",
+                "value": "",
+                "type": "query",
+                "description": "Include Airlines with inactive status along with active."
+              }
+            ]
+          },
+          "docs": "Returns airlines information for active marked airlines."
+        },
+        {
+          "info": {
+            "name": "Get flight checkout details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/flight-checkout",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get the flight checkout details associated with the selected itinerary."
+        },
+        {
+          "info": {
+            "name": "Get flight seat map",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/seat-map",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get seat map for the flights in the given itinerary."
+        },
+        {
+          "info": {
+            "name": "Initiate booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/initiate-booking",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates a new air booking for the trip. \nThe `identityDocs` field supports the following traveler identity documents: \nPassport, National ID, Known Traveler Number (KTN), redress number, and immigration documents. \nThe traveler can choose one among the list of identity documents available and provide its information during checkout.\n"
+        },
+        {
+          "info": {
+            "name": "Validate air itinerary",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/revalidate-itinerary",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates the air itinerary for availability and pricing"
+        },
+        {
+          "info": {
+            "name": "Validate air itinerary (interim)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/intermediate-revalidate-itinerary",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates an itinerary at any interim stage of air booking workflow and allows you to keep track of fare details before proceeding to checkout. Using this endpoint is optional. It requires a `searchId` and the `itineraryId` to obtain the latest fare details of the selected itinerary. The `travelerType` field in this endpoint response currently only accepts `ADULT`, `CHILD` and `INFANT`."
+        },
+        {
+          "info": {
+            "name": "Create air pnr",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/create-pnr",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new air booking with the given itinerary"
+        },
+        {
+          "info": {
+            "name": "Cancel Air Pnr",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/cancel-pnr",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cancel the air pnr and issues applicable refunds"
+        },
+        {
+          "info": {
+            "name": "Get PNR exchange details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/pnrs/:pnrId/exchange-details",
+            "params": [
+              {
+                "name": "pnrId",
+                "value": "",
+                "type": "path",
+                "description": "Spotnana PNR ID."
+              }
+            ]
+          },
+          "docs": "This endpoint gets exchange details of all the tickets present in the given PNR ID of the\ngiven trip ID.\n"
+        },
+        {
+          "info": {
+            "name": "Modify Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/modify-search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get Air Itineraries available for exchange/modification/deletion against current pnr."
+        },
+        {
+          "info": {
+            "name": "Modify Book",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/modify-book",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Book[cancel] new[existing] legs into an existing pnr using the selected rate option from airModifySearch operation."
+        },
+        {
+          "info": {
+            "name": "Edit PNR",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/pnrs/:pnrId/update",
+            "params": [
+              {
+                "name": "pnrId",
+                "value": "1213124111",
+                "type": "path",
+                "description": "PNR ID created by Spotnana for the booking."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit specific traveler information in an existing PNR.\nThis API allows you to edit and modify Special Service Requests (SSR), \nseat selection, loyalty number, ancillaries, redress number, Known Traveler Number (KTN), \ncheck-in preferences, and Other Service Information (OSI).\n"
+        },
+        {
+          "info": {
+            "name": "Get Special Service Requests (SSR)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/special-service-requests"
+          },
+          "docs": "Returns the list of all Special Service Requests (SSR) supported by Spotnana.\nThis API doesn't require a request payload or a query parameter.\nYou can use this endpoint anytime during the air booking or exchange workflow \nto view the list of SSRs currently supported by Spotnana.\n"
+        },
+        {
+          "info": {
+            "name": "Get Special Service Requests (SSR) for a Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/special-service-requests/categories",
+            "params": [
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "The category type of a Special Service Request (SSR)."
+              }
+            ]
+          },
+          "docs": "Returns the list of Special Service Requests (SSR) for a selected category.\nEvery `category` type can contain multiple service requests.\nFor example, the `category: MEAL` includes service requests such as a vegetarian meal, baby/infant meal, \ngluten free meal, and so on. These service requests are displayed as `subCategory` fields within the `category: MEAL`. \nTo learn more about a selected category such as its `subCategory` values, category code, and other relevant\ninformation, run this API usi"
+        },
+        {
+          "info": {
+            "name": "Returns the Air Raw Fare Rules for a Segment or Pnr",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext-sboxmeta.partners.spotnana.com/v2/air/fare-rules/fetch",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the Air Raw Fare Rules for a Segment or Pnr"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
