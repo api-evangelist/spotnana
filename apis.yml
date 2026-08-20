@@ -530,6 +530,8 @@ apis:
   humanURL: https://developer.spotnana.com/openapi/authapi
   baseURL: https://apis.spotnana.com
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -1078,6 +1080,8 @@ apis:
   humanURL: https://developer.spotnana.com/openapi/authapi
   baseURL: https://apis.spotnana.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
