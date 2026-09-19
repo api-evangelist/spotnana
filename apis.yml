@@ -50,6 +50,16 @@ tags:
 - Travel Management
 - Booking
 - Air
+- Hotels
+- Payments
+- Travel as a Service
+tags_raw:
+- Company
+- Travel
+- Corporate Travel
+- Travel Management
+- Booking
+- Air
 - Hotel
 - Payments
 - Travel as a Service
@@ -611,6 +621,8 @@ apis:
   humanURL: https://developer.spotnana.com/openapi/authapi
   baseURL: https://apis.spotnana.com
   tags:
+  - Hotels
+  tags_raw:
   - Hotel
   properties:
   - type: OpenAPI
