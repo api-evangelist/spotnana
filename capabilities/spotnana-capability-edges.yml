@@ -1,0 +1,35 @@
+slug: spotnana
+provider: Spotnana
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: API User
+  spec_file: spotnana-api-user-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.8
+  evidence: '"createApiUser Create a new API user", "rotateClientSecret Rotate client secret for an API
+    user" with schemas ApiUserCredentialTypeEnum, RotateClientSecretRequest'
+  reason: Issuance, revocation and secret rotation of API client credentials for platform integrators
+    is developer identity and credential management, not end-customer or employee identity.
+- tag: Roles
+  spec_file: spotnana-roles-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.72
+  evidence: GET /v3/users/{userId}/rbac-info getRbacInfo Get RBAC info for a user; schemas PermissionWithActions,
+    PermissionName, PermissionAction
+  reason: Returns a user's role-based access control permissions and permitted actions, which is access
+    management. Single read-only operation, so it is arguably authorisation plumbing; confidence moderate.
