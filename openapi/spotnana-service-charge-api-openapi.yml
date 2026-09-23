@@ -1,8 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Air Service Charge API
+  title: Spotnana Service Charge API
   version: v2
-  description: APIs to perform search, checkout and book an air pnr
+  description: 'Operations tagged Service Charge across 2 of this provider''s published API definitions: spotnana-company-openapi-original.json, spotnana-payments-openapi-original.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api-ext-sboxmeta.partners.spotnana.com
   description: Sandbox URL
@@ -59,105 +59,21 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+    servers:
+    - url: https://api-ext-sboxmeta.partners.spotnana.com
+      description: Sandbox URL
 components:
-  responses:
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    FailureReason:
+    UserId:
       type: object
-      title: FailureReason
-      description: Contains the failure reason in case of any Failed Transaction
+      title: UserId
+      description: User identifier
+      required:
+      - id
       properties:
-        reasonCode:
+        id:
           type: string
-          description: Reason Code associated with the Failure
-          enum:
-          - PAYMENT_METHOD_MISSING
-          - PAYMENT_GATEWAY_FAILURE
-          example: PAYMENT_METHOD_MISSING
-    PrimaryServiceProviderTmc:
-      type: object
-      title: PrimaryServiceProviderTmc
-      description: Primary service provider TMC info
-      required:
-      - tmcId
-      properties:
-        tmcId:
-          $ref: '#/components/schemas/CompanyId'
-          description: Id of the service provider TMC.
-    ServiceType:
-      type: string
-      title: ServiceType
-      description: 'Type of service for service charge. ITINERARY_BOOKING: Service charge for travel booking. AGENT_CONTACT: Service charge for agent contact.
-
-        '
-      enum:
-      - ITINERARY_BOOKING
-      - AGENT_CONTACT
-    AgentContactType:
-      type: string
-      title: Agent contact type
-      description: Agent contact type
-      enum:
-      - PHONE
-      - CHAT
-      - EMAIL
-    ServiceChargeType:
-      type: string
-      title: ServiceChargeType
-      description: 'Type of service charge. TMC_CHARGE: Service charge for a service charged by the TMC.
-
-        '
-      enum:
-      - TMC_CHARGE
-    ServiceCharge:
-      type: object
-      title: ServiceCharge
-      description: Service charge.
-      required:
-      - amount
-      - taxes
-      - totalAmount
-      properties:
-        amount:
-          $ref: '#/components/schemas/Money'
-          description: Service charge amount.
-        taxes:
-          type: array
-          description: Applicable taxes.
-          items:
-            $ref: '#/components/schemas/TaxAmount'
-        totalAmount:
-          $ref: '#/components/schemas/Money'
-          description: Total amount (including taxes).
-        allowedFoP:
-          type: array
-          deprecated: true
-          x-sunset: '2026-07-01'
-          description: List of allowed payment methods for this charge.
-          items:
-            $ref: '#/components/schemas/PaymentMethod'
-        feeInfo:
-          $ref: '#/components/schemas/FeeInfo'
-        waiveOffInfo:
-          $ref: '#/components/schemas/AppliedWaiveOffInfo'
+          format: uuid
     Money:
       type: object
       title: Money
@@ -224,231 +140,6 @@ components:
                     FlightPassPaymentMetadata: '#/components/schemas/FlightPassPaymentMetadataWrapper'
                 oneOf:
                 - $ref: '#/components/schemas/FlightPassPaymentMetadataWrapper'
-    FlightPassTax:
-      type: object
-      title: FlightPassTax
-      description: A single tax component of the flight pass fare.
-      properties:
-        code:
-          type: string
-          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
-          example: GST_HST
-        amount:
-          description: Tax amount.
-          $ref: '#/components/schemas/Money'
-    TokenizedExpiryWrapper:
-      type: object
-      title: TokenizedExpiryWrapper
-      properties:
-        tokenizedExpiry:
-          $ref: '#/components/schemas/TokenizedExpiry'
-    CompanyId:
-      type: object
-      title: CompanyId
-      description: Company ID
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: f49d00fe-1eda-4304-ba79-a980f565281d
-    PaymentTransaction:
-      type: object
-      title: PaymentTransaction
-      description: Payment Transaction
-      properties:
-        gatewayIdentifier:
-          description: Gateway Identifier
-          $ref: '#/components/schemas/GatewayIdentifier'
-        paymentReference:
-          type: string
-          description: payment reference
-        networkTransactionId:
-          type: string
-          description: Network Transaction Id
-        gatewayInfo:
-          $ref: '#/components/schemas/GatewayInfo'
-        failureReason:
-          $ref: '#/components/schemas/FailureReason'
-    UserId:
-      type: object
-      title: UserId
-      description: User identifier
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-    UAPassPlusMetadataWrapperExternal:
-      type: object
-      title: UAPassPlusMetadataResponseWrapper
-      description: Wrapper for UAPassPlus response metadata
-      required:
-      - uaPassPlusMetadata
-      properties:
-        uaPassPlusMetadata:
-          $ref: '#/components/schemas/UAPassPlusMetadataExternal'
-    OrganizationId:
-      type: object
-      title: OrganizationId
-      description: Organization id for traveler.
-      required:
-      - id
-      properties:
-        id:
-          type: string
-    TaxBreakdown:
-      type: array
-      items:
-        $ref: '#/components/schemas/Tax'
-    ErrorResponse:
-      type: object
-      properties:
-        debugIdentifier:
-          type: string
-          description: Link to debug the error internally.
-        errorMessages:
-          type: array
-          items:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                description: Error code to identify the specific errors.
-              message:
-                type: string
-                description: Message containing details of error.
-              errorParameters:
-                type: array
-                description: Error message parameters.
-                items:
-                  $ref: '#/components/schemas/ErrorParameter'
-              errorDetail:
-                type: string
-                description: More details about the error.
-    FailureDetails:
-      type: object
-      title: FailureDetails
-      description: Failure details
-      properties:
-        failureCode:
-          type: string
-          description: failure code
-          enum:
-          - FAILURE_CODE_UNKNOWN
-          - PAYMENT_METHOD_MISSING
-          - PAYMENT_GATEWAY_FAILURE
-        failureMessage:
-          type: string
-          description: failure message
-    OtherFeeInfo:
-      type: object
-      title: OtherFeeInfo
-      description: Other Fee Info
-      required:
-      - bookingFeeType
-      - otherFeeType
-      properties:
-        bookingFeeType:
-          type: string
-          description: Type of the booking fee
-          example: OTHER_FEE
-        calculatedAmount:
-          $ref: '#/components/schemas/Money'
-        chargeProcessorInfo:
-          $ref: '#/components/schemas/ChargeProcessorInfo'
-        otherFeeType:
-          $ref: '#/components/schemas/OtherFeeType'
-        feeName:
-          type: string
-          description: Name of the fee to be charged.
-          example: TMC Standard Fee
-    Tax:
-      type: object
-      title: Tax
-      description: Tax details
-      required:
-      - amount
-      properties:
-        amount:
-          $ref: '#/components/schemas/Money'
-          description: Tax amount
-        taxCode:
-          type: string
-          description: Tax code
-          example: VAT
-        percentage:
-          type: number
-          format: double
-          description: Tax amount to total amount
-          example: 9
-    PaymentSourceType:
-      type: string
-      description: Type of Payment Source
-      enum:
-      - CARD
-      - VIRTUAL_CARD
-      - REWARDS_PROGRAM
-      - DELAYED_INVOICING
-      - CUSTOM_PAYMENT_METHOD
-      - VENDOR_PROGRAM_PAYMENT
-      - UNUSED_CREDIT
-      - CASH
-    CardCompany:
-      type: string
-      enum:
-      - NONE
-      - VISA
-      - MASTERCARD
-      - AMEX
-      - DISCOVER
-      - AIR_TRAVEL_UATP
-      - CARTE_BLANCHE
-      - DINERS_CLUB
-      - JCB
-      - BREX
-      - UNION_PAY
-      - EURO_CARD
-      - ACCESS_CARD
-      - ELO_CARD
-      description: The issuing company of card
-      example: VISA
-    UAPassPlusMetadataExternal:
-      type: object
-      title: UAPassPlusMetadata
-      description: Details for UAPassPlus Metadata.
-      properties:
-        uatpInfo:
-          type: object
-          title: uatpInfo
-          description: UATP card information for UAPassPlus
-    NonBillableReason:
-      type: object
-      title: NonBillableReason
-      description: Reason for non-billable agent contact.
-      required:
-      - reasonCode
-      properties:
-        reasonCode:
-          $ref: '#/components/schemas/NonBillableReasonCode'
-          description: Reason code for non-billable agent contact.
-          example: MINOR_REQUEST
-        notes:
-          type: string
-          description: Notes for non-billable agent contact.
-          example: Waived off
-    ValueAddedServiceFeeType:
-      type: string
-      title: ValueAddedServiceFeeType
-      description: Value added service fee type
-      enum:
-      - VIRTUAL_CARD_PAYMENT
-      - PRICE_OPTIMIZATION
-      - UNUSED_CREDIT_APPLICATION
-      - MERCHANT_FEE
-      example: VIRTUAL_CARD_PAYMENT
     Expiry:
       title: Expiry
       type: object
@@ -470,6 +161,111 @@ components:
           description: Expiry year
           minimum: 2000
           example: 2010
+    TmcInfo:
+      type: object
+      title: TmcInfo
+      description: TMC config information.
+      required:
+      - id
+      - primaryServiceProviderTmc
+      properties:
+        id:
+          $ref: '#/components/schemas/CompanyId'
+          description: TMC id.
+        primaryServiceProviderTmc:
+          $ref: '#/components/schemas/PrimaryServiceProviderTmc'
+          description: Primary service provider TMC for the TMC.
+        secondaryServiceProviderTmcs:
+          type: array
+          description: Secondary service provider TMCs for the TMC.
+          items:
+            $ref: '#/components/schemas/SecondaryServiceProviderTmc'
+        partnerTmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Useful to identify the clients onboarded by a PARTNER_TMC
+    PaymentMetadata:
+      title: PaymentMetadata
+      description: Payment metadata related to form of payment
+      type: object
+      properties:
+        customPaymentMethodMetadata:
+          type: object
+          description: Metadata related to custom payment method
+          properties:
+            brexBudgetMetadata:
+              type: object
+              description: Metadata for Brex Budget
+              properties:
+                budgetName:
+                  type: string
+                  description: Name of the budget
+                  example: Travel budget
+                paidByPersonalCard:
+                  type: boolean
+                  description: Whether it was paid by budget card or personal card
+                  example: false
+            noPrepaymentMetadata:
+              $ref: '#/components/schemas/NoPrepaymentMetadata'
+        vendorProgramPaymentMetadata:
+          $ref: '#/components/schemas/VendorProgramPaymentMetadata2'
+        virtualCardMetadata:
+          $ref: '#/components/schemas/VirtualCardPaymentMetadata'
+        cardMetadata:
+          $ref: '#/components/schemas/CardMetadata2'
+    ThirdPartySource:
+      type: string
+      enum:
+      - UNKNOWN_SOURCE
+      - SABRE
+      - TRAVEL_FUSION
+      - AVIA
+      - NDC
+      - TRAINLINE
+      - ATPCO_NDC
+      - FARELOGIX_NDC
+      - OFFLINE
+      - CONNEXUS
+      - ROUTEHAPPY
+      - AMADEUS
+      - GIATA
+      - QBR
+      - BCD
+      - QANTAS_HOTELS
+      - SOUTHWEST
+      - EXPEDIA
+      - HOTEL_HUB
+      - MARRIOTT
+      - CLEARTRIP
+      - KYTE
+      - GROUNDSPAN
+      - SABRE_NDC
+      - BOOKING_COM
+      - CARTRAWLER
+      - PREMIER_INN
+      - TRAVELODGE
+      - ENTERPRISE
+      - HYATT
+      - EUROSTAR
+      - NATIONAL
+      - ALAMO
+      - AVIS
+      - BUDGET
+      - HERTZ
+      - DOLLAR
+      - THRIFTY
+      - FIREFLY
+      x-ignoreBreakingChanges:
+      - ThirdPartySource->BOOKING_COM
+      - ThirdPartySource->CARTRAWLER
+      - ThirdPartySource->PREMIER_INN
+      example: SABRE
+    OtherFeeType:
+      type: string
+      title: OtherFeeType
+      description: Other fee type
+      enum:
+      - MERCHANT_FEE
+      example: MERCHANT_FEE
     RuleBasedInfo:
       title: RuleBasedInfo
       type: object
@@ -486,52 +282,24 @@ components:
           type: string
           description: Charge processor type
           example: RULE_BASED_INFO
-    CentralCardAccessLevel:
-      title: CentralCardAccessLevel
+    ServiceType:
       type: string
-      description: Identifies at which level central card is applicable, for example organization or legal entity.
+      title: ServiceType
+      description: 'Type of service for service charge. ITINERARY_BOOKING: Service charge for travel booking. AGENT_CONTACT: Service charge for agent contact.
+
+        '
       enum:
-      - UNKNOWN
-      - ORGANIZATION
-      - LEGAL_ENTITY
-      - TMC
-    VirtualCardVendorInfo:
+      - ITINERARY_BOOKING
+      - AGENT_CONTACT
+    DirectBillingWrapper2:
       type: object
-      title: VirtualCardVendorInfo
-      description: Virtual card related information like vendor, cardId, card-pool id of vendor etc.
+      title: DirectBillingWrapper
+      description: Wrapper for DirectBilling metadata
       required:
-      - vendorCardId
-      - virtualCardVendorCardPoolId
+      - directBilling
       properties:
-        vendor:
-          $ref: '#/components/schemas/VirtualCardVendor'
-        vendorCardId:
-          type: string
-          description: Virtual card id.
-          example: '68793680'
-        virtualCardVendorCardPoolId:
-          type: string
-          description: Card pool id of virtual card vendor.
-          example: '51907'
-        confermaInfo:
-          $ref: '#/components/schemas/ConfermaInfo'
-    CardMetadata2:
-      type: object
-      title: CardMetadata
-      description: Metadata for Card payment source.
-      properties:
-        card:
-          $ref: '#/components/schemas/Card'
-        accessType:
-          $ref: '#/components/schemas/CreditCardAccess'
-        isLodgeCard:
-          type: boolean
-          description: Whether the payment is made using a lodge card
-          example: false
-        bta:
-          type: string
-          description: Whether this is a BTA card. Possible values are 'Y' or 'N'. Relevant only for lodge cards.
-          example: Y
+        directBilling:
+          $ref: '#/components/schemas/DirectBilling2'
     FormOfPayment:
       title: Form of Payment
       description: Information about form of payment to be used to charge customer
@@ -569,6 +337,204 @@ components:
           $ref: '#/components/schemas/PaymentMetadata'
         paymentSourceType:
           $ref: '#/components/schemas/PaymentSourceType'
+    OwnershipLabel:
+      title: OwnershipLabel
+      type: string
+      description: Ownership label of the card whether it is personal, corporate or central.
+      enum:
+      - CORPORATE
+      - PERSONAL
+      - CENTRAL
+    Dimensions:
+      type: object
+      title: Dimensions
+      description: Image dimensions ie width and height.
+      properties:
+        height:
+          type: integer
+          format: int32
+          example: 120
+        width:
+          type: integer
+          format: int32
+          example: 240
+    PaymentStatus:
+      type: string
+      title: PaymentStatus
+      description: Payment status.
+      enum:
+      - SUCCESS
+      - DELAYED_INVOICE
+      - MANUAL
+      - NO_CHARGE
+      - WAIVED_OFF
+    DateTimeOffset:
+      title: DateTimeOffset
+      description: ISO8601 UTC Date Time
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?(Z|([+-](0[0-9]|1[0-4]):([0-5][0-9])))$
+          example: 2017-07-21T17:32Z
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    CardMetadata2:
+      type: object
+      title: CardMetadata
+      description: Metadata for Card payment source.
+      properties:
+        card:
+          $ref: '#/components/schemas/Card'
+        accessType:
+          $ref: '#/components/schemas/CreditCardAccess'
+        isLodgeCard:
+          type: boolean
+          description: Whether the payment is made using a lodge card
+          example: false
+        bta:
+          type: string
+          description: Whether this is a BTA card. Possible values are 'Y' or 'N'. Relevant only for lodge cards.
+          example: Y
+    ServiceChargeEntityType:
+      type: string
+      title: ServiceChargeEntityType
+      description: Entity type for service charge.
+      enum:
+      - TRIP
+      - USER
+    VirtualCardVendorInfo:
+      type: object
+      title: VirtualCardVendorInfo
+      description: Virtual card related information like vendor, cardId, card-pool id of vendor etc.
+      required:
+      - vendorCardId
+      - virtualCardVendorCardPoolId
+      properties:
+        vendor:
+          $ref: '#/components/schemas/VirtualCardVendor'
+        vendorCardId:
+          type: string
+          description: Virtual card id.
+          example: '68793680'
+        virtualCardVendorCardPoolId:
+          type: string
+          description: Card pool id of virtual card vendor.
+          example: '51907'
+        confermaInfo:
+          $ref: '#/components/schemas/ConfermaInfo'
+    CentralCardAccessLevel:
+      title: CentralCardAccessLevel
+      type: string
+      description: Identifies at which level central card is applicable, for example organization or legal entity.
+      enum:
+      - UNKNOWN
+      - ORGANIZATION
+      - LEGAL_ENTITY
+      - TMC
+    TokenizedExpiryWrapper:
+      type: object
+      title: TokenizedExpiryWrapper
+      properties:
+        tokenizedExpiry:
+          $ref: '#/components/schemas/TokenizedExpiry'
+    LegalEntityId:
+      type: object
+      title: LegalEntityId
+      description: The ID of the legal entity.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          example: fc1ccbce-8413-4fe9-b233-a324dfbe7421
+    PrimaryServiceProviderTmc:
+      type: object
+      title: PrimaryServiceProviderTmc
+      description: Primary service provider TMC info
+      required:
+      - tmcId
+      properties:
+        tmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Id of the service provider TMC.
+    SupplierType:
+      type: string
+      description: Supplier type like Sabre, TravelFusion etc.
+      enum:
+      - SABRE
+      - AMADEUS
+      - TRAVEL_FUSION
+      - FARELOGIX_NDC
+      - ATPCO_NDC
+      - TRAINLINE
+      - AVIA
+      - QBR
+      - BCD
+      - QANTAS_HOTELS
+      - SOUTHWEST
+      - EXPEDIA
+      - HOTEL_HUB
+      - NDC
+      - MARRIOTT
+      - CLEARTRIP
+      - KYTE
+      - GROUNDSPAN
+      - SABRE_NDC
+      - BOOKING_COM
+      - CARTRAWLER
+      - PREMIER_INN
+      - TRAVELODGE
+      - ENTERPRISE
+      - HYATT
+      - NATIONAL
+      - ALAMO
+      - HERTZ
+      - DOLLAR
+      - THRIFTY
+      - FIREFLY
+      - EUROSTAR
+      - AVIS
+      - BUDGET
+      x-ignoreBreakingChanges:
+      - SupplierType->PREMIER_INN
+      example: SABRE
+    PaymentTransaction:
+      type: object
+      title: PaymentTransaction
+      description: Payment Transaction
+      properties:
+        gatewayIdentifier:
+          description: Gateway Identifier
+          $ref: '#/components/schemas/GatewayIdentifier'
+        paymentReference:
+          type: string
+          description: payment reference
+        networkTransactionId:
+          type: string
+          description: Network Transaction Id
+        gatewayInfo:
+          $ref: '#/components/schemas/GatewayInfo'
+        failureReason:
+          $ref: '#/components/schemas/FailureReason'
     ServiceChargeRecord:
       type: object
       title: ServiceChargeRecord
@@ -632,6 +598,248 @@ components:
         failureDetails:
           $ref: '#/components/schemas/FailureDetails'
           description: Failure details.
+    GatewayIdentifier:
+      type: object
+      properties:
+        gatewayId:
+          type: string
+          description: Gateway Id for which the payment method should be verified.
+        gatewayType:
+          type: string
+          description: Gateway Type for of the verification gateway.
+          enum:
+          - PAYMENT_GATEWAY_UNKNOWN
+          - STRIPE
+          - BREX
+          - RAZORPAY
+    DateRange:
+      type: object
+      description: Date range within which the virtual card can be charged.
+      required:
+      - startDate
+      - endDate
+      properties:
+        startDate:
+          $ref: '#/components/schemas/DateTimeLocal'
+        endDate:
+          $ref: '#/components/schemas/DateTimeLocal'
+    NonBillableReasonCode:
+      type: string
+      title: NonBillableReasonCode
+      description: Reason code for non-billable agent contact.
+      enum:
+      - PRODUCT_ISSUE
+      - ALREADY_CHARGED
+      - CUSTOMER_GOODWILL
+      - MINOR_REQUEST
+      - NON_BILLABLE_REASON_OTHER
+    CreditCardAccess:
+      type: object
+      title: CreditCardAccess
+      description: Access type for cards to check who in the organization has permission to use it
+      required:
+      - accessType
+      - entityIds
+      properties:
+        accessType:
+          $ref: '#/components/schemas/CreditCardAccessType'
+        entityIds:
+          type: array
+          items:
+            type: string
+          description: Holds the ids for for all users who can access the card or organization id
+        entities:
+          type: array
+          description: A list of cardAccessEntity consisting of central card access level if present and entity id.
+          items:
+            $ref: '#/components/schemas/CardAccessEntity'
+    FareAmount:
+      type: object
+      title: FareAmount
+      description: Fare amount including base fare and tax.
+      required:
+      - base
+      - tax
+      properties:
+        base:
+          description: Base fare amount.
+          $ref: '#/components/schemas/Money'
+        tax:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+        taxBreakdown:
+          description: Breakdown of tax amounts.
+          $ref: '#/components/schemas/TaxBreakdown'
+    TaxAmount:
+      type: object
+      title: Tax
+      description: Tax
+      required:
+      - amount
+      - taxCode
+      - description
+      properties:
+        amount:
+          $ref: '#/components/schemas/Money'
+        taxCode:
+          type: string
+          description: Tax code
+          example: VAT
+        description:
+          type: string
+          description: Tax code
+        percentage:
+          type: number
+          format: double
+          description: Amount
+          example: 10
+    AgentAssistedTransactionFeeInfo:
+      title: Agent Assisted Transaction Fee Info
+      type: object
+      description: Transaction Fees when Agent is booking for Traveler.
+      required:
+      - agentFeeType
+      properties:
+        agentFeeType:
+          type: string
+          example: AGENT_ASSISTED_TRANSACTION_FEE
+        transactionFeeType:
+          $ref: '#/components/schemas/ServiceFeeTransactionType'
+        calculatedAmount:
+          $ref: '#/components/schemas/Money'
+        chargeProcessorInfo:
+          $ref: '#/components/schemas/ChargeProcessorInfo'
+    VirtualCardVendor:
+      type: string
+      description: Type of Virtual card vendor
+      enum:
+      - CONFERMA
+      example: CONFERMA
+    OtherFeeInfo:
+      type: object
+      title: OtherFeeInfo
+      description: Other Fee Info
+      required:
+      - bookingFeeType
+      - otherFeeType
+      properties:
+        bookingFeeType:
+          type: string
+          description: Type of the booking fee
+          example: OTHER_FEE
+        calculatedAmount:
+          $ref: '#/components/schemas/Money'
+        chargeProcessorInfo:
+          $ref: '#/components/schemas/ChargeProcessorInfo'
+        otherFeeType:
+          $ref: '#/components/schemas/OtherFeeType'
+        feeName:
+          type: string
+          description: Name of the fee to be charged.
+          example: TMC Standard Fee
+    BookingFeeInfo:
+      type: object
+      title: BookingFeeInfo
+      required:
+      - feeType
+      discriminator:
+        propertyName: bookingFeeType
+        mapping:
+          TRIP_FEE: '#/components/schemas/TripFeeInfo'
+          TRANSACTION_FEE: '#/components/schemas/TransactionFeeInfo'
+          VALUE_ADDED_SERVICE_FEE: '#/components/schemas/ValueAddedServiceFeeInfo'
+          OTHER_FEE: '#/components/schemas/OtherFeeInfo'
+      oneOf:
+      - $ref: '#/components/schemas/TripFeeInfo'
+      - $ref: '#/components/schemas/TransactionFeeInfo'
+      - $ref: '#/components/schemas/ValueAddedServiceFeeInfo'
+      - $ref: '#/components/schemas/OtherFeeInfo'
+      properties:
+        feeType:
+          type: string
+          description: Type of the fee
+          example: BOOKING_FEE
+    ValueAddedServiceFeeType:
+      type: string
+      title: ValueAddedServiceFeeType
+      description: Value added service fee type
+      enum:
+      - VIRTUAL_CARD_PAYMENT
+      - PRICE_OPTIMIZATION
+      - UNUSED_CREDIT_APPLICATION
+      - MERCHANT_FEE
+      example: VIRTUAL_CARD_PAYMENT
+    CardExpiry:
+      title: CardExpiry
+      type: object
+      description: Contains the expiry of a Card.
+      oneOf:
+      - $ref: '#/components/schemas/TokenizedExpiryWrapper'
+      - $ref: '#/components/schemas/ExpiryWrapper'
+    TransactionFeeInfo:
+      title: Transaction Fee Info
+      type: object
+      description: Transaction Fee Info
+      required:
+      - bookingFeeType
+      properties:
+        bookingFeeType:
+          type: string
+          example: TRANSACTION_FEE
+        transactionFeeType:
+          $ref: '#/components/schemas/ServiceFeeTransactionType'
+        calculatedAmount:
+          $ref: '#/components/schemas/Money'
+        chargeProcessorInfo:
+          $ref: '#/components/schemas/ChargeProcessorInfo'
+    UAPassPlusMetadataExternal:
+      type: object
+      title: UAPassPlusMetadata
+      description: Details for UAPassPlus Metadata.
+      properties:
+        uatpInfo:
+          type: object
+          title: uatpInfo
+          description: UATP card information for UAPassPlus
+    OrganizationId:
+      type: object
+      title: OrganizationId
+      description: Organization id for traveler.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+    VirtualCardPaymentMetadata:
+      title: VirtualCardPaymentMetadata
+      type: object
+      description: Metadata for Virtual Card.
+      required:
+      - vendorInfo
+      properties:
+        vendorInfo:
+          $ref: '#/components/schemas/VirtualCardVendorInfo'
+        cardInfo:
+          $ref: '#/components/schemas/VirtualCardInfo'
+        paymentInstructionId:
+          type: string
+          description: Payment instruction id set during addition of virtual card payment source
+          example: 1eb8b778-f0a6-4037-865c-4580982fa36e
+        shouldReveal:
+          type: boolean
+          description: Identifier for when to reveal virtual cards as they are revealed to travellers only 24hrs before check-in.
+          example: false
+    CompanyId:
+      type: object
+      title: CompanyId
+      description: Company ID
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: f49d00fe-1eda-4304-ba79-a980f565281d
     FlightPassPaymentMetadata:
       type: object
       title: FlightPassPaymentMetadata
@@ -643,6 +851,239 @@ components:
           example: FP123456789
         flightPassAmounts:
           $ref: '#/components/schemas/FlightPassPaymentAmounts'
+    TaxBreakdown:
+      type: array
+      items:
+        $ref: '#/components/schemas/Tax'
+    Tax:
+      type: object
+      title: Tax
+      description: Tax details
+      required:
+      - amount
+      properties:
+        amount:
+          $ref: '#/components/schemas/Money'
+          description: Tax amount
+        taxCode:
+          type: string
+          description: Tax code
+          example: VAT
+        percentage:
+          type: number
+          format: double
+          description: Tax amount to total amount
+          example: 9
+    PaymentMethod:
+      type: string
+      description: Payment method
+      enum:
+      - PAYMENT_METHOD_UNKNOWN
+      - CREDIT_CARD
+      - BREX_POINTS
+      - CASH
+      - QANTAS_POINTS
+      - VENDOR_PROGRAM_PAYMENT
+      - DELAYED_INVOICING
+      - FLIGHT_CREDITS
+      - QANTAS_TRAVEL_FUND
+      - CUSTOM_VIRTUAL_PAYMENT
+      - FLIGHT_PASS
+      - MISCELLANEOUS_CREDIT_ORDER
+      - NO_PREPAYMENT
+      x-ignoreBreakingChanges:
+      - PaymentMethod->MISCELLANEOUS_CREDIT_ORDER
+      - PaymentMethod->NO_PREPAYMENT
+      example: BREX_POINTS
+    AgentContactType:
+      type: string
+      title: Agent contact type
+      description: Agent contact type
+      enum:
+      - PHONE
+      - CHAT
+      - EMAIL
+    ChargeProcessorInfo:
+      title: ChargeProcessorInfo
+      type: object
+      description: Information about the processor that calculated the charge
+      discriminator:
+        propertyName: chargeProcessorType
+        mapping:
+          RULE_BASED_INFO: '#/components/schemas/RuleBasedInfo'
+          TMC_CALCULATOR_INFO: '#/components/schemas/TmcCalculatorInfo'
+      oneOf:
+      - $ref: '#/components/schemas/RuleBasedInfo'
+      - $ref: '#/components/schemas/TmcCalculatorInfo'
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    ServiceCharge:
+      type: object
+      title: ServiceCharge
+      description: Service charge.
+      required:
+      - amount
+      - taxes
+      - totalAmount
+      properties:
+        amount:
+          $ref: '#/components/schemas/Money'
+          description: Service charge amount.
+        taxes:
+          type: array
+          description: Applicable taxes.
+          items:
+            $ref: '#/components/schemas/TaxAmount'
+        totalAmount:
+          $ref: '#/components/schemas/Money'
+          description: Total amount (including taxes).
+        allowedFoP:
+          type: array
+          deprecated: true
+          x-sunset: '2026-07-01'
+          description: List of allowed payment methods for this charge.
+          items:
+            $ref: '#/components/schemas/PaymentMethod'
+        feeInfo:
+          $ref: '#/components/schemas/FeeInfo'
+        waiveOffInfo:
+          $ref: '#/components/schemas/AppliedWaiveOffInfo'
+    GatewayInfo:
+      type: object
+      title: GatewayInfo
+      description: Payment gateway information
+      oneOf:
+      - $ref: '#/components/schemas/StripeInfoWrapper'
+    Card:
+      type: object
+      title: Card
+      description: User card info
+      required:
+      - number
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this card
+          format: uuid
+          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - CREDIT
+          - DEBIT
+          description: Type of card
+          example: CREDIT
+        company:
+          $ref: '#/components/schemas/CardCompany'
+        name:
+          description: Name on card
+          type: string
+          example: Harrison Schwartz
+          x-pii: SENSITIVE
+        address:
+          description: Billing address
+          $ref: '#/components/schemas/PostalAddress'
+          x-pii: SENSITIVE
+        number:
+          type: string
+          description: Card number
+          example: '4111111111111111'
+        expiryMonth:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+          description: Expiry month
+          example: 1
+          deprecated: true
+          x-sunset: '2026-07-01'
+        expiryYear:
+          type: integer
+          format: int32
+          description: Expiry year
+          minimum: 2000
+          example: 2010
+          deprecated: true
+          x-sunset: '2026-07-01'
+        cvv:
+          type: string
+          description: Card cvv number
+          example: '012'
+        label:
+          type: string
+          description: Card Label
+          example: Label amex
+        currency:
+          type: string
+          description: Native currency of the card.
+          example: USD
+        externalId:
+          type: string
+          description: Spotnana partner card id.
+          example: bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40
+        vaultId:
+          type: string
+          description: ID of the vault used for creating the card.
+          format: uuid
+          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
+        expiry:
+          description: Card Expiry.
+          $ref: '#/components/schemas/CardExpiry'
+        ownershipLabel:
+          $ref: '#/components/schemas/OwnershipLabel'
+          example: PERSONAL
+    AgentContactOp:
+      type: string
+      title: AgentContactOp
+      description: Agent contact operation.
+      enum:
+      - AGENT_BOOKING
+      - AGENT_MODIFY
+      - AGENT_CANCEL
+      - AGENT_OTHER
+      - AGENT_EXCHANGE
+      - ANCILLARY_PURCHASE
+      - SHELL_PNR_CREATE
+      - SHELL_PNR_MODIFY
+      - SHELL_PNR_CANCEL
+      - SHELL_PNR_EXCHANGE
+      - MANUAL_FORM_CREATE
+      - MANUAL_FORM_MODIFY
+      - MANUAL_FORM_CANCEL
+      - MANUAL_FORM_EXCHANGE
+      - UNUSED_TICKET_MANAGEMENT
+    Image:
+      type: object
+      title: Image
+      description: An image with meta data. Either the `data` or `url` property must be supplied to load the image.
+      properties:
+        data:
+          type: string
+          format: byte
+          example: 6935813e12584abda0e43d71cd2ea260
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        url:
+          type: string
+          example: https://static.wixstatic.com/media/73f2e2_6935813e12584abda0e43d71cd2ea260~mv2.png/v1/fill/w_630,h_94,al_c,q_85,usm_0.66_1.00_0.01/Spotnana%403x.webp
+    ListServiceChargesRequest:
+      type: object
+      title: ListServiceChargesRequest
+      description: Request for list service charges.
+      properties:
+        serviceType:
+          $ref: '#/components/schemas/ServiceType'
+          description: Type of service charge (Optional).
     CreditCardAccessType:
       title: CreditCardAccessType
       type: string
@@ -661,83 +1102,188 @@ components:
       - EVENT_TEMPLATE
       x-ignoreBreakingChanges:
       - CreditCardAccessType->EVENT_TEMPLATE
-    Image:
+    AgentFeeInfo:
       type: object
-      title: Image
-      description: An image with meta data. Either the `data` or `url` property must be supplied to load the image.
-      properties:
-        data:
-          type: string
-          format: byte
-          example: 6935813e12584abda0e43d71cd2ea260
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-        url:
-          type: string
-          example: https://static.wixstatic.com/media/73f2e2_6935813e12584abda0e43d71cd2ea260~mv2.png/v1/fill/w_630,h_94,al_c,q_85,usm_0.66_1.00_0.01/Spotnana%403x.webp
-    LegalEntityId:
-      type: object
-      title: LegalEntityId
-      description: The ID of the legal entity.
+      title: AgentFeeInfo
       required:
-      - id
+      - feeType
+      discriminator:
+        propertyName: agentFeeType
+        mapping:
+          AGENT_ASSISTED_TRIP_FEE: '#/components/schemas/AgentAssistedTripFeeInfo'
+          AGENT_ASSISTED_TRANSACTION_FEE: '#/components/schemas/AgentAssistedTransactionFeeInfo'
+      oneOf:
+      - $ref: '#/components/schemas/AgentAssistedTripFeeInfo'
+      - $ref: '#/components/schemas/AgentAssistedTransactionFeeInfo'
       properties:
-        id:
+        feeType:
           type: string
-          example: fc1ccbce-8413-4fe9-b233-a324dfbe7421
-    FareAmount:
+          description: Type of the fee
+          example: AGENT_FEE
+    SecondaryServiceProviderTmc:
       type: object
-      title: FareAmount
-      description: Fare amount including base fare and tax.
+      title: SecondaryServiceProviderTmc
+      description: Secondary service provider TMC info
       required:
-      - base
-      - tax
+      - tmcId
+      - supplier
+      - travelType
       properties:
-        base:
-          description: Base fare amount.
-          $ref: '#/components/schemas/Money'
-        tax:
-          description: Tax amount.
-          $ref: '#/components/schemas/Money'
-        taxBreakdown:
-          description: Breakdown of tax amounts.
-          $ref: '#/components/schemas/TaxBreakdown'
-    AppliedWaiveOffInfo:
+        tmcId:
+          $ref: '#/components/schemas/CompanyId'
+          description: Id of the service provider TMC.
+        supplier:
+          $ref: '#/components/schemas/SupplierType'
+          description: Supplier for which this service provider should be used.
+        travelType:
+          $ref: '#/components/schemas/TravelType'
+          description: Travel type for which this service provider should be used.
+    TmcBasicInfo:
       type: object
-      title: Applied Waive-Off Information
-      description: Information about TMC fee waivers applied by an agent during checkout.
+      title: TmcBasicInfo
+      description: TMC related basic information.
+      required:
+      - contractingTmc
+      - bookingTmc
       properties:
-        waiveOffAmount:
-          description: The amount of TMC fee that has been waived
-          $ref: '#/components/schemas/FareAmount'
-        waiveOffReason:
-          description: The reason provided by the agent for waiving the fee
-          $ref: '#/components/schemas/WaiveOffFeeReason'
-    StripeInfo:
-      title: StripeInfo
+        contractingTmc:
+          $ref: '#/components/schemas/CompanyRef'
+          description: Contracting TMC is the TMC the user/organization contracted.
+        bookingTmc:
+          $ref: '#/components/schemas/CompanyRef'
+          description: Booking TMC is the TMC used for the bookings for the user/organization.
+    CardAccessEntity:
+      title: CardAccessEntity
       type: object
-      description: Stripe payment gateway information
+      description: Contains the central access level and entity id.
+      required:
+      - entityId
       properties:
-        accountId:
+        entityId:
           type: string
-          description: Stripe account id
-          example: acct_1OAbc3AB5abcdDdA
-        accountDisplayName:
+          description: Holds the id for for the user who can access the card or organization id or legal entity
+        centralCardAccessLevel:
+          $ref: '#/components/schemas/CentralCardAccessLevel'
+    FeeInfo:
+      type: object
+      title: FeeInfo
+      discriminator:
+        propertyName: feeType
+        mapping:
+          BOOKING_FEE: '#/components/schemas/BookingFeeInfo'
+          AGENT_FEE: '#/components/schemas/AgentFeeInfo'
+      oneOf:
+      - $ref: '#/components/schemas/BookingFeeInfo'
+      - $ref: '#/components/schemas/AgentFeeInfo'
+      x-oneOfValidFrom:
+        AgentFeeInfo: '2025-08-20'
+    FlightPassPaymentMetadataWrapper:
+      type: object
+      title: FlightPassPaymentMetadataWrapper
+      description: Wrapper for Flight Pass payment metadata.
+      required:
+      - flightPassMetadata
+      properties:
+        metadataType:
           type: string
-          description: Stripe account display name as seen on the stripe dashboard
-          example: Abc Travel
-        platformAccountGatewayId:
+          description: Discriminator field for polymorphic deserialization
+          example: FlightPassPaymentMetadata
+          default: FlightPassPaymentMetadata
+        flightPassMetadata:
+          $ref: '#/components/schemas/FlightPassPaymentMetadata'
+    ServiceChargeType:
+      type: string
+      title: ServiceChargeType
+      description: 'Type of service charge. TMC_CHARGE: Service charge for a service charged by the TMC.
+
+        '
+      enum:
+      - TMC_CHARGE
+    FailureDetails:
+      type: object
+      title: FailureDetails
+      description: Failure details
+      properties:
+        failureCode:
           type: string
-          description: Gateway-id of platform account when this gateway is a connected account
-          example: connect-platform:#
-          readOnly: true
-        address:
-          description: Address for the given account
-          $ref: '#/components/schemas/PostalAddress'
-        taxId:
+          description: failure code
+          enum:
+          - FAILURE_CODE_UNKNOWN
+          - PAYMENT_METHOD_MISSING
+          - PAYMENT_GATEWAY_FAILURE
+        failureMessage:
           type: string
-          description: Tax id for account
-          example: 89-189390
+          description: failure message
+    FailureReason:
+      type: object
+      title: FailureReason
+      description: Contains the failure reason in case of any Failed Transaction
+      properties:
+        reasonCode:
+          type: string
+          description: Reason Code associated with the Failure
+          enum:
+          - PAYMENT_METHOD_MISSING
+          - PAYMENT_GATEWAY_FAILURE
+          example: PAYMENT_METHOD_MISSING
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    VirtualCardInfo:
+      type: object
+      title: VirtualCardInfo
+      description: Virtual card information like maximum deployment amount, valid date range.
+      properties:
+        amount:
+          description: Virtual card deployment amount. This amount will drive the maximum authorisation value permitted on the virtual card.
+          $ref: '#/components/schemas/Money'
+        dateRange:
+          description: Date range within which the virtual card can be charged.
+          $ref: '#/components/schemas/DateRange'
+    UAPassPlusMetadataWrapperExternal:
+      type: object
+      title: UAPassPlusMetadataResponseWrapper
+      description: Wrapper for UAPassPlus response metadata
+      required:
+      - uaPassPlusMetadata
+      properties:
+        uaPassPlusMetadata:
+          $ref: '#/components/schemas/UAPassPlusMetadataExternal'
+    TravelType:
+      type: string
+      title: TravelType
+      description: Travel Type
+      enum:
+      - AIR
+      - HOTEL
+      - CAR
+      - RAIL
+      - LIMO
+      - MISC
+      - ALL
+      example: AIR
     TokenizedExpiry:
       title: TokenizedExpiry
       type: object
@@ -754,30 +1300,6 @@ components:
           type: string
           description: Tokenized Expiry year
           example: fPBm0OWrKwPyIrCVcbg4cA==
-    ListServiceChargesRequest:
-      type: object
-      title: ListServiceChargesRequest
-      description: Request for list service charges.
-      properties:
-        serviceType:
-          $ref: '#/components/schemas/ServiceType'
-          description: Type of service charge (Optional).
-    TransactionFeeInfo:
-      title: Transaction Fee Info
-      type: object
-      description: Transaction Fee Info
-      required:
-      - bookingFeeType
-      properties:
-        bookingFeeType:
-          type: string
-          example: TRANSACTION_FEE
-        transactionFeeType:
-          $ref: '#/components/schemas/ServiceFeeTransactionType'
-        calculatedAmount:
-          $ref: '#/components/schemas/Money'
-        chargeProcessorInfo:
-          $ref: '#/components/schemas/ChargeProcessorInfo'
     StripeInfoWrapper:
       type: object
       title: StripeInfoWrapper
@@ -787,6 +1309,78 @@ components:
       properties:
         stripeInfo:
           $ref: '#/components/schemas/StripeInfo'
+    ConfermaInfo:
+      type: object
+      title: ConfermaInfo
+      description: Details of conferma - one of virtual card vendors.
+      required:
+      - deploymentId
+      properties:
+        deploymentId:
+          type: integer
+          format: int32
+          description: Unique identifier assigned to the virtual card deployment at the point of creation.
+          example: 68793680
+    ServiceFeeTransactionType:
+      type: string
+      title: ServiceFeeTransactionType
+      description: Transaction type for service fee
+      enum:
+      - TRANSACTION_TYPE_BOOKING
+      - TRANSACTION_TYPE_MODIFICATION
+      - TRANSACTION_TYPE_CANCELLATION
+      - TRANSACTION_TYPE_AGENT_CONTACT
+      x-ignoreBreakingChanges:
+      - ServiceFeeTransactionType->TRANSACTION_TYPE_AGENT_CONTACT
+    OrganizationAgencyId:
+      type: object
+      title: OrganizationAgencyId
+      description: Agency id for the organization.
+      deprecated: true
+      x-sunset: '2026-07-01'
+      required:
+      - id
+      properties:
+        id:
+          type: string
+    AppliedWaiveOffInfo:
+      type: object
+      title: Applied Waive-Off Information
+      description: Information about TMC fee waivers applied by an agent during checkout.
+      properties:
+        waiveOffAmount:
+          description: The amount of TMC fee that has been waived
+          $ref: '#/components/schemas/FareAmount'
+        waiveOffReason:
+          description: The reason provided by the agent for waiving the fee
+          $ref: '#/components/schemas/WaiveOffFeeReason'
+    DirectBilling2:
+      title: DirectBilling
+      type: object
+      description: Metadata for Direct Billing
+      required:
+      - vendorId
+      properties:
+        vendorId:
+          type: string
+          description: Unique vendor id/code
+          example: ZI
+        directBillingCode:
+          type: string
+          description: Direct billing code provided by the vendor
+          example: '123456'
+    PaymentSourceType:
+      type: string
+      description: Type of Payment Source
+      enum:
+      - CARD
+      - VIRTUAL_CARD
+      - REWARDS_PROGRAM
+      - DELAYED_INVOICING
+      - CUSTOM_PAYMENT_METHOD
+      - VENDOR_PROGRAM_PAYMENT
+      - UNUSED_CREDIT
+      - CASH
     PostalAddress:
       title: PostalAddress
       description: Postal Address Details
@@ -898,6 +1492,76 @@ components:
         coordinates:
           description: Map coordinates of the address.
           $ref: '#/components/schemas/Latlng'
+    VendorProgramPaymentMetadata2:
+      type: object
+      title: VendorProgramPaymentMetadata
+      description: Metadata related to vendor program payment method
+      oneOf:
+      - $ref: '#/components/schemas/DirectBillingWrapper2'
+      - $ref: '#/components/schemas/UAPassPlusMetadataWrapperExternal'
+    ServiceChargeEntity:
+      type: object
+      title: ServiceChargeEntity
+      description: Entity for service charge.
+      required:
+      - entityType
+      - entityId
+      properties:
+        entityType:
+          $ref: '#/components/schemas/ServiceChargeEntityType'
+          description: Entity type for service charge.
+          example: TRIP
+        entityId:
+          type: string
+          description: Entity ID for service charge e.g, trip ID for entityType=TRIP.
+          example: '1234567890'
+    FlightPassTax:
+      type: object
+      title: FlightPassTax
+      description: A single tax component of the flight pass fare.
+      properties:
+        code:
+          type: string
+          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
+          example: GST_HST
+        amount:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+    ListServiceChargesResponse:
+      type: object
+      title: ListServiceChargesResponse
+      description: Response for list service charges.
+      properties:
+        serviceCharges:
+          type: array
+          description: List of service charges.
+          items:
+            $ref: '#/components/schemas/ServiceChargeRecord'
+    BookingDetails:
+      type: object
+      title: BookingDetails
+      description: Booking information
+      properties:
+        pnrId:
+          type: string
+          description: PNR Id
+        pnrVersion:
+          type: integer
+          format: int32
+          description: Version number associated with the PNR
+        tripUsageType:
+          type: string
+          description: Trip Usage Type
+          enum:
+          - TRIP_USAGE_TYPE_UNKNOWN
+          - STANDARD
+          - EVENT
+        source:
+          description: Third party source
+          $ref: '#/components/schemas/ThirdPartySource'
+        sourcePnrId:
+          type: string
+          description: Source PNR Id from thirdparty source
     ValueAddedServiceFeeInfo:
       type: object
       title: ValueAddedServiceFeeInfo
@@ -919,6 +1583,177 @@ components:
           type: string
           description: Name of the fee to be charged.
           example: Payment Admin Fee
+    TripFeeInfo:
+      title: Trip Fee Info
+      type: object
+      description: Trip Fee Info
+      required:
+      - bookingFeeType
+      properties:
+        bookingFeeType:
+          type: string
+          example: TRIP_FEE
+        calculatedAmount:
+          $ref: '#/components/schemas/Money'
+        chargeProcessorInfo:
+          $ref: '#/components/schemas/ChargeProcessorInfo'
+    CardCompany:
+      type: string
+      enum:
+      - NONE
+      - VISA
+      - MASTERCARD
+      - AMEX
+      - DISCOVER
+      - AIR_TRAVEL_UATP
+      - CARTE_BLANCHE
+      - DINERS_CLUB
+      - JCB
+      - BREX
+      - UNION_PAY
+      - EURO_CARD
+      - ACCESS_CARD
+      - ELO_CARD
+      description: The issuing company of card
+      example: VISA
+    ExpiryWrapper:
+      type: object
+      title: ExpiryWrapper
+      properties:
+        expiry:
+          $ref: '#/components/schemas/Expiry'
+    UserOrgId:
+      type: object
+      title: UserOrgId
+      description: User and user's organization information.
+      required:
+      - userId
+      - organizationId
+      properties:
+        organizationAgencyId:
+          $ref: '#/components/schemas/OrganizationAgencyId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        userId:
+          $ref: '#/components/schemas/UserId'
+        tmcInfo:
+          $ref: '#/components/schemas/TmcInfo'
+          deprecated: true
+          x-sunset: '2026-07-01'
+        tmcBasicInfo:
+          $ref: '#/components/schemas/TmcBasicInfo'
+    AgentAssistedTripFeeInfo:
+      title: Agent Assisted Trip Fee Info
+      type: object
+      description: Trip Fees when Agent is booking for Traveler.
+      required:
+      - agentFeeType
+      properties:
+        agentFeeType:
+          type: string
+          example: AGENT_ASSISTED_TRIP_FEE
+        calculatedAmount:
+          $ref: '#/components/schemas/Money'
+        chargeProcessorInfo:
+          $ref: '#/components/schemas/ChargeProcessorInfo'
+    NoPrepaymentMetadata:
+      type: object
+      title: NoPrepaymentMetadata
+      required:
+      - label
+      description: Metadata for No Prepayment payment source (car bookings on no-guarantee rates).
+      properties:
+        label:
+          type: string
+          example: No Prepayment
+          description: Label for No Prepayment payment source.
+    TmcCalculatorInfo:
+      title: TmcCalculatorInfo
+      type: object
+      description: TMC calculator processor info
+      required:
+      - chargeProcessorType
+      - calculatorType
+      properties:
+        calculatorType:
+          type: string
+          description: TMC service charge calculator type
+          example: SPOTNANA
+        chargeProcessorType:
+          type: string
+          description: Charge processor type
+          example: TMC_CALCULATOR_INFO
+    DateTimeLocal:
+      title: DateTimeLocal
+      description: Local date and time in ISO 8601 format.
+      type: object
+      required:
+      - iso8601
+      properties:
+        iso8601:
+          type: string
+          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?$
+          example: 2017-07-21T17:32
+    WaiveOffFeeReason:
+      type: object
+      title: WaiveOffFeeReason
+      description: Fee waive off reason info.
+      properties:
+        reasonCode:
+          type: string
+          description: Fee waive off reason code.
+          example: WA05
+        reason:
+          type: string
+          description: Fee waive off reason description.
+          example: Customer goodwill
+    NonBillableReason:
+      type: object
+      title: NonBillableReason
+      description: Reason for non-billable agent contact.
+      required:
+      - reasonCode
+      properties:
+        reasonCode:
+          $ref: '#/components/schemas/NonBillableReasonCode'
+          description: Reason code for non-billable agent contact.
+          example: MINOR_REQUEST
+        notes:
+          type: string
+          description: Notes for non-billable agent contact.
+          example: Waived off
+    CompanyRef:
+      type: object
+      description: Basic information about a company.
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/CompanyId'
+        name:
+          type: string
+        logo:
+          $ref: '#/components/schemas/Image'
+          description: Company logo
+    FlightPassPaymentAmounts:
+      type: object
+      title: FlightPassPaymentAmounts
+      description: Fare breakdown for the flight pass booking.
+      properties:
+        totalAmount:
+          description: Total value (base + taxes).
+          $ref: '#/components/schemas/Money'
+        baseAmount:
+          description: Base fare excluding taxes.
+          $ref: '#/components/schemas/Money'
+        totalTaxes:
+          description: Sum of all taxes, fees, and charges.
+          $ref: '#/components/schemas/Money'
+        taxBreakdown:
+          type: array
+          description: Breakdown of taxes by code (e.g. GST_HST, QST, OTHER).
+          items:
+            $ref: '#/components/schemas/FlightPassTax'
     AgentContact:
       type: object
       title: AgentContact
@@ -963,883 +1798,54 @@ components:
         nonBillableReason:
           $ref: '#/components/schemas/NonBillableReason'
           description: Reason for non-billable agent contact
-    GatewayInfo:
+    StripeInfo:
+      title: StripeInfo
       type: object
-      title: GatewayInfo
-      description: Payment gateway information
-      oneOf:
-      - $ref: '#/components/schemas/StripeInfoWrapper'
-    BookingDetails:
-      type: object
-      title: BookingDetails
-      description: Booking information
+      description: Stripe payment gateway information
       properties:
-        pnrId:
+        accountId:
           type: string
-          description: PNR Id
-        pnrVersion:
-          type: integer
-          format: int32
-          description: Version number associated with the PNR
-        tripUsageType:
+          description: Stripe account id
+          example: acct_1OAbc3AB5abcdDdA
+        accountDisplayName:
           type: string
-          description: Trip Usage Type
-          enum:
-          - TRIP_USAGE_TYPE_UNKNOWN
-          - STANDARD
-          - EVENT
-        source:
-          description: Third party source
-          $ref: '#/components/schemas/ThirdPartySource'
-        sourcePnrId:
+          description: Stripe account display name as seen on the stripe dashboard
+          example: Abc Travel
+        platformAccountGatewayId:
           type: string
-          description: Source PNR Id from thirdparty source
-    DirectBillingWrapper2:
-      type: object
-      title: DirectBillingWrapper
-      description: Wrapper for DirectBilling metadata
-      required:
-      - directBilling
-      properties:
-        directBilling:
-          $ref: '#/components/schemas/DirectBilling2'
-    CardExpiry:
-      title: CardExpiry
-      type: object
-      description: Contains the expiry of a Card.
-      oneOf:
-      - $ref: '#/components/schemas/TokenizedExpiryWrapper'
-      - $ref: '#/components/schemas/ExpiryWrapper'
-    VendorProgramPaymentMetadata2:
-      type: object
-      title: VendorProgramPaymentMetadata
-      description: Metadata related to vendor program payment method
-      oneOf:
-      - $ref: '#/components/schemas/DirectBillingWrapper2'
-      - $ref: '#/components/schemas/UAPassPlusMetadataWrapperExternal'
-    OrganizationAgencyId:
-      type: object
-      title: OrganizationAgencyId
-      description: Agency id for the organization.
-      deprecated: true
-      x-sunset: '2026-07-01'
-      required:
-      - id
-      properties:
-        id:
-          type: string
-    AgentAssistedTripFeeInfo:
-      title: Agent Assisted Trip Fee Info
-      type: object
-      description: Trip Fees when Agent is booking for Traveler.
-      required:
-      - agentFeeType
-      properties:
-        agentFeeType:
-          type: string
-          example: AGENT_ASSISTED_TRIP_FEE
-        calculatedAmount:
-          $ref: '#/components/schemas/Money'
-        chargeProcessorInfo:
-          $ref: '#/components/schemas/ChargeProcessorInfo'
-    TmcBasicInfo:
-      type: object
-      title: TmcBasicInfo
-      description: TMC related basic information.
-      required:
-      - contractingTmc
-      - bookingTmc
-      properties:
-        contractingTmc:
-          $ref: '#/components/schemas/CompanyRef'
-          description: Contracting TMC is the TMC the user/organization contracted.
-        bookingTmc:
-          $ref: '#/components/schemas/CompanyRef'
-          description: Booking TMC is the TMC used for the bookings for the user/organization.
-    PaymentStatus:
-      type: string
-      title: PaymentStatus
-      description: Payment status.
-      enum:
-      - SUCCESS
-      - DELAYED_INVOICE
-      - MANUAL
-      - NO_CHARGE
-      - WAIVED_OFF
-    FlightPassPaymentMetadataWrapper:
-      type: object
-      title: FlightPassPaymentMetadataWrapper
-      description: Wrapper for Flight Pass payment metadata.
-      required:
-      - flightPassMetadata
-      properties:
-        metadataType:
-          type: string
-          description: Discriminator field for polymorphic deserialization
-          example: FlightPassPaymentMetadata
-          default: FlightPassPaymentMetadata
-        flightPassMetadata:
-          $ref: '#/components/schemas/FlightPassPaymentMetadata'
-    NoPrepaymentMetadata:
-      type: object
-      title: NoPrepaymentMetadata
-      required:
-      - label
-      description: Metadata for No Prepayment payment source (car bookings on no-guarantee rates).
-      properties:
-        label:
-          type: string
-          example: No Prepayment
-          description: Label for No Prepayment payment source.
-    DateTimeOffset:
-      title: DateTimeOffset
-      description: ISO8601 UTC Date Time
-      type: object
-      required:
-      - iso8601
-      properties:
-        iso8601:
-          type: string
-          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?(Z|([+-](0[0-9]|1[0-4]):([0-5][0-9])))$
-          example: 2017-07-21T17:32Z
-    TmcInfo:
-      type: object
-      title: TmcInfo
-      description: TMC config information.
-      required:
-      - id
-      - primaryServiceProviderTmc
-      properties:
-        id:
-          $ref: '#/components/schemas/CompanyId'
-          description: TMC id.
-        primaryServiceProviderTmc:
-          $ref: '#/components/schemas/PrimaryServiceProviderTmc'
-          description: Primary service provider TMC for the TMC.
-        secondaryServiceProviderTmcs:
-          type: array
-          description: Secondary service provider TMCs for the TMC.
-          items:
-            $ref: '#/components/schemas/SecondaryServiceProviderTmc'
-        partnerTmcId:
-          $ref: '#/components/schemas/CompanyId'
-          description: Useful to identify the clients onboarded by a PARTNER_TMC
-    FeeInfo:
-      type: object
-      title: FeeInfo
-      discriminator:
-        propertyName: feeType
-        mapping:
-          BOOKING_FEE: '#/components/schemas/BookingFeeInfo'
-          AGENT_FEE: '#/components/schemas/AgentFeeInfo'
-      oneOf:
-      - $ref: '#/components/schemas/BookingFeeInfo'
-      - $ref: '#/components/schemas/AgentFeeInfo'
-      x-oneOfValidFrom:
-        AgentFeeInfo: '2025-08-20'
-    ExpiryWrapper:
-      type: object
-      title: ExpiryWrapper
-      properties:
-        expiry:
-          $ref: '#/components/schemas/Expiry'
-    OwnershipLabel:
-      title: OwnershipLabel
-      type: string
-      description: Ownership label of the card whether it is personal, corporate or central.
-      enum:
-      - CORPORATE
-      - PERSONAL
-      - CENTRAL
-    WaiveOffFeeReason:
-      type: object
-      title: WaiveOffFeeReason
-      description: Fee waive off reason info.
-      properties:
-        reasonCode:
-          type: string
-          description: Fee waive off reason code.
-          example: WA05
-        reason:
-          type: string
-          description: Fee waive off reason description.
-          example: Customer goodwill
-    UserOrgId:
-      type: object
-      title: UserOrgId
-      description: User and user's organization information.
-      required:
-      - userId
-      - organizationId
-      properties:
-        organizationAgencyId:
-          $ref: '#/components/schemas/OrganizationAgencyId'
-        organizationId:
-          $ref: '#/components/schemas/OrganizationId'
-        userId:
-          $ref: '#/components/schemas/UserId'
-        tmcInfo:
-          $ref: '#/components/schemas/TmcInfo'
-          deprecated: true
-          x-sunset: '2026-07-01'
-        tmcBasicInfo:
-          $ref: '#/components/schemas/TmcBasicInfo'
-    DateTimeLocal:
-      title: DateTimeLocal
-      description: Local date and time in ISO 8601 format.
-      type: object
-      required:
-      - iso8601
-      properties:
-        iso8601:
-          type: string
-          pattern: ^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-4]):([0-5][0-9])(:([0-5][0-9]))?$
-          example: 2017-07-21T17:32
-    Card:
-      type: object
-      title: Card
-      description: User card info
-      required:
-      - number
-      properties:
-        id:
-          type: string
-          description: Unique identifier for this card
-          format: uuid
-          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
-        type:
-          type: string
-          enum:
-          - UNKNOWN
-          - CREDIT
-          - DEBIT
-          description: Type of card
-          example: CREDIT
-        company:
-          $ref: '#/components/schemas/CardCompany'
-        name:
-          description: Name on card
-          type: string
-          example: Harrison Schwartz
-          x-pii: SENSITIVE
+          description: Gateway-id of platform account when this gateway is a connected account
+          example: connect-platform:#
+          readOnly: true
         address:
-          description: Billing address
+          description: Address for the given account
           $ref: '#/components/schemas/PostalAddress'
-          x-pii: SENSITIVE
-        number:
+        taxId:
           type: string
-          description: Card number
-          example: '4111111111111111'
-        expiryMonth:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 12
-          description: Expiry month
-          example: 1
-          deprecated: true
-          x-sunset: '2026-07-01'
-        expiryYear:
-          type: integer
-          format: int32
-          description: Expiry year
-          minimum: 2000
-          example: 2010
-          deprecated: true
-          x-sunset: '2026-07-01'
-        cvv:
-          type: string
-          description: Card cvv number
-          example: '012'
-        label:
-          type: string
-          description: Card Label
-          example: Label amex
-        currency:
-          type: string
-          description: Native currency of the card.
-          example: USD
-        externalId:
-          type: string
-          description: Spotnana partner card id.
-          example: bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40
-        vaultId:
-          type: string
-          description: ID of the vault used for creating the card.
-          format: uuid
-          example: 34d536b6-f8ff-11eb-9a61-0242ac180002
-        expiry:
-          description: Card Expiry.
-          $ref: '#/components/schemas/CardExpiry'
-        ownershipLabel:
-          $ref: '#/components/schemas/OwnershipLabel'
-          example: PERSONAL
-    GatewayIdentifier:
-      type: object
-      properties:
-        gatewayId:
-          type: string
-          description: Gateway Id for which the payment method should be verified.
-        gatewayType:
-          type: string
-          description: Gateway Type for of the verification gateway.
-          enum:
-          - PAYMENT_GATEWAY_UNKNOWN
-          - STRIPE
-          - BREX
-          - RAZORPAY
-    TmcCalculatorInfo:
-      title: TmcCalculatorInfo
-      type: object
-      description: TMC calculator processor info
-      required:
-      - chargeProcessorType
-      - calculatorType
-      properties:
-        calculatorType:
-          type: string
-          description: TMC service charge calculator type
-          example: SPOTNANA
-        chargeProcessorType:
-          type: string
-          description: Charge processor type
-          example: TMC_CALCULATOR_INFO
-    ServiceChargeEntityType:
-      type: string
-      title: ServiceChargeEntityType
-      description: Entity type for service charge.
-      enum:
-      - TRIP
-      - USER
-    CreditCardAccess:
-      type: object
-      title: CreditCardAccess
-      description: Access type for cards to check who in the organization has permission to use it
-      required:
-      - accessType
-      - entityIds
-      properties:
-        accessType:
-          $ref: '#/components/schemas/CreditCardAccessType'
-        entityIds:
-          type: array
-          items:
-            type: string
-          description: Holds the ids for for all users who can access the card or organization id
-        entities:
-          type: array
-          description: A list of cardAccessEntity consisting of central card access level if present and entity id.
-          items:
-            $ref: '#/components/schemas/CardAccessEntity'
-    VirtualCardVendor:
-      type: string
-      description: Type of Virtual card vendor
-      enum:
-      - CONFERMA
-      example: CONFERMA
-    PaymentMethod:
-      type: string
-      description: Payment method
-      enum:
-      - PAYMENT_METHOD_UNKNOWN
-      - CREDIT_CARD
-      - BREX_POINTS
-      - CASH
-      - QANTAS_POINTS
-      - VENDOR_PROGRAM_PAYMENT
-      - DELAYED_INVOICING
-      - FLIGHT_CREDITS
-      - QANTAS_TRAVEL_FUND
-      - CUSTOM_VIRTUAL_PAYMENT
-      - FLIGHT_PASS
-      - MISCELLANEOUS_CREDIT_ORDER
-      - NO_PREPAYMENT
-      x-ignoreBreakingChanges:
-      - PaymentMethod->MISCELLANEOUS_CREDIT_ORDER
-      - PaymentMethod->NO_PREPAYMENT
-      example: BREX_POINTS
-    SupplierType:
-      type: string
-      description: Supplier type like Sabre, TravelFusion etc.
-      enum:
-      - SABRE
-      - AMADEUS
-      - TRAVEL_FUSION
-      - FARELOGIX_NDC
-      - ATPCO_NDC
-      - TRAINLINE
-      - AVIA
-      - QBR
-      - BCD
-      - QANTAS_HOTELS
-      - SOUTHWEST
-      - EXPEDIA
-      - HOTEL_HUB
-      - NDC
-      - MARRIOTT
-      - CLEARTRIP
-      - KYTE
-      - GROUNDSPAN
-      - SABRE_NDC
-      - BOOKING_COM
-      - CARTRAWLER
-      - PREMIER_INN
-      - TRAVELODGE
-      - ENTERPRISE
-      - HYATT
-      - NATIONAL
-      - ALAMO
-      - HERTZ
-      - DOLLAR
-      - THRIFTY
-      - FIREFLY
-      - EUROSTAR
-      - AVIS
-      - BUDGET
-      x-ignoreBreakingChanges:
-      - SupplierType->PREMIER_INN
-      example: SABRE
-    ThirdPartySource:
-      type: string
-      enum:
-      - UNKNOWN_SOURCE
-      - SABRE
-      - TRAVEL_FUSION
-      - AVIA
-      - NDC
-      - TRAINLINE
-      - ATPCO_NDC
-      - FARELOGIX_NDC
-      - OFFLINE
-      - CONNEXUS
-      - ROUTEHAPPY
-      - AMADEUS
-      - GIATA
-      - QBR
-      - BCD
-      - QANTAS_HOTELS
-      - SOUTHWEST
-      - EXPEDIA
-      - HOTEL_HUB
-      - MARRIOTT
-      - CLEARTRIP
-      - KYTE
-      - GROUNDSPAN
-      - SABRE_NDC
-      - BOOKING_COM
-      - CARTRAWLER
-      - PREMIER_INN
-      - TRAVELODGE
-      - ENTERPRISE
-      - HYATT
-      - EUROSTAR
-      - NATIONAL
-      - ALAMO
-      - AVIS
-      - BUDGET
-      - HERTZ
-      - DOLLAR
-      - THRIFTY
-      - FIREFLY
-      x-ignoreBreakingChanges:
-      - ThirdPartySource->BOOKING_COM
-      - ThirdPartySource->CARTRAWLER
-      - ThirdPartySource->PREMIER_INN
-      example: SABRE
-    FlightPassPaymentAmounts:
-      type: object
-      title: FlightPassPaymentAmounts
-      description: Fare breakdown for the flight pass booking.
-      properties:
-        totalAmount:
-          description: Total value (base + taxes).
-          $ref: '#/components/schemas/Money'
-        baseAmount:
-          description: Base fare excluding taxes.
-          $ref: '#/components/schemas/Money'
-        totalTaxes:
-          description: Sum of all taxes, fees, and charges.
-          $ref: '#/components/schemas/Money'
-        taxBreakdown:
-          type: array
-          description: Breakdown of taxes by code (e.g. GST_HST, QST, OTHER).
-          items:
-            $ref: '#/components/schemas/FlightPassTax'
-    TripFeeInfo:
-      title: Trip Fee Info
-      type: object
-      description: Trip Fee Info
-      required:
-      - bookingFeeType
-      properties:
-        bookingFeeType:
-          type: string
-          example: TRIP_FEE
-        calculatedAmount:
-          $ref: '#/components/schemas/Money'
-        chargeProcessorInfo:
-          $ref: '#/components/schemas/ChargeProcessorInfo'
-    BookingFeeInfo:
-      type: object
-      title: BookingFeeInfo
-      required:
-      - feeType
-      discriminator:
-        propertyName: bookingFeeType
-        mapping:
-          TRIP_FEE: '#/components/schemas/TripFeeInfo'
-          TRANSACTION_FEE: '#/components/schemas/TransactionFeeInfo'
-          VALUE_ADDED_SERVICE_FEE: '#/components/schemas/ValueAddedServiceFeeInfo'
-          OTHER_FEE: '#/components/schemas/OtherFeeInfo'
-      oneOf:
-      - $ref: '#/components/schemas/TripFeeInfo'
-      - $ref: '#/components/schemas/TransactionFeeInfo'
-      - $ref: '#/components/schemas/ValueAddedServiceFeeInfo'
-      - $ref: '#/components/schemas/OtherFeeInfo'
-      properties:
-        feeType:
-          type: string
-          description: Type of the fee
-          example: BOOKING_FEE
-    NonBillableReasonCode:
-      type: string
-      title: NonBillableReasonCode
-      description: Reason code for non-billable agent contact.
-      enum:
-      - PRODUCT_ISSUE
-      - ALREADY_CHARGED
-      - CUSTOMER_GOODWILL
-      - MINOR_REQUEST
-      - NON_BILLABLE_REASON_OTHER
-    ChargeProcessorInfo:
-      title: ChargeProcessorInfo
-      type: object
-      description: Information about the processor that calculated the charge
-      discriminator:
-        propertyName: chargeProcessorType
-        mapping:
-          RULE_BASED_INFO: '#/components/schemas/RuleBasedInfo'
-          TMC_CALCULATOR_INFO: '#/components/schemas/TmcCalculatorInfo'
-      oneOf:
-      - $ref: '#/components/schemas/RuleBasedInfo'
-      - $ref: '#/components/schemas/TmcCalculatorInfo'
-    CardAccessEntity:
-      title: CardAccessEntity
-      type: object
-      description: Contains the central access level and entity id.
-      required:
-      - entityId
-      properties:
-        entityId:
-          type: string
-          description: Holds the id for for the user who can access the card or organization id or legal entity
-        centralCardAccessLevel:
-          $ref: '#/components/schemas/CentralCardAccessLevel'
-    SecondaryServiceProviderTmc:
-      type: object
-      title: SecondaryServiceProviderTmc
-      description: Secondary service provider TMC info
-      required:
-      - tmcId
-      - supplier
-      - travelType
-      properties:
-        tmcId:
-          $ref: '#/components/schemas/CompanyId'
-          description: Id of the service provider TMC.
-        supplier:
-          $ref: '#/components/schemas/SupplierType'
-          description: Supplier for which this service provider should be used.
-        travelType:
-          $ref: '#/components/schemas/TravelType'
-          description: Travel type for which this service provider should be used.
-    VirtualCardInfo:
-      type: object
-      title: VirtualCardInfo
-      description: Virtual card information like maximum deployment amount, valid date range.
-      properties:
-        amount:
-          description: Virtual card deployment amount. This amount will drive the maximum authorisation value permitted on the virtual card.
-          $ref: '#/components/schemas/Money'
-        dateRange:
-          description: Date range within which the virtual card can be charged.
-          $ref: '#/components/schemas/DateRange'
-    ServiceFeeTransactionType:
-      type: string
-      title: ServiceFeeTransactionType
-      description: Transaction type for service fee
-      enum:
-      - TRANSACTION_TYPE_BOOKING
-      - TRANSACTION_TYPE_MODIFICATION
-      - TRANSACTION_TYPE_CANCELLATION
-      - TRANSACTION_TYPE_AGENT_CONTACT
-      x-ignoreBreakingChanges:
-      - ServiceFeeTransactionType->TRANSACTION_TYPE_AGENT_CONTACT
-    TravelType:
-      type: string
-      title: TravelType
-      description: Travel Type
-      enum:
-      - AIR
-      - HOTEL
-      - CAR
-      - RAIL
-      - LIMO
-      - MISC
-      - ALL
-      example: AIR
-    AgentContactOp:
-      type: string
-      title: AgentContactOp
-      description: Agent contact operation.
-      enum:
-      - AGENT_BOOKING
-      - AGENT_MODIFY
-      - AGENT_CANCEL
-      - AGENT_OTHER
-      - AGENT_EXCHANGE
-      - ANCILLARY_PURCHASE
-      - SHELL_PNR_CREATE
-      - SHELL_PNR_MODIFY
-      - SHELL_PNR_CANCEL
-      - SHELL_PNR_EXCHANGE
-      - MANUAL_FORM_CREATE
-      - MANUAL_FORM_MODIFY
-      - MANUAL_FORM_CANCEL
-      - MANUAL_FORM_EXCHANGE
-      - UNUSED_TICKET_MANAGEMENT
-    TaxAmount:
-      type: object
-      title: Tax
-      description: Tax
-      required:
-      - amount
-      - taxCode
-      - description
-      properties:
-        amount:
-          $ref: '#/components/schemas/Money'
-        taxCode:
-          type: string
-          description: Tax code
-          example: VAT
-        description:
-          type: string
-          description: Tax code
-        percentage:
-          type: number
-          format: double
-          description: Amount
-          example: 10
-    PaymentMetadata:
-      title: PaymentMetadata
-      description: Payment metadata related to form of payment
-      type: object
-      properties:
-        customPaymentMethodMetadata:
-          type: object
-          description: Metadata related to custom payment method
-          properties:
-            brexBudgetMetadata:
-              type: object
-              description: Metadata for Brex Budget
-              properties:
-                budgetName:
-                  type: string
-                  description: Name of the budget
-                  example: Travel budget
-                paidByPersonalCard:
-                  type: boolean
-                  description: Whether it was paid by budget card or personal card
-                  example: false
-            noPrepaymentMetadata:
-              $ref: '#/components/schemas/NoPrepaymentMetadata'
-        vendorProgramPaymentMetadata:
-          $ref: '#/components/schemas/VendorProgramPaymentMetadata2'
-        virtualCardMetadata:
-          $ref: '#/components/schemas/VirtualCardPaymentMetadata'
-        cardMetadata:
-          $ref: '#/components/schemas/CardMetadata2'
-    Dimensions:
-      type: object
-      title: Dimensions
-      description: Image dimensions ie width and height.
-      properties:
-        height:
-          type: integer
-          format: int32
-          example: 120
-        width:
-          type: integer
-          format: int32
-          example: 240
-    ServiceChargeEntity:
-      type: object
-      title: ServiceChargeEntity
-      description: Entity for service charge.
-      required:
-      - entityType
-      - entityId
-      properties:
-        entityType:
-          $ref: '#/components/schemas/ServiceChargeEntityType'
-          description: Entity type for service charge.
-          example: TRIP
-        entityId:
-          type: string
-          description: Entity ID for service charge e.g, trip ID for entityType=TRIP.
-          example: '1234567890'
-    Latlng:
-      title: Latlng
-      description: Latitude and Longitude for a Location
-      type: object
-      required:
-      - latitude
-      - longitude
-      properties:
-        latitude:
-          type: number
-          description: Latitude of the Location
-          format: double
-          example: 77.1025
-        longitude:
-          type: number
-          description: Longitude of the Location
-          format: double
-          example: 28.7041
-    DirectBilling2:
-      title: DirectBilling
-      type: object
-      description: Metadata for Direct Billing
-      required:
-      - vendorId
-      properties:
-        vendorId:
-          type: string
-          description: Unique vendor id/code
-          example: ZI
-        directBillingCode:
-          type: string
-          description: Direct billing code provided by the vendor
-          example: '123456'
-    OtherFeeType:
-      type: string
-      title: OtherFeeType
-      description: Other fee type
-      enum:
-      - MERCHANT_FEE
-      example: MERCHANT_FEE
-    ListServiceChargesResponse:
-      type: object
-      title: ListServiceChargesResponse
-      description: Response for list service charges.
-      properties:
-        serviceCharges:
-          type: array
-          description: List of service charges.
-          items:
-            $ref: '#/components/schemas/ServiceChargeRecord'
-    AgentAssistedTransactionFeeInfo:
-      title: Agent Assisted Transaction Fee Info
-      type: object
-      description: Transaction Fees when Agent is booking for Traveler.
-      required:
-      - agentFeeType
-      properties:
-        agentFeeType:
-          type: string
-          example: AGENT_ASSISTED_TRANSACTION_FEE
-        transactionFeeType:
-          $ref: '#/components/schemas/ServiceFeeTransactionType'
-        calculatedAmount:
-          $ref: '#/components/schemas/Money'
-        chargeProcessorInfo:
-          $ref: '#/components/schemas/ChargeProcessorInfo'
-    AgentFeeInfo:
-      type: object
-      title: AgentFeeInfo
-      required:
-      - feeType
-      discriminator:
-        propertyName: agentFeeType
-        mapping:
-          AGENT_ASSISTED_TRIP_FEE: '#/components/schemas/AgentAssistedTripFeeInfo'
-          AGENT_ASSISTED_TRANSACTION_FEE: '#/components/schemas/AgentAssistedTransactionFeeInfo'
-      oneOf:
-      - $ref: '#/components/schemas/AgentAssistedTripFeeInfo'
-      - $ref: '#/components/schemas/AgentAssistedTransactionFeeInfo'
-      properties:
-        feeType:
-          type: string
-          description: Type of the fee
-          example: AGENT_FEE
-    CompanyRef:
-      type: object
-      description: Basic information about a company.
-      required:
-      - id
-      properties:
-        id:
-          $ref: '#/components/schemas/CompanyId'
-        name:
-          type: string
-        logo:
-          $ref: '#/components/schemas/Image'
-          description: Company logo
-    VirtualCardPaymentMetadata:
-      title: VirtualCardPaymentMetadata
-      type: object
-      description: Metadata for Virtual Card.
-      required:
-      - vendorInfo
-      properties:
-        vendorInfo:
-          $ref: '#/components/schemas/VirtualCardVendorInfo'
-        cardInfo:
-          $ref: '#/components/schemas/VirtualCardInfo'
-        paymentInstructionId:
-          type: string
-          description: Payment instruction id set during addition of virtual card payment source
-          example: 1eb8b778-f0a6-4037-865c-4580982fa36e
-        shouldReveal:
-          type: boolean
-          description: Identifier for when to reveal virtual cards as they are revealed to travellers only 24hrs before check-in.
-          example: false
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    ConfermaInfo:
-      type: object
-      title: ConfermaInfo
-      description: Details of conferma - one of virtual card vendors.
-      required:
-      - deploymentId
-      properties:
-        deploymentId:
-          type: integer
-          format: int32
-          description: Unique identifier assigned to the virtual card deployment at the point of creation.
-          example: 68793680
-    DateRange:
-      type: object
-      description: Date range within which the virtual card can be charged.
-      required:
-      - startDate
-      - endDate
-      properties:
-        startDate:
-          $ref: '#/components/schemas/DateTimeLocal'
-        endDate:
-          $ref: '#/components/schemas/DateTimeLocal'
+          description: Tax id for account
+          example: 89-189390
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http
       scheme: bearer
+x-refined-from:
+- spotnana-company-openapi-original.json
+- spotnana-payments-openapi-original.json

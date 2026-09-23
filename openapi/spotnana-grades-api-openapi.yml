@@ -1,8 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Air Grades API
+  title: Company Grades API
   version: v2
-  description: APIs to perform search, checkout and book an air pnr
+  description: APIs to create and manage grades.
 servers:
 - url: https://api-ext-sboxmeta.partners.spotnana.com
   description: Sandbox URL
@@ -160,156 +160,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    ListGradesResponse:
-      type: object
-      title: ListGradesResponse
-      description: Response for list grades API.
-      required:
-      - paginationParams
-      properties:
-        paginationParams:
-          description: Pagination information.
-          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
-        grades:
-          type: array
-          description: List of grades containing id and name.
-          items:
-            $ref: '#/components/schemas/GradeInfo'
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    OffsetBasedPaginationResponseParams:
-      type: object
-      title: PaginationResponseParams
-      description: Pagination parameters for response.
-      required:
-      - totalNumResults
-      properties:
-        totalNumResults:
-          type: integer
-          format: int32
-          description: Total number of results.
-    GradeV2:
-      type: object
-      title: GradeV2
-      description: Grade details.
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
-        name:
-          type: string
-          description: Name of the grade
-          example: Grade
-    EntityId:
-      type: object
-      description: Identifier of an object
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
-    ListGradesRequest:
-      type: object
-      title: ListGradesRequest
-      required:
-      - paginationParams
-      description: List grades request
-      properties:
-        searchText:
-          type: string
-          description: Search string entered by the user
-          example: Senior Engineer
-        paginationParams:
-          description: Pagination information.
-          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
-        filters:
-          type: array
-          description: List of filters. Grades matching with any filter would be returned.
-          items:
-            $ref: '#/components/schemas/ListGradesFilter'
-    UpdateGradeRequest:
-      type: object
-      title: UpdateGradeRequest
-      required:
-      - name
-      description: Update grade request
-      properties:
-        name:
-          type: string
-          description: Name of the grade
-          example: Grade
-    OffsetBasedPaginationRequestParams:
-      type: object
-      title: OffsetBasedPaginationRequestParams
-      description: Pagination parameters for requests.
-      properties:
-        offset:
-          type: integer
-          format: int32
-          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
-          default: 0
-          minimum: 0
-        limit:
-          type: integer
-          format: int32
-          description: Maximum number of results to be fetched.
-          minimum: 1
-          default: 100
-    GradeInfo:
-      type: object
-      title: GradeInfo
-      description: Grade information with UUID and name.
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
-        name:
-          type: string
-          example: Senior Engineer
     ErrorResponse:
       type: object
       properties:
@@ -335,6 +186,42 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
+    GradeInfo:
+      type: object
+      title: GradeInfo
+      description: Grade information with UUID and name.
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
+        name:
+          type: string
+          example: Senior Engineer
+    OffsetBasedPaginationResponseParams:
+      type: object
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
+      required:
+      - totalNumResults
+      properties:
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results.
+    UpdateGradeRequest:
+      type: object
+      title: UpdateGradeRequest
+      required:
+      - name
+      description: Update grade request
+      properties:
+        name:
+          type: string
+          description: Name of the grade
+          example: Grade
     CreateGradeRequest:
       type: object
       title: CreateGradeRequest
@@ -346,6 +233,73 @@ components:
           type: string
           description: Name of the grade
           example: Senior Engineer
+    ListGradesRequest:
+      type: object
+      title: ListGradesRequest
+      required:
+      - paginationParams
+      description: List grades request
+      properties:
+        searchText:
+          type: string
+          description: Search string entered by the user
+          example: Senior Engineer
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
+        filters:
+          type: array
+          description: List of filters. Grades matching with any filter would be returned.
+          items:
+            $ref: '#/components/schemas/ListGradesFilter'
+    OffsetBasedPaginationRequestParams:
+      type: object
+      title: OffsetBasedPaginationRequestParams
+      description: Pagination parameters for requests.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
+          default: 0
+          minimum: 0
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to be fetched.
+          minimum: 1
+          default: 100
+    ListGradesResponse:
+      type: object
+      title: ListGradesResponse
+      description: Response for list grades API.
+      required:
+      - paginationParams
+      properties:
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
+        grades:
+          type: array
+          description: List of grades containing id and name.
+          items:
+            $ref: '#/components/schemas/GradeInfo'
+    GradeV2:
+      type: object
+      title: GradeV2
+      description: Grade details.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
+        name:
+          type: string
+          description: Name of the grade
+          example: Grade
     ListGradesFilter:
       type: object
       title: ListGradesFilter
@@ -358,6 +312,52 @@ components:
             format: uuid
             example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
           description: List of grade ids.
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http

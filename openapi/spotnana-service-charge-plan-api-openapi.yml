@@ -1,8 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Air Service Charge Plan API
+  title: Company Service Charge Plan API
   version: v2
-  description: APIs to perform search, checkout and book an air pnr
+  description: APIs to manage service charge plans.
 servers:
 - url: https://api-ext-sboxmeta.partners.spotnana.com
   description: Sandbox URL
@@ -63,90 +63,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    FlightPassTax:
-      type: object
-      title: FlightPassTax
-      description: A single tax component of the flight pass fare.
-      properties:
-        code:
-          type: string
-          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
-          example: GST_HST
-        amount:
-          description: Tax amount.
-          $ref: '#/components/schemas/Money'
-    FlightPassPaymentMetadata:
-      type: object
-      title: FlightPassPaymentMetadata
-      description: Metadata specific to Flight Pass payment method in OtherCoinage.
-      properties:
-        flightPassNumber:
-          type: string
-          description: Flight pass number
-          example: FP123456789
-        flightPassAmounts:
-          $ref: '#/components/schemas/FlightPassPaymentAmounts'
-    GetCompanyPerTripSrvChargeResponse:
-      type: object
-      title: GetCompanyPerTripSrvChargeResponse
-      description: Get per trip service charge configuration for company
-      properties:
-        config:
-          $ref: '#/components/schemas/FixedChargeConfig'
-        enabled:
-          type: boolean
-          description: True if per trip service charge configuration is enabled
-          example: true
-        enableDisableOpSupported:
-          type: boolean
-          description: True if per trip service charge configuration can be enabled/disabled
-          example: true
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    FlightPassPaymentMetadataWrapper:
-      type: object
-      title: FlightPassPaymentMetadataWrapper
-      description: Wrapper for Flight Pass payment metadata.
-      required:
-      - flightPassMetadata
-      properties:
-        metadataType:
-          type: string
-          description: Discriminator field for polymorphic deserialization
-          example: FlightPassPaymentMetadata
-          default: FlightPassPaymentMetadata
-        flightPassMetadata:
-          $ref: '#/components/schemas/FlightPassPaymentMetadata'
-    FixedChargeConfig:
-      type: object
-      title: FixedChargeConfig
-      description: Fixed charge configuration for service charge
-      required:
-      - charges
-      properties:
-        charges:
-          type: array
-          description: Amount in specified currency
-          items:
-            $ref: '#/components/schemas/Money'
-        defaultCurrencyCode:
-          type: string
-          description: The 3-letter currency code defined in ISO 4217.
-          example: GBP
-        tierCharges:
-          type: array
-          description: Charges specified per traveler tier
-          items:
-            $ref: '#/components/schemas/TierChargeConfig'
     TierChargeConfig:
       type: object
       title: Tier charge configuration for service charge
@@ -161,6 +77,31 @@ components:
           description: Amount in specified currency
           items:
             $ref: '#/components/schemas/Money'
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
     SetCompanyPerTripSrvChargeRequest:
       type: object
       title: SetCompanyPerTripSrvChargeRequest
@@ -170,6 +111,17 @@ components:
       properties:
         config:
           $ref: '#/components/schemas/FixedChargeConfig'
+    FlightPassPaymentMetadata:
+      type: object
+      title: FlightPassPaymentMetadata
+      description: Metadata specific to Flight Pass payment method in OtherCoinage.
+      properties:
+        flightPassNumber:
+          type: string
+          description: Flight pass number
+          example: FP123456789
+        flightPassAmounts:
+          $ref: '#/components/schemas/FlightPassPaymentAmounts'
     Money:
       type: object
       title: Money
@@ -236,31 +188,39 @@ components:
                     FlightPassPaymentMetadata: '#/components/schemas/FlightPassPaymentMetadataWrapper'
                 oneOf:
                 - $ref: '#/components/schemas/FlightPassPaymentMetadataWrapper'
-    ErrorResponse:
+    FlightPassTax:
       type: object
+      title: FlightPassTax
+      description: A single tax component of the flight pass fare.
       properties:
-        debugIdentifier:
+        code:
           type: string
-          description: Link to debug the error internally.
-        errorMessages:
+          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
+          example: GST_HST
+        amount:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+    FixedChargeConfig:
+      type: object
+      title: FixedChargeConfig
+      description: Fixed charge configuration for service charge
+      required:
+      - charges
+      properties:
+        charges:
           type: array
+          description: Amount in specified currency
           items:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                description: Error code to identify the specific errors.
-              message:
-                type: string
-                description: Message containing details of error.
-              errorParameters:
-                type: array
-                description: Error message parameters.
-                items:
-                  $ref: '#/components/schemas/ErrorParameter'
-              errorDetail:
-                type: string
-                description: More details about the error.
+            $ref: '#/components/schemas/Money'
+        defaultCurrencyCode:
+          type: string
+          description: The 3-letter currency code defined in ISO 4217.
+          example: GBP
+        tierCharges:
+          type: array
+          description: Charges specified per traveler tier
+          items:
+            $ref: '#/components/schemas/TierChargeConfig'
     PaymentMethod:
       type: string
       description: Payment method
@@ -282,6 +242,46 @@ components:
       - PaymentMethod->MISCELLANEOUS_CREDIT_ORDER
       - PaymentMethod->NO_PREPAYMENT
       example: BREX_POINTS
+    FlightPassPaymentMetadataWrapper:
+      type: object
+      title: FlightPassPaymentMetadataWrapper
+      description: Wrapper for Flight Pass payment metadata.
+      required:
+      - flightPassMetadata
+      properties:
+        metadataType:
+          type: string
+          description: Discriminator field for polymorphic deserialization
+          example: FlightPassPaymentMetadata
+          default: FlightPassPaymentMetadata
+        flightPassMetadata:
+          $ref: '#/components/schemas/FlightPassPaymentMetadata'
+    GetCompanyPerTripSrvChargeResponse:
+      type: object
+      title: GetCompanyPerTripSrvChargeResponse
+      description: Get per trip service charge configuration for company
+      properties:
+        config:
+          $ref: '#/components/schemas/FixedChargeConfig'
+        enabled:
+          type: boolean
+          description: True if per trip service charge configuration is enabled
+          example: true
+        enableDisableOpSupported:
+          type: boolean
+          description: True if per trip service charge configuration can be enabled/disabled
+          example: true
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
     Tier:
       type: string
       title: Tier
@@ -318,14 +318,14 @@ components:
           items:
             $ref: '#/components/schemas/FlightPassTax'
   responses:
-    Forbidden:
-      description: Forbidden
+    Unauthorized:
+      description: Unauthorized
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:

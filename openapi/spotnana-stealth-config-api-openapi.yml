@@ -1,8 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Air Stealth Config API
+  title: Company Stealth Config API
   version: v2
-  description: APIs to perform search, checkout and book an air pnr
 servers:
 - url: https://api-ext-sboxmeta.partners.spotnana.com
   description: Sandbox URL
@@ -70,77 +69,19 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    StealthConfig:
-      type: object
-      title: StealthConfig
-      description: Stealth configuration for a company.
-      properties:
-        stealthModes:
-          type: array
-          description: A list of stealth modes for this company.
-          items:
-            $ref: '#/components/schemas/StealthMode'
-    CompanyRole:
+    StealthType:
       type: string
-      description: Role of the company.
+      description: Stealth type.
       enum:
-      - ORG
-      - TMC
-      - PARTNER_TMC
-      - HR_FEED_CONNECTOR
-      - TRIPS_DATA_CONNECTOR
-      - GLOBAL
-      example: ORG
-    StealthMode:
-      type: object
-      title: StealthMode
-      description: Stealth mode configuration with type and label.
-      required:
-      - stealthType
-      - label
-      properties:
-        stealthType:
-          $ref: '#/components/schemas/StealthType'
-        label:
-          type: string
-          description: Customer specific label for the stealth mode.
+      - STEALTH_TYPE_1
+      - STEALTH_TYPE_2
+      - STEALTH_TYPE_3
+      example: STEALTH_TYPE_1
+      x-ignoreBreakingChanges:
+      - StealthType->STEALTH_TYPE_4
+      - StealthType->STEALTH_TYPE_5
+      - StealthType->STEALTH_TYPE_6
     ErrorResponse:
       type: object
       properties:
@@ -166,18 +107,76 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    StealthType:
+    StealthConfig:
+      type: object
+      title: StealthConfig
+      description: Stealth configuration for a company.
+      properties:
+        stealthModes:
+          type: array
+          description: A list of stealth modes for this company.
+          items:
+            $ref: '#/components/schemas/StealthMode'
+    CompanyRole:
       type: string
-      description: Stealth type.
+      description: Role of the company.
       enum:
-      - STEALTH_TYPE_1
-      - STEALTH_TYPE_2
-      - STEALTH_TYPE_3
-      example: STEALTH_TYPE_1
-      x-ignoreBreakingChanges:
-      - StealthType->STEALTH_TYPE_4
-      - StealthType->STEALTH_TYPE_5
-      - StealthType->STEALTH_TYPE_6
+      - ORG
+      - TMC
+      - PARTNER_TMC
+      - HR_FEED_CONNECTOR
+      - TRIPS_DATA_CONNECTOR
+      - GLOBAL
+      example: ORG
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    StealthMode:
+      type: object
+      title: StealthMode
+      description: Stealth mode configuration with type and label.
+      required:
+      - stealthType
+      - label
+      properties:
+        stealthType:
+          $ref: '#/components/schemas/StealthType'
+        label:
+          type: string
+          description: Customer specific label for the stealth mode.
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http

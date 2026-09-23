@@ -1,8 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Air Autocomplete API
+  title: Spotnana Autocomplete API
   version: v2
-  description: APIs to perform search, checkout and book an air pnr
+  description: 'Operations tagged Autocomplete across 2 of this provider''s published API definitions: spotnana-air-openapi-original.json, spotnana-hotel-openapi-original.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api-ext-sboxmeta.partners.spotnana.com
   description: Sandbox URL
@@ -36,6 +36,9 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+    servers:
+    - url: https://api-ext-sboxmeta.partners.spotnana.com
+      description: Sandbox URL
   /v2/hotel-supplier-autocomplete:
     get:
       tags:
@@ -62,44 +65,66 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+    servers:
+    - url: https://api-ext-sboxmeta.partners.spotnana.com
+      description: Sandbox URL
 components:
-  responses:
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    ContactInfo:
+    AirportGroupInfo:
+      title: AirportGroupInfo
+      description: Grouping criteria for the airports in same group
       type: object
-      title: Contact Information
-      description: Provides contact information for a hotel.
       required:
-      - phone
-      - email
+      - groupId
+      - mainAirportLocation
       properties:
-        phone:
+        groupId:
+          type: string
+          description: Id of the airport group
+          example: NYC
+        groupCityCode:
+          type: string
+          description: City code of the airport group. If airport group does not have a recognized city code, then this field will be empty.
+          example: NYC
+        mainAirportLocation:
+          description: Location of the main airport in the group
+          $ref: '#/components/schemas/Location'
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
           type: array
-          description: List of phone numbers for the hotel.
           items:
-            $ref: '#/components/schemas/PhoneNumber'
-        fax:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    AirAutocompleteResponse:
+      title: AirAutocompleteResponse
+      type: object
+      required:
+      - airports
+      properties:
+        airports:
           type: array
-          description: List of fax numbers for the hotel.
+          description: List of Airports matching the query
           items:
-            type: string
-        email:
-          type: array
-          description: List of email addresses for the hotel.
-          items:
-            type: string
+            $ref: '#/components/schemas/Airport'
     Airport:
       title: Airport
       description: Airport Details
@@ -125,28 +150,6 @@ components:
           $ref: '#/components/schemas/Location'
         groupInfo:
           $ref: '#/components/schemas/AirportGroupInfo'
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    HotelAutocompleteResponse:
-      title: HotelAutocompleteResponse
-      type: object
-      required:
-      - hotels
-      properties:
-        hotels:
-          type: array
-          description: List of Hotels matching the Autocomplete query
-          items:
-            $ref: '#/components/schemas/AutocompleteHotel'
     Location:
       title: Location
       description: Location details
@@ -176,6 +179,91 @@ components:
           type: string
           description: Full name of the state
           example: Colorado
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    HotelStarRatingInfo:
+      type: object
+      title: Hotel Start Rating Information
+      description: Details about hotel star rating.
+      required:
+      - starRating
+      - ratingType
+      properties:
+        starRating:
+          type: number
+          format: float
+          example: 3
+          description: Star rating of the hotel.
+          minimum: 0
+          maximum: 5
+        ratingType:
+          type: string
+          title: Star Rating Type
+          enum:
+          - OFFICIAL
+          - SELF_RATED
+          description: Enum representing the type of star rating.
+    HotelAutocompleteResponse:
+      title: HotelAutocompleteResponse
+      type: object
+      required:
+      - hotels
+      properties:
+        hotels:
+          type: array
+          description: List of Hotels matching the Autocomplete query
+          items:
+            $ref: '#/components/schemas/AutocompleteHotel'
+    ContactInfo:
+      type: object
+      title: Contact Information
+      description: Provides contact information for a hotel.
+      required:
+      - phone
+      - email
+      properties:
+        phone:
+          type: array
+          description: List of phone numbers for the hotel.
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        fax:
+          type: array
+          description: List of fax numbers for the hotel.
+          items:
+            type: string
+        email:
+          type: array
+          description: List of email addresses for the hotel.
+          items:
+            type: string
     AutocompleteHotel:
       title: AutocompleteHotel
       description: Hotel Details
@@ -324,101 +412,6 @@ components:
         coordinates:
           description: Map coordinates of the address.
           $ref: '#/components/schemas/Latlng'
-    Latlng:
-      title: Latlng
-      description: Latitude and Longitude for a Location
-      type: object
-      required:
-      - latitude
-      - longitude
-      properties:
-        latitude:
-          type: number
-          description: Latitude of the Location
-          format: double
-          example: 77.1025
-        longitude:
-          type: number
-          description: Longitude of the Location
-          format: double
-          example: 28.7041
-    AirAutocompleteResponse:
-      title: AirAutocompleteResponse
-      type: object
-      required:
-      - airports
-      properties:
-        airports:
-          type: array
-          description: List of Airports matching the query
-          items:
-            $ref: '#/components/schemas/Airport'
-    HotelStarRatingInfo:
-      type: object
-      title: Hotel Start Rating Information
-      description: Details about hotel star rating.
-      required:
-      - starRating
-      - ratingType
-      properties:
-        starRating:
-          type: number
-          format: float
-          example: 3
-          description: Star rating of the hotel.
-          minimum: 0
-          maximum: 5
-        ratingType:
-          type: string
-          title: Star Rating Type
-          enum:
-          - OFFICIAL
-          - SELF_RATED
-          description: Enum representing the type of star rating.
-    AirportGroupInfo:
-      title: AirportGroupInfo
-      description: Grouping criteria for the airports in same group
-      type: object
-      required:
-      - groupId
-      - mainAirportLocation
-      properties:
-        groupId:
-          type: string
-          description: Id of the airport group
-          example: NYC
-        groupCityCode:
-          type: string
-          description: City code of the airport group. If airport group does not have a recognized city code, then this field will be empty.
-          example: NYC
-        mainAirportLocation:
-          description: Location of the main airport in the group
-          $ref: '#/components/schemas/Location'
-    ErrorResponse:
-      type: object
-      properties:
-        debugIdentifier:
-          type: string
-          description: Link to debug the error internally.
-        errorMessages:
-          type: array
-          items:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                description: Error code to identify the specific errors.
-              message:
-                type: string
-                description: Message containing details of error.
-              errorParameters:
-                type: array
-                description: Error message parameters.
-                items:
-                  $ref: '#/components/schemas/ErrorParameter'
-              errorDetail:
-                type: string
-                description: More details about the error.
     PhoneNumber:
       type: object
       title: PhoneNumber
@@ -472,7 +465,23 @@ components:
           - MOBILE
           - LANDLINE
           example: MOBILE
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http
       scheme: bearer
+x-refined-from:
+- spotnana-air-openapi-original.json
+- spotnana-hotel-openapi-original.json

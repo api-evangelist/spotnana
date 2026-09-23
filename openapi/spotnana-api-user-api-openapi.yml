@@ -1,13 +1,11 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Air API User API
+  title: Auth API User API
   version: v2
-  description: APIs to perform search, checkout and book an air pnr
 servers:
 - url: https://api-ext-sboxmeta.partners.spotnana.com
   description: Sandbox URL
-security:
-- Bearer: []
+security: []
 tags:
 - name: API User
 paths:
@@ -47,9 +45,7 @@ paths:
 
         - Only a TMC admin can use this endpoint to create API users.
 
-        - `SCIM_TOKEN` credential type requires `role` to be `COMPANY_ADMIN`.
-
-        '
+        - `SCIM_TOKEN` credential type requires `role` to be `COMPANY_ADMIN`.'
       operationId: createApiUser
       requestBody:
         required: true
@@ -92,9 +88,7 @@ paths:
 
         - Returns only the API users belonging to the caller''s contracting TMC.
 
-        - Only a TMC admin can use this endpoint.
-
-        '
+        - Only a TMC admin can use this endpoint.'
       operationId: getApiUsers
       parameters:
       - name: limit
@@ -132,7 +126,43 @@ paths:
       tags:
       - API User
       summary: Delete an API user
-      description: "Permanently deletes an API user and revokes its access to the Spotnana platform. This immediately \ninvalidates all existing access tokens and removes the API user's ability to authenticate.\n\n**Use this endpoint to:**\n- Revoke access for an API user that is no longer needed.\n- Decommission an integration or clean up unused API users.\n- Free up a slot in your TMC's API user quota (default up to 5 API users per TMC).\n\n**Best practice:**\n\nBefore revoking, ensure no active integrations are using this `clientId`. Be sure to:\n1. create a new API user first\n2. update your integrations to use the new credentials\n3. verify they work\n4. and then revoke the old API user.\n\n**Notes:**\n- This action is permanent and cannot be undone. The `clientId` and `clientSecret` are permanently invalidated.\n- All active tokens for this API user are invalidated immediately. Any in-flight API requests using those tokens will fail.\n- The API user being revoked must belong to the same TMC as the caller.\n- Only a TMC admin can use this endpoint.\n"
+      description: 'Permanently deletes an API user and revokes its access to the Spotnana platform. This immediately
+
+        invalidates all existing access tokens and removes the API user''s ability to authenticate.
+
+
+        **Use this endpoint to:**
+
+        - Revoke access for an API user that is no longer needed.
+
+        - Decommission an integration or clean up unused API users.
+
+        - Free up a slot in your TMC''s API user quota (default up to 5 API users per TMC).
+
+
+        **Best practice:**
+
+
+        Before revoking, ensure no active integrations are using this `clientId`. Be sure to:
+
+        1. create a new API user first
+
+        2. update your integrations to use the new credentials
+
+        3. verify they work
+
+        4. and then revoke the old API user.
+
+
+        **Notes:**
+
+        - This action is permanent and cannot be undone. The `clientId` and `clientSecret` are permanently invalidated.
+
+        - All active tokens for this API user are invalidated immediately. Any in-flight API requests using those tokens will fail.
+
+        - The API user being revoked must belong to the same TMC as the caller.
+
+        - Only a TMC admin can use this endpoint.'
       operationId: deleteApiUser
       requestBody:
         required: true
@@ -154,7 +184,36 @@ paths:
       tags:
       - API User
       summary: Rotate client secret for an API user
-      description: "Generates a new `clientSecret` for an existing API user. The old `clientSecret` is \nimmediately invalidated and all existing access tokens for the API user will be expired.\n\n**Use this endpoint to:**\n- Rotate credentials as part of a regular security hygiene practice.\n- Replace a `clientSecret` without deleting the API user.\n- Generate a new `clientSecret` if the old secret was lost or not stored.\n\n**Best practice:**\n- Update your integrations with the new `clientSecret` immediately after rotation. Any authentication requests using the old secret will fail.\n\n**Notes:**\n- The new `clientSecret` is only returned once in the response and cannot be retrieved later. Store it securely.\n- The `clientId` remains the same.\n- The old `clientSecret` stops working immediately. Any integration using it will need to re-authenticate with the new secret.\n- All existing access tokens created using the old `clientSecret` are immediately invalidated.\n- Only a TMC admin can use this endpoint.\n"
+      description: 'Generates a new `clientSecret` for an existing API user. The old `clientSecret` is
+
+        immediately invalidated and all existing access tokens for the API user will be expired.
+
+
+        **Use this endpoint to:**
+
+        - Rotate credentials as part of a regular security hygiene practice.
+
+        - Replace a `clientSecret` without deleting the API user.
+
+        - Generate a new `clientSecret` if the old secret was lost or not stored.
+
+
+        **Best practice:**
+
+        - Update your integrations with the new `clientSecret` immediately after rotation. Any authentication requests using the old secret will fail.
+
+
+        **Notes:**
+
+        - The new `clientSecret` is only returned once in the response and cannot be retrieved later. Store it securely.
+
+        - The `clientId` remains the same.
+
+        - The old `clientSecret` stops working immediately. Any integration using it will need to re-authenticate with the new secret.
+
+        - All existing access tokens created using the old `clientSecret` are immediately invalidated.
+
+        - Only a TMC admin can use this endpoint.'
       operationId: rotateClientSecret
       requestBody:
         required: true
@@ -176,57 +235,7 @@ paths:
         '404':
           $ref: '#/components/responses/BadRequest'
 components:
-  responses:
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    RotateClientSecretRequest:
-      type: object
-      title: RotateClientSecretRequest
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-    GetApiUsersResponse:
-      type: object
-      title: GetApiUsersResponse
-      properties:
-        apiUsers:
-          type: array
-          description: List of api users
-          items:
-            $ref: '#/components/schemas/ApiUsersInfo'
-        totalCount:
-          type: integer
-          description: Total count of api users
-          example: 25
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
     ErrorResponse:
       type: object
       properties:
@@ -252,21 +261,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    DeleteApiUsersRequest:
-      type: object
-      title: DeleteApiUsersRequest
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-    ApiUsersInfo:
-      type: object
-      title: ApiUsersInfo
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-          example: 1ddj3hs95to28iag7m4hl9lv2
     RotateClientSecretResponse:
       type: object
       title: RotateClientSecretResponse
@@ -279,6 +273,17 @@ components:
           type: string
           description: Api user client secret
           example: 1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
     CreateApiUsersRequest:
       type: object
       title: CreateApiUsersRequest
@@ -297,6 +302,19 @@ components:
         credentialType:
           $ref: '#/components/schemas/ApiUserCredentialTypeEnum'
           description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
+    GetApiUsersResponse:
+      type: object
+      title: GetApiUsersResponse
+      properties:
+        apiUsers:
+          type: array
+          description: List of api users
+          items:
+            $ref: '#/components/schemas/ApiUsersInfo'
+        totalCount:
+          type: integer
+          description: Total count of api users
+          example: 25
     ApiUserRoleEnum:
       type: string
       description: Roles supported for api user creation
@@ -305,6 +323,36 @@ components:
       - COMPANY_ADMIN
       default: TMC_ADMIN
       example: TMC_ADMIN
+    ApiUserCredentialTypeEnum:
+      type: string
+      description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
+      enum:
+      - CLIENT_CREDENTIALS
+      - SCIM_TOKEN
+      default: CLIENT_CREDENTIALS
+      example: CLIENT_CREDENTIALS
+    RotateClientSecretRequest:
+      type: object
+      title: RotateClientSecretRequest
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
+    DeleteApiUsersRequest:
+      type: object
+      title: DeleteApiUsersRequest
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
+    ApiUsersInfo:
+      type: object
+      title: ApiUsersInfo
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
+          example: 1ddj3hs95to28iag7m4hl9lv2
     CreateApiUsersResponse:
       type: object
       title: CreateApiUsersResponse
@@ -321,14 +369,25 @@ components:
           type: string
           description: SCIM bearer token (Base64-encoded JSON envelope with encrypted secret). Present only for SCIM_TOKEN credential type.
           example: eyJzY29wZSI6InNjaW0iLCJjbGllbnRJZCI6Ii4uLiIsImVuY3J5cHRlZFNlY3JldCI6Ii4uLiJ9
-    ApiUserCredentialTypeEnum:
-      type: string
-      description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
-      enum:
-      - CLIENT_CREDENTIALS
-      - SCIM_TOKEN
-      default: CLIENT_CREDENTIALS
-      example: CLIENT_CREDENTIALS
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http

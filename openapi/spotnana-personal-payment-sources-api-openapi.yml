@@ -1,8 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Air Personal Payment Sources API
+  title: Payments Personal Payment Sources API
   version: v2
-  description: APIs to perform search, checkout and book an air pnr
 servers:
 - url: https://api-ext-sboxmeta.partners.spotnana.com
   description: Sandbox URL
@@ -61,7 +60,7 @@ paths:
     post:
       tags:
       - Personal Payment Sources
-      summary: Create Personal Payment Source.
+      summary: Create Personal Payment Source
       operationId: createPersonalPaymentSource
       requestBody:
         content:
@@ -125,7 +124,7 @@ paths:
     delete:
       tags:
       - Personal Payment Sources
-      summary: Delete a Personal Payment Source.
+      summary: Delete a Personal Payment Source
       operationId: deletePersonalPaymentSource
       responses:
         '200':
@@ -141,7 +140,7 @@ paths:
     patch:
       tags:
       - Personal Payment Sources
-      summary: Update a Personal Payment Source.
+      summary: Update a Personal Payment Source
       operationId: updatePersonalPaymentSource
       requestBody:
         content:
@@ -161,8 +160,8 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   responses:
-    Forbidden:
-      description: Forbidden
+    Unauthorized:
+      description: Unauthorized
       content:
         application/json:
           schema:
@@ -173,30 +172,79 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     BadRequest:
       description: Bad request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    OffsetBasedPaginationResponseParams:
+    Expiry:
+      title: Expiry
       type: object
-      title: PaginationResponseParams
-      description: Pagination parameters for response.
+      description: Contains the expiry of a Card.
       required:
-      - totalNumResults
+      - expiryMonth
+      - expiryYear
       properties:
-        totalNumResults:
+        expiryMonth:
           type: integer
           format: int32
-          description: Total number of results.
+          minimum: 1
+          maximum: 12
+          description: Expiry month
+          example: 1
+        expiryYear:
+          type: integer
+          format: int32
+          description: Expiry year
+          minimum: 2000
+          example: 2010
+    GetPaymentSourceResponseV2:
+      type: object
+      title: GetPaymentSourceResponseV2
+      description: Response returned when fetching details of a payment source.
+      properties:
+        paymentSource:
+          description: Details of the payment source
+          $ref: '#/components/schemas/PaymentSourceInfoV2'
+    CardCompany:
+      type: string
+      enum:
+      - NONE
+      - VISA
+      - MASTERCARD
+      - AMEX
+      - DISCOVER
+      - AIR_TRAVEL_UATP
+      - CARTE_BLANCHE
+      - DINERS_CLUB
+      - JCB
+      - BREX
+      - UNION_PAY
+      - EURO_CARD
+      - ACCESS_CARD
+      - ELO_CARD
+      description: The issuing company of card
+      example: VISA
+    ListPaymentSourceResponse:
+      type: object
+      title: ListPaymentSourceResponse
+      description: Response containing a list of payment sources along with pagination details.
+      properties:
+        paymentSourceInfos:
+          type: array
+          description: List of payment sources
+          items:
+            $ref: '#/components/schemas/PaymentSourceInfoV2'
+        paginationParams:
+          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
     CreatePaymentSourceRequestV2:
       type: object
       title: CreatePaymentSourceRequestV2
@@ -207,16 +255,6 @@ components:
         paymentSourceInfo:
           description: Detailed information about the payment source to be created.
           $ref: '#/components/schemas/PaymentSourceInfoV2'
-    TMCPaymentFilter:
-      type: object
-      title: TMCPaymentFilter
-      description: Defines filter specific to tmc payment sources.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          example: TMC
     PaymentSourceDetails:
       type: object
       title: PaymentSourceDetails
@@ -227,29 +265,6 @@ components:
           CARD: '#/components/schemas/CardPaymentSource'
       oneOf:
       - $ref: '#/components/schemas/CardPaymentSource'
-    CardPaymentSourceUpdate:
-      type: object
-      title: CardPaymentSourceUpdate
-      description: This describes the details for a card payment source.
-      required:
-      - paymentType
-      - card
-      properties:
-        paymentType:
-          type: string
-          example: CARD
-        card:
-          $ref: '#/components/schemas/CardUpdate'
-    PaymentSourceUpdateDetails:
-      type: object
-      title: PaymentSourceUpdateDetails
-      description: Specifies the details required to update an existing payment source.
-      discriminator:
-        propertyName: paymentType
-        mapping:
-          CARD: '#/components/schemas/CardPaymentSourceUpdate'
-      oneOf:
-      - $ref: '#/components/schemas/CardPaymentSourceUpdate'
     CardUpdate:
       type: object
       title: CardUpdate
@@ -264,40 +279,26 @@ components:
           example: Label amex
         ownershipLabel:
           $ref: '#/components/schemas/OwnershipLabel'
-    TravelType:
-      type: string
-      title: TravelType
-      description: Travel Type
-      enum:
-      - AIR
-      - HOTEL
-      - CAR
-      - RAIL
-      - LIMO
-      - MISC
-      - ALL
-      example: AIR
-    UpdatePersonalPaymentSourceRequest:
+    PaymentSourceUpdateDetails:
       type: object
-      title: UpdatePersonalPaymentSourceRequest
-      description: Request payload for updating an existing personal payment source.
+      title: PaymentSourceUpdateDetails
+      description: Specifies the details required to update an existing payment source.
+      discriminator:
+        propertyName: paymentType
+        mapping:
+          CARD: '#/components/schemas/CardPaymentSourceUpdate'
+      oneOf:
+      - $ref: '#/components/schemas/CardPaymentSourceUpdate'
+    TMCPaymentFilter:
+      type: object
+      title: TMCPaymentFilter
+      description: Defines filter specific to tmc payment sources.
       required:
-      - paymentSourceInfo
+      - type
       properties:
-        paymentSourceInfo:
-          description: Details of the payment source to be updated
-          $ref: '#/components/schemas/PaymentSourceUpdateDetails'
-        filter:
-          description: Applicable Filters i.e. access level, travel type information etc.
-          $ref: '#/components/schemas/UsagePaymentFilter'
-    OwnershipLabel:
-      title: OwnershipLabel
-      type: string
-      description: Ownership label of the card whether it is personal, corporate or central.
-      enum:
-      - CORPORATE
-      - PERSONAL
-      - CENTRAL
+        type:
+          type: string
+          example: TMC
     CardPaymentSource:
       type: object
       title: CardPaymentSource
@@ -311,38 +312,30 @@ components:
           example: CARD
         card:
           $ref: '#/components/schemas/CardV2'
-    Latlng:
-      title: Latlng
-      description: Latitude and Longitude for a Location
-      type: object
-      required:
-      - latitude
-      - longitude
-      properties:
-        latitude:
-          type: number
-          description: Latitude of the Location
-          format: double
-          example: 77.1025
-        longitude:
-          type: number
-          description: Longitude of the Location
-          format: double
-          example: 28.7041
-    UsagePaymentFilter:
-      type: object
-      title: UsagePaymentFilter
-      description: Defines usage restrictions or filters for a payment source.
-      discriminator:
-        propertyName: type
-        mapping:
-          PERSONAL: '#/components/schemas/PersonalPaymentFilter'
-          TMC: '#/components/schemas/TMCPaymentFilter'
-      oneOf:
-      - $ref: '#/components/schemas/PersonalPaymentFilter'
-      - $ref: '#/components/schemas/TMCPaymentFilter'
+    PaymentSourceStatus:
+      type: string
+      description: Status of the Payment Source.
+      readOnly: true
+      enum:
+      - ACTIVE
+      - INCOMPLETE
+      - TEMPORARY_READY
+      - TEMPORARY_USED
+      - TEMPORARY_EXPIRED
+      - TEMPORARY_INCOMPLETE
       x-ignoreBreakingChanges:
-      - UsagePaymentFilter->TMCPaymentFilter
+      - PaymentSourceStatus->TEMPORARY_READY
+      - PaymentSourceStatus->TEMPORARY_USED
+      - PaymentSourceStatus->TEMPORARY_EXPIRED
+      - PaymentSourceStatus->TEMPORARY_INCOMPLETE
+    AuthenticationInfo:
+      type: object
+      title: AuthenticationInfo
+      description: Provides authentication details, such as URLs for 3DS.
+      properties:
+        authUrl:
+          type: string
+          description: URL provided by the payment gateway for completing authentication.
     ManagedTravelerPaymentAccess:
       type: object
       description: Settings for sharing this payment method with managed traveler profiles. Applicable for Arranger Roles.
@@ -361,34 +354,14 @@ components:
               type: boolean
               description: If true, managed travelers can see this payment method when booking for themselves. If false, only the Travel Arranger can see it.
               default: false
-    ListPaymentSourceResponse:
-      type: object
-      title: ListPaymentSourceResponse
-      description: Response containing a list of payment sources along with pagination details.
-      properties:
-        paymentSourceInfos:
-          type: array
-          description: List of payment sources
-          items:
-            $ref: '#/components/schemas/PaymentSourceInfoV2'
-        paginationParams:
-          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
-    AuthenticationInfo:
-      type: object
-      title: AuthenticationInfo
-      description: Provides authentication details, such as URLs for 3DS.
-      properties:
-        authUrl:
-          type: string
-          description: URL provided by the payment gateway for completing authentication.
-    GetPaymentSourceResponseV2:
-      type: object
-      title: GetPaymentSourceResponseV2
-      description: Response returned when fetching details of a payment source.
-      properties:
-        paymentSource:
-          description: Details of the payment source
-          $ref: '#/components/schemas/PaymentSourceInfoV2'
+    OwnershipLabel:
+      title: OwnershipLabel
+      type: string
+      description: Ownership label of the card whether it is personal, corporate or central.
+      enum:
+      - CORPORATE
+      - PERSONAL
+      - CENTRAL
     ErrorResponse:
       type: object
       properties:
@@ -414,6 +387,203 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
+    OffsetBasedPaginationResponseParams:
+      type: object
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
+      required:
+      - totalNumResults
+      properties:
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results.
+    CardPaymentSourceUpdate:
+      type: object
+      title: CardPaymentSourceUpdate
+      description: This describes the details for a card payment source.
+      required:
+      - paymentType
+      - card
+      properties:
+        paymentType:
+          type: string
+          example: CARD
+        card:
+          $ref: '#/components/schemas/CardUpdate'
+    CardV2:
+      type: object
+      title: CardV2
+      description: Card Details
+      required:
+      - company
+      - name
+      - address
+      - number
+      - label
+      - expiry
+      properties:
+        company:
+          $ref: '#/components/schemas/CardCompany'
+        name:
+          description: Name on card
+          type: string
+          example: Harrison Schwartz
+          x-pii: SENSITIVE
+        address:
+          description: Billing address
+          $ref: '#/components/schemas/PostalAddress'
+          x-pii: SENSITIVE
+        number:
+          type: string
+          description: Card number
+          example: '4111111111111111'
+        cvv:
+          type: string
+          description: Card cvv number
+          example: '012'
+        label:
+          type: string
+          description: Card Label
+          example: Label amex
+        expiry:
+          description: Card Expiry.
+          $ref: '#/components/schemas/Expiry'
+        ownershipLabel:
+          $ref: '#/components/schemas/OwnershipLabel'
+          example: PERSONAL
+    TravelType:
+      type: string
+      title: TravelType
+      description: Travel Type
+      enum:
+      - AIR
+      - HOTEL
+      - CAR
+      - RAIL
+      - LIMO
+      - MISC
+      - ALL
+      example: AIR
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    CreatePaymentSourceResponseV2:
+      type: object
+      title: CreatePaymentSourceResponseV2
+      description: Response returned upon creating a payment source.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier identifying the created payment source, if created.
+          example: f49d00fe-1eda-4304-ba79-a980f565281d
+        status:
+          $ref: '#/components/schemas/PaymentSourceStatus'
+          description: Current status of the payment source.
+        authenticationInfo:
+          $ref: '#/components/schemas/AuthenticationInfo'
+          description: Information required for additional authentication steps, such as 3D Secure verification.
+    UpdatePersonalPaymentSourceRequest:
+      type: object
+      title: UpdatePersonalPaymentSourceRequest
+      description: Request payload for updating an existing personal payment source.
+      required:
+      - paymentSourceInfo
+      properties:
+        paymentSourceInfo:
+          description: Details of the payment source to be updated
+          $ref: '#/components/schemas/PaymentSourceUpdateDetails'
+        filter:
+          description: Applicable Filters i.e. access level, travel type information etc.
+          $ref: '#/components/schemas/UsagePaymentFilter'
+    PersonalPaymentFilter:
+      type: object
+      title: PersonalPaymentFilter
+      description: Defines filter specific to personal payment sources.
+      required:
+      - type
+      - travelTypes
+      properties:
+        type:
+          type: string
+          example: PERSONAL
+        travelTypes:
+          type: array
+          description: Applicable payment source travel types
+          items:
+            $ref: '#/components/schemas/TravelType'
+          minItems: 1
+          maxItems: 6
+        managedTravelerAccess:
+          description: Config for providing the access to Managed Travelers if any.
+          $ref: '#/components/schemas/ManagedTravelerPaymentAccess'
+    UsagePaymentFilter:
+      type: object
+      title: UsagePaymentFilter
+      description: Defines usage restrictions or filters for a payment source.
+      discriminator:
+        propertyName: type
+        mapping:
+          PERSONAL: '#/components/schemas/PersonalPaymentFilter'
+          TMC: '#/components/schemas/TMCPaymentFilter'
+      oneOf:
+      - $ref: '#/components/schemas/PersonalPaymentFilter'
+      - $ref: '#/components/schemas/TMCPaymentFilter'
+      x-ignoreBreakingChanges:
+      - UsagePaymentFilter->TMCPaymentFilter
+    PaymentSourceInfoV2:
+      type: object
+      title: PaymentSourceInfoV2
+      required:
+      - paymentSource
+      - filter
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier identifying the created payment source, if created.
+          readOnly: true
+        paymentSource:
+          description: Details of the payment source
+          $ref: '#/components/schemas/PaymentSourceDetails'
+        filter:
+          description: Applicable Filters i.e. access level, travel type information etc.
+          $ref: '#/components/schemas/UsagePaymentFilter'
+        status:
+          readOnly: true
+          description: Status of the payment source after creation. Only Active sources can be used for bookings.
+          $ref: '#/components/schemas/PaymentSourceStatus'
+        externalId:
+          type: string
+          description: An identifier assigned by a partner system. Once attached to a payment source, it remains unique per user and cannot be reassigned to another payment source.
+          example: bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
     PostalAddress:
       title: PostalAddress
       description: Postal Address Details
@@ -525,177 +695,6 @@ components:
         coordinates:
           description: Map coordinates of the address.
           $ref: '#/components/schemas/Latlng'
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    PaymentSourceStatus:
-      type: string
-      description: Status of the Payment Source.
-      readOnly: true
-      enum:
-      - ACTIVE
-      - INCOMPLETE
-      - TEMPORARY_READY
-      - TEMPORARY_USED
-      - TEMPORARY_EXPIRED
-      - TEMPORARY_INCOMPLETE
-      x-ignoreBreakingChanges:
-      - PaymentSourceStatus->TEMPORARY_READY
-      - PaymentSourceStatus->TEMPORARY_USED
-      - PaymentSourceStatus->TEMPORARY_EXPIRED
-      - PaymentSourceStatus->TEMPORARY_INCOMPLETE
-    CardCompany:
-      type: string
-      enum:
-      - NONE
-      - VISA
-      - MASTERCARD
-      - AMEX
-      - DISCOVER
-      - AIR_TRAVEL_UATP
-      - CARTE_BLANCHE
-      - DINERS_CLUB
-      - JCB
-      - BREX
-      - UNION_PAY
-      - EURO_CARD
-      - ACCESS_CARD
-      - ELO_CARD
-      description: The issuing company of card
-      example: VISA
-    CardV2:
-      type: object
-      title: CardV2
-      description: Card Details
-      required:
-      - company
-      - name
-      - address
-      - number
-      - label
-      - expiry
-      properties:
-        company:
-          $ref: '#/components/schemas/CardCompany'
-        name:
-          description: Name on card
-          type: string
-          example: Harrison Schwartz
-          x-pii: SENSITIVE
-        address:
-          description: Billing address
-          $ref: '#/components/schemas/PostalAddress'
-          x-pii: SENSITIVE
-        number:
-          type: string
-          description: Card number
-          example: '4111111111111111'
-        cvv:
-          type: string
-          description: Card cvv number
-          example: '012'
-        label:
-          type: string
-          description: Card Label
-          example: Label amex
-        expiry:
-          description: Card Expiry.
-          $ref: '#/components/schemas/Expiry'
-        ownershipLabel:
-          $ref: '#/components/schemas/OwnershipLabel'
-          example: PERSONAL
-    CreatePaymentSourceResponseV2:
-      type: object
-      title: CreatePaymentSourceResponseV2
-      description: Response returned upon creating a payment source.
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier identifying the created payment source, if created.
-          example: f49d00fe-1eda-4304-ba79-a980f565281d
-        status:
-          $ref: '#/components/schemas/PaymentSourceStatus'
-          description: Current status of the payment source.
-        authenticationInfo:
-          $ref: '#/components/schemas/AuthenticationInfo'
-          description: Information required for additional authentication steps, such as 3D Secure verification.
-    PersonalPaymentFilter:
-      type: object
-      title: PersonalPaymentFilter
-      description: Defines filter specific to personal payment sources.
-      required:
-      - type
-      - travelTypes
-      properties:
-        type:
-          type: string
-          example: PERSONAL
-        travelTypes:
-          type: array
-          description: Applicable payment source travel types
-          items:
-            $ref: '#/components/schemas/TravelType'
-          minItems: 1
-          maxItems: 6
-        managedTravelerAccess:
-          description: Config for providing the access to Managed Travelers if any.
-          $ref: '#/components/schemas/ManagedTravelerPaymentAccess'
-    PaymentSourceInfoV2:
-      type: object
-      title: PaymentSourceInfoV2
-      required:
-      - paymentSource
-      - filter
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier identifying the created payment source, if created.
-          readOnly: true
-        paymentSource:
-          description: Details of the payment source
-          $ref: '#/components/schemas/PaymentSourceDetails'
-        filter:
-          description: Applicable Filters i.e. access level, travel type information etc.
-          $ref: '#/components/schemas/UsagePaymentFilter'
-        status:
-          readOnly: true
-          description: Status of the payment source after creation. Only Active sources can be used for bookings.
-          $ref: '#/components/schemas/PaymentSourceStatus'
-        externalId:
-          type: string
-          description: An identifier assigned by a partner system. Once attached to a payment source, it remains unique per user and cannot be reassigned to another payment source.
-          example: bxt_RNGsNfzgJDaTstKIKqK4xEuhGYAnMdYK8T40
-    Expiry:
-      title: Expiry
-      type: object
-      description: Contains the expiry of a Card.
-      required:
-      - expiryMonth
-      - expiryYear
-      properties:
-        expiryMonth:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 12
-          description: Expiry month
-          example: 1
-        expiryYear:
-          type: integer
-          format: int32
-          description: Expiry year
-          minimum: 2000
-          example: 2010
   securitySchemes:
     Bearer:
       type: http
