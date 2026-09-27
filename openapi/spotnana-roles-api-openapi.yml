@@ -43,6 +43,31 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
     GetRbacInfoResponse:
       type: object
       title: GetRbacInfoResponse
@@ -83,31 +108,17 @@ components:
       - AGENT_CONTACT_CENTER_ANALYTICS_MANAGEMENT
       - AGENT_CONTACT_CENTER_SETTINGS_MANAGEMENT
       example: COMPANY_MANAGEMENT
-    ErrorResponse:
+    ErrorParameter:
       type: object
+      title: ErrorParameter
+      description: Error parameter
       properties:
-        debugIdentifier:
+        name:
           type: string
-          description: Link to debug the error internally.
-        errorMessages:
-          type: array
-          items:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                description: Error code to identify the specific errors.
-              message:
-                type: string
-                description: Message containing details of error.
-              errorParameters:
-                type: array
-                description: Error message parameters.
-                items:
-                  $ref: '#/components/schemas/ErrorParameter'
-              errorDetail:
-                type: string
-                description: More details about the error.
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
     PermissionAction:
       type: string
       title: PermissionAction
@@ -120,17 +131,6 @@ components:
       - DELETE
       - PURGE
       example: READ
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
     PermissionWithActions:
       type: object
       title: PermissionWithActions
@@ -163,14 +163,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
+    NotFound:
+      description: The specified resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:

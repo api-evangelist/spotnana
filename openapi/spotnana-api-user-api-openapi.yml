@@ -236,6 +236,26 @@ paths:
           $ref: '#/components/responses/BadRequest'
 components:
   schemas:
+    RotateClientSecretResponse:
+      type: object
+      title: RotateClientSecretResponse
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
+          example: 1ddj3hs95to28iag7m4hl9lv2
+        clientSecret:
+          type: string
+          description: Api user client secret
+          example: 1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml
+    ApiUsersInfo:
+      type: object
+      title: ApiUsersInfo
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
+          example: 1ddj3hs95to28iag7m4hl9lv2
     ErrorResponse:
       type: object
       properties:
@@ -261,29 +281,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    RotateClientSecretResponse:
-      type: object
-      title: RotateClientSecretResponse
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-          example: 1ddj3hs95to28iag7m4hl9lv2
-        clientSecret:
-          type: string
-          description: Api user client secret
-          example: 1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
     CreateApiUsersRequest:
       type: object
       title: CreateApiUsersRequest
@@ -302,35 +299,6 @@ components:
         credentialType:
           $ref: '#/components/schemas/ApiUserCredentialTypeEnum'
           description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
-    GetApiUsersResponse:
-      type: object
-      title: GetApiUsersResponse
-      properties:
-        apiUsers:
-          type: array
-          description: List of api users
-          items:
-            $ref: '#/components/schemas/ApiUsersInfo'
-        totalCount:
-          type: integer
-          description: Total count of api users
-          example: 25
-    ApiUserRoleEnum:
-      type: string
-      description: Roles supported for api user creation
-      enum:
-      - TMC_ADMIN
-      - COMPANY_ADMIN
-      default: TMC_ADMIN
-      example: TMC_ADMIN
-    ApiUserCredentialTypeEnum:
-      type: string
-      description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
-      enum:
-      - CLIENT_CREDENTIALS
-      - SCIM_TOKEN
-      default: CLIENT_CREDENTIALS
-      example: CLIENT_CREDENTIALS
     RotateClientSecretRequest:
       type: object
       title: RotateClientSecretRequest
@@ -345,14 +313,6 @@ components:
         clientId:
           type: string
           description: Api user client id
-    ApiUsersInfo:
-      type: object
-      title: ApiUsersInfo
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-          example: 1ddj3hs95to28iag7m4hl9lv2
     CreateApiUsersResponse:
       type: object
       title: CreateApiUsersResponse
@@ -369,6 +329,46 @@ components:
           type: string
           description: SCIM bearer token (Base64-encoded JSON envelope with encrypted secret). Present only for SCIM_TOKEN credential type.
           example: eyJzY29wZSI6InNjaW0iLCJjbGllbnRJZCI6Ii4uLiIsImVuY3J5cHRlZFNlY3JldCI6Ii4uLiJ9
+    ApiUserCredentialTypeEnum:
+      type: string
+      description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
+      enum:
+      - CLIENT_CREDENTIALS
+      - SCIM_TOKEN
+      default: CLIENT_CREDENTIALS
+      example: CLIENT_CREDENTIALS
+    ApiUserRoleEnum:
+      type: string
+      description: Roles supported for api user creation
+      enum:
+      - TMC_ADMIN
+      - COMPANY_ADMIN
+      default: TMC_ADMIN
+      example: TMC_ADMIN
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    GetApiUsersResponse:
+      type: object
+      title: GetApiUsersResponse
+      properties:
+        apiUsers:
+          type: array
+          description: List of api users
+          items:
+            $ref: '#/components/schemas/ApiUsersInfo'
+        totalCount:
+          type: integer
+          description: Total count of api users
+          example: 25
   responses:
     BadRequest:
       description: Bad request

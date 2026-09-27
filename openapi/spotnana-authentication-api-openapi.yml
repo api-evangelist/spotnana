@@ -68,37 +68,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    OAuthTokenRequest:
-      type: object
-      title: OAuthTokenRequest
-      x-ignore-naming-case: true
-      required:
-      - grant_type
-      - client_id
-      - client_secret
-      properties:
-        grant_type:
-          type: string
-          description: Supported values are `client_credentials` and `urn:ietf:params:oauth:grant-type:token-exchange`.
-        client_id:
-          type: string
-          description: Identifier for the API user.
-        client_secret:
-          type: string
-          description: Password
-        audience:
-          type: string
-          description: Identifies the API being accessed in Spotnana.
-          example: https://apis.spotnana.com/v2
-        subject_token:
-          type: string
-          description: "A security token that represents the identity of the entity on whose behalf the request \nis being made.\n"
-        subject_token_type:
-          type: string
-          description: "Indicates the type of the `subject_token` used for token exchange. \nThis field supports the valid types as per the OAUTH 2.0 security framework.\n"
-        scope:
-          type: string
-          description: "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \nRFC6749 OAuth 2.0 framework, that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
     OAuthTokenResponse:
       type: object
       title: OAuthTokenResponse
@@ -139,6 +108,37 @@ components:
         value:
           type: string
           description: Parameter value
+    OAuthTokenRequest:
+      type: object
+      title: OAuthTokenRequest
+      x-ignore-naming-case: true
+      required:
+      - grant_type
+      - client_id
+      - client_secret
+      properties:
+        grant_type:
+          type: string
+          description: Supported values are `client_credentials` and `urn:ietf:params:oauth:grant-type:token-exchange`.
+        client_id:
+          type: string
+          description: Identifier for the API user.
+        client_secret:
+          type: string
+          description: Password
+        audience:
+          type: string
+          description: Identifies the API being accessed in Spotnana.
+          example: https://apis.spotnana.com/v2
+        subject_token:
+          type: string
+          description: "A security token that represents the identity of the entity on whose behalf the request \nis being made.\n"
+        subject_token_type:
+          type: string
+          description: "Indicates the type of the `subject_token` used for token exchange. \nThis field supports the valid types as per the OAUTH 2.0 security framework.\n"
+        scope:
+          type: string
+          description: "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \nRFC6749 OAuth 2.0 framework, that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
   responses:
     Forbidden:
       description: Forbidden

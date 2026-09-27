@@ -194,7 +194,51 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
+    ListDepartmentsRequest:
+      type: object
+      title: ListDepartmentsRequest
+      required:
+      - paginationParams
+      description: List departments request
+      properties:
+        searchText:
+          type: string
+          description: Search string entered by the user
+          example: Engineering
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
+        filters:
+          type: array
+          description: List of filters. Departments matching with any filter would be returned.
+          items:
+            $ref: '#/components/schemas/ListDepartmentsFilter'
     ErrorResponse:
       type: object
       properties:
@@ -220,6 +264,31 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
+    OffsetBasedPaginationResponseParams:
+      type: object
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
+      required:
+      - totalNumResults
+      properties:
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results.
+    ListDepartmentsResponse:
+      type: object
+      description: Response for list departments API.
+      required:
+      - paginationParams
+      properties:
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
+        departments:
+          type: array
+          description: List of departments containing id and name.
+          items:
+            $ref: '#/components/schemas/DepartmentInfo'
     DepartmentV2:
       type: object
       title: DepartmentV2
@@ -239,31 +308,24 @@ components:
           type: string
           description: External id of the department
           example: department-ext-id
-    CreateDepartmentRequest:
+    ListDepartmentsFilter:
       type: object
-      title: CreateDepartmentRequest
-      required:
-      - name
-      description: Create department request
+      title: ListDepartmentsFilter
+      description: Filter parameters for list departments.
       properties:
-        name:
-          type: string
-          description: Name of the department
-        externalId:
-          type: string
-          description: External id of the department
-          example: department-external-id
-    OffsetBasedPaginationResponseParams:
-      type: object
-      title: PaginationResponseParams
-      description: Pagination parameters for response.
-      required:
-      - totalNumResults
-      properties:
-        totalNumResults:
-          type: integer
-          format: int32
-          description: Total number of results.
+        externalIds:
+          type: array
+          items:
+            type: string
+            example: department-external-id
+          description: List of external ids.
+        departmentIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+          description: List of department ids.
     DepartmentInfo:
       type: object
       title: DepartmentInfo
@@ -278,39 +340,6 @@ components:
         name:
           type: string
           example: Accounting
-    ListDepartmentsResponse:
-      type: object
-      description: Response for list departments API.
-      required:
-      - paginationParams
-      properties:
-        paginationParams:
-          description: Pagination information.
-          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
-        departments:
-          type: array
-          description: List of departments containing id and name.
-          items:
-            $ref: '#/components/schemas/DepartmentInfo'
-    ListDepartmentsRequest:
-      type: object
-      title: ListDepartmentsRequest
-      required:
-      - paginationParams
-      description: List departments request
-      properties:
-        searchText:
-          type: string
-          description: Search string entered by the user
-          example: Engineering
-        paginationParams:
-          description: Pagination information.
-          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
-        filters:
-          type: array
-          description: List of filters. Departments matching with any filter would be returned.
-          items:
-            $ref: '#/components/schemas/ListDepartmentsFilter'
     OffsetBasedPaginationRequestParams:
       type: object
       title: OffsetBasedPaginationRequestParams
@@ -357,16 +386,6 @@ components:
           type: integer
           format: int32
           description: Total number of results
-    EntityId:
-      type: object
-      description: Identifier of an object
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
     ErrorParameter:
       type: object
       title: ErrorParameter
@@ -378,49 +397,30 @@ components:
         value:
           type: string
           description: Parameter value
-    ListDepartmentsFilter:
+    CreateDepartmentRequest:
       type: object
-      title: ListDepartmentsFilter
-      description: Filter parameters for list departments.
+      title: CreateDepartmentRequest
+      required:
+      - name
+      description: Create department request
       properties:
-        externalIds:
-          type: array
-          items:
-            type: string
-            example: department-external-id
-          description: List of external ids.
-        departmentIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-            example: 731ccbca-0415-6fe1-d235-c324dfbe7423
-          description: List of department ids.
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+        name:
+          type: string
+          description: Name of the department
+        externalId:
+          type: string
+          description: External id of the department
+          example: department-external-id
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
   securitySchemes:
     Bearer:
       type: http

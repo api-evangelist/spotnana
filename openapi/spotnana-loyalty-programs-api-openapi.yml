@@ -60,6 +60,25 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
     ErrorResponse:
       type: object
@@ -99,6 +118,38 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LoyaltyInfo'
+    AirLoyaltyProgram:
+      type: object
+      required:
+      - programName
+      - airlineCode
+      - airlineName
+      - loyaltyType
+      properties:
+        programName:
+          description: Name of the loyalty program.
+          type: string
+          example: AA Advantage
+        airlineCode:
+          description: IATA code of the airline that hosts the loyalty program.
+          type: string
+          example: AA
+        airlineName:
+          description: Name of the airline that hosts the loyalty program.
+          type: string
+          example: American Airlines
+        loyaltyType:
+          description: Type of the loyalty program. This indicates how the loyalty program is associated with the airline mentioned in the API request.
+          type: string
+          enum:
+          - OWN
+          - PARTNER
+          - ALLIANCE
+          example: OWN
+    LoyaltyTier:
+      type: string
+      description: Loyalty membership tier name echoed from the supplier.
+      example: GOLD
     ErrorParameter:
       type: object
       title: ErrorParameter
@@ -147,57 +198,6 @@ components:
           example: false
         tier:
           $ref: '#/components/schemas/LoyaltyTier'
-    LoyaltyTier:
-      type: string
-      description: Loyalty membership tier name echoed from the supplier.
-      example: GOLD
-    AirLoyaltyProgram:
-      type: object
-      required:
-      - programName
-      - airlineCode
-      - airlineName
-      - loyaltyType
-      properties:
-        programName:
-          description: Name of the loyalty program.
-          type: string
-          example: AA Advantage
-        airlineCode:
-          description: IATA code of the airline that hosts the loyalty program.
-          type: string
-          example: AA
-        airlineName:
-          description: Name of the airline that hosts the loyalty program.
-          type: string
-          example: American Airlines
-        loyaltyType:
-          description: Type of the loyalty program. This indicates how the loyalty program is associated with the airline mentioned in the API request.
-          type: string
-          enum:
-          - OWN
-          - PARTNER
-          - ALLIANCE
-          example: OWN
-  responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http

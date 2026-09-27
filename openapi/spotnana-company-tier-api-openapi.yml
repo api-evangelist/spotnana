@@ -121,6 +121,22 @@ components:
           description: URL representing tier icon.
         tier:
           $ref: '#/components/schemas/Tier'
+    Tier:
+      type: string
+      title: Tier
+      description: 'Tier of User.
+
+        Note: In default UI, BASIC is displayed as Standard, and SEAT1A is displayed as VIP.
+
+        '
+      enum:
+      - BASIC
+      - SEAT1A
+      x-enum-varnames:
+      - BASIC
+      - SEAT1A
+      example: SEAT1A
+      default: BASIC
     CompanyRole:
       type: string
       description: Role of the company.
@@ -143,43 +159,27 @@ components:
         value:
           type: string
           description: Parameter value
-    Tier:
-      type: string
-      title: Tier
-      description: 'Tier of User.
-
-        Note: In default UI, BASIC is displayed as Standard, and SEAT1A is displayed as VIP.
-
-        '
-      enum:
-      - BASIC
-      - SEAT1A
-      x-enum-varnames:
-      - BASIC
-      - SEAT1A
-      example: SEAT1A
-      default: BASIC
   responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:

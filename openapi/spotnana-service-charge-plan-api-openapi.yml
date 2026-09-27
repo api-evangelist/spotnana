@@ -63,20 +63,27 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    TierChargeConfig:
+    FixedChargeConfig:
       type: object
-      title: Tier charge configuration for service charge
+      title: FixedChargeConfig
+      description: Fixed charge configuration for service charge
       required:
-      - tier
       - charges
       properties:
-        tier:
-          $ref: '#/components/schemas/Tier'
         charges:
           type: array
           description: Amount in specified currency
           items:
             $ref: '#/components/schemas/Money'
+        defaultCurrencyCode:
+          type: string
+          description: The 3-letter currency code defined in ISO 4217.
+          example: GBP
+        tierCharges:
+          type: array
+          description: Charges specified per traveler tier
+          items:
+            $ref: '#/components/schemas/TierChargeConfig'
     ErrorResponse:
       type: object
       properties:
@@ -102,26 +109,21 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    SetCompanyPerTripSrvChargeRequest:
+    GetCompanyPerTripSrvChargeResponse:
       type: object
-      title: SetCompanyPerTripSrvChargeRequest
-      description: Set per trip service charge configuration for company
-      required:
-      - config
+      title: GetCompanyPerTripSrvChargeResponse
+      description: Get per trip service charge configuration for company
       properties:
         config:
           $ref: '#/components/schemas/FixedChargeConfig'
-    FlightPassPaymentMetadata:
-      type: object
-      title: FlightPassPaymentMetadata
-      description: Metadata specific to Flight Pass payment method in OtherCoinage.
-      properties:
-        flightPassNumber:
-          type: string
-          description: Flight pass number
-          example: FP123456789
-        flightPassAmounts:
-          $ref: '#/components/schemas/FlightPassPaymentAmounts'
+        enabled:
+          type: boolean
+          description: True if per trip service charge configuration is enabled
+          example: true
+        enableDisableOpSupported:
+          type: boolean
+          description: True if per trip service charge configuration can be enabled/disabled
+          example: true
     Money:
       type: object
       title: Money
@@ -188,39 +190,22 @@ components:
                     FlightPassPaymentMetadata: '#/components/schemas/FlightPassPaymentMetadataWrapper'
                 oneOf:
                 - $ref: '#/components/schemas/FlightPassPaymentMetadataWrapper'
-    FlightPassTax:
-      type: object
-      title: FlightPassTax
-      description: A single tax component of the flight pass fare.
-      properties:
-        code:
-          type: string
-          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
-          example: GST_HST
-        amount:
-          description: Tax amount.
-          $ref: '#/components/schemas/Money'
-    FixedChargeConfig:
-      type: object
-      title: FixedChargeConfig
-      description: Fixed charge configuration for service charge
-      required:
-      - charges
-      properties:
-        charges:
-          type: array
-          description: Amount in specified currency
-          items:
-            $ref: '#/components/schemas/Money'
-        defaultCurrencyCode:
-          type: string
-          description: The 3-letter currency code defined in ISO 4217.
-          example: GBP
-        tierCharges:
-          type: array
-          description: Charges specified per traveler tier
-          items:
-            $ref: '#/components/schemas/TierChargeConfig'
+    Tier:
+      type: string
+      title: Tier
+      description: 'Tier of User.
+
+        Note: In default UI, BASIC is displayed as Standard, and SEAT1A is displayed as VIP.
+
+        '
+      enum:
+      - BASIC
+      - SEAT1A
+      x-enum-varnames:
+      - BASIC
+      - SEAT1A
+      example: SEAT1A
+      default: BASIC
     PaymentMethod:
       type: string
       description: Payment method
@@ -242,62 +227,31 @@ components:
       - PaymentMethod->MISCELLANEOUS_CREDIT_ORDER
       - PaymentMethod->NO_PREPAYMENT
       example: BREX_POINTS
-    FlightPassPaymentMetadataWrapper:
+    FlightPassPaymentMetadata:
       type: object
-      title: FlightPassPaymentMetadataWrapper
-      description: Wrapper for Flight Pass payment metadata.
+      title: FlightPassPaymentMetadata
+      description: Metadata specific to Flight Pass payment method in OtherCoinage.
+      properties:
+        flightPassNumber:
+          type: string
+          description: Flight pass number
+          example: FP123456789
+        flightPassAmounts:
+          $ref: '#/components/schemas/FlightPassPaymentAmounts'
+    TierChargeConfig:
+      type: object
+      title: Tier charge configuration for service charge
       required:
-      - flightPassMetadata
+      - tier
+      - charges
       properties:
-        metadataType:
-          type: string
-          description: Discriminator field for polymorphic deserialization
-          example: FlightPassPaymentMetadata
-          default: FlightPassPaymentMetadata
-        flightPassMetadata:
-          $ref: '#/components/schemas/FlightPassPaymentMetadata'
-    GetCompanyPerTripSrvChargeResponse:
-      type: object
-      title: GetCompanyPerTripSrvChargeResponse
-      description: Get per trip service charge configuration for company
-      properties:
-        config:
-          $ref: '#/components/schemas/FixedChargeConfig'
-        enabled:
-          type: boolean
-          description: True if per trip service charge configuration is enabled
-          example: true
-        enableDisableOpSupported:
-          type: boolean
-          description: True if per trip service charge configuration can be enabled/disabled
-          example: true
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    Tier:
-      type: string
-      title: Tier
-      description: 'Tier of User.
-
-        Note: In default UI, BASIC is displayed as Standard, and SEAT1A is displayed as VIP.
-
-        '
-      enum:
-      - BASIC
-      - SEAT1A
-      x-enum-varnames:
-      - BASIC
-      - SEAT1A
-      example: SEAT1A
-      default: BASIC
+        tier:
+          $ref: '#/components/schemas/Tier'
+        charges:
+          type: array
+          description: Amount in specified currency
+          items:
+            $ref: '#/components/schemas/Money'
     FlightPassPaymentAmounts:
       type: object
       title: FlightPassPaymentAmounts
@@ -317,6 +271,52 @@ components:
           description: Breakdown of taxes by code (e.g. GST_HST, QST, OTHER).
           items:
             $ref: '#/components/schemas/FlightPassTax'
+    FlightPassTax:
+      type: object
+      title: FlightPassTax
+      description: A single tax component of the flight pass fare.
+      properties:
+        code:
+          type: string
+          description: Tax code identifier (e.g. GST_HST, QST, OTHER).
+          example: GST_HST
+        amount:
+          description: Tax amount.
+          $ref: '#/components/schemas/Money'
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    SetCompanyPerTripSrvChargeRequest:
+      type: object
+      title: SetCompanyPerTripSrvChargeRequest
+      description: Set per trip service charge configuration for company
+      required:
+      - config
+      properties:
+        config:
+          $ref: '#/components/schemas/FixedChargeConfig'
+    FlightPassPaymentMetadataWrapper:
+      type: object
+      title: FlightPassPaymentMetadataWrapper
+      description: Wrapper for Flight Pass payment metadata.
+      required:
+      - flightPassMetadata
+      properties:
+        metadataType:
+          type: string
+          description: Discriminator field for polymorphic deserialization
+          example: FlightPassPaymentMetadata
+          default: FlightPassPaymentMetadata
+        flightPassMetadata:
+          $ref: '#/components/schemas/FlightPassPaymentMetadata'
   responses:
     Unauthorized:
       description: Unauthorized
@@ -324,14 +324,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
+    NotFound:
+      description: The specified resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:

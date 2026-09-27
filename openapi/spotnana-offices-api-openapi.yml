@@ -208,76 +208,18 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    CreateOfficeRequest:
+    OfficeNode:
       type: object
-      title: Create Office request.
-      description: Office details.
-      properties:
-        address:
-          $ref: '#/components/schemas/PostalAddress'
-        name:
-          type: string
-          example: Office name
-        latlng:
-          $ref: '#/components/schemas/Latlng'
-        externalId:
-          type: string
-          example: external-id
-        taxId:
-          type: string
-          example: '123232'
-    Reference:
-      type: object
-      title: Reference object containing uuid and name of the entity.
-      description: Reference of an entity
+      title: OfficeNode
+      description: Info for an office
       required:
-      - id
+      - legalEntityRef
+      - office
       properties:
-        id:
-          type: string
-          format: uuid
-          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
-        name:
-          type: string
-          example: Name
-    ListOfficesV2Request:
-      type: object
-      title: ListOfficesV2Request
-      description: List offices request with query, filters, pagination and sort parameters.
-      required:
-      - paginationParams
-      properties:
-        searchText:
-          type: string
-          description: Search text
-        paginationParams:
-          description: Pagination information.
-          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
-        sortParams:
-          description: Sorting related parameters.
-          $ref: '#/components/schemas/OfficeSortParams'
-        filters:
-          type: array
-          description: List of filters. Offices matching with any of filters would be returned.
-          items:
-            $ref: '#/components/schemas/ListOfficeFilter'
-    SortOrder:
-      type: string
-      description: Sorting order.
-      enum:
-      - DESC
-      - ASC
-      example: DESC
-      default: ASC
-    OfficeSortBy:
-      type: string
-      title: OfficeSortBy
-      description: The field name to sort on.
-      enum:
-      - NAME
-      - LEGAL_ENTITY_NAME
-      - COUNTRY_CODE
-      - TAX_ID
+        legalEntityRef:
+          $ref: '#/components/schemas/Reference'
+        office:
+          $ref: '#/components/schemas/OfficeV2'
     ListOfficesV2Response:
       type: object
       title: ListOfficesV2Response
@@ -293,53 +235,35 @@ components:
             $ref: '#/components/schemas/OfficeNode'
         paginationParams:
           $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
-    EntityId:
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
       type: object
-      description: Identifier of an object
       required:
-      - id
+      - latitude
+      - longitude
       properties:
-        id:
-          type: string
-          format: uuid
-          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
-    ErrorResponse:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
+    ErrorParameter:
       type: object
+      title: ErrorParameter
+      description: Error parameter
       properties:
-        debugIdentifier:
+        name:
           type: string
-          description: Link to debug the error internally.
-        errorMessages:
-          type: array
-          items:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                description: Error code to identify the specific errors.
-              message:
-                type: string
-                description: Message containing details of error.
-              errorParameters:
-                type: array
-                description: Error message parameters.
-                items:
-                  $ref: '#/components/schemas/ErrorParameter'
-              errorDetail:
-                type: string
-                description: More details about the error.
-    OfficeNode:
-      type: object
-      title: OfficeNode
-      description: Info for an office
-      required:
-      - legalEntityRef
-      - office
-      properties:
-        legalEntityRef:
-          $ref: '#/components/schemas/Reference'
-        office:
-          $ref: '#/components/schemas/OfficeV2'
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
     OffsetBasedPaginationResponseParams:
       type: object
       title: PaginationResponseParams
@@ -381,53 +305,41 @@ components:
             type: string
             format: uuid
           description: List of legal entity ids.
-    OfficeSortParams:
+    ListOfficesV2Request:
       type: object
-      title: OfficeSortParams
-      description: Sorting related parameters to return sorted list of offices.
+      title: ListOfficesV2Request
+      description: List offices request with query, filters, pagination and sort parameters.
       required:
-      - sortBy
-      - sortOrder
+      - paginationParams
       properties:
-        sortBy:
-          $ref: '#/components/schemas/OfficeSortBy'
-        sortOrder:
-          $ref: '#/components/schemas/SortOrder'
-    OffsetBasedPaginationRequestParams:
+        searchText:
+          type: string
+          description: Search text
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
+        sortParams:
+          description: Sorting related parameters.
+          $ref: '#/components/schemas/OfficeSortParams'
+        filters:
+          type: array
+          description: List of filters. Offices matching with any of filters would be returned.
+          items:
+            $ref: '#/components/schemas/ListOfficeFilter'
+    Reference:
       type: object
-      title: OffsetBasedPaginationRequestParams
-      description: Pagination parameters for requests.
-      properties:
-        offset:
-          type: integer
-          format: int32
-          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
-          default: 0
-          minimum: 0
-        limit:
-          type: integer
-          format: int32
-          description: Maximum number of results to be fetched.
-          minimum: 1
-          default: 100
-    Latlng:
-      title: Latlng
-      description: Latitude and Longitude for a Location
-      type: object
+      title: Reference object containing uuid and name of the entity.
+      description: Reference of an entity
       required:
-      - latitude
-      - longitude
+      - id
       properties:
-        latitude:
-          type: number
-          description: Latitude of the Location
-          format: double
-          example: 77.1025
-        longitude:
-          type: number
-          description: Longitude of the Location
-          format: double
-          example: 28.7041
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+        name:
+          type: string
+          example: Name
     ArrayOfReference:
       type: object
       properties:
@@ -443,38 +355,18 @@ components:
           type: integer
           format: int32
           description: Total number of results
-    ErrorParameter:
+    OfficeSortParams:
       type: object
-      title: ErrorParameter
-      description: Error parameter
+      title: OfficeSortParams
+      description: Sorting related parameters to return sorted list of offices.
+      required:
+      - sortBy
+      - sortOrder
       properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    OfficeV2:
-      type: object
-      title: Office
-      description: Office details.
-      properties:
-        address:
-          $ref: '#/components/schemas/PostalAddress'
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-          example: Office
-        latlng:
-          $ref: '#/components/schemas/Latlng'
-        externalId:
-          type: string
-          example: external-id
-        taxId:
-          type: string
-          example: '123232'
+        sortBy:
+          $ref: '#/components/schemas/OfficeSortBy'
+        sortOrder:
+          $ref: '#/components/schemas/SortOrder'
     PostalAddress:
       title: PostalAddress
       description: Postal Address Details
@@ -586,15 +478,123 @@ components:
         coordinates:
           description: Map coordinates of the address.
           $ref: '#/components/schemas/Latlng'
+    OffsetBasedPaginationRequestParams:
+      type: object
+      title: OffsetBasedPaginationRequestParams
+      description: Pagination parameters for requests.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
+          default: 0
+          minimum: 0
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to be fetched.
+          minimum: 1
+          default: 100
+    OfficeSortBy:
+      type: string
+      title: OfficeSortBy
+      description: The field name to sort on.
+      enum:
+      - NAME
+      - LEGAL_ENTITY_NAME
+      - COUNTRY_CODE
+      - TAX_ID
+    CreateOfficeRequest:
+      type: object
+      title: Create Office request.
+      description: Office details.
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+        name:
+          type: string
+          example: Office name
+        latlng:
+          $ref: '#/components/schemas/Latlng'
+        externalId:
+          type: string
+          example: external-id
+        taxId:
+          type: string
+          example: '123232'
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    SortOrder:
+      type: string
+      description: Sorting order.
+      enum:
+      - DESC
+      - ASC
+      example: DESC
+      default: ASC
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+    OfficeV2:
+      type: object
+      title: Office
+      description: Office details.
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Office
+        latlng:
+          $ref: '#/components/schemas/Latlng'
+        externalId:
+          type: string
+          example: external-id
+        taxId:
+          type: string
+          example: '123232'
   responses:
-    Unauthorized:
-      description: Unauthorized
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
+    Unauthorized:
+      description: Unauthorized
       content:
         application/json:
           schema:
@@ -605,8 +605,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
+    NotFound:
+      description: The specified resource was not found.
       content:
         application/json:
           schema:

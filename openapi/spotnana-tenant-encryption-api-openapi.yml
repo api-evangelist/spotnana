@@ -83,17 +83,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
     ProvisionOrRotateTenantKeyResponse:
       type: object
       title: ProvisionOrRotateTenantKeyResponse
@@ -106,15 +95,26 @@ components:
           type: boolean
           description: True on first provision; false on CMK rotation.
           example: true
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
   responses:
-    BadRequest:
-      description: Bad request
+    Unauthorized:
+      description: Unauthorized
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:

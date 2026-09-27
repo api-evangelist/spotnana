@@ -70,18 +70,16 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    StealthType:
-      type: string
-      description: Stealth type.
-      enum:
-      - STEALTH_TYPE_1
-      - STEALTH_TYPE_2
-      - STEALTH_TYPE_3
-      example: STEALTH_TYPE_1
-      x-ignoreBreakingChanges:
-      - StealthType->STEALTH_TYPE_4
-      - StealthType->STEALTH_TYPE_5
-      - StealthType->STEALTH_TYPE_6
+    StealthConfig:
+      type: object
+      title: StealthConfig
+      description: Stealth configuration for a company.
+      properties:
+        stealthModes:
+          type: array
+          description: A list of stealth modes for this company.
+          items:
+            $ref: '#/components/schemas/StealthMode'
     ErrorResponse:
       type: object
       properties:
@@ -107,16 +105,18 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    StealthConfig:
-      type: object
-      title: StealthConfig
-      description: Stealth configuration for a company.
-      properties:
-        stealthModes:
-          type: array
-          description: A list of stealth modes for this company.
-          items:
-            $ref: '#/components/schemas/StealthMode'
+    StealthType:
+      type: string
+      description: Stealth type.
+      enum:
+      - STEALTH_TYPE_1
+      - STEALTH_TYPE_2
+      - STEALTH_TYPE_3
+      example: STEALTH_TYPE_1
+      x-ignoreBreakingChanges:
+      - StealthType->STEALTH_TYPE_4
+      - StealthType->STEALTH_TYPE_5
+      - StealthType->STEALTH_TYPE_6
     CompanyRole:
       type: string
       description: Role of the company.
@@ -128,17 +128,6 @@ components:
       - TRIPS_DATA_CONNECTOR
       - GLOBAL
       example: ORG
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
     StealthMode:
       type: object
       title: StealthMode
@@ -152,27 +141,38 @@ components:
         label:
           type: string
           description: Customer specific label for the stealth mode.
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
   responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
