@@ -160,23 +160,32 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    GradeV2:
-      type: object
-      title: GradeV2
-      description: Grade details.
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
-        name:
-          type: string
-          description: Name of the grade
-          example: Grade
     GradeInfo:
       type: object
       title: GradeInfo
@@ -216,6 +225,17 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
+    UpdateGradeRequest:
+      type: object
+      title: UpdateGradeRequest
+      required:
+      - name
+      description: Update grade request
+      properties:
+        name:
+          type: string
+          description: Name of the grade
+          example: Grade
     OffsetBasedPaginationResponseParams:
       type: object
       title: PaginationResponseParams
@@ -227,25 +247,58 @@ components:
           type: integer
           format: int32
           description: Total number of results.
-    ListGradesFilter:
+    ListGradesRequest:
       type: object
-      title: ListGradesFilter
-      description: Filter parameters for list grades.
+      title: ListGradesRequest
+      required:
+      - paginationParams
+      description: List grades request
       properties:
-        gradeIds:
+        searchText:
+          type: string
+          description: Search string entered by the user
+          example: Senior Engineer
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
+        filters:
           type: array
+          description: List of filters. Grades matching with any filter would be returned.
           items:
-            type: string
-            format: uuid
-            example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
-          description: List of grade ids.
-    UpdateGradeRequest:
+            $ref: '#/components/schemas/ListGradesFilter'
+    EntityId:
       type: object
-      title: UpdateGradeRequest
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
+    CreateGradeRequest:
+      type: object
+      title: CreateGradeRequest
       required:
       - name
-      description: Update grade request
+      description: Create grade request
       properties:
+        name:
+          type: string
+          description: Name of the grade
+          example: Senior Engineer
+    GradeV2:
+      type: object
+      title: GradeV2
+      description: Grade details.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
         name:
           type: string
           description: Name of the grade
@@ -267,36 +320,6 @@ components:
           description: Maximum number of results to be fetched.
           minimum: 1
           default: 100
-    CreateGradeRequest:
-      type: object
-      title: CreateGradeRequest
-      required:
-      - name
-      description: Create grade request
-      properties:
-        name:
-          type: string
-          description: Name of the grade
-          example: Senior Engineer
-    ListGradesRequest:
-      type: object
-      title: ListGradesRequest
-      required:
-      - paginationParams
-      description: List grades request
-      properties:
-        searchText:
-          type: string
-          description: Search string entered by the user
-          example: Senior Engineer
-        paginationParams:
-          description: Pagination information.
-          $ref: '#/components/schemas/OffsetBasedPaginationRequestParams'
-        filters:
-          type: array
-          description: List of filters. Grades matching with any filter would be returned.
-          items:
-            $ref: '#/components/schemas/ListGradesFilter'
     ListGradesResponse:
       type: object
       title: ListGradesResponse
@@ -323,41 +346,18 @@ components:
         value:
           type: string
           description: Parameter value
-    EntityId:
+    ListGradesFilter:
       type: object
-      description: Identifier of an object
-      required:
-      - id
+      title: ListGradesFilter
+      description: Filter parameters for list grades.
       properties:
-        id:
-          type: string
-          format: uuid
-          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
-  responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+        gradeIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: 831ccbcb-1416-7fe2-e236-d324dfbe7424
+          description: List of grade ids.
   securitySchemes:
     Bearer:
       type: http

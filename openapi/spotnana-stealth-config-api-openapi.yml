@@ -69,17 +69,57 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    StealthConfig:
+    StealthType:
+      type: string
+      description: Stealth type.
+      enum:
+      - STEALTH_TYPE_1
+      - STEALTH_TYPE_2
+      - STEALTH_TYPE_3
+      example: STEALTH_TYPE_1
+      x-ignoreBreakingChanges:
+      - StealthType->STEALTH_TYPE_4
+      - StealthType->STEALTH_TYPE_5
+      - StealthType->STEALTH_TYPE_6
+    StealthMode:
       type: object
-      title: StealthConfig
-      description: Stealth configuration for a company.
+      title: StealthMode
+      description: Stealth mode configuration with type and label.
+      required:
+      - stealthType
+      - label
       properties:
-        stealthModes:
-          type: array
-          description: A list of stealth modes for this company.
-          items:
-            $ref: '#/components/schemas/StealthMode'
+        stealthType:
+          $ref: '#/components/schemas/StealthType'
+        label:
+          type: string
+          description: Customer specific label for the stealth mode.
     ErrorResponse:
       type: object
       properties:
@@ -105,18 +145,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    StealthType:
-      type: string
-      description: Stealth type.
-      enum:
-      - STEALTH_TYPE_1
-      - STEALTH_TYPE_2
-      - STEALTH_TYPE_3
-      example: STEALTH_TYPE_1
-      x-ignoreBreakingChanges:
-      - StealthType->STEALTH_TYPE_4
-      - StealthType->STEALTH_TYPE_5
-      - StealthType->STEALTH_TYPE_6
     CompanyRole:
       type: string
       description: Role of the company.
@@ -128,19 +156,16 @@ components:
       - TRIPS_DATA_CONNECTOR
       - GLOBAL
       example: ORG
-    StealthMode:
+    StealthConfig:
       type: object
-      title: StealthMode
-      description: Stealth mode configuration with type and label.
-      required:
-      - stealthType
-      - label
+      title: StealthConfig
+      description: Stealth configuration for a company.
       properties:
-        stealthType:
-          $ref: '#/components/schemas/StealthType'
-        label:
-          type: string
-          description: Customer specific label for the stealth mode.
+        stealthModes:
+          type: array
+          description: A list of stealth modes for this company.
+          items:
+            $ref: '#/components/schemas/StealthMode'
     ErrorParameter:
       type: object
       title: ErrorParameter
@@ -152,31 +177,6 @@ components:
         value:
           type: string
           description: Parameter value
-  responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http

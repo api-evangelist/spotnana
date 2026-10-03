@@ -236,18 +236,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
 components:
   schemas:
-    RotateClientSecretResponse:
-      type: object
-      title: RotateClientSecretResponse
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-          example: 1ddj3hs95to28iag7m4hl9lv2
-        clientSecret:
-          type: string
-          description: Api user client secret
-          example: 1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml
     ApiUsersInfo:
       type: object
       title: ApiUsersInfo
@@ -256,6 +244,32 @@ components:
           type: string
           description: Api user client id
           example: 1ddj3hs95to28iag7m4hl9lv2
+    CreateApiUsersRequest:
+      type: object
+      title: CreateApiUsersRequest
+      properties:
+        tmcId:
+          type: string
+          description: Tmc id
+          example: ecc5b835-8001-430c-98f8-fedeccebe4cf
+        orgId:
+          type: string
+          description: Org id
+          example: ecc5b835-8001-430c-98f8-fedeccebe4cf
+        role:
+          $ref: '#/components/schemas/ApiUserRoleEnum'
+          description: Roles supported for api user creation
+        credentialType:
+          $ref: '#/components/schemas/ApiUserCredentialTypeEnum'
+          description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
+    ApiUserRoleEnum:
+      type: string
+      description: Roles supported for api user creation
+      enum:
+      - TMC_ADMIN
+      - COMPANY_ADMIN
+      default: TMC_ADMIN
+      example: TMC_ADMIN
     ErrorResponse:
       type: object
       properties:
@@ -281,38 +295,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    CreateApiUsersRequest:
-      type: object
-      title: CreateApiUsersRequest
-      properties:
-        tmcId:
-          type: string
-          description: Tmc id
-          example: ecc5b835-8001-430c-98f8-fedeccebe4cf
-        orgId:
-          type: string
-          description: Org id
-          example: ecc5b835-8001-430c-98f8-fedeccebe4cf
-        role:
-          $ref: '#/components/schemas/ApiUserRoleEnum'
-          description: Roles supported for api user creation
-        credentialType:
-          $ref: '#/components/schemas/ApiUserCredentialTypeEnum'
-          description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
-    RotateClientSecretRequest:
-      type: object
-      title: RotateClientSecretRequest
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-    DeleteApiUsersRequest:
-      type: object
-      title: DeleteApiUsersRequest
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
     CreateApiUsersResponse:
       type: object
       title: CreateApiUsersResponse
@@ -329,6 +311,13 @@ components:
           type: string
           description: SCIM bearer token (Base64-encoded JSON envelope with encrypted secret). Present only for SCIM_TOKEN credential type.
           example: eyJzY29wZSI6InNjaW0iLCJjbGllbnRJZCI6Ii4uLiIsImVuY3J5cHRlZFNlY3JldCI6Ii4uLiJ9
+    DeleteApiUsersRequest:
+      type: object
+      title: DeleteApiUsersRequest
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
     ApiUserCredentialTypeEnum:
       type: string
       description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
@@ -337,25 +326,18 @@ components:
       - SCIM_TOKEN
       default: CLIENT_CREDENTIALS
       example: CLIENT_CREDENTIALS
-    ApiUserRoleEnum:
-      type: string
-      description: Roles supported for api user creation
-      enum:
-      - TMC_ADMIN
-      - COMPANY_ADMIN
-      default: TMC_ADMIN
-      example: TMC_ADMIN
-    ErrorParameter:
+    RotateClientSecretResponse:
       type: object
-      title: ErrorParameter
-      description: Error parameter
+      title: RotateClientSecretResponse
       properties:
-        name:
+        clientId:
           type: string
-          description: Parameter name
-        value:
+          description: Api user client id
+          example: 1ddj3hs95to28iag7m4hl9lv2
+        clientSecret:
           type: string
-          description: Parameter value
+          description: Api user client secret
+          example: 1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml
     GetApiUsersResponse:
       type: object
       title: GetApiUsersResponse
@@ -369,13 +351,25 @@ components:
           type: integer
           description: Total count of api users
           example: 25
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    RotateClientSecretRequest:
+      type: object
+      title: RotateClientSecretRequest
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
   responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Unauthorized
       content:
@@ -384,6 +378,12 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     Forbidden:
       description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:

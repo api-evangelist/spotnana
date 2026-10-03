@@ -69,7 +69,45 @@ paths:
     - url: https://api-ext-sboxmeta.partners.spotnana.com
       description: Sandbox URL
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
+    Airport:
+      title: Airport
+      description: Airport Details
+      type: object
+      required:
+      - airportCode
+      - airportName
+      - cityCode
+      properties:
+        airportCode:
+          type: string
+          description: Unique code for the Airport
+          example: LHR
+        airportName:
+          type: string
+          description: Full Name of the Airport
+          example: Heathrow Airport
+        cityCode:
+          type: string
+          description: City Code for the location
+          example: LON
+        location:
+          $ref: '#/components/schemas/Location'
+        groupInfo:
+          $ref: '#/components/schemas/AirportGroupInfo'
     AirAutocompleteResponse:
       title: AirAutocompleteResponse
       type: object
@@ -106,50 +144,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    AirportGroupInfo:
-      title: AirportGroupInfo
-      description: Grouping criteria for the airports in same group
-      type: object
-      required:
-      - groupId
-      - mainAirportLocation
-      properties:
-        groupId:
-          type: string
-          description: Id of the airport group
-          example: NYC
-        groupCityCode:
-          type: string
-          description: City code of the airport group. If airport group does not have a recognized city code, then this field will be empty.
-          example: NYC
-        mainAirportLocation:
-          description: Location of the main airport in the group
-          $ref: '#/components/schemas/Location'
-    Airport:
-      title: Airport
-      description: Airport Details
-      type: object
-      required:
-      - airportCode
-      - airportName
-      - cityCode
-      properties:
-        airportCode:
-          type: string
-          description: Unique code for the Airport
-          example: LHR
-        airportName:
-          type: string
-          description: Full Name of the Airport
-          example: Heathrow Airport
-        cityCode:
-          type: string
-          description: City Code for the location
-          example: LON
-        location:
-          $ref: '#/components/schemas/Location'
-        groupInfo:
-          $ref: '#/components/schemas/AirportGroupInfo'
     Latlng:
       title: Latlng
       description: Latitude and Longitude for a Location
@@ -208,6 +202,171 @@ components:
         value:
           type: string
           description: Parameter value
+    AirportGroupInfo:
+      title: AirportGroupInfo
+      description: Grouping criteria for the airports in same group
+      type: object
+      required:
+      - groupId
+      - mainAirportLocation
+      properties:
+        groupId:
+          type: string
+          description: Id of the airport group
+          example: NYC
+        groupCityCode:
+          type: string
+          description: City code of the airport group. If airport group does not have a recognized city code, then this field will be empty.
+          example: NYC
+        mainAirportLocation:
+          description: Location of the main airport in the group
+          $ref: '#/components/schemas/Location'
+    HotelAutocompleteResponse:
+      title: HotelAutocompleteResponse
+      type: object
+      required:
+      - hotels
+      properties:
+        hotels:
+          type: array
+          description: List of Hotels matching the Autocomplete query
+          items:
+            $ref: '#/components/schemas/AutocompleteHotel'
+    PhoneNumber:
+      type: object
+      title: PhoneNumber
+      description: Properly formatted phone number.
+      properties:
+        countryCode:
+          type: integer
+          format: int32
+          description: two digit country code
+          example: 91
+        countryCodeSource:
+          type: string
+          enum:
+          - UNSPECIFIED
+          - FROM_NUMBER_WITH_PLUS_SIGN
+          - FROM_NUMBER_WITH_IDD
+          - FROM_NUMBER_WITHOUT_PLUS_SIGN
+          - FROM_DEFAULT_COUNTRY
+          example: FROM_NUMBER_WITH_PLUS_SIGN
+        extension:
+          description: phone number extension
+          type: string
+          example: '222'
+        isoCountryCode:
+          description: ISO alpha-2 code
+          type: string
+          example: IN
+        italianLeadingZero:
+          type: boolean
+          default: false
+          example: true
+        nationalNumber:
+          type: integer
+          format: int64
+          example: 8150
+        numberOfLeadingZeros:
+          type: integer
+          format: int32
+          default: 0
+          example: 1
+        preferredDomesticCarrierCode:
+          type: string
+          example: '7'
+        rawInput:
+          type: string
+          example: '77777'
+        type:
+          type: string
+          enum:
+          - UNKNOWN_TYPE
+          - MOBILE
+          - LANDLINE
+          example: MOBILE
+    HotelStarRatingInfo:
+      type: object
+      title: Hotel Start Rating Information
+      description: Details about hotel star rating.
+      required:
+      - starRating
+      - ratingType
+      properties:
+        starRating:
+          type: number
+          format: float
+          example: 3
+          description: Star rating of the hotel.
+          minimum: 0
+          maximum: 5
+        ratingType:
+          type: string
+          title: Star Rating Type
+          enum:
+          - OFFICIAL
+          - SELF_RATED
+          description: Enum representing the type of star rating.
+    ContactInfo:
+      type: object
+      title: Contact Information
+      description: Provides contact information for a hotel.
+      required:
+      - phone
+      - email
+      properties:
+        phone:
+          type: array
+          description: List of phone numbers for the hotel.
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        fax:
+          type: array
+          description: List of fax numbers for the hotel.
+          items:
+            type: string
+        email:
+          type: array
+          description: List of email addresses for the hotel.
+          items:
+            type: string
+    AutocompleteHotel:
+      title: AutocompleteHotel
+      description: Hotel Details
+      type: object
+      required:
+      - hotelName
+      properties:
+        hotelCode:
+          type: string
+          description: Unique Code for the hotel
+          example: '100259788'
+        hotelName:
+          type: string
+          description: Full Name of the hotel
+          example: Delphin Deluxe Resort
+        location:
+          $ref: '#/components/schemas/Location'
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+        isPresentInPreferredVendors:
+          type: boolean
+          description: Whether the hotel is present in preferred vendor list. This is an optional field which gets populated only in the preferred vendor autocomplete API.
+          example: true
+        brandCode:
+          type: string
+          example: MC
+          description: The code of hotel brand.
+        chainCode:
+          type: string
+          example: EM
+          description: The code of hotel chain.
+        starRating:
+          $ref: '#/components/schemas/HotelStarRatingInfo'
+          description: Hotel star rating detail.
+        contactInfo:
+          $ref: '#/components/schemas/ContactInfo'
+          description: Contact information for the hotel.
     PostalAddress:
       title: PostalAddress
       description: Postal Address Details
@@ -319,165 +478,6 @@ components:
         coordinates:
           description: Map coordinates of the address.
           $ref: '#/components/schemas/Latlng'
-    HotelStarRatingInfo:
-      type: object
-      title: Hotel Start Rating Information
-      description: Details about hotel star rating.
-      required:
-      - starRating
-      - ratingType
-      properties:
-        starRating:
-          type: number
-          format: float
-          example: 3
-          description: Star rating of the hotel.
-          minimum: 0
-          maximum: 5
-        ratingType:
-          type: string
-          title: Star Rating Type
-          enum:
-          - OFFICIAL
-          - SELF_RATED
-          description: Enum representing the type of star rating.
-    PhoneNumber:
-      type: object
-      title: PhoneNumber
-      description: Properly formatted phone number.
-      properties:
-        countryCode:
-          type: integer
-          format: int32
-          description: two digit country code
-          example: 91
-        countryCodeSource:
-          type: string
-          enum:
-          - UNSPECIFIED
-          - FROM_NUMBER_WITH_PLUS_SIGN
-          - FROM_NUMBER_WITH_IDD
-          - FROM_NUMBER_WITHOUT_PLUS_SIGN
-          - FROM_DEFAULT_COUNTRY
-          example: FROM_NUMBER_WITH_PLUS_SIGN
-        extension:
-          description: phone number extension
-          type: string
-          example: '222'
-        isoCountryCode:
-          description: ISO alpha-2 code
-          type: string
-          example: IN
-        italianLeadingZero:
-          type: boolean
-          default: false
-          example: true
-        nationalNumber:
-          type: integer
-          format: int64
-          example: 8150
-        numberOfLeadingZeros:
-          type: integer
-          format: int32
-          default: 0
-          example: 1
-        preferredDomesticCarrierCode:
-          type: string
-          example: '7'
-        rawInput:
-          type: string
-          example: '77777'
-        type:
-          type: string
-          enum:
-          - UNKNOWN_TYPE
-          - MOBILE
-          - LANDLINE
-          example: MOBILE
-    ContactInfo:
-      type: object
-      title: Contact Information
-      description: Provides contact information for a hotel.
-      required:
-      - phone
-      - email
-      properties:
-        phone:
-          type: array
-          description: List of phone numbers for the hotel.
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        fax:
-          type: array
-          description: List of fax numbers for the hotel.
-          items:
-            type: string
-        email:
-          type: array
-          description: List of email addresses for the hotel.
-          items:
-            type: string
-    AutocompleteHotel:
-      title: AutocompleteHotel
-      description: Hotel Details
-      type: object
-      required:
-      - hotelName
-      properties:
-        hotelCode:
-          type: string
-          description: Unique Code for the hotel
-          example: '100259788'
-        hotelName:
-          type: string
-          description: Full Name of the hotel
-          example: Delphin Deluxe Resort
-        location:
-          $ref: '#/components/schemas/Location'
-        address:
-          $ref: '#/components/schemas/PostalAddress'
-        isPresentInPreferredVendors:
-          type: boolean
-          description: Whether the hotel is present in preferred vendor list. This is an optional field which gets populated only in the preferred vendor autocomplete API.
-          example: true
-        brandCode:
-          type: string
-          example: MC
-          description: The code of hotel brand.
-        chainCode:
-          type: string
-          example: EM
-          description: The code of hotel chain.
-        starRating:
-          $ref: '#/components/schemas/HotelStarRatingInfo'
-          description: Hotel star rating detail.
-        contactInfo:
-          $ref: '#/components/schemas/ContactInfo'
-          description: Contact information for the hotel.
-    HotelAutocompleteResponse:
-      title: HotelAutocompleteResponse
-      type: object
-      required:
-      - hotels
-      properties:
-        hotels:
-          type: array
-          description: List of Hotels matching the Autocomplete query
-          items:
-            $ref: '#/components/schemas/AutocompleteHotel'
-  responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http

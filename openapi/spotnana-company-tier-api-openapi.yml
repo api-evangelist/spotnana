@@ -69,7 +69,48 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
+    TierDefinition:
+      type: object
+      title: TierDefinition
+      description: Tier that controls the support features available to a user.
+      required:
+      - name
+      - tier
+      properties:
+        name:
+          type: string
+          description: Tier name.
+        icon:
+          type: string
+          description: URL representing tier icon.
+        tier:
+          $ref: '#/components/schemas/Tier'
     ErrorResponse:
       type: object
       properties:
@@ -95,6 +136,17 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
+    CompanyRole:
+      type: string
+      description: Role of the company.
+      enum:
+      - ORG
+      - TMC
+      - PARTNER_TMC
+      - HR_FEED_CONNECTOR
+      - TRIPS_DATA_CONNECTOR
+      - GLOBAL
+      example: ORG
     TierConfig:
       type: object
       title: TierConfig
@@ -105,22 +157,17 @@ components:
           description: A list of tiers for this company.
           items:
             $ref: '#/components/schemas/TierDefinition'
-    TierDefinition:
+    ErrorParameter:
       type: object
-      title: TierDefinition
-      description: Tier that controls the support features available to a user.
-      required:
-      - name
-      - tier
+      title: ErrorParameter
+      description: Error parameter
       properties:
         name:
           type: string
-          description: Tier name.
-        icon:
+          description: Parameter name
+        value:
           type: string
-          description: URL representing tier icon.
-        tier:
-          $ref: '#/components/schemas/Tier'
+          description: Parameter value
     Tier:
       type: string
       title: Tier
@@ -137,53 +184,6 @@ components:
       - SEAT1A
       example: SEAT1A
       default: BASIC
-    CompanyRole:
-      type: string
-      description: Role of the company.
-      enum:
-      - ORG
-      - TMC
-      - PARTNER_TMC
-      - HR_FEED_CONNECTOR
-      - TRIPS_DATA_CONNECTOR
-      - GLOBAL
-      example: ORG
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-  responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http

@@ -174,6 +174,124 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    TravelType:
+      type: string
+      title: TravelType
+      description: Travel Type
+      enum:
+      - AIR
+      - HOTEL
+      - CAR
+      - RAIL
+      - LIMO
+      - MISC
+      - ALL
+      example: AIR
+    ExpensePartnerConfig:
+      type: object
+      title: ExpensePartnerConfig
+      description: Expense Partner Configuration
+      required:
+      - partner
+      properties:
+        partner:
+          $ref: '#/components/schemas/ExpensePartner'
+        emailConfig:
+          $ref: '#/components/schemas/EmailConfig'
+        travelType:
+          type: array
+          description: Applicable segments
+          items:
+            $ref: '#/components/schemas/TravelType'
+        isExpensePartnerEnabled:
+          type: boolean
+          description: A flag denoting is the expense partner config is enabled or not.
+          default: true
+          example: true
+        reportCustomFields:
+          type: boolean
+          description: Send custom fields to the expense partner if enabled.
+          example: true
+        personalCardExpenseOwner:
+          $ref: '#/components/schemas/ExpenseOwner'
+        centralCardExpenseOwner:
+          $ref: '#/components/schemas/ExpenseOwner'
+        partnerReferralId:
+          type: string
+          description: Referral id used for this company/legal entity during expense partner setup
+          example: 1234hgd
+        itineraryConfig:
+          $ref: '#/components/schemas/ItineraryConfig'
+    LegalEntity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the legal entity.
+        name:
+          type: string
+          description: Name of the legal entity
+        registeredName:
+          type: string
+          description: 'The official name of this legal entity as registered with local tax authorities.
+
+            '
+        registeredEmail:
+          type: string
+          description: "The primary email (or alias) used for the \"Registered name\" of this legal entity. \nUsed for official communications, including regulatory, compliance, and invoicing \npurposes.\n"
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+          description: Address of the legal entity.
+        billingCurrency:
+          type: string
+          description: Billing currency for the legal entity.
+        dba:
+          type: string
+          description: Business name, sort form of Doing Business As
+        ein:
+          type: string
+          description: Tax number
+        phoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        isDelayedInvoicingEnabled:
+          type: boolean
+          description: 'Whether delayed invoicing is enabled for the legal entity. If enabled, travelers of the
+
+            legal entity won''t be charged for trip on checkout, rather the bills would be sent to
+
+            the company later on based on the billing cycle.
+
+            '
+        bookingTmcRef:
+          $ref: '#/components/schemas/Reference'
+          description: Booking TMC of the legal entity.
+        expensePartnerConfig:
+          $ref: '#/components/schemas/ExpensePartnerConfig'
+          description: Configured details of expense partner.
+        ccEmailAddresses:
+          type: array
+          description: List of email addresses on which all confirmation emails will be CCed. This is applicable only for company roles 'ORG'
+          items:
+            type: string
+            example: example@gmail.com
+        bccEmailAddresses:
+          type: array
+          description: List of email addresses on which all confirmation emails will be BCCed. This is applicable only for company roles 'ORG'
+          items:
+            type: string
+            example: example@gmail.com
+        externalId:
+          description: External id for the legal entity.
+          type: string
+          example: my-external-id
+        companySpecifiedAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanySpecifiedAttributeLegalEntity'
+          description: Company specified attributes or fields for the legal entity.
     LegalEntityUpdateRequest:
       type: object
       properties:
@@ -244,54 +362,47 @@ components:
           items:
             $ref: '#/components/schemas/CompanySpecifiedAttributeLegalEntity'
           description: Company specified attributes or fields for the legal entity.
-    EmailConfig:
+    ArrayOfReference:
       type: object
-      title: EmailConfig
-      description: The email configuration part of the ExpensePartnerConfig.
-      required:
-      - expensePartnerEmail
       properties:
-        personalCardConfig:
-          $ref: '#/components/schemas/PersonalCardConfig'
-        centralCardExpenseEmail:
-          type: string
-          description: Central email for bookings done with central card.
-          example: finance+le@company.com
-        expensePartnerEmail:
-          type: string
-          description: The expense partner email where expense receipts are sent to.
-          example: receipts@expensify.com
-        bccEmail:
-          type: string
-          description: Email to which we bcc expensify emails
-          example: docs@company.com
-    Latlng:
-      title: Latlng
-      description: Latitude and Longitude for a Location
+        length:
+          type: integer
+          format: int32
+        elements:
+          type: array
+          description: List of references containing id and name.
+          items:
+            $ref: '#/components/schemas/Reference'
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results
+    ItineraryConfig:
+      title: ItineraryConfig
       type: object
-      required:
-      - latitude
-      - longitude
+      description: Itinerary configuration to control what expenses to send to the partner
       properties:
-        latitude:
-          type: number
-          description: Latitude of the Location
-          format: double
-          example: 77.1025
-        longitude:
-          type: number
-          description: Longitude of the Location
-          format: double
-          example: 28.7041
-    ExpensePartner:
-      title: Expense Partner
-      description: The expense partner name as enum.
-      type: string
-      enum:
-      - EXPENSIFY
-      - EMBURSE_CHROMERIVER
-      - BREX
-      example: EXPENSIFY
+        skipModificationUpdate:
+          type: boolean
+          description: Allow modification expenses to be skipped from sending to the partner
+          example: true
+          default: false
+        skipCancellationUpdate:
+          type: boolean
+          description: Allow cancellation expenses to be skipped from sending to the partner
+          example: true
+          default: false
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
     LegalEntityCreateRequest:
       type: object
       required:
@@ -356,98 +467,54 @@ components:
           items:
             $ref: '#/components/schemas/CompanySpecifiedAttributeLegalEntity'
           description: Company specified attributes or fields for the legal entity.
-    PhoneNumber:
+    PersonalCardConfig:
+      title: PersonalCardConfig
+      description: Configuration for bookings done with Personal card.
       type: object
-      title: PhoneNumber
-      description: Properly formatted phone number.
       properties:
-        countryCode:
-          type: integer
-          format: int32
-          description: two digit country code
-          example: 91
-        countryCodeSource:
-          type: string
-          enum:
-          - UNSPECIFIED
-          - FROM_NUMBER_WITH_PLUS_SIGN
-          - FROM_NUMBER_WITH_IDD
-          - FROM_NUMBER_WITHOUT_PLUS_SIGN
-          - FROM_DEFAULT_COUNTRY
-          example: FROM_NUMBER_WITH_PLUS_SIGN
-        extension:
-          description: phone number extension
-          type: string
-          example: '222'
-        isoCountryCode:
-          description: ISO alpha-2 code
-          type: string
-          example: IN
-        italianLeadingZero:
+        sendToTraveler:
           type: boolean
-          default: false
-          example: true
-        nationalNumber:
-          type: integer
-          format: int64
-          example: 8150
-        numberOfLeadingZeros:
-          type: integer
-          format: int32
-          default: 0
-          example: 1
-        preferredDomesticCarrierCode:
+          description: A boolean flag to show if expenses are to be sent to traveler's Expense partner account.
+          example: false
+        personalCardExpenseEmail:
           type: string
-          example: '7'
-        rawInput:
-          type: string
-          example: '77777'
-        type:
-          type: string
-          enum:
-          - UNKNOWN_TYPE
-          - MOBILE
-          - LANDLINE
-          example: MOBILE
-    ErrorParameter:
+          description: The email for the expense partner account.
+          example: user@company.com
+    ErrorResponse:
       type: object
-      title: ErrorParameter
-      description: Error parameter
       properties:
-        name:
+        debugIdentifier:
           type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    TravelType:
-      type: string
-      title: TravelType
-      description: Travel Type
-      enum:
-      - AIR
-      - HOTEL
-      - CAR
-      - RAIL
-      - LIMO
-      - MISC
-      - ALL
-      example: AIR
-    ItineraryConfig:
-      title: ItineraryConfig
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    EntityId:
       type: object
-      description: Itinerary configuration to control what expenses to send to the partner
+      description: Identifier of an object
+      required:
+      - id
       properties:
-        skipModificationUpdate:
-          type: boolean
-          description: Allow modification expenses to be skipped from sending to the partner
-          example: true
-          default: false
-        skipCancellationUpdate:
-          type: boolean
-          description: Allow cancellation expenses to be skipped from sending to the partner
-          example: true
-          default: false
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
     Reference:
       type: object
       title: Reference object containing uuid and name of the entity.
@@ -462,21 +529,19 @@ components:
         name:
           type: string
           example: Name
-    ArrayOfReference:
+    ExpenseOwner:
       type: object
+      title: ExpenseOwner
+      description: Determines who should the expense be reported against.
       properties:
-        length:
-          type: integer
-          format: int32
-        elements:
-          type: array
-          description: List of references containing id and name.
-          items:
-            $ref: '#/components/schemas/Reference'
-        totalNumResults:
-          type: integer
-          format: int32
-          description: Total number of results
+        traveler:
+          type: boolean
+          description: Report the expense against the traveler who made the booking. If set to true, central email should not be set.
+          example: true
+        centralEmail:
+          type: string
+          description: Report the expense against a central email.
+          example: docs@company.com
     PostalAddress:
       title: PostalAddress
       description: Postal Address Details
@@ -588,19 +653,107 @@ components:
         coordinates:
           description: Map coordinates of the address.
           $ref: '#/components/schemas/Latlng'
-    PersonalCardConfig:
-      title: PersonalCardConfig
-      description: Configuration for bookings done with Personal card.
+    ExpensePartner:
+      title: Expense Partner
+      description: The expense partner name as enum.
+      type: string
+      enum:
+      - EXPENSIFY
+      - EMBURSE_CHROMERIVER
+      - BREX
+      example: EXPENSIFY
+    PhoneNumber:
       type: object
+      title: PhoneNumber
+      description: Properly formatted phone number.
       properties:
-        sendToTraveler:
-          type: boolean
-          description: A boolean flag to show if expenses are to be sent to traveler's Expense partner account.
-          example: false
-        personalCardExpenseEmail:
+        countryCode:
+          type: integer
+          format: int32
+          description: two digit country code
+          example: 91
+        countryCodeSource:
           type: string
-          description: The email for the expense partner account.
-          example: user@company.com
+          enum:
+          - UNSPECIFIED
+          - FROM_NUMBER_WITH_PLUS_SIGN
+          - FROM_NUMBER_WITH_IDD
+          - FROM_NUMBER_WITHOUT_PLUS_SIGN
+          - FROM_DEFAULT_COUNTRY
+          example: FROM_NUMBER_WITH_PLUS_SIGN
+        extension:
+          description: phone number extension
+          type: string
+          example: '222'
+        isoCountryCode:
+          description: ISO alpha-2 code
+          type: string
+          example: IN
+        italianLeadingZero:
+          type: boolean
+          default: false
+          example: true
+        nationalNumber:
+          type: integer
+          format: int64
+          example: 8150
+        numberOfLeadingZeros:
+          type: integer
+          format: int32
+          default: 0
+          example: 1
+        preferredDomesticCarrierCode:
+          type: string
+          example: '7'
+        rawInput:
+          type: string
+          example: '77777'
+        type:
+          type: string
+          enum:
+          - UNKNOWN_TYPE
+          - MOBILE
+          - LANDLINE
+          example: MOBILE
+    EmailConfig:
+      type: object
+      title: EmailConfig
+      description: The email configuration part of the ExpensePartnerConfig.
+      required:
+      - expensePartnerEmail
+      properties:
+        personalCardConfig:
+          $ref: '#/components/schemas/PersonalCardConfig'
+        centralCardExpenseEmail:
+          type: string
+          description: Central email for bookings done with central card.
+          example: finance+le@company.com
+        expensePartnerEmail:
+          type: string
+          description: The expense partner email where expense receipts are sent to.
+          example: receipts@expensify.com
+        bccEmail:
+          type: string
+          description: Email to which we bcc expensify emails
+          example: docs@company.com
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
     CompanySpecifiedAttributeLegalEntity:
       type: object
       description: Company specified attribute for legal entity.
@@ -616,159 +769,6 @@ components:
           type: string
           description: Field value of the attribute
           example: ABCD
-    ErrorResponse:
-      type: object
-      properties:
-        debugIdentifier:
-          type: string
-          description: Link to debug the error internally.
-        errorMessages:
-          type: array
-          items:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                description: Error code to identify the specific errors.
-              message:
-                type: string
-                description: Message containing details of error.
-              errorParameters:
-                type: array
-                description: Error message parameters.
-                items:
-                  $ref: '#/components/schemas/ErrorParameter'
-              errorDetail:
-                type: string
-                description: More details about the error.
-    ExpenseOwner:
-      type: object
-      title: ExpenseOwner
-      description: Determines who should the expense be reported against.
-      properties:
-        traveler:
-          type: boolean
-          description: Report the expense against the traveler who made the booking. If set to true, central email should not be set.
-          example: true
-        centralEmail:
-          type: string
-          description: Report the expense against a central email.
-          example: docs@company.com
-    ExpensePartnerConfig:
-      type: object
-      title: ExpensePartnerConfig
-      description: Expense Partner Configuration
-      required:
-      - partner
-      properties:
-        partner:
-          $ref: '#/components/schemas/ExpensePartner'
-        emailConfig:
-          $ref: '#/components/schemas/EmailConfig'
-        travelType:
-          type: array
-          description: Applicable segments
-          items:
-            $ref: '#/components/schemas/TravelType'
-        isExpensePartnerEnabled:
-          type: boolean
-          description: A flag denoting is the expense partner config is enabled or not.
-          default: true
-          example: true
-        reportCustomFields:
-          type: boolean
-          description: Send custom fields to the expense partner if enabled.
-          example: true
-        personalCardExpenseOwner:
-          $ref: '#/components/schemas/ExpenseOwner'
-        centralCardExpenseOwner:
-          $ref: '#/components/schemas/ExpenseOwner'
-        partnerReferralId:
-          type: string
-          description: Referral id used for this company/legal entity during expense partner setup
-          example: 1234hgd
-        itineraryConfig:
-          $ref: '#/components/schemas/ItineraryConfig'
-    LegalEntity:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier of the legal entity.
-        name:
-          type: string
-          description: Name of the legal entity
-        registeredName:
-          type: string
-          description: 'The official name of this legal entity as registered with local tax authorities.
-
-            '
-        registeredEmail:
-          type: string
-          description: "The primary email (or alias) used for the \"Registered name\" of this legal entity. \nUsed for official communications, including regulatory, compliance, and invoicing \npurposes.\n"
-        address:
-          $ref: '#/components/schemas/PostalAddress'
-          description: Address of the legal entity.
-        billingCurrency:
-          type: string
-          description: Billing currency for the legal entity.
-        dba:
-          type: string
-          description: Business name, sort form of Doing Business As
-        ein:
-          type: string
-          description: Tax number
-        phoneNumbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        isDelayedInvoicingEnabled:
-          type: boolean
-          description: 'Whether delayed invoicing is enabled for the legal entity. If enabled, travelers of the
-
-            legal entity won''t be charged for trip on checkout, rather the bills would be sent to
-
-            the company later on based on the billing cycle.
-
-            '
-        bookingTmcRef:
-          $ref: '#/components/schemas/Reference'
-          description: Booking TMC of the legal entity.
-        expensePartnerConfig:
-          $ref: '#/components/schemas/ExpensePartnerConfig'
-          description: Configured details of expense partner.
-        ccEmailAddresses:
-          type: array
-          description: List of email addresses on which all confirmation emails will be CCed. This is applicable only for company roles 'ORG'
-          items:
-            type: string
-            example: example@gmail.com
-        bccEmailAddresses:
-          type: array
-          description: List of email addresses on which all confirmation emails will be BCCed. This is applicable only for company roles 'ORG'
-          items:
-            type: string
-            example: example@gmail.com
-        externalId:
-          description: External id for the legal entity.
-          type: string
-          example: my-external-id
-        companySpecifiedAttributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/CompanySpecifiedAttributeLegalEntity'
-          description: Company specified attributes or fields for the legal entity.
-    EntityId:
-      type: object
-      description: Identifier of an object
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
   responses:
     Forbidden:
       description: Forbidden
@@ -776,14 +776,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request
+    Unauthorized:
+      description: Unauthorized
       content:
         application/json:
           schema:

@@ -64,6 +64,77 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    CompanySpecifiedAttributeConfig:
+      type: object
+      title: CompanySpecifiedAttributeConfig
+      description: Configuration for a company-specified attribute on the enrollment form.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The attribute name.
+        isHidden:
+          type: boolean
+          description: Whether this attribute should be hidden from the enrollment form UI.
+          default: false
+    EnrollmentTemplateSettings:
+      type: object
+      title: EnrollmentTemplateSettings
+      description: Template settings for enrollment emails.
+      properties:
+        applicationReceivedTemplate:
+          type: string
+          description: Template ID for application received emails.
+        applicationRejectedTemplate:
+          type: string
+          description: Template ID for application rejected emails.
+        applicationApprovedTemplate:
+          type: string
+          description: Template ID for application approved emails.
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
+    LoginActionType:
+      type: string
+      description: Type of login action.
+      enum:
+      - PRIVACY_CONSENT_ACTION
+      - ONBOARDING_ACTION
+      - HYATT_LOYALTY_VALIDATION
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
     EnrollmentConfig:
       type: object
       title: EnrollmentConfig
@@ -105,77 +176,6 @@ components:
           description: Configuration for company-specified attributes on the enrollment form.
           items:
             $ref: '#/components/schemas/CompanySpecifiedAttributeConfig'
-    ErrorResponse:
-      type: object
-      properties:
-        debugIdentifier:
-          type: string
-          description: Link to debug the error internally.
-        errorMessages:
-          type: array
-          items:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                description: Error code to identify the specific errors.
-              message:
-                type: string
-                description: Message containing details of error.
-              errorParameters:
-                type: array
-                description: Error message parameters.
-                items:
-                  $ref: '#/components/schemas/ErrorParameter'
-              errorDetail:
-                type: string
-                description: More details about the error.
-    CompanySpecifiedAttributeConfig:
-      type: object
-      title: CompanySpecifiedAttributeConfig
-      description: Configuration for a company-specified attribute on the enrollment form.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: The attribute name.
-        isHidden:
-          type: boolean
-          description: Whether this attribute should be hidden from the enrollment form UI.
-          default: false
-    LoginActionType:
-      type: string
-      description: Type of login action.
-      enum:
-      - PRIVACY_CONSENT_ACTION
-      - ONBOARDING_ACTION
-      - HYATT_LOYALTY_VALIDATION
-    EnrollmentTemplateSettings:
-      type: object
-      title: EnrollmentTemplateSettings
-      description: Template settings for enrollment emails.
-      properties:
-        applicationReceivedTemplate:
-          type: string
-          description: Template ID for application received emails.
-        applicationRejectedTemplate:
-          type: string
-          description: Template ID for application rejected emails.
-        applicationApprovedTemplate:
-          type: string
-          description: Template ID for application approved emails.
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
   responses:
     Unauthorized:
       description: Unauthorized
@@ -183,8 +183,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
@@ -195,8 +195,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:

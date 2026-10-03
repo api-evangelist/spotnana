@@ -42,6 +42,31 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
     ErrorResponse:
       type: object
@@ -68,23 +93,37 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    GetRbacInfoResponse:
+    PermissionAction:
+      type: string
+      title: PermissionAction
+      description: Actions which can be performed for a given permission.
+      enum:
+      - ALL
+      - CREATE
+      - READ
+      - WRITE
+      - DELETE
+      - PURGE
+      example: READ
+    PermissionWithActions:
       type: object
-      title: GetRbacInfoResponse
-      description: Response containing RBAC info for a user.
+      title: PermissionWithActions
+      description: Permission with actions
       required:
-      - hasOthersTripAccess
-      - permissions
+      - permission
+      - actions
       properties:
-        hasOthersTripAccess:
-          type: boolean
-          description: Flag indicating whether user has access to trips of other travelers.
-          example: true
-        permissions:
+        permission:
+          $ref: '#/components/schemas/PermissionName'
+          example: USER_MANAGEMENT
+        actions:
           type: array
-          description: List of permissions with their associated actions for the user.
           items:
-            $ref: '#/components/schemas/PermissionWithActions'
+            $ref: '#/components/schemas/PermissionAction'
+          description: Actions allowed on the permission like read/write/delete.
+          example:
+          - READ
+          - WRITE
     PermissionName:
       type: string
       title: PermissionName
@@ -119,62 +158,23 @@ components:
         value:
           type: string
           description: Parameter value
-    PermissionAction:
-      type: string
-      title: PermissionAction
-      description: Actions which can be performed for a given permission.
-      enum:
-      - ALL
-      - CREATE
-      - READ
-      - WRITE
-      - DELETE
-      - PURGE
-      example: READ
-    PermissionWithActions:
+    GetRbacInfoResponse:
       type: object
-      title: PermissionWithActions
-      description: Permission with actions
+      title: GetRbacInfoResponse
+      description: Response containing RBAC info for a user.
       required:
-      - permission
-      - actions
+      - hasOthersTripAccess
+      - permissions
       properties:
-        permission:
-          $ref: '#/components/schemas/PermissionName'
-          example: USER_MANAGEMENT
-        actions:
+        hasOthersTripAccess:
+          type: boolean
+          description: Flag indicating whether user has access to trips of other travelers.
+          example: true
+        permissions:
           type: array
+          description: List of permissions with their associated actions for the user.
           items:
-            $ref: '#/components/schemas/PermissionAction'
-          description: Actions allowed on the permission like read/write/delete.
-          example:
-          - READ
-          - WRITE
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: '#/components/schemas/PermissionWithActions'
   securitySchemes:
     Bearer:
       type: http

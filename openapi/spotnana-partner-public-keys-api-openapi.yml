@@ -109,17 +109,46 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    ListPartnerPublicKeysResponse:
+    AddPartnerPublicKeyRequest:
       type: object
-      title: ListPartnerPublicKeysResponse
-      description: Response containing the list of partner public keys for a TMC.
+      title: AddPartnerPublicKeyRequest
+      required:
+      - keyType
+      description: 'Request to add a partner public key for token exchange authentication. Set keyType to JWKS and populate the jwks field with the RSA public key in standard JWKS format (RFC 7517).
+
+        '
       properties:
-        keys:
-          type: array
-          description: List of partner public keys.
-          items:
-            $ref: '#/components/schemas/PartnerPublicKeyInfo'
+        keyType:
+          $ref: '#/components/schemas/PartnerPublicKeyType'
+        jwks:
+          $ref: '#/components/schemas/PartnerJwks'
+          description: JWKS containing the RSA public key. Required when keyType is JWKS.
     ErrorResponse:
       type: object
       properties:
@@ -145,78 +174,16 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    AddPartnerPublicKeyResponse:
+    ListPartnerPublicKeysResponse:
       type: object
-      title: AddPartnerPublicKeyResponse
-      description: Response containing the partner public keys that were added.
+      title: ListPartnerPublicKeysResponse
+      description: Response containing the list of partner public keys for a TMC.
       properties:
         keys:
           type: array
-          description: List of added partner public keys.
+          description: List of partner public keys.
           items:
             $ref: '#/components/schemas/PartnerPublicKeyInfo'
-    PartnerPublicKeyType:
-      type: string
-      description: The type of public key being registered.
-      enum:
-      - JWKS
-    PartnerJwks:
-      type: object
-      description: A JSON Web Key Set (JWKS) per RFC 7517.
-      required:
-      - keys
-      properties:
-        keys:
-          type: array
-          items:
-            $ref: '#/components/schemas/JwkPublicKey'
-          description: List of public keys. Exactly one key must be provided per request.
-    AddPartnerPublicKeyRequest:
-      type: object
-      title: AddPartnerPublicKeyRequest
-      required:
-      - keyType
-      description: 'Request to add a partner public key for token exchange authentication. Set keyType to JWKS and populate the jwks field with the RSA public key in standard JWKS format (RFC 7517).
-
-        '
-      properties:
-        keyType:
-          $ref: '#/components/schemas/PartnerPublicKeyType'
-        jwks:
-          $ref: '#/components/schemas/PartnerJwks'
-          description: JWKS containing the RSA public key. Required when keyType is JWKS.
-    PartnerPublicKeyInfo:
-      type: object
-      title: PartnerPublicKeyInfo
-      description: A partner public key registered for token exchange authentication.
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier for the key.
-        orgId:
-          type: string
-          format: uuid
-          description: Organization this key is scoped to.
-        kid:
-          type: string
-          description: Key ID extracted from the JWK.
-        status:
-          type: string
-          description: Key status.
-          enum:
-          - ACTIVE
-          - REVOKED
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp when the key was created.
-        thumbprint:
-          type: string
-          readOnly: true
-          description: 'RFC 7638 JWK thumbprint (base64url SHA-256 of canonical key material). Use this to verify the correct key was registered.
-
-            '
     JwkPublicKey:
       type: object
       description: RSA public key in JWK format (RFC 7517). Only RSA signature keys are supported.
@@ -252,6 +219,54 @@ components:
         e:
           type: string
           description: RSA public exponent (base64url-encoded).
+    PartnerPublicKeyType:
+      type: string
+      description: The type of public key being registered.
+      enum:
+      - JWKS
+    PartnerJwks:
+      type: object
+      description: A JSON Web Key Set (JWKS) per RFC 7517.
+      required:
+      - keys
+      properties:
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/JwkPublicKey'
+          description: List of public keys. Exactly one key must be provided per request.
+    PartnerPublicKeyInfo:
+      type: object
+      title: PartnerPublicKeyInfo
+      description: A partner public key registered for token exchange authentication.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the key.
+        orgId:
+          type: string
+          format: uuid
+          description: Organization this key is scoped to.
+        kid:
+          type: string
+          description: Key ID extracted from the JWK.
+        status:
+          type: string
+          description: Key status.
+          enum:
+          - ACTIVE
+          - REVOKED
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the key was created.
+        thumbprint:
+          type: string
+          readOnly: true
+          description: 'RFC 7638 JWK thumbprint (base64url SHA-256 of canonical key material). Use this to verify the correct key was registered.
+
+            '
     ErrorParameter:
       type: object
       title: ErrorParameter
@@ -263,31 +278,16 @@ components:
         value:
           type: string
           description: Parameter value
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+    AddPartnerPublicKeyResponse:
+      type: object
+      title: AddPartnerPublicKeyResponse
+      description: Response containing the partner public keys that were added.
+      properties:
+        keys:
+          type: array
+          description: List of added partner public keys.
+          items:
+            $ref: '#/components/schemas/PartnerPublicKeyInfo'
   securitySchemes:
     Bearer:
       type: http
