@@ -69,19 +69,6 @@ paths:
     - url: https://api-ext-sboxmeta.partners.spotnana.com
       description: Sandbox URL
 components:
-  responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
     Airport:
       title: Airport
@@ -108,17 +95,36 @@ components:
           $ref: '#/components/schemas/Location'
         groupInfo:
           $ref: '#/components/schemas/AirportGroupInfo'
-    AirAutocompleteResponse:
-      title: AirAutocompleteResponse
+    AirportGroupInfo:
+      title: AirportGroupInfo
+      description: Grouping criteria for the airports in same group
       type: object
       required:
-      - airports
+      - groupId
+      - mainAirportLocation
       properties:
-        airports:
-          type: array
-          description: List of Airports matching the query
-          items:
-            $ref: '#/components/schemas/Airport'
+        groupId:
+          type: string
+          description: Id of the airport group
+          example: NYC
+        groupCityCode:
+          type: string
+          description: City code of the airport group. If airport group does not have a recognized city code, then this field will be empty.
+          example: NYC
+        mainAirportLocation:
+          description: Location of the main airport in the group
+          $ref: '#/components/schemas/Location'
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
     ErrorResponse:
       type: object
       properties:
@@ -144,24 +150,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    Latlng:
-      title: Latlng
-      description: Latitude and Longitude for a Location
-      type: object
-      required:
-      - latitude
-      - longitude
-      properties:
-        latitude:
-          type: number
-          description: Latitude of the Location
-          format: double
-          example: 77.1025
-        longitude:
-          type: number
-          description: Longitude of the Location
-          format: double
-          example: 28.7041
     Location:
       title: Location
       description: Location details
@@ -191,47 +179,35 @@ components:
           type: string
           description: Full name of the state
           example: Colorado
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    AirportGroupInfo:
-      title: AirportGroupInfo
-      description: Grouping criteria for the airports in same group
+    AirAutocompleteResponse:
+      title: AirAutocompleteResponse
       type: object
       required:
-      - groupId
-      - mainAirportLocation
+      - airports
       properties:
-        groupId:
-          type: string
-          description: Id of the airport group
-          example: NYC
-        groupCityCode:
-          type: string
-          description: City code of the airport group. If airport group does not have a recognized city code, then this field will be empty.
-          example: NYC
-        mainAirportLocation:
-          description: Location of the main airport in the group
-          $ref: '#/components/schemas/Location'
-    HotelAutocompleteResponse:
-      title: HotelAutocompleteResponse
-      type: object
-      required:
-      - hotels
-      properties:
-        hotels:
+        airports:
           type: array
-          description: List of Hotels matching the Autocomplete query
+          description: List of Airports matching the query
           items:
-            $ref: '#/components/schemas/AutocompleteHotel'
+            $ref: '#/components/schemas/Airport'
+    Latlng:
+      title: Latlng
+      description: Latitude and Longitude for a Location
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          description: Latitude of the Location
+          format: double
+          example: 77.1025
+        longitude:
+          type: number
+          description: Longitude of the Location
+          format: double
+          example: 28.7041
     PhoneNumber:
       type: object
       title: PhoneNumber
@@ -330,43 +306,6 @@ components:
           description: List of email addresses for the hotel.
           items:
             type: string
-    AutocompleteHotel:
-      title: AutocompleteHotel
-      description: Hotel Details
-      type: object
-      required:
-      - hotelName
-      properties:
-        hotelCode:
-          type: string
-          description: Unique Code for the hotel
-          example: '100259788'
-        hotelName:
-          type: string
-          description: Full Name of the hotel
-          example: Delphin Deluxe Resort
-        location:
-          $ref: '#/components/schemas/Location'
-        address:
-          $ref: '#/components/schemas/PostalAddress'
-        isPresentInPreferredVendors:
-          type: boolean
-          description: Whether the hotel is present in preferred vendor list. This is an optional field which gets populated only in the preferred vendor autocomplete API.
-          example: true
-        brandCode:
-          type: string
-          example: MC
-          description: The code of hotel brand.
-        chainCode:
-          type: string
-          example: EM
-          description: The code of hotel chain.
-        starRating:
-          $ref: '#/components/schemas/HotelStarRatingInfo'
-          description: Hotel star rating detail.
-        contactInfo:
-          $ref: '#/components/schemas/ContactInfo'
-          description: Contact information for the hotel.
     PostalAddress:
       title: PostalAddress
       description: Postal Address Details
@@ -478,6 +417,67 @@ components:
         coordinates:
           description: Map coordinates of the address.
           $ref: '#/components/schemas/Latlng'
+    HotelAutocompleteResponse:
+      title: HotelAutocompleteResponse
+      type: object
+      required:
+      - hotels
+      properties:
+        hotels:
+          type: array
+          description: List of Hotels matching the Autocomplete query
+          items:
+            $ref: '#/components/schemas/AutocompleteHotel'
+    AutocompleteHotel:
+      title: AutocompleteHotel
+      description: Hotel Details
+      type: object
+      required:
+      - hotelName
+      properties:
+        hotelCode:
+          type: string
+          description: Unique Code for the hotel
+          example: '100259788'
+        hotelName:
+          type: string
+          description: Full Name of the hotel
+          example: Delphin Deluxe Resort
+        location:
+          $ref: '#/components/schemas/Location'
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+        isPresentInPreferredVendors:
+          type: boolean
+          description: Whether the hotel is present in preferred vendor list. This is an optional field which gets populated only in the preferred vendor autocomplete API.
+          example: true
+        brandCode:
+          type: string
+          example: MC
+          description: The code of hotel brand.
+        chainCode:
+          type: string
+          example: EM
+          description: The code of hotel chain.
+        starRating:
+          $ref: '#/components/schemas/HotelStarRatingInfo'
+          description: Hotel star rating detail.
+        contactInfo:
+          $ref: '#/components/schemas/ContactInfo'
+          description: Contact information for the hotel.
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     Bearer:
       type: http

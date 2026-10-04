@@ -209,6 +209,23 @@ components:
           description: List of departments containing id and name.
           items:
             $ref: '#/components/schemas/DepartmentInfo'
+    OffsetBasedPaginationRequestParams:
+      type: object
+      title: OffsetBasedPaginationRequestParams
+      description: Pagination parameters for requests.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
+          default: 0
+          minimum: 0
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to be fetched.
+          minimum: 1
+          default: 100
     ListDepartmentsRequest:
       type: object
       title: ListDepartmentsRequest
@@ -228,23 +245,6 @@ components:
           description: List of filters. Departments matching with any filter would be returned.
           items:
             $ref: '#/components/schemas/ListDepartmentsFilter'
-    OffsetBasedPaginationRequestParams:
-      type: object
-      title: OffsetBasedPaginationRequestParams
-      description: Pagination parameters for requests.
-      properties:
-        offset:
-          type: integer
-          format: int32
-          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
-          default: 0
-          minimum: 0
-        limit:
-          type: integer
-          format: int32
-          description: Maximum number of results to be fetched.
-          minimum: 1
-          default: 100
     DepartmentInfo:
       type: object
       title: DepartmentInfo
@@ -259,6 +259,94 @@ components:
         name:
           type: string
           example: Accounting
+    ListDepartmentsFilter:
+      type: object
+      title: ListDepartmentsFilter
+      description: Filter parameters for list departments.
+      properties:
+        externalIds:
+          type: array
+          items:
+            type: string
+            example: department-external-id
+          description: List of external ids.
+        departmentIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+          description: List of department ids.
+    OffsetBasedPaginationResponseParams:
+      type: object
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
+      required:
+      - totalNumResults
+      properties:
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results.
+    ArrayOfReference:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+        elements:
+          type: array
+          description: List of references containing id and name.
+          items:
+            $ref: '#/components/schemas/Reference'
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results
+    CreateDepartmentRequest:
+      type: object
+      title: CreateDepartmentRequest
+      required:
+      - name
+      description: Create department request
+      properties:
+        name:
+          type: string
+          description: Name of the department
+        externalId:
+          type: string
+          description: External id of the department
+          example: department-external-id
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    DepartmentV2:
+      type: object
+      title: DepartmentV2
+      description: Department details.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: Name of the department
+          example: IT Department
+        externalId:
+          type: string
+          description: External id of the department
+          example: department-ext-id
     ErrorResponse:
       type: object
       properties:
@@ -284,56 +372,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    CreateDepartmentRequest:
-      type: object
-      title: CreateDepartmentRequest
-      required:
-      - name
-      description: Create department request
-      properties:
-        name:
-          type: string
-          description: Name of the department
-        externalId:
-          type: string
-          description: External id of the department
-          example: department-external-id
-    ArrayOfReference:
-      type: object
-      properties:
-        length:
-          type: integer
-          format: int32
-        elements:
-          type: array
-          description: List of references containing id and name.
-          items:
-            $ref: '#/components/schemas/Reference'
-        totalNumResults:
-          type: integer
-          format: int32
-          description: Total number of results
-    EntityId:
-      type: object
-      description: Identifier of an object
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
-    OffsetBasedPaginationResponseParams:
-      type: object
-      title: PaginationResponseParams
-      description: Pagination parameters for response.
-      required:
-      - totalNumResults
-      properties:
-        totalNumResults:
-          type: integer
-          format: int32
-          description: Total number of results.
     Reference:
       type: object
       title: Reference object containing uuid and name of the entity.
@@ -348,54 +386,16 @@ components:
         name:
           type: string
           example: Name
-    DepartmentV2:
+    EntityId:
       type: object
-      title: DepartmentV2
-      description: Department details.
+      description: Identifier of an object
       required:
       - id
-      - name
       properties:
         id:
           type: string
           format: uuid
-        name:
-          type: string
-          description: Name of the department
-          example: IT Department
-        externalId:
-          type: string
-          description: External id of the department
-          example: department-ext-id
-    ListDepartmentsFilter:
-      type: object
-      title: ListDepartmentsFilter
-      description: Filter parameters for list departments.
-      properties:
-        externalIds:
-          type: array
-          items:
-            type: string
-            example: department-external-id
-          description: List of external ids.
-        departmentIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-            example: 731ccbca-0415-6fe1-d235-c324dfbe7423
-          description: List of department ids.
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
   responses:
     Unauthorized:
       description: Unauthorized

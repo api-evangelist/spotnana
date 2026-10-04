@@ -235,15 +235,26 @@ paths:
         '404':
           $ref: '#/components/responses/BadRequest'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    ApiUsersInfo:
-      type: object
-      title: ApiUsersInfo
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-          example: 1ddj3hs95to28iag7m4hl9lv2
     CreateApiUsersRequest:
       type: object
       title: CreateApiUsersRequest
@@ -262,14 +273,61 @@ components:
         credentialType:
           $ref: '#/components/schemas/ApiUserCredentialTypeEnum'
           description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
-    ApiUserRoleEnum:
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    CreateApiUsersResponse:
+      type: object
+      title: CreateApiUsersResponse
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
+          example: 1ddj3hs95to28iag7m4hl9lv2
+        clientSecret:
+          type: string
+          description: Api user client secret. Present for CLIENT_CREDENTIALS credential type.
+          example: 1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml
+        scimToken:
+          type: string
+          description: SCIM bearer token (Base64-encoded JSON envelope with encrypted secret). Present only for SCIM_TOKEN credential type.
+          example: eyJzY29wZSI6InNjaW0iLCJjbGllbnRJZCI6Ii4uLiIsImVuY3J5cHRlZFNlY3JldCI6Ii4uLiJ9
+    ApiUsersInfo:
+      type: object
+      title: ApiUsersInfo
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
+          example: 1ddj3hs95to28iag7m4hl9lv2
+    ApiUserCredentialTypeEnum:
       type: string
-      description: Roles supported for api user creation
+      description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
       enum:
-      - TMC_ADMIN
-      - COMPANY_ADMIN
-      default: TMC_ADMIN
-      example: TMC_ADMIN
+      - CLIENT_CREDENTIALS
+      - SCIM_TOKEN
+      default: CLIENT_CREDENTIALS
+      example: CLIENT_CREDENTIALS
+    RotateClientSecretResponse:
+      type: object
+      title: RotateClientSecretResponse
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
+          example: 1ddj3hs95to28iag7m4hl9lv2
+        clientSecret:
+          type: string
+          description: Api user client secret
+          example: 1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml
     ErrorResponse:
       type: object
       properties:
@@ -295,49 +353,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    CreateApiUsersResponse:
-      type: object
-      title: CreateApiUsersResponse
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-          example: 1ddj3hs95to28iag7m4hl9lv2
-        clientSecret:
-          type: string
-          description: Api user client secret. Present for CLIENT_CREDENTIALS credential type.
-          example: 1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml
-        scimToken:
-          type: string
-          description: SCIM bearer token (Base64-encoded JSON envelope with encrypted secret). Present only for SCIM_TOKEN credential type.
-          example: eyJzY29wZSI6InNjaW0iLCJjbGllbnRJZCI6Ii4uLiIsImVuY3J5cHRlZFNlY3JldCI6Ii4uLiJ9
-    DeleteApiUsersRequest:
-      type: object
-      title: DeleteApiUsersRequest
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-    ApiUserCredentialTypeEnum:
-      type: string
-      description: Type of credentials to generate for the API user. Defaults to CLIENT_CREDENTIALS.
-      enum:
-      - CLIENT_CREDENTIALS
-      - SCIM_TOKEN
-      default: CLIENT_CREDENTIALS
-      example: CLIENT_CREDENTIALS
-    RotateClientSecretResponse:
-      type: object
-      title: RotateClientSecretResponse
-      properties:
-        clientId:
-          type: string
-          description: Api user client id
-          example: 1ddj3hs95to28iag7m4hl9lv2
-        clientSecret:
-          type: string
-          description: Api user client secret
-          example: 1hgea74sii6os6vlkk1c7krlfgniaphbn2c56pml
     GetApiUsersResponse:
       type: object
       title: GetApiUsersResponse
@@ -351,17 +366,14 @@ components:
           type: integer
           description: Total count of api users
           example: 25
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
+    ApiUserRoleEnum:
+      type: string
+      description: Roles supported for api user creation
+      enum:
+      - TMC_ADMIN
+      - COMPANY_ADMIN
+      default: TMC_ADMIN
+      example: TMC_ADMIN
     RotateClientSecretRequest:
       type: object
       title: RotateClientSecretRequest
@@ -369,25 +381,13 @@ components:
         clientId:
           type: string
           description: Api user client id
-  responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+    DeleteApiUsersRequest:
+      type: object
+      title: DeleteApiUsersRequest
+      properties:
+        clientId:
+          type: string
+          description: Api user client id
   securitySchemes:
     Bearer:
       type: http

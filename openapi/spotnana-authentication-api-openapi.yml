@@ -43,6 +43,71 @@ paths:
           $ref: '#/components/responses/Forbidden'
 components:
   schemas:
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    OAuthTokenResponse:
+      type: object
+      title: OAuthTokenResponse
+      required:
+      - access_token
+      - token_type
+      x-ignore-naming-case: true
+      properties:
+        access_token:
+          type: string
+          description: The token to be used in subsequent API calls made to the Spotnana platform.
+        expires_in:
+          type: integer
+          description: The length of time (in seconds) for which the access token is valid.
+          format: int32
+        token_type:
+          type: string
+          description: "A case-insensitive value specifying the method of using the access token issued, as \nspecified in Section 7.1 of [RFC6749].\n"
+          example: Bearer
+        refresh_token:
+          type: string
+          description: 'Used to fetch a new access token when the existing token expires.
+
+            The refresh token will not be available if the `grant_type` is `client_credentials`.
+
+            '
+        scope:
+          type: string
+          description: "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \n[RFC6749], that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
+    ErrorResponse:
+      type: object
+      properties:
+        debugIdentifier:
+          type: string
+          description: Link to debug the error internally.
+        errorMessages:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                description: Error code to identify the specific errors.
+              message:
+                type: string
+                description: Message containing details of error.
+              errorParameters:
+                type: array
+                description: Error message parameters.
+                items:
+                  $ref: '#/components/schemas/ErrorParameter'
+              errorDetail:
+                type: string
+                description: More details about the error.
     OAuthTokenRequest:
       type: object
       title: OAuthTokenRequest
@@ -74,71 +139,6 @@ components:
         scope:
           type: string
           description: "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \nRFC6749 OAuth 2.0 framework, that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
-    ErrorResponse:
-      type: object
-      properties:
-        debugIdentifier:
-          type: string
-          description: Link to debug the error internally.
-        errorMessages:
-          type: array
-          items:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                description: Error code to identify the specific errors.
-              message:
-                type: string
-                description: Message containing details of error.
-              errorParameters:
-                type: array
-                description: Error message parameters.
-                items:
-                  $ref: '#/components/schemas/ErrorParameter'
-              errorDetail:
-                type: string
-                description: More details about the error.
-    OAuthTokenResponse:
-      type: object
-      title: OAuthTokenResponse
-      required:
-      - access_token
-      - token_type
-      x-ignore-naming-case: true
-      properties:
-        access_token:
-          type: string
-          description: The token to be used in subsequent API calls made to the Spotnana platform.
-        expires_in:
-          type: integer
-          description: The length of time (in seconds) for which the access token is valid.
-          format: int32
-        token_type:
-          type: string
-          description: "A case-insensitive value specifying the method of using the access token issued, as \nspecified in Section 7.1 of [RFC6749].\n"
-          example: Bearer
-        refresh_token:
-          type: string
-          description: 'Used to fetch a new access token when the existing token expires.
-
-            The refresh token will not be available if the `grant_type` is `client_credentials`.
-
-            '
-        scope:
-          type: string
-          description: "The list of space-delimited, case-sensitive strings, as defined in Section 3.3 of \n[RFC6749], that allow the client to specify the desired scope of the requested security \ntoken in the context of the service or resource where the token will be used.\n"
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
   responses:
     Forbidden:
       description: Forbidden

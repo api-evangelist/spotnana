@@ -195,6 +195,23 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    OffsetBasedPaginationRequestParams:
+      type: object
+      title: OffsetBasedPaginationRequestParams
+      description: Pagination parameters for requests.
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
+          default: 0
+          minimum: 0
+        limit:
+          type: integer
+          format: int32
+          description: Maximum number of results to be fetched.
+          minimum: 1
+          default: 100
     CostCenter:
       type: object
       title: CostCenter
@@ -211,34 +228,75 @@ components:
         externalId:
           type: string
           example: external-id
-    ListCostCentersResponse:
+    OffsetBasedPaginationResponseParams:
       type: object
-      description: Response for list cost centers API.
+      title: PaginationResponseParams
+      description: Pagination parameters for response.
       required:
-      - paginationParams
+      - totalNumResults
       properties:
-        paginationParams:
-          description: Pagination information.
-          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
-        costCenters:
-          type: array
-          description: List of cost centers containing id and name.
-          items:
-            $ref: '#/components/schemas/CostCenterInfo'
-    CreateCostCenterRequest:
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results.
+    CostCenterInfo:
       type: object
-      description: Request body for cost center create API.
+      title: CostCenterInfo
+      description: Cost center information with UUID and entity name.
       required:
-      - name
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+        name:
+          type: string
+          example: Credit
+    ListCostCentersFilter:
+      type: object
+      title: ListCostCentersFilter
+      description: Filter parameters for cost centers.
+      properties:
+        externalIds:
+          type: array
+          items:
+            type: string
+            example: external-id
+          description: List of external ids.
+        costCenterIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+          description: List of cost center ids.
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
       properties:
         name:
           type: string
-        numberOfEmployees:
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
+    ArrayOfReference:
+      type: object
+      properties:
+        length:
           type: integer
           format: int32
-        externalId:
-          type: string
-          example: external-id
+        elements:
+          type: array
+          description: List of references containing id and name.
+          items:
+            $ref: '#/components/schemas/Reference'
+        totalNumResults:
+          type: integer
+          format: int32
+          description: Total number of results
     ErrorResponse:
       type: object
       properties:
@@ -264,51 +322,6 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    OffsetBasedPaginationResponseParams:
-      type: object
-      title: PaginationResponseParams
-      description: Pagination parameters for response.
-      required:
-      - totalNumResults
-      properties:
-        totalNumResults:
-          type: integer
-          format: int32
-          description: Total number of results.
-    ArrayOfReference:
-      type: object
-      properties:
-        length:
-          type: integer
-          format: int32
-        elements:
-          type: array
-          description: List of references containing id and name.
-          items:
-            $ref: '#/components/schemas/Reference'
-        totalNumResults:
-          type: integer
-          format: int32
-          description: Total number of results
-    EntityId:
-      type: object
-      description: Identifier of an object
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
-    CostCenterId:
-      type: object
-      title: Cost center id.
-      required:
-      - id
-      properties:
-        id:
-          type: string
-          example: 731ccbca-0415-6fe1-d235-c324dfbe7423
     ListCostCentersRequest:
       type: object
       description: Request body for list cost centers API.
@@ -327,37 +340,20 @@ components:
           description: List of filters. Cost centers matching with any filter would be returned.
           items:
             $ref: '#/components/schemas/ListCostCentersFilter'
-    CostCenterInfo:
+    CreateCostCenterRequest:
       type: object
-      title: CostCenterInfo
-      description: Cost center information with UUID and entity name.
+      description: Request body for cost center create API.
       required:
-      - id
+      - name
       properties:
-        id:
-          type: string
-          format: uuid
-          example: 731ccbca-0415-6fe1-d235-c324dfbe7423
         name:
           type: string
-          example: Credit
-    OffsetBasedPaginationRequestParams:
-      type: object
-      title: OffsetBasedPaginationRequestParams
-      description: Pagination parameters for requests.
-      properties:
-        offset:
+        numberOfEmployees:
           type: integer
           format: int32
-          description: The starting index in the list from which results are returned. The value must be greater than or equal to 0.
-          default: 0
-          minimum: 0
-        limit:
-          type: integer
-          format: int32
-          description: Maximum number of results to be fetched.
-          minimum: 1
-          default: 100
+        externalId:
+          type: string
+          example: external-id
     Reference:
       type: object
       title: Reference object containing uuid and name of the entity.
@@ -372,35 +368,39 @@ components:
         name:
           type: string
           example: Name
-    ErrorParameter:
+    CostCenterId:
       type: object
-      title: ErrorParameter
-      description: Error parameter
+      title: Cost center id.
+      required:
+      - id
       properties:
-        name:
+        id:
           type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    ListCostCentersFilter:
+          example: 731ccbca-0415-6fe1-d235-c324dfbe7423
+    ListCostCentersResponse:
       type: object
-      title: ListCostCentersFilter
-      description: Filter parameters for cost centers.
+      description: Response for list cost centers API.
+      required:
+      - paginationParams
       properties:
-        externalIds:
+        paginationParams:
+          description: Pagination information.
+          $ref: '#/components/schemas/OffsetBasedPaginationResponseParams'
+        costCenters:
           type: array
+          description: List of cost centers containing id and name.
           items:
-            type: string
-            example: external-id
-          description: List of external ids.
-        costCenterIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-            example: 731ccbca-0415-6fe1-d235-c324dfbe7423
-          description: List of cost center ids.
+            $ref: '#/components/schemas/CostCenterInfo'
+    EntityId:
+      type: object
+      description: Identifier of an object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: b93dc51f-12dd-46c7-b7d6-1cb12cd3f5b3
   responses:
     Unauthorized:
       description: Unauthorized

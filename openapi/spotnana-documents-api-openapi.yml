@@ -137,56 +137,26 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    TravelType:
-      type: string
-      title: TravelType
-      description: Travel Type
-      enum:
-      - AIR
-      - HOTEL
-      - CAR
-      - RAIL
-      - LIMO
-      - MISC
-      - ALL
-      example: AIR
-    EventMetadataWrapper:
+    Document:
       type: object
-      title: EventMetadataWrapper
-      properties:
-        eventMetadata:
-          $ref: '#/components/schemas/EventEntityMetadata'
-    ErrorParameter:
-      type: object
-      title: ErrorParameter
-      description: Error parameter
-      properties:
-        name:
-          type: string
-          description: Parameter name
-        value:
-          type: string
-          description: Parameter value
-    UploadDocumentRequest:
-      type: object
-      title: UploadDocumentRequest
-      description: Request body for upload document.
+      title: Document
+      description: Document details.
       required:
-      - file
-      x-ignoreBreakingChanges:
-      - DocumentApi.yaml->UploadDocumentRequest->documentMetadata
-      - UploadDocumentRequest->documentMetadata
+      - url
+      - documentId
+      - documentMetadata
       properties:
+        url:
+          type: string
+          description: S3 location of the document.
+          example: https://s3.amazonaws.com/bucket-name/folder-name/file-name
+        documentId:
+          type: string
+          format: uuid
+          description: Unique identifier of the document.
+          example: f49d00fe-1eda-4304-ba79-a980f565281d
         documentMetadata:
           $ref: '#/components/schemas/DocumentMetadata'
-          x-optionalFrom: '2026-01-14'
-        file:
-          type: string
-          format: binary
-          description: Contents of the document to be uploaded (PDF only). Accepts application/pdf or application/octet-stream.
-        documentMetadataStr:
-          type: string
-          description: JSON string of DocumentMetadata - accepts application/octet-stream. Either documentMetadata or documentMetadataStr must be present.
     ErrorResponse:
       type: object
       properties:
@@ -212,18 +182,119 @@ components:
               errorDetail:
                 type: string
                 description: More details about the error.
-    GetDocumentsResponse:
+    LegMetadata:
+      title: LegMetadata
+      description: Leg metadata against which document is associated.
       type: object
-      title: GetDocumentsResponse
-      description: Response containing a list of documents.
-      required:
-      - documents
       properties:
-        documents:
-          type: array
-          description: List of documents.
-          items:
-            $ref: '#/components/schemas/Document'
+        legId:
+          type: string
+          description: Unique identifier of the leg.
+          example: CgNTRk8SA0RFThoKNTQ1NzI5ODcxMQ==
+    UploadDocumentRequest:
+      type: object
+      title: UploadDocumentRequest
+      description: Request body for upload document.
+      required:
+      - file
+      x-ignoreBreakingChanges:
+      - DocumentApi.yaml->UploadDocumentRequest->documentMetadata
+      - UploadDocumentRequest->documentMetadata
+      properties:
+        documentMetadata:
+          $ref: '#/components/schemas/DocumentMetadata'
+          x-optionalFrom: '2026-01-14'
+        file:
+          type: string
+          format: binary
+          description: Contents of the document to be uploaded (PDF only). Accepts application/pdf or application/octet-stream.
+        documentMetadataStr:
+          type: string
+          description: JSON string of DocumentMetadata - accepts application/octet-stream. Either documentMetadata or documentMetadataStr must be present.
+    DocumentMetadata:
+      title: DocumentMetadata
+      description: Metadata related to document.
+      type: object
+      required:
+      - documentType
+      - entityType
+      - entityId
+      - entityMetadata
+      - name
+      properties:
+        documentType:
+          $ref: '#/components/schemas/DocumentType'
+        entityType:
+          $ref: '#/components/schemas/EntityType'
+        entityId:
+          type: string
+          description: Entity Id for the given entity type.
+          example: '123124'
+        entityMetadata:
+          $ref: '#/components/schemas/EntityMetadata'
+        name:
+          type: string
+          description: Document name.
+          example: BoardingPass.pdf
+    FlightMetadataWrapper:
+      type: object
+      title: FlightMetadataWrapper
+      properties:
+        flightMetadata:
+          $ref: '#/components/schemas/FlightMetadata'
+    GetDocumentResponse:
+      type: object
+      title: GetDocumentResponse
+      description: Response containing a document.
+      required:
+      - document
+      properties:
+        document:
+          $ref: '#/components/schemas/Document'
+    PnrMetadataWrapper:
+      type: object
+      title: PnrMetadataWrapper
+      required:
+      - travelType
+      properties:
+        pnrMetadata:
+          $ref: '#/components/schemas/PnrMetadata'
+        invoiceMetadata:
+          type: object
+          title: InvoiceMetadata
+          description: Metadata associated with an invoice document.
+          required:
+          - invoiceNumber
+          properties:
+            invoiceNumber:
+              type: string
+              example: SPOT-0001
+            invoiceType:
+              type: string
+              example: FARE_INVOICE
+              enum:
+              - SERVICE_FEE_INVOICE
+              - FARE_INVOICE
+              - GENERIC_INVOICE
+        travelType:
+          $ref: '#/components/schemas/TravelType'
+    EventMetadataWrapper:
+      type: object
+      title: EventMetadataWrapper
+      properties:
+        eventMetadata:
+          $ref: '#/components/schemas/EventEntityMetadata'
+    ErrorParameter:
+      type: object
+      title: ErrorParameter
+      description: Error parameter
+      properties:
+        name:
+          type: string
+          description: Parameter name
+        value:
+          type: string
+          description: Parameter value
     PostalAddress:
       title: PostalAddress
       description: Postal Address Details
@@ -335,133 +406,23 @@ components:
         coordinates:
           description: Map coordinates of the address.
           $ref: '#/components/schemas/Latlng'
-    EntityMetadata:
-      title: EntityMetadata
-      description: Metadata for associated entity of document.
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/PnrMetadataWrapper'
-      - $ref: '#/components/schemas/EventMetadataWrapper'
-    PnrMetadataWrapper:
-      type: object
-      title: PnrMetadataWrapper
-      required:
-      - travelType
-      properties:
-        pnrMetadata:
-          $ref: '#/components/schemas/PnrMetadata'
-        invoiceMetadata:
-          type: object
-          title: InvoiceMetadata
-          description: Metadata associated with an invoice document.
-          required:
-          - invoiceNumber
-          properties:
-            invoiceNumber:
-              type: string
-              example: SPOT-0001
-            invoiceType:
-              type: string
-              example: FARE_INVOICE
-              enum:
-              - SERVICE_FEE_INVOICE
-              - FARE_INVOICE
-              - GENERIC_INVOICE
-        travelType:
-          $ref: '#/components/schemas/TravelType'
-    FlightMetadataWrapper:
-      type: object
-      title: FlightMetadataWrapper
-      properties:
-        flightMetadata:
-          $ref: '#/components/schemas/FlightMetadata'
-    EntityType:
-      title: EntityType
-      description: Entity type against which the document is to uploaded.
+    DocumentType:
+      title: DocumentType
+      description: Document type.
       type: string
       enum:
-      - PNR
-      - COMPANY
-      - AIR_ITINERARY
-      - EVENT
-      - LOCATION_IMAGE
-      - AIR_COMMISSION_CONTRACT
-      example: PNR
+      - BOARDING_PASS
+      - CONFIRMATION
+      - INVOICE
+      - VISA
+      - MISCELLANEOUS
+      - OTHERS
+      - TASK_PROCESSOR
+      - EVENT_COVER_IMAGE
+      - LOGO_IMAGE
+      example: VISA
       x-ignoreBreakingChanges:
-      - EntityType->TRIP
-      - EntityType->TICKETING_ERROR
-    GetDocumentResponse:
-      type: object
-      title: GetDocumentResponse
-      description: Response containing a document.
-      required:
-      - document
-      properties:
-        document:
-          $ref: '#/components/schemas/Document'
-    EventEntityMetadata:
-      title: EventEntityMetadata
-      description: Metadata when document is associated to an event.
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/PostalAddress'
-    LegMetadataWrapper:
-      type: object
-      title: LegMetadataWrapper
-      properties:
-        legMetadata:
-          $ref: '#/components/schemas/LegMetadata'
-    FlightMetadata:
-      title: FlightMetadata
-      description: Flight metadata against which document is associated.
-      type: object
-      properties:
-        flightId:
-          type: string
-          description: Unique identifier of the flight.
-          example: CgNERU4SA1NGTxoKNTQ1NzI5ODcxMQ
-    LegMetadata:
-      title: LegMetadata
-      description: Leg metadata against which document is associated.
-      type: object
-      properties:
-        legId:
-          type: string
-          description: Unique identifier of the leg.
-          example: CgNTRk8SA0RFThoKNTQ1NzI5ODcxMQ==
-    DocumentMetadata:
-      title: DocumentMetadata
-      description: Metadata related to document.
-      type: object
-      required:
-      - documentType
-      - entityType
-      - entityId
-      - entityMetadata
-      - name
-      properties:
-        documentType:
-          $ref: '#/components/schemas/DocumentType'
-        entityType:
-          $ref: '#/components/schemas/EntityType'
-        entityId:
-          type: string
-          description: Entity Id for the given entity type.
-          example: '123124'
-        entityMetadata:
-          $ref: '#/components/schemas/EntityMetadata'
-        name:
-          type: string
-          description: Document name.
-          example: BoardingPass.pdf
-    PnrMetadata:
-      title: PnrMetadata
-      description: Metadata when document is associated to pnr entity.
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/FlightMetadataWrapper'
-      - $ref: '#/components/schemas/LegMetadataWrapper'
+      - DocumentType->LOGO_IMAGE
     UploadDocumentResponse:
       type: object
       title: UploadDocumentResponse
@@ -477,6 +438,12 @@ components:
           example: f49d00fe-1eda-4304-ba79-a980f565281d
         documentMetadata:
           $ref: '#/components/schemas/DocumentMetadata'
+    LegMetadataWrapper:
+      type: object
+      title: LegMetadataWrapper
+      properties:
+        legMetadata:
+          $ref: '#/components/schemas/LegMetadata'
     Latlng:
       title: Latlng
       description: Latitude and Longitude for a Location
@@ -495,46 +462,79 @@ components:
           description: Longitude of the Location
           format: double
           example: 28.7041
-    Document:
+    GetDocumentsResponse:
       type: object
-      title: Document
-      description: Document details.
+      title: GetDocumentsResponse
+      description: Response containing a list of documents.
       required:
-      - url
-      - documentId
-      - documentMetadata
+      - documents
       properties:
-        url:
+        documents:
+          type: array
+          description: List of documents.
+          items:
+            $ref: '#/components/schemas/Document'
+    EntityMetadata:
+      title: EntityMetadata
+      description: Metadata for associated entity of document.
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/PnrMetadataWrapper'
+      - $ref: '#/components/schemas/EventMetadataWrapper'
+    TravelType:
+      type: string
+      title: TravelType
+      description: Travel Type
+      enum:
+      - AIR
+      - HOTEL
+      - CAR
+      - RAIL
+      - LIMO
+      - MISC
+      - ALL
+      example: AIR
+    FlightMetadata:
+      title: FlightMetadata
+      description: Flight metadata against which document is associated.
+      type: object
+      properties:
+        flightId:
           type: string
-          description: S3 location of the document.
-          example: https://s3.amazonaws.com/bucket-name/folder-name/file-name
-        documentId:
-          type: string
-          format: uuid
-          description: Unique identifier of the document.
-          example: f49d00fe-1eda-4304-ba79-a980f565281d
-        documentMetadata:
-          $ref: '#/components/schemas/DocumentMetadata'
-    DocumentType:
-      title: DocumentType
-      description: Document type.
+          description: Unique identifier of the flight.
+          example: CgNERU4SA1NGTxoKNTQ1NzI5ODcxMQ
+    PnrMetadata:
+      title: PnrMetadata
+      description: Metadata when document is associated to pnr entity.
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/FlightMetadataWrapper'
+      - $ref: '#/components/schemas/LegMetadataWrapper'
+    EventEntityMetadata:
+      title: EventEntityMetadata
+      description: Metadata when document is associated to an event.
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+    EntityType:
+      title: EntityType
+      description: Entity type against which the document is to uploaded.
       type: string
       enum:
-      - BOARDING_PASS
-      - CONFIRMATION
-      - INVOICE
-      - VISA
-      - MISCELLANEOUS
-      - OTHERS
-      - TASK_PROCESSOR
-      - EVENT_COVER_IMAGE
-      - LOGO_IMAGE
-      example: VISA
+      - PNR
+      - COMPANY
+      - AIR_ITINERARY
+      - EVENT
+      - LOCATION_IMAGE
+      - AIR_COMMISSION_CONTRACT
+      example: PNR
       x-ignoreBreakingChanges:
-      - DocumentType->LOGO_IMAGE
+      - EntityType->TRIP
+      - EntityType->TICKETING_ERROR
   responses:
-    Forbidden:
-      description: Forbidden
+    NotFound:
+      description: The specified resource was not found.
       content:
         application/json:
           schema:
@@ -545,8 +545,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: The specified resource was not found.
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
