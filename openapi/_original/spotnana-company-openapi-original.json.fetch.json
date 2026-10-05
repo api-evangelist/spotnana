@@ -1,0 +1,12 @@
+{
+ "url": "https://developer.spotnana.com/_bundle/openapi/CompanyApi.json?download",
+ "requested_url": "https://developer.spotnana.com/_bundle/openapi/CompanyApi.json?download",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 301658,
+ "sha256": "94f0800a509efcd29527fb916b83954d53b678643056f35d3217159439a90244",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.984), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
